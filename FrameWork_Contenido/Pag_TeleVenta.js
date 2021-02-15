@@ -52,6 +52,7 @@ function estTV(){
 	$("#dvEstTV").html(icoCargando16+" cargando datos...");
 	var contenido = "";
 	var parametros = '{"modo":"estadisticas","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
+	console.log("estTV - parametros:\n"+parametros);
 	flexygo.nav.execProcess('pEstTV','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
@@ -59,6 +60,20 @@ function estTV(){
 					  + "&nbsp;&nbsp;&nbsp; Pedidos: "+js[0].pedidos
 					  + "&nbsp;&nbsp;&nbsp; Importe: "+js[0].importe+"&euro;";
 			$("#dvEstTV").html(contenido);
+			var filtros = js[0].filtros;
+			var losFiltros = "";			/**/ console.log(JSON.stringify(filtros));
+			if(js[0].filtros[0].gestor.length>0){ losFiltros += " gestor,"; } 
+			if(js[0].filtros[0].ruta.length>0){ losFiltros += " ruta,"; } 
+			if(js[0].filtros[0].vendedor.length>0){ losFiltros += " vendedor,"; } 
+			if(js[0].filtros[0].serie.length>0){ losFiltros += " serie,"; } 
+			if(js[0].filtros[0].marca.length>0){ losFiltros += " marca,"; } 
+			if(js[0].filtros[0].familia.length>0){ losFiltros += " familia,"; } 
+			if(js[0].filtros[0].subfamilia.length>0){ losFiltros += " subfamilia "; } 
+			
+			if(losFiltros.length>0){ 
+				losFiltros = losFiltros.substring(0,losFiltros.length-1); 
+				$("#dvFiltrosTV").html("El registro '"+NombreTeleVenta+"' contiene filtros de "+losFiltros); 
+			}else{ $("#dvFiltrosTV").html("Registro '"+NombreTeleVenta+"'"); }
 		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }	
 	},false);
 }
@@ -793,7 +808,7 @@ function calcularImporte(i){
 	var dto = $(elTR).find(".inpDtoSol").val();			if(isNaN(dto)){ dto=0; }
 	var precio = $(elTR).find(".inpPrecioSol").val();	if(isNaN(precio)){ precio=0; }
 	var importe = parseFloat(precio) * parseFloat(uds);
-	if(parseFloat(peso)>0){ importe =  parseFloat(precio) * parseFloat(peso); }
+	if(parseFloat(peso)>0 && parseInt(EWtrabajaPeso)===1){ importe =  parseFloat(precio) * parseFloat(peso); }
 	if(parseFloat(dto)>0){ importe = importe - ((importe*dto)/100); }
 	if(isNaN(importe)){ importe=0; } 
 	$(elTR).find(".inpImporteSol").html(importe.toFixed(2)+"&euro;");

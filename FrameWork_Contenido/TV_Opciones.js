@@ -1,11 +1,19 @@
 <div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
-	Opciones
-	<span id="dvEstTV" class="vaM" style="margin-left:50px; font:16px arial; color:#accfdd;" ></span>
-	<div id="btnTerminar" class="MIbotonW FR vaM inv" style="margin-top:-5px;" onclick='terminarLlamada()'>Terminar Llamada</div>
-	<div id="btnPedido" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='pedidoTV()'>Pedido</div>
-	<div id="btnClientes" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='cargarClientes()'>Clientes</div>
-	<div id="btnConfiguracion" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='configurarTeleVenta()'>Configuración</div>
-	<div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 20px arial; color:#FFF;" ></div>
+	<table id="tbOpciones">
+		<tr>
+			<th>
+				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#accfdd;" ></div>
+				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#92D6B6;" ></div>
+			</th>
+			<th><div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;" ></div></th>
+			<th>
+				<div id="btnTerminar" class="MIbotonW FR vaM inv" style="margin-top:-5px;" onclick='terminarLlamada()'>Terminar Llamada</div>
+				<div id="btnPedido" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='pedidoTV()'>Pedido</div>
+				<div id="btnClientes" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='cargarClientes()'>Clientes</div>
+				<div id="btnConfiguracion" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick='configurarTeleVenta()'>Configuración</div>
+			</th>
+		</tr>
+	</table>
 </div>
 
 <div id="dvConfiguracionTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
@@ -54,9 +62,10 @@ $("#inpFechaTV").val(FechaTeleVenta);
 $("#dvFechaTV").html(FechaTeleVenta);
 $("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos(($(this).text()).split(" ")[0]); event.stopPropagation(); });
 
-function cargarTbConfigOperador(modo,comprobar){
-	var fecha = $.trim($("#inpFechaTV").val());
-	var nombre = $.trim($("#inpNombreTV").val());		
+function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
+	var fecha = $.trim($("#inpFechaTV").val()); 
+	var nombre = $.trim($("#inpNombreTV").val());	
+		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
 	var elJS = '{"modo":"' + modo + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '",' + paramStd + '}';
 	if(modo==="guardar"){

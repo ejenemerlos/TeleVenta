@@ -48,7 +48,7 @@ BEGIN TRY
 		set @observaciones = (select JSON_VALUE(@parametros,'$.observaciones'))
 		set @pedido = (select JSON_VALUE(@parametros,'$.pedido'))		
 		if @pedido='undefined' set @pedido='NO!'
-		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,replace(@serie,space(1),'0'),replace(LEFT(@pedido,10),space(1),'0')) collate Modern_Spanish_CI_AI 
+		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,@serie,replicate('0',10-len(@pedido)),@pedido) collate Modern_Spanish_CI_AI 
 		insert into llamadas ([usuario],[fecha],[cliente],[hora],[nombreTV],[llamada],[incidencia],[observa],[idpedido],[pedido],[completado]) 
 		values (@usuario, cast(@FechaTeleVenta as date), @cliente, CONVERT (time, SYSDATETIME()), @nombreTV, 1, @incidenciaCliente, @observaciones, @idpedido, @pedido, 1)
 		

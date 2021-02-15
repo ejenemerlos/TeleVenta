@@ -205,11 +205,79 @@ BEGIN TRY
 
 
 	-- Vista vPedidos
-	IF EXISTS (select * FROM sys.views where name = 'vPedidos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	IF EXISTS (select * FROM sys.views where name = 'vPedidos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 	
 
-	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[vPedidos]
-	AS
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vPedidos]
+	AS '
+
+	set @controlAnys = 0
+	if @NumEjer>0 BEGIN
+		while @controlAnys<@NumEjer BEGIN
+			set @controlAnys = @controlAnys + 1
+			set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
+			set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
+			if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
+				set @Sentencia = @Sentencia +'
+				SELECT   cast('''' as varchar(50)) as MODO
+					, CONCAT('''+@EJERCICIOAnt+''',CAV.empresa,replace(CAV.LETRA,space(1),''0''),replace(LEFT(CAV.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO	
+					, '''+@EJERCICIOAnt+''' as EJER , CAV.EMPRESA  collate Modern_Spanish_CI_AI as EMPRESA, convert(varchar(10), CAV.ENTREGA, 103) as ENTREGA
+					, CAV.LETRA + CAV.NUMERO as PEDIDO , CAV.NUMERO as numero, CAV.LETRA, CAV.FECHA as sqlFecha
+					, convert(varchar(10), CAV.FECHA, 103) as FECHA
+					, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI as DIRECCION, CAV.CLIENTE as codCliente 			
+					, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
+					, ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),'''') AS OBSERVACIO
+					, env.DIRECCION as nDireccion, ven.nombre as nVendedor
+					, cli.nombre collate Modern_Spanish_CI_AI as nCliente
+					, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
+					, cli.RUTA
+					, env.CODPOS+'' ''+env.POBLACION as Ciudad, env.PROVINCIA as Provincia
+					, DAV.PRESUP as presupuesto, '''+@EJERCICIOAnt+''' + CAV.empresa + CAV.letra + DAV.PRESUP as idpresuven
+					, case when TRASPASADO=1 then ''TRASPASADO''
+							when FINALIZADO=1 then ''FINALIZADO''
+							when CANCELADO =1 then ''CANCELADO'' 
+							else ''PENDIENTE'' END 
+							as ESTADO			  
+					, PCN.Contacto as contacto, CON.Persona  as nContacto
+					, ser.nombre as laSerie		
+					, CPA.FAMILIA as EWFAMILIA, FAM.NOMBRE as FAMILIA
+					, sum(isnull(cav.TOTALDOC,0.00)) as TOTALDOC
+					, case when sum(cav.TOTALDOC)>0 then 
+						replace(replace(replace(convert(varchar, cast(sum(isnull(cav.TOTALDOC,0)) as money),1),''.'',''_''),'','',''.''),''_'','','') +'' €''
+						else '''' end as TOTALDOCformato
+
+				FROM '+@GESTIONAnt+'.dbo.c_pedive CAV
+				INNER JOIN '+@GESTIONAnt+'.dbo.clientes CLI ON CLI.CODIGO=CAV.CLIENTE
+				left join  '+@GESTIONAnt+'.dbo.entre_pv ent on ent.NUMERO=CAV.NUMERO and ent.EMPRESA=CAV.EMPRESA and ent.LETRA=CAV.letra
+				left join  '+@GESTIONAnt+'.dbo.env_cli env on env.cliente=cav.cliente and env.linea=cav.env_cli
+				left join  '+@GESTIONAnt+'.dbo.vendedor ven on ven.codigo=cav.vendedor
+				LEFT JOIN (SELECT EMPRESA, NUMERO, LETRA, LEFT(MAX(DOC_NUM),10) AS PRESUP 
+							FROM '+@GESTIONAnt+'.DBO.D_PEDIVE 
+							GROUP BY EMPRESA, NUMERO, LETRA) DAV 
+							ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
+				LEFT JOIN Pedidos_Contactos PCN ON PCN.IDPEDIDO COLLATE Modern_Spanish_CI_AI='''+@EJERCICIOAnt+'''+CAV.LETRA+CAV.NUMERO
+				LEFT JOIN '+@GESTIONAnt+'.DBO.CONT_CLI CON ON CON.CLIENTE=CAV.CLIENTE AND CON.LINEA=PCN.CONTACTO
+				LEFT JOIN Pedidos_Familias CPA ON CPA.EJERCICIO='''+@EJERCICIOAnt+''' COLLATE Modern_Spanish_CI_AI
+							AND CPA.NUMERO COLLATE Modern_Spanish_CI_AI=CAV.NUMERO AND CPA.LETRA COLLATE Modern_Spanish_CI_AI=CAV.LETRA
+				LEFT JOIN '+@GESTIONAnt+'.DBO.FAMILIAS FAM ON FAM.CODIGO=CPA.FAMILIA COLLATE Modern_Spanish_CI_AI
+				LEFT JOIN vSeries ser on ser.codigo=CAV.LETRA
+	
+				GROUP BY  CAV.empresa, CAV.LETRA, CAV.NUMERO, CAV.EMPRESA, CAV.ENTREGA, CAV.FECHA
+						, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI, CAV.CLIENTE	
+						, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
+						, env.DIRECCION, ven.nombre, CAST(CAV.OBSERVACIO AS VARCHAR(max))
+						, cli.nombre collate Modern_Spanish_CI_AI
+						, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI
+						, cli.RUTA, env.CODPOS, env.POBLACION, env.PROVINCIA, DAV.PRESUP, TRASPASADO, FINALIZADO, CANCELADO, PCN.Contacto
+						, CON.Persona, ser.nombre, CPA.FAMILIA, FAM.NOMBRE
+				
+				UNION
+
+				'
+			end
+		end
+	end
+
+	set @Sentencia = @Sentencia +'
 	SELECT   cast('''' as varchar(50)) as MODO
 			, CONCAT('''+@EJERCICIO+''',CAV.empresa,replace(CAV.LETRA,space(1),''0''),replace(LEFT(CAV.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO	
 			, '''+@EJERCICIO+''' as EJER , CAV.EMPRESA  collate Modern_Spanish_CI_AI as EMPRESA, convert(varchar(10), CAV.ENTREGA, 103) as ENTREGA

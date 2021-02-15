@@ -10,6 +10,7 @@ var currentUserLogin = flexygo.context.currentUserLogin;
 var currentUserId = flexygo.context.currentUserId;
 var currentUserFullName = flexygo.context.currentUserFullName;
 var currentSubreference = flexygo.context.currentSubreference;
+var EWtrabajaPeso = flexygo.context.EWtrabajaPeso;
 var UsuariosTV = flexygo.context.usuariosTV;
 var CodigoEmpresa = flexygo.context.CodigoEmpresa;
 var MesesConsumo = flexygo.context.MesesConsumo;

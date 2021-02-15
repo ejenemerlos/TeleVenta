@@ -539,7 +539,7 @@ BEGIN TRY
 		END CLOSE cur deallocate cur	
 
 		-- actualizar cabecera del pedido
-		begin try EXEC [pPedido_ActualizarCabecera] @IDPEDIDO end try begin catch end catch
+		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
 'set  @Sentencia = @Sentencia + '
 
 	COMMIT TRANSACTION pedidoNuevo
@@ -1078,6 +1078,44 @@ END CATCH
 '
 exec(@Sentencia)
 select  'pContactos'
+
+
+
+
+--Procedimiento pPedido_ActualizarCabecera
+IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pPedido_ActualizarCabecera' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+set @Sentencia = @AlterCreate + ' PROCEDURE [dbo].[pPedido_ActualizarCabecera] @IDPEDIDO varchar(50)
+AS
+BEGIN	
+    DECLARE @totalped as numeric(15,6)
+	DECLARE @totaldoc numeric(15, 6)
+	DECLARE @peso numeric(15, 6)
+
+	declare @ejercicio char(4) = LEFT(@IDPEDIDO,4)
+	declare @letra char(2) = (select LETRA from Configuracion_SQL)
+	
+	SET @totalped	= isnull((SELECT sum(cast(IMPORTE as numeric(15,6))) FROM vPedidos_Pie where IDPEDIDO=@IDPEDIDO),0)
+	SET @peso		= isnull((SELECT sum(cast(peso as numeric(15,6)))    FROM vPedidos_Detalle where IDPEDIDO=@IDPEDIDO),0)
+
+	SET @totaldoc	= isnull((SELECT sum(cast(IMPORTE as numeric(15,6))) FROM vPedidos_Pie where IDPEDIDO=@IDPEDIDO),0)
+					+ isnull((SELECT sum(cast(RECARGO as numeric(15,6))) FROM vPedidos_Pie where IDPEDIDO=@IDPEDIDO),0)
+					+ isnull((SELECT sum(cast(impPP as numeric(15,6)))   FROM vPedidos_Pie where IDPEDIDO=@IDPEDIDO),0)
+	
+	declare @sql varchar(max) = concat(''
+		UPDATE ['',@ejercicio,'''',@letra,''].[DBO].c_pedive 
+				SET TOTALPED='''''',@totalped,'''''',
+					IMPDIVISA='''''',@totalped,'''''',
+					TOTALDOC='''''',@totaldoc,'''''', 
+					PESO='''''',@peso,''''''
+		WHERE CONCAT('''''',@ejercicio,'''''',EMPRESA,replace(LETRA,space(1),''''0''''),replace(LEFT(NUMERO,10),space(1),''''0''''))  
+				collate Modern_Spanish_CI_AI='''''',@IDPEDIDO,'''''' '')
+
+	exec(@sql)
+
+END
+'
+exec(@Sentencia)
+select  'pPedido_ActualizarCabecera'
 
 
 
