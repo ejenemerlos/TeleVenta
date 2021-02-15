@@ -1,0 +1,1714 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+flxSysProcess
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.CronProcesses">
+ <summary>
+ Class CronProcesses.
+ </summary>
+</member>
+<member name="M:FLEXYGO.CronProcesses.SendMails(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sends pending mails from outbox.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if mail sent, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Error in attacment</exception>
+</member>
+<member name="M:FLEXYGO.CronProcesses.BuildMailAndNotices(FLEXYGO.Objects.IEntity,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Builds notices and emails based on Notices_sentence table.
+ </summary>
+ <param name="Entity">The collection of SQLSentences</param>
+ <param name="Ret">The process helper.</param>
+ <returns><c>true</c> if worked, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.CronProcesses.InsertMails(System.Data.DataTable,FLEXYGO.Data.DataManager,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Inserts the mails.
+ </summary>
+ <param name="dt">The datatable to obtain rows to insert.</param>
+ <param name="dm">The Data manager.</param>
+ <param name="aConftoken">a conftoken.</param>
+ <returns><c>true</c> if was inserted, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.ArgumentException">
+ FromEmail is required
+ or
+ To is required
+ or
+ Subject is required
+ or
+ Body is required
+ </exception>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting Mails
+ </exception>
+</member>
+<member name="M:FLEXYGO.CronProcesses.AddDocumentManagerFile(System.String[],FLEXYGO.Objects.EntityObject)">
+ <summary>
+ Adds the document manager file.
+ </summary>
+ <param name="attachArray">The attachment array.</param>
+ <param name="ent">An entity object</param>
+ <returns>Collection.</returns>
+</member>
+<member name="M:FLEXYGO.CronProcesses.InsertNotices(System.Data.DataTable,System.Data.DataTable,FLEXYGO.Data.DataManager,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Inserts the notices.
+ </summary>
+ <param name="dt">The datatable to obtain rows to insert.</param>
+ <param name="dtu">The userid datatable to obtain rows to insert.</param>
+ <param name="dm">The Data Manager.</param>
+ <param name="aConftoken">a conftoken.</param>
+ <returns><c>true</c> if inserted, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.ArgumentException">
+ Title is required
+ or
+ Message is required
+ or
+ MethodName is required
+ or
+ ReminderTime is required
+ or
+ ExpiryTime is required
+ or
+ AllUsers is required
+ or
+ TypeId is required
+ </exception>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting Notices
+ </exception>
+</member>
+<member name="M:FLEXYGO.CronProcesses.InsertNoticeUsers(System.String,System.String,FLEXYGO.Data.DataManager,FLEXYGO.Configuration.Tokens.ConfToken,System.Boolean)">
+ <summary>
+ Inserts the notice users.
+ </summary>
+ <param name="NoticeId">The notice identifier.</param>
+ <param name="UsersId">The users identifier 8can be separated with (;).</param>
+ <param name="dm">The DataManager.</param>
+ <param name="aConftoken">a conftoken.</param>
+ <param name="useReference"> if we are using UserId or Current reference</param>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting notice users
+ </exception>
+</member>
+<member name="M:FLEXYGO.CronProcesses.InsertNoticeUsers(System.Data.DataTable,System.String,FLEXYGO.Data.DataManager,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Inserts the notice users.
+ </summary>
+ <param name="dtu">The user datatable.</param>
+ <param name="NoticeId">The notice identifier.</param>
+ <param name="dm">The Data Manager.</param>
+ <param name="aConftoken">a conftoken.</param>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting notice users
+ </exception>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.InsertObjectContact(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Insert process for sysMailChimp_Object_Contact entity.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GeneratePotentialContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Generate potential contacts related to a sysMailChimp_Object_Contact entity.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.UploadPotentialContacts(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ Uploads in MailChimp a collection of contacts.
+ </summary>
+ <param name="Entity">The entity collection.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ListID">The list where contacts are uploaded.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.UpdateMailChimpSettings(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ Update configuration of MailChimp account.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="Apikey">The Apikey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.MailChimpIntegration(FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Integration with MailChimp, it gets data from MailChimp and is stored into database.
+ </summary>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.RefreshCampaigns(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Synchronizes MailChimp and Flexygo campaigns.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.RefreshCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Synchronizes MailChimp and Flexygo campaign.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaign(System.String,System.String)">
+ <summary>
+ Get MailChimp Campaign.
+ </summary>
+ <param name="apiKey">The apikey.</param>
+ <param name="id">The campaign id.</param>
+ <returns>A campaign.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaigns(System.String)">
+ <summary>
+ Get MailChimp Campaigns.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <returns>Collection of campaigns.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignsInfo(System.String)">
+ <summary>
+ Get MailChimp Campaigns info.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <returns>Collection of reports.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignInfo(System.String,System.String)">
+ <summary>
+ Get MailChimp Campaign info.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="id">The campaign id.</param>
+ <returns>A campaign report.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignsRecipients(System.String,System.String)">
+ <summary>
+ Get MailChimp recipients by campaign.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="campaignId">The campaign id.</param>
+ <returns>Collection of recipients emails.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignsOpenContactInfo(System.String,System.String)">
+ <summary>
+ Get MailChimp Campaigns open contact info.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="campaignId">The campaign id.</param>
+ <returns>Collection of open contact info.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignUrlsClicked(System.String,System.String)">
+ <summary>
+ Get MailChimp Campaign urls clicked.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="campaignId">The campaign id.</param>
+ <returns>Collection of urls clicked.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetCampaignsClickContactInfo(System.String,System.String,System.String)">
+ <summary>
+ Get MailChimp Campaigns click contact info.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="campaignId">The campaign id.</param>
+ <param name="linkId">The clicked link id.</param>
+ <returns>Collection of click contact info.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SaveCampaigns(System.String,System.Text.StringBuilder@,FLEXYGO.Processing.ProcessManager.ProcessHelper,FLEXYGO.Data.DataManager)">
+ <summary>
+ Save MailChimp Campaigns in configuration database.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="listaErrores">List of errors.</param>
+ <param name="Ret">The ret.</param>
+ <param name="cdm">Datamanager.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SaveCampaign(System.String,System.Text.StringBuilder@,FLEXYGO.Processing.ProcessManager.ProcessHelper,FLEXYGO.Data.DataManager,System.String)">
+ <summary>
+ Save MailChimp Campaign in configuration database.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="listaErrores">List of errors.</param>
+ <param name="Ret">The ret.</param>
+ <param name="cdm">Datamanager.</param>
+ <param name="Id">Campaign Id.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.EditCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object,System.Object@)">
+ <summary>
+ New campaign is saved or existing campaign is updated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="SegmentOptions">Options to segment the list/audience.</param>
+ <param name="newId">The new campaign id.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.DeleteCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Campaign is deleted.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.LaunchActionCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.Object,System.Object)">
+ <summary>
+ It triggers campaign actions.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="action">The action selected.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SendCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ A campaign is sent.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ReplicateCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ A campaign is replicated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ScheduleCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ A campaign is replicated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.UnscheduleCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ A campaign is replicated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.TestCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String)">
+ <summary>
+ A campaign is replicated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.CancelSendCampaign(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ A campaign is cancelled.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ApiKey">The ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SendCampaignWithSegment(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.Object,System.String,System.String,System.Object,System.String,System.String,System.String,System.Object,System.Object,System.Object)">
+ <summary>
+ A campaign with segment options is created and sent.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ViewMailChimpInfo(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ View related MailChimp info.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.RefreshTemplates(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Synchronizes MailChimp and Flexygo templates.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetTemplates(System.String)">
+ <summary>
+ Get MailChimp Templates.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <returns>Collection of lists.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SaveTemplates(System.String,System.Text.StringBuilder@,FLEXYGO.Processing.ProcessManager.ProcessHelper,FLEXYGO.Data.DataManager)">
+ <summary>
+ Save MailChimp Templates in configuration database.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="listaErrores">List of errors.</param>
+ <param name="Ret">The ret.</param>
+ <param name="cdm">Datamanager.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.EditTemplate(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ New template is saved or existing template is updated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.DeleteTemplate(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Template is deleted.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.RefreshLists(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Synchronizes MailChimp and Flexygo lists.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetLists(System.String)">
+ <summary>
+ Get MailChimp Lists.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <returns>Collection of lists.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetListMembers(System.String,System.String)">
+ <summary>
+ Get MailChimp contacts by list.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="listId">The campaign id.</param>
+ <returns>Collection of members.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.SaveLists(System.String,System.Text.StringBuilder@,FLEXYGO.Processing.ProcessManager.ProcessHelper,FLEXYGO.Data.DataManager)">
+ <summary>
+ Save MailChimp Lists in configuration database.
+ </summary>
+ <param name="apiKey">The apikey</param>
+ <param name="listaErrores">List of errors.</param>
+ <param name="Ret">The ret.</param>
+ <param name="cdm">Datamanager.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.EditList(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ New list is saved or existing list is updated.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.DeleteList(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ List is deleted.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.NewSubscriber(FLEXYGO.Objects.EntityObject,System.String,System.Boolean,System.String,System.Text.StringBuilder@)">
+ <summary>
+ Adds a new subscriber.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="ListID">The apikey</param>
+ <param name="isCustom">The apikey</param>
+ <param name="listaErrores">List of errors.</param>
+ <returns>Collection of lists.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ProcessDependeciesMailChimpObjectsContacts(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Process dependecies of timeline object.
+ </summary>
+ <param name="aSender">FormSender with objectname, processname or reportname, entity if proceeded and current form values.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns>List(Of FormAction) with actions to do with properties.</returns>
+ <exception cref="T:System.Exception">Returns error</exception>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetApiKey(FLEXYGO.Data.DataManager)">
+ <summary>
+ Get apikey.
+ </summary>
+ <param name="dm">Datamanager.</param>
+ <returns>The apikey.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetMailChimpErrorMessage(System.AggregateException)">
+ <summary>
+ Get MailChimp exception info.
+ </summary>
+ <param name="ex">Exception.</param>
+ <returns>String with MailChimp exception info.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ChangeMailChimpAccount(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ All MailChimp info is deleted in configuration database.
+ </summary>
+ <param name="ex">Exception.</param>
+ <returns>String with MailChimp exception info.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.TestMailChimpApi(System.String,System.String@)">
+ <summary>
+ MailChimp api is tested with given ApiKey.
+ </summary>
+ <param name="apiKey">ApiKey.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.ObjectProcesses.IPLockout.InsertIPLockout(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Insert new object
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.ObjectProcesses.IPLockout.UpdateIPLockout(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an object.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.ObjectProcesses.IPLockout.DeleteIPLockout(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an object
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.Office.AddRedirectURIs(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ It adds AppFullPath to RedirectURI in Azure portal.
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.GetConsent(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ It gets url to get user authorization
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="Service">Microsoft service name: calendar, contacts, mail,...</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.GetOfficeContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object)">
+ <summary>
+ It gets office contacts
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.SendOfficeContacts(System.Collections.Generic.List{FLEXYGO.OfficeResourceTypes.Contact},FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Object)">
+ <summary>
+ It sends contacts to office 365 with a batch request
+ </summary>
+ <param name="Contacts">Collection of contacts</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.GetOfficeCalendar(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object)">
+ <summary>
+ It gets office calendar events
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.SendOfficeEvents(System.Collections.Generic.List{FLEXYGO.OfficeResourceTypes.OfficeEvent},FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Object)">
+ <summary>
+ It sends calendar events to office 365
+ </summary>
+ <param name="Events">Collection of calendar events</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.GetOfficeApiError(RestSharp.IRestResponse)">
+ <summary>
+ It gets office error
+ </summary>
+ <param name="response">IRestResponse obtained after office api call</param>
+ <returns>the error.</returns>
+</member>
+<member name="M:FLEXYGO.Office.ReadToken(System.String,System.Object,System.String@,System.String@)">
+ <summary>
+ Token is read from DB, It's refreshed when it's expired
+ </summary>
+ <param name="tokenType">Services type called</param>
+ <param name="errorMsg">Error message</param>
+ <param name="token">token</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.Contact">
+ <summary>
+ Class Office contact
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.assistantName">
+ <summary>
+ The name of the contact's assistant
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.birthday">
+ <summary>
+ The contact's birthday. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. 
+ For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.businessAddress">
+ <summary>
+ The contact's business address
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.businessHomePage">
+ <summary>
+ The business home page of the contact.
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.businessPhones">
+ <summary>
+ The contact's business phone numbers
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.categories">
+ <summary>
+ The categories associated with the contact.
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.changeKey">
+ <summary>
+ Identifies the version of the contact. Every time the contact Is changed, ChangeKey changes as well. This allows Exchange to apply changes 
+ to the correct version of the object
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.children">
+ <summary>
+ The names of the contact's children
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.companyName">
+ <summary>
+ The name of the contact's company
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.createdDateTime">
+ <summary>
+ The time the contact was created. The Timestamp type represents Date And time information Using ISO 8601 format And Is always In UTC time. 
+ For example, midnight UTC On Jan 1, 2014 would look Like this: '2014-01-01T00:00:00Z'
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.department">
+ <summary>
+ The contact's department
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.displayName">
+ <summary>
+ The contact's display name. You can specify the display name in a create or update operation. Note that later updates to other properties 
+ may cause an automatically generated value to overwrite the displayName value you have specified. To preserve a pre-existing value, 
+ always include it as displayName in an update operation
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.emailAddresses">
+ <summary>
+ The contact's email addresses
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.fileAs">
+ <summary>
+ The name the contact Is filed under
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.generation">
+ <summary>
+ The contact's generation
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.givenName">
+ <summary>
+ The contact's given name
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.homeAddress">
+ <summary>
+ The contact's home address
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.homePhones">
+ <summary>
+ The contact's home phone numbers
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.id">
+ <summary>
+ The contact's unique identifier. Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.imAddresses">
+ <summary>
+ The contact's instant messaging (IM) addresses
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.initials">
+ <summary>
+ The contact's initials
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.jobTitle">
+ <summary>
+ The contact's job title
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.lastModifiedDateTime">
+ <summary>
+ The time the contact was modified. The Timestamp type represents Date And time information Using ISO 8601 format And Is always In UTC time. 
+ For example, midnight UTC On Jan 1, 2014 would look Like this: '2014-01-01T00:00:00Z'
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.manager">
+ <summary>
+ The name of the contact's manager
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.middleName">
+ <summary>
+ The contact's middle name
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.mobilePhone">
+ <summary>
+ The contact's mobile phone number
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.nickName">
+ <summary>
+ The contact's nickname
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.officeLocation">
+ <summary>
+ The location of the contact's office
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.otherAddress">
+ <summary>
+ Other addresses For the contact
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.parentFolderId">
+ <summary>
+ The ID of the contact's parent folder
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.personalNotes">
+ <summary>
+ The user's notes about the contact
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.profession">
+ <summary>
+ The contact's profession
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.spouseName">
+ <summary>
+ The name of the contact's spouse/partner
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.surname">
+ <summary>
+ The contact's surname
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.title">
+ <summary>
+ The contact's title
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.yomiCompanyName">
+ <summary>
+ The phonetic Japanese company name of the contact
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.yomiGivenName">
+ <summary>
+ The phonetic Japanese given name (first name) of the contact
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Contact.yomiSurname">
+ <summary>
+ The phonetic Japanese surname (last name) of the contact
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.PhysicalAddress">
+ <summary>
+ Class Office physical address
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PhysicalAddress.city">
+ <summary>
+ The city
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PhysicalAddress.countryOrRegion">
+ <summary>
+ The country Or region. It's a free-format string value, for example, "United States"
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PhysicalAddress.postalCode">
+ <summary>
+ The postal code
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PhysicalAddress.state">
+ <summary>
+ The state
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PhysicalAddress.street">
+ <summary>
+ The street
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.EmailAddress">
+ <summary>
+ Class Office email address
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.EmailAddress.address">
+ <summary>
+ The email address of the person Or entity
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.EmailAddress.name">
+ <summary>
+ The display name of the person Or entity
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.OfficeEvent">
+ <summary>
+ Class Office calendar events
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.allowNewTimeProposals">
+ <summary>
+ True if the meeting organizer allows invitees to propose a New time when responding, false otherwise. Optional. Default Is true
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.attendees">
+ <summary>
+ The collection Of attendees For the Event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.body">
+ <summary>
+ The body Of the message associated With the Event. It can be In HTML Or text format
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.bodyPreview">
+ <summary>
+ The preview of the message associated with the event. It Is in text format
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.categories">
+ <summary>
+ The categories associated with the event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.changeKey">
+ <summary>
+ Identifies the version of the event object. Every time the event Is changed, ChangeKey changes as well. This allows Exchange to apply changes 
+ to the correct version of the object
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.createdDateTime">
+ <summary>
+ The Timestamp type represents Date And time information Using ISO 8601 format And Is always In UTC time
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.end">
+ <summary>
+ The Date, time, And time zone that the Event ends. By Default, the End time Is In UTC
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.hasAttachments">
+ <summary>
+ Set to true if the event has attachments 
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.iCalUId">
+ <summary>
+ A unique identifier for an event across calendars. This ID Is different for each occurrence in a recurring series. Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.id">
+ <summary>
+ Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.importance">
+ <summary>
+ The importance Of the Event. The possible values are: low, normal, high
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.isAllDay">
+ <summary>
+ Set to true if the event lasts all day
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.isCancelled">
+ <summary>
+ Set to true if the event has been canceled
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.isOnlineMeeting">
+ <summary>
+ True if this event has online meeting information, false otherwise. Default Is false. Optional
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.isOrganizer">
+ <summary>
+ Set to true if the calendar owner (specified by the owner property of the calendar) Is the organizer of the event 
+ (specified by the organizer property of the event). This also applies if a delegate organized the event on behalf of the owner
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.isReminderOn">
+ <summary>
+ Set to true if an alert Is set to remind the user of the event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.lastModifiedDateTime">
+ <summary>
+ The Timestamp type represents Date And time information Using ISO 8601 format And Is always In UTC time
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.location">
+ <summary>
+ The location Of the Event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.locations">
+ <summary>
+ The locations where the Event Is held Or attended from. The location And locations properties always correspond With Each other. 
+ If you update the location Property, any prior locations In the locations collection would be removed And replaced by the New location value
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.onlineMeeting">
+ <summary>
+ Details For an attendee To join the meeting online. Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.onlineMeetingProvider">
+ <summary>
+ Represents the online meeting service provider. The possible values are teamsForBusiness, skypeForBusiness, And skypeForConsumer. Optional
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.onlineMeetingUrl">
+ <summary>
+ A URL for an online meeting. The property Is set only when an organizer specifies an event as an online meeting such as a Skype meeting. Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.organizer">
+ <summary>
+ The organizer Of the Event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.originalEndTimeZone">
+ <summary>
+ The end time zone that was set when the event was created. A value of tzone://Microsoft/Custom indicates that a legacy custom time zone was set in desktop Outlook
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.originalStart">
+ <summary>
+ The Timestamp type represents Date And time information Using ISO 8601 format And Is always In UTC time
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.originalStartTimeZone">
+ <summary>
+ The start time zone that was set when the event was created. A value of tzone//Microsoft/Custom indicates that a legacy custom time zone was set in desktop Outlook
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.recurrence">
+ <summary>
+ The recurrence pattern For the Event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.reminderMinutesBeforeStart">
+ <summary>
+ The number Of minutes before the Event start time that the reminder alert occurs
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.responseRequested">
+ <summary>
+ Default Is true, which represents the organizer would Like an invitee to send a response to the even
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.responseStatus">
+ <summary>
+ Indicates the type Of response sent In response To an Event message
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.sensitivity">
+ <summary>
+ The possible values are: normal, personal, private, confidential
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.seriesMasterId">
+ <summary>
+ The ID for the recurring series master item, if this event Is part of a recurring series
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.showAs">
+ <summary>
+ The status To show. The possible values are: free, tentative, busy, oof, workingElsewhere, unknown
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.start">
+ <summary>
+ The Date, time, And time zone that the Event starts. By Default, the start time Is In UTC
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.subject">
+ <summary>
+ The text of the event's subject line
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.transactionId">
+ <summary>
+ A custom identifier specified by a client app for the server to avoid redundant POST operations in case of client retries to create the same event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.type">
+ <summary>
+ The event type. The possible values are: singleInstance, occurrence, exception, seriesMaster. Read-only.
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OfficeEvent.webLink">
+ <summary>
+ The URL to open the event in Outlook on the web.
+ Outlook on the web opens the event in the browser if you are signed in to your mailbox. Otherwise, Outlook on the web prompts you to sign in.
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.Attendee">
+ <summary>
+ Class Office attendee
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Attendee.emailAddress">
+ <summary>
+ Includes the name And SMTP address Of the attendee
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Attendee.proposedNewTime">
+ <summary>
+ An alternate Date/time proposed by the attendee For a meeting request To start And End. If the attendee hasn't proposed another time, then this property is not included in a response of a GET event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Attendee.status">
+ <summary>
+ The attendee's response (none, accepted, declined, etc.) for the event and date-time that the response was sent
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Attendee.type">
+ <summary>
+ The attendee type: required, optional, resource
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.TimeSlot">
+ <summary>
+ Class Office timeSlot
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.TimeSlot.end">
+ <summary>
+ The Date, time, And time zone that a period begins
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.TimeSlot.start">
+ <summary>
+ The Date, time, And time zone that a period ends
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.DateTimeTimeZone">
+ <summary>
+ Class Office dateTimeTimeZone
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.DateTimeTimeZone.dateTime">
+ <summary>
+ A single point of time in a combined date And time representation ({date}T{time}; for example, 2017-08-29T0400:00.0000000)
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.DateTimeTimeZone.timeZone">
+ <summary>
+ Represents a time zone, for example, "Pacific Standard Time".
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.ItemBody">
+ <summary>
+ Class Office itemBody
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.ItemBody.content">
+ <summary>
+ The content of the item
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.ItemBody.contentType">
+ <summary>
+ The type Of the content. Possible values are text And html
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.Location">
+ <summary>
+ Class Office location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.address">
+ <summary>
+ The street address Of the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.coordinates">
+ <summary>
+ The geographic coordinates And elevation Of the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.displayName">
+ <summary>
+ The name associated with the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.locationEmailAddress">
+ <summary>
+ Optional email address of the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.locationUri">
+ <summary>
+ Optional URI representing the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.locationType">
+ <summary>
+ The type Of location. The possible values are: Default, conferenceRoom, homeAddress, businessAddress,geoCoordinates, streetAddress, hotel, 
+ restaurant, localBusiness, postalAddress. Read-only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.uniqueId">
+ <summary>
+ For internal use only
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Location.uniqueIdType">
+ <summary>
+ For internal use only
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates">
+ <summary>
+ Class Office outlookGeoCoordinates
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates.accuracy">
+ <summary>
+ The accuracy of the latitude And longitude. As an example, the accuracy can be measured in meters, such as the latitude And longitude are accurate to within 50 meters
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates.altitude">
+ <summary>
+ The altitude of the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates.altitudeAccuracy">
+ <summary>
+ The accuracy of the altitude
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates.latitude">
+ <summary>
+ The latitude of the location
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OutlookGeoCoordinates.longitude">
+ <summary>
+ The longitude of the location
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo">
+ <summary>
+ Class Office onlineMeetingInfo
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.onferenceId">
+ <summary>
+ The ID of the conference
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.joinUrl">
+ <summary>
+ The external link that launches the online meeting. This Is a URL that clients will launch into a browser And will redirect the user to join the meeting
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.phones">
+ <summary>
+ All Of the phone numbers associated With this conference
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.quickDial">
+ <summary>
+ The pre-formatted quickdial for this call
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.tollFreeNumbers">
+ <summary>
+ The toll free numbers that can be used to join the conference
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.OnlineMeetingInfo.tollNumber">
+ <summary>
+ The toll number that can be used to join the conference
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.Phone">
+ <summary>
+ Class Office phone
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Phone.number">
+ <summary>
+ The phone number
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Phone.type">
+ <summary>
+ The type of phone number. The possible values are: home, business, mobile, other, assistant, homeFax, businessFax, otherFax, pager, radio.
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.Recipient">
+ <summary>
+ Class Office recipient
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.Recipient.emailAddress">
+ <summary>
+ The recipient's email address
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.PatternedRecurrence">
+ <summary>
+ Class Office patternedRecurrence
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PatternedRecurrence.pattern">
+ <summary>
+ The frequency Of an Event
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.PatternedRecurrence.range">
+ <summary>
+ RecurrenceRange	The duration Of an Event
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.RecurrencePattern">
+ <summary>
+ Class Office recurrencePattern
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.dayOfMonth">
+ <summary>
+ The day Of the month On which the Event occurs. Required If type Is absoluteMonthly Or absoluteYearly
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.daysOfWeek">
+ <summary>
+ A collection Of the days Of the week On which the Event occurs. The possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.firstDayOfWeek">
+ <summary>
+ The first day Of the week. The possible values are: sunday, monday, tuesday, wednesday, thursday, friday, saturday. Default Is sunday. Required if type Is weekly
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.index">
+ <summary>
+ Specifies On which instance Of the allowed days specified In daysOfsWeek the Event occurs, counted from the first instance In the month. The possible values are: first, second, third, fourth, last. Default Is first. Optional And used if type Is relativeMonthly Or relativeYearly
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.interval">
+ <summary>
+ The number Of units between occurrences, where units can be In days, weeks, months, Or years, depending On the type. Required
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.month">
+ <summary>
+ The month In which the Event occurs. This Is a number from 1 To 12
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrencePattern.type">
+ <summary>
+ recurrencePatternType	The recurrence pattern type: daily, weekly, absoluteMonthly, relativeMonthly, absoluteYearly, relativeYearly. Required
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.RecurrenceRange">
+ <summary>
+ Class Office recurrenceRange
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrenceRange.endDate">
+ <summary>
+ The date to stop applying the recurrence pattern. Depending on the recurrence pattern of the event, the last occurrence of the meeting may Not be this date. Required if type Is endDate
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrenceRange.numberOfOccurrences">
+ <summary>
+ The number Of times To repeat the Event. Required And must be positive If type Is numbered
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrenceRange.recurrenceTimeZone">
+ <summary>
+ Time zone for the startDate And endDate properties. Optional. If Not specified, the time zone of the event Is used
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrenceRange.startDate">
+ <summary>
+ The date to start applying the recurrence pattern. The first occurrence of the meeting may be this date Or later, depending on the recurrence 
+ pattern of the event. Must be the same value as the start property of the recurring event. Required
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.RecurrenceRange.type">
+ <summary>
+ The recurrence range. The possible values are: endDate, noEnd, numbered. Required
+ </summary>
+</member>
+<member name="T:FLEXYGO.OfficeResourceTypes.ResponseStatus">
+ <summary>
+ Class Office responseStatus
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.ResponseStatus.response">
+ <summary>
+ The response type. The possible values are: None, Organizer, TentativelyAccepted, Accepted, Declined, NotResponded
+ </summary>
+</member>
+<member name="P:FLEXYGO.OfficeResourceTypes.ResponseStatus.time">
+ <summary>
+ The Date And time that the response was returned. It uses ISO 8601 format And Is always In UTC time
+ </summary>
+</member>
+<member name="M:FLEXYGO.Offline.GetAppConfig(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Gets app offline configuration
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="AppName">App name to get current config</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SyncData(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sync data to application
+ </summary>
+ <param name="Entity">Sync entity data</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.GetAPPDataSchema(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sync data to application
+ </summary>
+ <param name="Entity">Sync entity data</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SendAllPushMessages(FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Send all the push mesages in the queue.
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting notice users
+ </exception>
+</member>
+<member name="M:FLEXYGO.Offline.SendPushMessage(System.String,System.String,System.Int32,System.String,System.String,System.Object,System.Boolean,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sends a push message to the API.
+ </summary>
+ <param name="token">The app user.</param>
+ <param name="platform">The platform of the user.</param>
+ <param name="id">The id of the notice.</param>
+ <param name="title">The tittle of the message.</param>
+ <param name="text">The text of the message.</param>
+ <param name="jscode">The jscode.</param>
+ <param name="causesSync">Causes sync of data.</param>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.InvalidOperationException">
+ Error inserting notice users
+ </exception>
+</member>
+<member name="M:FLEXYGO.Offline.GetAPPFileResource(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Get Base64 data from app file resource.
+ </summary>
+ <param name="Entity">Offline File entity</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.ScriptJob.Insert(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Updates the specified entity.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.ScriptJob.Update(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Updates the specified entity.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.ScriptJob.ExecScripts(System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Exec all script jobs in order from script menu
+ </summary>
+ <param name="Entity">Not Used</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.ScriptJob.Run(System.InvalidOperationException@)">
+ <summary>
+ Exec all script jobs form startup process
+ </summary>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Notices.UpdateNoticeBadge(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Update notice icon using SignalR Controller
+ </summary>
+ <param name="Entity">Not Used</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.QuartzSheduler.JobScheduler.InsertJob(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Create new job and refresh the scheduler.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.QuartzSheduler.JobScheduler.UpdateJob(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update new job and refresh the scheduler.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.QuartzSheduler.JobScheduler.DeleteJob(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update new job and refresh the scheduler.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="T:FLEXYGO.SysProcess">
+ <summary>
+ Class SysProcess.
+ </summary>
+</member>
+<member name="M:FLEXYGO.SysProcess.ReloadCache(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Reloads the cache.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.Gipe_Test_Add3(FLEXYGO.Objects.EntityObject,System.Decimal@,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Reloads the cache.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.ChangeAdminProfile(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Changes admin profile.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="NewProfile">The new profile.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.ChangeCurrentUserLang(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Changes current user language.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="NewCultureId">The new language.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.TranslateTo(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Int32)">
+ <summary>
+ Translates to a given language using google translator.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Lang">The language.</param>
+ <param name="OriginId">OringinId Strings to translate</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if translated, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.TranslateTextTo(FLEXYGO.Objects.EntityObject,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Translates a text to a given language using google translator.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Text">The string to translate.</param>
+ <param name="Lang">The language.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.CreateProcessParameters(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Creates all process parameters.
+ </summary>
+ <param name="Entity">Process EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if Created, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess._SaveProcessParams(System.String,FLEXYGO.Utilities.General.BaseCollection,FLEXYGO.Objects.Settings.eProcessType,System.String,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Saves the process parameters.
+ </summary>
+ <param name="ProcessName">Name of the process.</param>
+ <param name="ParamList">The parameter list.</param>
+ <param name="ProcessType">Type of the process.</param>
+ <param name="aConftoken">A Configuration token.</param>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">
+ Error in insert process parameter Name {0}
+ or
+ Error saving Process param list
+ </exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.UpdateImage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Update Image From ImageManager.
+ </summary>
+ <param name="Entity">The EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns>a Boolean indicating completion of process</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.EditStoredProcedure(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Edit an stored procedure.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="ProcedureText">Procedure text code</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.AfterLoginERPAhoraFreeware(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Create new register in AhoraSesion and prepare Datamanager SQL Instructions.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not create AhoraSession</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.AfterLoginERPAhoraFreewarePortal(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Create new register in AhoraSesion with username 0 and office 0 and prepare Datamanager SQL Instructions.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not create AhoraSession</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.AfterLogoffERPAhoraFreeware(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Erase register in AhoraSesion for the current user
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not erase AhoraSession</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.ScriptDatabase(FLEXYGO.Objects.IEntity,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Generate merges from active origin id
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not erase AhoraSession</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.SendMail(FLEXYGO.Objects.EntityObject,System.String,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sends an email
+ </summary>
+ <param name="Email">The email.</param>
+ <param name="Subject">The subject.</param>
+ <param name="Body">The body</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if succes, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.DownloadDataToExcel(FLEXYGO.Objects.EntityObject,System.String,System.String,System.Object,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Downloads data info on to excel file
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="ConnString">Data connection string Name</param>
+ <param name="Sentence">SQL Sentence</param>
+ <param name="XSLFilePath">Optional XSL file path</param>
+ <param name="XSLFileName">Optional XSL file name</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.UnlockKeyFieldsLoadProcess(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Unlocks key fields when there values are null.
+ </summary>
+ <param name="aSender">FormSender with objectname, processname or reportname, entity if proceeded and current form values.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns>List(Of FormAction) with actions to do with properties.</returns>
+ <exception cref="T:System.Exception">Returns error</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.ProcessDependeciesTimeline(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Process dependecies of timeline object.
+ </summary>
+ <param name="aSender">FormSender with objectname, processname or reportname, entity if proceeded and current form values.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns>List(Of FormAction) with actions to do with properties.</returns>
+ <exception cref="T:System.Exception">Returns error</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.OfflineCloneObject(FLEXYGO.Objects.EntityObject,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+Offline clone object
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="AppName">App name</param>
+ <param name="ObjectName">Object name</param>
+ <param name="Properties">Properties</param>
+ <param name="NewObjectName">New object name</param>
+ <param name="NewCollectionName">New collection name</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.WebApiIsEnabled(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+Check if WebApi is enabled
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.EnableWebApi(FLEXYGO.Objects.EntityObject,System.Boolean,System.Boolean,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+Enable WebApi
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Enable">Enable.</param>
+ <param name="RefreshApplication">Refresh application.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.EnableOfflineRequirements(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+Enable offline requirements
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.GetPowerBISettings(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Gets the power bi settings.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="ReportName">Name of the report.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.GetPBIReportInfo(System.String,FLEXYGO.Configuration.Tokens.ConfToken,System.String@,System.String@,System.String@)">
+ <summary>
+ Gets the pbi report information.
+ </summary>
+ <param name="ReportName">Name of the report.</param>
+ <param name="aConfToken">a conf token.</param>
+ <param name="PowerBIReportId">The power bi report identifier.</param>
+ <param name="Filter">The filter.</param>
+ <param name="Roles">The roles.</param>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error loading Report Info</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.ProcessDependeciesConnString(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Connection string is changed
+ </summary>
+ <param name="aSender">FormSender with objectname, processname or reportname, entity if proceeded and current form values.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns>List(Of FormAction) with actions to do with properties.</returns>
+ <exception cref="T:System.Exception">Returns error</exception>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>

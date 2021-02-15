@@ -1,0 +1,247 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+UnitTest
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.Testing.UnitTest">
+ <summary>
+ Class UnitTest is user for running unit tests on flexygo Objects.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Testing.UnitTest._conftoken">
+ <summary>
+ The configuration token
+ </summary>
+</member>
+<member name="F:FLEXYGO.Testing.UnitTest.FormatedExceptions">
+ <summary>
+ The formated exceptions
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.UnitTest.#ctor">
+ <summary>
+ Initializes a new instance of the <see cref="T:FLEXYGO.Testing.UnitTest"/> class.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.UnitTest.SetConfToken(FLEXYGO.Configuration.Tokens.ConfToken,System.Boolean)">
+ <summary>
+ Sets the conf token.
+ </summary>
+ <param name="lConfToken">The conftoken.</param>
+ <param name="HTMLFormat">if set to <c>true</c> [HTML format].</param>
+</member>
+<member name="M:FLEXYGO.Testing.UnitTest.AsertFormatException(System.Exception,System.String)">
+ <summary>
+ Aserts the format exception.
+ </summary>
+ <param name="ex">The exception.</param>
+ <param name="text">The optional text.</param>
+ <returns>System.String.</returns>
+</member>
+<member name="T:FLEXYGO.Testing.BasicTests">
+ <summary>
+ Class BasicTests.
+ </summary>
+ <seealso cref="T:FLEXYGO.Testing.UnitTest" />
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestUserProfile">
+ <summary>
+ Tests User Profile JSon serialization.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestConfigTokens">
+ <summary>
+ Tests configuration tokens JSon serialization.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestNodes">
+ <summary>
+ Tests Nodes.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestUserProfileInterfaceMenus">
+ <summary>
+ Tests User Profile Web Menus.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestMovement">
+ <summary>
+ Tests the SysMenus basic collection movement.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestVars">
+ <summary>
+ Tests the default vars and User Info.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestBasicUpdate">
+ <summary>
+ Tests the Basic Entity Update.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestBasicInsertDelete">
+ <summary>
+ Tests the Basic Entity Update.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestLoadObjectsSettings">
+ <summary>
+ Tests the System objects settings.
+ </summary>
+ 
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestEntitiesAndCollections">
+ <summary>
+ Tests the entities and collections.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestViewsSyntaxis">
+ <summary>
+ Tests the entities and collections with cache.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestEntityCollection(System.String,System.String)">
+ <summary>
+ Tests the entity collection.
+ </summary>
+ <param name="ColName">Name of the col.</param>
+ <param name="CollWhere">The coll where.</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestCollectionMovement(System.String,System.String)">
+ <summary>
+ Tests the collection movement.
+ </summary>
+ <param name="ColName">Name of the col.</param>
+ <param name="ColWhere">The col where.</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestNewObject(System.String)">
+ <summary>
+ Tests a New object.
+ </summary>
+ <param name="ObjName">Object Type name</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestEntityObject(System.String,System.String)">
+ <summary>
+ Tests the entity object.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="objectWhere">The object where.</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestDeprecatedIssues">
+ <summary>
+ Tests the deprecated  features
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestEntityProperties(FLEXYGO.Objects.EntityObject)">
+ <summary>
+ Tests the entity properties
+ </summary>
+ <param name="c">The c.</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestEntityDependencyProperties(FLEXYGO.Objects.Settings.ObjectProperty)">
+ <summary>
+ Tests the entity properties dependency.
+ </summary>
+ <param name="c">Object Property</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestRelations(FLEXYGO.Objects.EntityObject)">
+ <summary>
+ Tests the existing relations.
+ </summary>
+ <param name="c">The Entity.</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestGridViewKeys(FLEXYGO.Objects.IEntity)">
+ <summary>
+ Tests grid views have default key.
+ </summary>
+ <param name="c">The Entity</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestProcess(FLEXYGO.Objects.IEntity)">
+ <summary>
+ Tests the existing process.
+ </summary>
+ <param name="c">The Entity</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestProcessParams(FLEXYGO.Objects.Settings.ProcessConfig)">
+ <summary>
+ Tests the Process parameters
+ </summary>
+ <param name="pr">The process settings</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestReports(FLEXYGO.Objects.IEntity)">
+ <summary>
+ Tests the existing reports.
+ </summary>
+ <param name="c">The Entity</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestReportParams(FLEXYGO.Objects.Settings.ReportSettings)">
+ <summary>
+ Tests the Report parameters
+ </summary>
+ <param name="r">The report settings</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestTemplates(FLEXYGO.Objects.IEntity)">
+ <summary>
+ Tests the existing Templates.
+ </summary>
+ <param name="c">The Entity</param>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.IsObjectSerializable(System.Object,System.Data.SerializationFormat)">
+ <summary>
+ Determines whether an object can be serialized.
+ </summary>
+ <param name="Object">The object.</param>
+ <param name="SerializationFormat">The serialization format.</param>
+ <exception cref="T:System.ArgumentException">Invalid SerializationFormat</exception>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestMasterTables">
+ <summary>
+ Tests the Master Tables.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestMasterTableInsertUpdateDelete">
+ <summary>
+ Tests the Master Tables Insert Update and Delete.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestImpersonate">
+ <summary>
+ Tests impersonate domain, user and password if ImpersonateEnabled setting is true
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestCronExpressions">
+ <summary>
+ Tests all cron expressions in conf database.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestMissingTranslations">
+ <summary>
+ Tests if there are missing translations for active cultures and originId 0
+ </summary>
+</member>
+<member name="M:FLEXYGO.Testing.BasicTests.TestObjectSecurity">
+ <summary>
+ Tests Security.
+ </summary>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
+</members>
+</doc>

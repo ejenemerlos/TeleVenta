@@ -1,0 +1,159 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+flxPowerBI
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.PowerBI.Services.EmbedService">
+ <summary>
+ Class EmbedService.
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Services.EmbedService.AppSettings">
+ <summary>
+ The application settings
+ </summary>
+</member>
+<member name="P:FLEXYGO.PowerBI.Services.EmbedService.EmbedConfig">
+ <summary>
+ Gets the embed configuration.
+ </summary>
+ <value>The embed configuration.</value>
+</member>
+<member name="P:FLEXYGO.PowerBI.Services.EmbedService.TileEmbedConfig">
+ <summary>
+ Gets the tile embed configuration.
+ </summary>
+ <value>The tile embed configuration.</value>
+</member>
+<member name="F:FLEXYGO.PowerBI.Services.EmbedService.m_embedConfig">
+ <summary>
+ The m embed configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Services.EmbedService.m_tileEmbedConfig">
+ <summary>
+ The m tile embed configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Services.EmbedService.m_tokenCredentials">
+ <summary>
+ The m token credentials
+ </summary>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.#ctor">
+ <summary>
+ Initializes a new instance of the <see cref="T:FLEXYGO.PowerBI.Services.EmbedService"/> class.
+ </summary>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.EmbedDashboard">
+ <summary>
+ Embeds the dashboard.
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.EmbedTile">
+ <summary>
+ Embeds the tile.
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.GetSettingErrors">
+ <summary>
+ Gets the setting errors.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.DoAuthentication">
+ <summary>
+ Does the authentication.
+ </summary>
+ <returns>AuthenticationResult.</returns>
+</member>
+<member name="M:FLEXYGO.PowerBI.Services.EmbedService.GetTokenCredentials">
+ <summary>
+ Gets the token credentials.
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="T:FLEXYGO.PowerBI.Settings.AppSettings">
+ <summary>
+ Class AppSettings.
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.AuthorityUrl">
+ <summary>
+ The authority URL
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.ResourceUrl">
+ <summary>
+ The resource URL
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.ApplicationId">
+ <summary>
+ The application identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.ApiUrl">
+ <summary>
+ The API URL
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.WorkspaceId">
+ <summary>
+ The workspace identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.AuthenticationType">
+ <summary>
+ The authentication type
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.ApplicationSecret">
+ <summary>
+ The application secret
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.Tenant">
+ <summary>
+ The tenant
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.Username">
+ <summary>
+ The username
+ </summary>
+</member>
+<member name="F:FLEXYGO.PowerBI.Settings.AppSettings.Password">
+ <summary>
+ The password
+ </summary>
+</member>
+<member name="M:FLEXYGO.PowerBI.Settings.AppSettings.#ctor">
+ <summary>
+ Initializes a new instance of the <see cref="T:FLEXYGO.PowerBI.Settings.AppSettings"/> class.
+ </summary>
+ <exception cref="T:System.ArgumentException">Error Loading BI Settings</exception>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>
