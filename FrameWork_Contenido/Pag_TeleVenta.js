@@ -61,7 +61,7 @@ function estTV(){
 					  + "&nbsp;&nbsp;&nbsp; Importe: "+js[0].importe+"&euro;";
 			$("#dvEstTV").html(contenido);
 			var filtros = js[0].filtros;
-			var losFiltros = "";			/**/ console.log(JSON.stringify(filtros));
+			var losFiltros = "";
 			if(js[0].filtros[0].gestor.length>0){ losFiltros += " gestor,"; } 
 			if(js[0].filtros[0].ruta.length>0){ losFiltros += " ruta,"; } 
 			if(js[0].filtros[0].vendedor.length>0){ losFiltros += " vendedor,"; } 
@@ -125,6 +125,10 @@ function cargarSubDatos(objeto,cliente,id,pos){ console.log("cargarSubDatos("+ob
 					contenido += "<div class='dvSub' onclick='asignarObjetoDatos(\""+id+"\",$(this).text())'>"+elTXT+"</div>"; 
 				}
 			}else{ contenido="<div style='color:red;'>Sin resultados!</div>"; }
+			if(objeto==="inciArt"){
+				var inciAsig = $("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val();
+				if(inciAsig!==""){ contenido = "<div class='dvSubI' onclick='desasignarCliArt(\""+objeto+"\",\""+cliente+"\",\""+id+"\",\""+pos+"\")'>Asignado: "+inciAsig+"</div><br>" + contenido; }
+			}
 		}else{ contenido="<div style='color:red;'>Sin resultados!</div>"; }
 		$("#dvDatosTemp").html(contenido);
 	}else{ $("#dvDatosTemp").remove(); alert('Error S.P. pSeries!\n'+JSON.stringify(ret)); } }, false);
@@ -132,14 +136,19 @@ function cargarSubDatos(objeto,cliente,id,pos){ console.log("cargarSubDatos("+ob
 
 function asignarObjetoDatos(id,txt){ console.log("asignarObjetoDatos("+id+","+txt+")");
 	if(Left(id,16)==="inpIncidenciaSol"){ 
-		var idid = id.split("inpIncidenciaSol")[1];
-		id="inpIncidenciaSolINP"+idid;
-		$("#inpIncidenciaSolImg"+idid).attr("src","./Merlos/images/inciRed.png");
+		var idN = id.split("inpIncidenciaSol")[1];
+		id="inpIncidenciaSolINP"+idN;
+		$("#inpIncidenciaSolImg"+idN).attr("src","./Merlos/images/inciRed.png");
 	}
 	$("#"+id).val(txt);
 	$("#dvDatosTemp").fadeOut(); 
 }
 
+function desasignarCliArt(objeto,cliente,id,pos){
+	$("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val("");
+	$("#inpIncidenciaSolImg"+id.split("inpIncidenciaSol")[1]).attr("src","./Merlos/images/inciGris.png");
+	cargarSubDatos(objeto,cliente,id,pos);
+}
 
 
 /*  TV_Cliente  **************************************************************************************************************** */
@@ -284,6 +293,7 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	var elDV = "dvLlamadas";
 	var contenido = "";
 	var parametros = '{"modo":"'+modo+'","cliente":"'+ClienteCodigo+'","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","usuariosTV":'+UsuariosTV+','+paramStd+'}'; 	
+	/**/ console.log("cargarTeleVentaLlamadas parametros: \n"+parametros);
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
@@ -539,9 +549,9 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 		var elSP = "pArticulosBuscar";	
 		var parametros = '{"registros":'+paginadorRegistros+',"buscar":"'+$.trim($("#inpBuscarArticuloDisponible").val())+'","cliente":"'+ClienteCodigo+'","fechaTV":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
 		if(modo){ elSP = "pArticulosCliente"; }
-		/**/ console.log(elSP+" parametros:\n"+limpiarCadena(parametros));
+
 		flexygo.nav.execProcess(elSP,'',null,null,[{"Key":"parametros","Value":limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-			if(ret){ 
+			if(ret){
 				var respuesta = limpiarCadena(ret.JSCode); if(respuesta===""){ respuesta = "[]";} 
 				var contenido="";
 				var art = JSON.parse(respuesta);
@@ -604,9 +614,9 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 									+"	<td class='trBscCod' style='width:10%;' "+omHover+" >"+art[i].CODIGO+"</td>"
 									+"	<td class='trBscNom'>"+art[i].NOMBRE+"</td>";
 						if(modo){ 
-							contenido += "<td class='C' style='width:5%;'>"+art[i].articulo[0].CajasALB+"</td>"
-									  +  "<td class='C' style='width:5%;'>"+art[i].articulo[0].UnidadesALB+"</td>"
-									  +  "<td class='C' style='width:5%;'>"+art[i].articulo[0].PesoALB+"</td>";
+							contenido += "<td class='C' style='width:5%;'>"+art[i].CajasALB+"</td>"
+									  +  "<td class='C' style='width:5%;'>"+art[i].UnidadesALB+"</td>"
+									  +  "<td class='C' style='width:5%;'>"+art[i].PesoALB+"</td>";
 						}						
 						contenido += " 	<td class='C trBscCajas inv' style='width:10%;'>"+elPedUniCaja+"</td>"
 									+"	<td class='C' style='width:5%;'>"
@@ -971,9 +981,28 @@ function terminarLlamadaDef(pedido,confirmacion){
 		);
 		return;
 	}
+	var incidenciasSinPedido = "";
+	if(PedidoGenerado==="" && PedidoDetalle===""){
+		var articulo = "";
+		var inciArt  = "";
+		var obsArt   = "";
+		var elID     =  0;
+		$("#tbPersEP_Articulos").find("tr").each(function(){
+			articulo = $(this).attr("data-art");
+			inciArt  = $.trim($("#inpIncidenciaSolINP"+elID).val());	if(inciArt==undefined){ inciArt=""; }
+			obsArt   = $.trim($("#inpObservaSolTA0"+elID).val());	if(obsArt==undefined){ obsArt=""; }
+
+			if(inciArt!==""  || obsArt!==""){ 
+				incidenciasSinPedido += '{"articulo":"'+articulo+'","incidencia":"'+inciArt.split(" - ")[0]+'","descrip":"'+inciArt.split(" - ")[1]+'","observacion":"'+obsArt+'"}'; 
+			}
+			elID++;
+		});
+		incidenciasSinPedido = ',"inciSinPed":['+incidenciasSinPedido.replace(/}{/g,"},{")+']';
+	} 
 	var parametros = '{"modo":"terminar","cliente":"'+ClienteCodigo+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'"'
 					+',"incidenciaCliente":"'+incidenciaCliente+'","observaciones":"'+observaciones+'","pedido":"'+pedido+'"'
-					+',"empresa":"'+flexygo.context.CodigoEmpresa+'","serie":"'+SERIE+'",'+paramStd+'}';
+					+',"empresa":"'+CodigoEmpresa+'","serie":"'+SERIE+'"'+incidenciasSinPedido+','+paramStd+'}';
+
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 
 			if(ctvll==="llamadasDelCliente"){ flexygo.nav.openPage('list','Clientes','(BAJA=0)',null,'current',false,$(this)); $("#mainNav").show(); }

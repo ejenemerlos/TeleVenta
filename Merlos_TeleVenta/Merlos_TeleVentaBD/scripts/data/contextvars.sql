@@ -8,6 +8,8 @@ USING (VALUES
  ,(N'DIAS_ENTRE',N'select DIAS_ENTRE from vDatosEmpresa where CODIGO=(select EMPRESA collate Modern_Spanish_CI_AI from Configuracion_SQL)
 ',0,N'DataConnectionString',1)
  ,(N'Ejercicio',N'select top 1 EJERCICIO FROM Configuracion_SQL',0,N'DataConnectionString',1)
+ ,(N'EWtrabajaPeso',N'select peso from [vConfigEW] where empresa=(select top 1 Empresa collate Modern_Spanish_CS_AI FROM Configuracion_SQL)
+',0,N'DataConnectionString',1)
  ,(N'MesesConsumo',N'select top 1 MesesConsumo from Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'NombreEmpresa',N'select top 1 NOMBRE_EMPRESA FROM Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'TVSerie',N'select top 1 TVSerie from Configuracion_SQL',0,N'DataConnectionString',1)

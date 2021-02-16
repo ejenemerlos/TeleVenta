@@ -233,16 +233,32 @@ input {
 
 .dvSub {
     margin: 4px;
-    padding:4px;
-    box-sizing:border-box;
+    padding: 4px;
+    box-sizing: border-box;
     background: #FFF;
-    cursor:pointer;
+    cursor: pointer;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
 }
+
     .dvSub:hover {
         background: #BAEEBB;
+    }
+
+.dvSubI {
+    margin: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    background: #FEAEAE;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+    .dvSubI:hover {
+        background: #FFCC38;
     }
 
     .dvListaDatos {

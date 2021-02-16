@@ -9,33 +9,34 @@ function cargarLlamadasCliente(){
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarLlamadasCliente(); },100); return; }
 	var parametros = '{"modo":"llamadasDelCliente","cliente":"'+ClienteCodigo+'"}';
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){
-			try{
-				var js = JSON.parse(ret.JSCode);
+		if(ret){  
+				var js = JSON.parse(limpiarCadena(ret.JSCode));
 				var contenido = "<table class='tbStdP'>"
 							  + "	<tr>"
-							  + "		<th>Fecha</th>"
-							  + "		<th class='C'>Hora</th>"
-							  + "		<th>Incidencia</th>"
+							  + "		<th>Usuario</th>"
+							  + "		<th class='C'>Fecha</th>"
+							  + "		<th>Pedido</th>"
+							  + "		<th>Importe</th>"
 							  + "	</tr>";
 				if(js.length>0){
 					for(var i in js){
-						var laFecha = $.trim(js[i].fecha);
-						if((laFecha.split("-")[0]).length===4){ laFecha = laFecha.substr(8,2)+"-"+laFecha.substr(5,2)+"-"+laFecha.substr(0,4); }
-						var inci = js[i].ic[0].nIncidencia; if(inci===undefined){ inci=""; }
-						var observa = js[i].ic[0].observa; if(observa===undefined){ observa=""; }
-						contenido +="<tr title='"+observa+"'>"
-								  + "	<td>"+laFecha+"</td>"
-								  + "	<td class='C'>"+Left(js[i].hora,5)+"</td>"
-								  + "	<td>"+inci+"</td>"
+						var  laLetra= $.trim(js[i].idpedido).substring(6,8);
+						var elImporte = parseFloat($.trim(js[i].ic[0].importe)).toFixed(2);
+						var elPedido = $.trim(js[i].pedido);
+						if(elPedido==="NO!"){ elPedido="Sin Pedido"; } else { elPedido = laLetra+"-"+elPedido}
+						if(isNaN(elImporte)){ elImporte= ""; } else {elImporte = elImporte+" &euro;";}
+						contenido +="<tr title='"+$.trim(js[i].observa)+"'>"
+								  + "	<td>"+$.trim(js[i].usuario)+"</td>"
+								  + "	<td class='C'>"+$.trim(js[i].fecha)+"</td>"
+								  + "	<td>"+elPedido+"</td>"
+								  + "	<td class='R'>"+elImporte+"</td>"
 								  + "</tr>";
 					}
 					contenido += "</table>";
 				}else{ contenido = "<span style='color:#1f8eee;'>Sin registros de llamadas!</span>"; }
-			}
-			catch{ console.log("pLlamadas - error JSON: "+ret.JSCode); }
+			
 			$("#dvRegLlamadas").html(contenido);
-		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }	
+		}else{ alert("Error SP: pLlamadas - llamadasDelCliente !!!"+JSON.stringify(ret)); }	
 	},false);
 }
 

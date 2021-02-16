@@ -15,33 +15,34 @@ function cargarLlamadasCliente(){
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarLlamadasCliente(); },100); return; }
 	var parametros = ''{"modo":"llamadasDelCliente","cliente":"''+ClienteCodigo+''"}'';
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if(ret){
-			try{
-				var js = JSON.parse(ret.JSCode);
+		if(ret){  
+				var js = JSON.parse(limpiarCadena(ret.JSCode));
 				var contenido = "<table class=''tbStdP''>"
 							  + "	<tr>"
-							  + "		<th>Fecha</th>"
-							  + "		<th class=''C''>Hora</th>"
-							  + "		<th>Incidencia</th>"
+							  + "		<th>Usuario</th>"
+							  + "		<th class=''C''>Fecha</th>"
+							  + "		<th>Pedido</th>"
+							  + "		<th>Importe</th>"
 							  + "	</tr>";
 				if(js.length>0){
 					for(var i in js){
-						var laFecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha);
-						if((laFecha.split("-")[0]).length===4){ laFecha = laFecha.substr(8,2)+"-"+laFecha.substr(5,2)+"-"+laFecha.substr(0,4); }
-						var inci = js[i].ic[0].nIncidencia; if(inci===undefined){ inci=""; }
-						var observa = js[i].ic[0].observa; if(observa===undefined){ observa=""; }
-						contenido +="<tr title=''"+observa+"''>"
-								  + "	<td>"+laFecha+"</td>"
-								  + "	<td class=''C''>"+Left(js[i].hora,5)+"</td>"
-								  + "	<td>"+inci+"</td>"
+						var  laLetra= ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].idpedido).substring(6,8);
+						var elImporte = parseFloat(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].ic[0].importe)).toFixed(2);
+						var elPedido = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].pedido);
+						if(elPedido==="NO!"){ elPedido="Sin Pedido"; } else { elPedido = laLetra+"-"+elPedido}
+						if(isNaN(elImporte)){ elImporte= ""; } else {elImporte = elImporte+" &euro;";}
+						contenido +="<tr title=''"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].observa)+"''>"
+								  + "	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].usuario)+"</td>"
+								  + "	<td class=''C''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha)+"</td>"
+								  + "	<td>"+elPedido+"</td>"
+								  + "	<td class=''R''>"+elImporte+"</td>"
 								  + "</tr>";
 					}
 					contenido += "</table>";
 				}else{ contenido = "<span style=''color:#1f8eee;''>Sin registros de llamadas!</span>"; }
-			}
-			catch{ console.log("pLlamadas - error JSON: "+ret.JSCode); }
+			
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvRegLlamadas").html(contenido);
-		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }	
+		}else{ alert("Error SP: pLlamadas - llamadasDelCliente !!!"+JSON.stringify(ret)); }	
 	},false);
 }
 
@@ -49,20 +50,21 @@ function cargarLlamadasCliente(){
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flow-chart-2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Datos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Datos',N'Datos del Cliente',N'default',0,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'client',NULL,NULL,N'DataConnectionString',NULL,NULL,N'Cliente_Datos',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Incidencias',N'flx-html',N'project',NULL,NULL,N'Cliente_Incidencias',N'Incidencias',N'default',0,0,1,0,NULL,NULL,N'<div id="dvRegInci" style=''max-height:350px;overflow:hidden;overflow-y:auto;''></div>
-
+EN DESARROLLO...
 <script>
-cargarIncidenciasCliente();
+// cargarIncidenciasCliente();
 function cargarIncidenciasCliente(){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvRegInci").html(icoCargando16+" <span class=''fadeIO'' style=''color:#1f8eee;''>cargando datos...</span>"); 
 	var ClienteCodigo = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#spanClienteCodigo").text());
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
-	var parametros = ''{"modo":"llamadasDelCliente","cliente":"''+ClienteCodigo+''"}'';
+	var parametros = ''{"modo":"incidenciasDelCliente","cliente":"''+ClienteCodigo+''"}'';
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
 			try{
 				var js = JSON.parse(ret.JSCode);
 				var contenido = "<table class=''tbStdP''>"
 							  + "	<tr>"
+							  + "		<th>Tipo</th>"
 							  + "		<th>Fecha</th>"
 							  + "		<th class=''C''>Hora</th>"
 							  + "		<th>Incidencia</th>"
@@ -532,13 +534,21 @@ function guardarContacto(io){
 <div id="dvLlamadasTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_OpcionesLlamada',N'flx-html',N'project',NULL,NULL,N'TV_OpcionesLlamada',N'TV_OpcionesLlamada',N'none',1,1,1,0,NULL,NULL,N'<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
-	Opciones
-	<span id="dvEstTV" class="vaM" style="margin-left:50px; font:16px arial; color:#accfdd;" ></span>
-	<div id="btnTerminar" class="MIbotonW FR vaM inv" style="margin-top:-5px;" onclick=''terminarLlamada()''>Terminar Llamada</div>
-	<div id="btnPedido" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''pedidoTV()''>Pedido</div>
-	<div id="btnClientes" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''cargarClientes()''>Clientes</div>
-	<div id="btnConfiguracion" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''configurarTeleVenta()''>Configuración</div>
-	<div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 20px arial; color:#FFF;" ></div>
+	<table id="tbOpciones">
+		<tr>
+			<th>
+				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#accfdd;" ></div>
+				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#92D6B6;" ></div>
+			</th>
+			<th><div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;" ></div></th>
+			<th>
+				<div id="btnTerminar" class="MIbotonW FR vaM inv" style="margin-top:-5px;" onclick=''terminarLlamada()''>Terminar Llamada</div>
+				<div id="btnPedido" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''pedidoTV()''>Pedido</div>
+				<div id="btnClientes" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''cargarClientes()''>Clientes</div>
+				<div id="btnConfiguracion" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''configurarTeleVenta()''>Configuración</div>
+			</th>
+		</tr>
+	</table>
 </div>
 
 <div id="dvConfiguracionTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
@@ -587,9 +597,10 @@ function guardarContacto(io){
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(FechaTeleVenta);
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos((' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).split(" ")[0]); event.stopPropagation(); });
 
-function cargarTbConfigOperador(modo,comprobar){
-	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val());
-	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());		
+function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
+	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val()); 
+	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());	
+		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
 	var elJS = ''{"modo":"'' + modo + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
 	if(modo==="guardar"){

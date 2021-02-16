@@ -1,18 +1,19 @@
 <div id="dvRegInci" style='max-height:350px;overflow:hidden;overflow-y:auto;'></div>
-
+EN DESARROLLO...
 <script>
-cargarIncidenciasCliente();
+// cargarIncidenciasCliente();
 function cargarIncidenciasCliente(){
 	$("#dvRegInci").html(icoCargando16+" <span class='fadeIO' style='color:#1f8eee;'>cargando datos...</span>"); 
 	var ClienteCodigo = $.trim($("#spanClienteCodigo").text());
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
-	var parametros = '{"modo":"llamadasDelCliente","cliente":"'+ClienteCodigo+'"}';
+	var parametros = '{"modo":"incidenciasDelCliente","cliente":"'+ClienteCodigo+'"}';
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){
 			try{
 				var js = JSON.parse(ret.JSCode);
 				var contenido = "<table class='tbStdP'>"
 							  + "	<tr>"
+							  + "		<th>Tipo</th>"
 							  + "		<th>Fecha</th>"
 							  + "		<th class='C'>Hora</th>"
 							  + "		<th>Incidencia</th>"

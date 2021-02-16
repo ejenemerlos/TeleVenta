@@ -4,7 +4,7 @@ BEGIN TRY
 
 	declare   @modo varchar(20) = (select JSON_VALUE(@parametros,'$.modo'))
 			, @respuesta varchar(max) = ''
-			, @cliente varchar(20) = ''
+			, @cliente varchar(20) = isnull((select JSON_VALUE(@parametros,'$.cliente')),'')
 			, @incidenciaCliente varchar(20) = ''
 			, @observaciones varchar(1000) = ''
 			, @fecha varchar(50)
@@ -12,11 +12,11 @@ BEGIN TRY
 			, @vendedor varchar(10)
 			, @pedido varchar(50) = ''
 			, @elWhere varchar(1000) = ''
-			, @nombreTV varchar(50)		  = (select JSON_VALUE(@parametros,'$.nombreTV'))
-			, @usuariosTV nvarchar(max)	  = (select JSON_VALUE(@parametros,'$.usuariosTV'))
-			, @FechaTeleVenta varchar(10) = (select JSON_VALUE(@parametros,'$.FechaTeleVenta'))
-			, @usuario varchar(20)		  = (select JSON_VALUE(@parametros,'$.paramStd[0].currentReference'))
-			, @rol varchar(50)			  = (select JSON_VALUE(@parametros,'$.paramStd[0].currentRole'))
+			, @nombreTV varchar(50)		  = isnull((select JSON_VALUE(@parametros,'$.nombreTV')),'')
+			, @usuariosTV nvarchar(max)	  = ''
+			, @FechaTeleVenta varchar(10) = isnull((select JSON_VALUE(@parametros,'$.FechaTeleVenta')),'')
+			, @usuario varchar(20)		  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentReference')),'')
+			, @rol varchar(50)			  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentRole')),'')
 	
 	if @modo='anyadirCliente' begin
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
@@ -30,6 +30,21 @@ BEGIN TRY
 	END
 
 	if @modo='llamadasDelCliente' begin
+		select (
+			select ll.*
+			, ic.nombre as nIncidencia 
+			, isnull(cast(vped.TOTALDOC as varchar),'') as importe
+			from llamadas ll 
+			left join inci_cli ic on ic.codigo=ll.incidencia	
+			left join vPedidos vped on vped.IDPEDIDO collate Modern_Spanish_CI_AI=ll.idpedido						
+			where ll.cliente=@cliente  
+			order by cast(ll.fecha as datetime) desc, ll.hora desc 
+			for JSON AUTO
+		) as JAVASCRIPT
+		return -1
+	END
+
+	if @modo='incidenciasDelCliente' begin
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
 		set @respuesta = (select ll.*
 							, ic.nombre as nIncidencia 
@@ -38,9 +53,11 @@ BEGIN TRY
 							where ll.cliente=@cliente  
 							order by cast(ll.fecha as datetime) desc, ll.hora desc 
 							for JSON AUTO)
+		return -1
 	END
 
 	if @modo='terminar' begin
+		declare @inciSinPed varchar(max) = (select JSON_VALUE(@parametros,'$.inciSinPed'))
 		declare @empresa char(2)= (select JSON_VALUE(@parametros,'$.empresa'))
 		declare @serie char(2)= (select JSON_VALUE(@parametros,'$.serie'))
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
@@ -49,8 +66,10 @@ BEGIN TRY
 		set @pedido = (select JSON_VALUE(@parametros,'$.pedido'))		
 		if @pedido='undefined' set @pedido='NO!'
 		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,@serie,replicate('0',10-len(@pedido)),@pedido) collate Modern_Spanish_CI_AI 
-		insert into llamadas ([usuario],[fecha],[cliente],[hora],[nombreTV],[llamada],[incidencia],[observa],[idpedido],[pedido],[completado]) 
-		values (@usuario, cast(@FechaTeleVenta as date), @cliente, CONVERT (time, SYSDATETIME()), @nombreTV, 1, @incidenciaCliente, @observaciones, @idpedido, @pedido, 1)
+		insert into llamadas ([usuario],[fecha],[cliente],[hora],[nombreTV],[llamada],[incidencia],[descripcion],[observa],[idpedido],[pedido],[completado]) 
+		values (@usuario, cast(@FechaTeleVenta as date), @cliente, CONVERT (time, SYSDATETIME()), @nombreTV, 1, @incidenciaCliente
+		, (select nombre from inci_cli where codigo=@incidenciaCliente)
+		, @observaciones, @idpedido, @pedido, 1)
 		
 		-- actualizar llamas_user	
 		begin try
@@ -62,13 +81,31 @@ BEGIN TRY
 					   ,(select NOMBRE from vClientes where CODIGO=@cliente)
 					   ,(select VENDEDOR from vClientes where CODIGO=@cliente))
 		end try begin catch end catch
+
+		-- si hay incidencias sin haber hecho un pedido
+		if exists (select * from openjson(@parametros,'$.inciSinPed')) BEGIN
+			declare @valor varchar(1000) 
+			declare cur CURSOR for select [value] from openjson(@parametros,'$.inciSinPed')
+			OPEN cur FETCH NEXT FROM cur INTO @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into inci_CliArt (empresa, cliente, fecha, articulo, incidencia, descripcion, hora, observaciones)
+				values (@empresa, @cliente, @FechaTeleVenta, (select JSON_VALUE(@valor,'$.articulo'))
+						, (select JSON_VALUE(@valor,'$.incidencia'))
+						, (select JSON_VALUE(@valor,'$.descrip'))
+						, convert(varchar(5),getdate(),8)
+						, (select JSON_VALUE(@valor,'$.observacion'))
+				)
+				FETCH NEXT FROM cur INTO @valor
+			END CLOSE cur deallocate cur
+		END
 	END
 
 	if @modo='listaGlobal' begin
 		if @rol='Admins' or @rol='AdminPortal' or @rol='VerTodosLosClientes'
-			select isnull((select distinct ll.nombreTV, ll.fecha, cast(fecha as datetime) as fechaDT, ll.usuario, concat(t.Nombre,' ',t.SurName) as nUsuario
+			select isnull((select distinct ll.nombreTV, ll.fecha, cast(fecha as datetime) as fechaDT, ll.usuario
+			, concat(t.Nombre,' ',t.SurName) as nUsuario
 			from llamadas_user ll
-			left join (select * from openJSON(@usuariosTV)
+			left join (select * from openJSON(@parametros,'$.usuariosTV')
 						with (
 							  RoleId varchar(50) '$.RoleId', Email varchar(100) '$.Email', UserName varchar(100) '$.UserName'
 							, Reference varchar(50) '$.Reference', Nombre varchar(100) '$.Name', SurName varchar(100) '$.SurName'

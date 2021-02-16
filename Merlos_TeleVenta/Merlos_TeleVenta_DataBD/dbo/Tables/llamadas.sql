@@ -1,4 +1,5 @@
-﻿CREATE TABLE [dbo].[llamadas](
+﻿
+CREATE TABLE [dbo].[llamadas](
 	[usuario] [char](20) NOT NULL,
 	[fecha] [date] NOT NULL,
 	[cliente] [char](20) NOT NULL,
@@ -6,6 +7,7 @@
 	[nombreTV] [nvarchar](100) NULL,
 	[llamada] [bit] NULL,
 	[incidencia] [char](2) NULL,
+	[descripcion] [varchar](100) NULL,
 	[observa] [nvarchar](1000) NULL,
 	[idpedido] [varchar](50) NULL,
 	[pedido] [char](20) NULL,

@@ -66,9 +66,9 @@ BEGIN TRY
 			, dpv.DEFINICION as NOMBRE
 			, articulo.UNICAJA
 			, articulo.peso
-			, max(dpv.CAJAS) as CajasALB
-			, max(dpv.UNIDADES) as UnidadesALB
-			, max(dpv.PESO) as PesoALB
+			, dpv.CAJAS as CajasALB
+			, dpv.UNIDADES as UnidadesALB
+			, dpv.PESO as PesoALB
 			-- datos de los últimos 5 albaranes
 			, (select top 5  p.IDALBARAN , p.sqlfecha, p.fecha
 							, d.ALBARAN, d.ARTICULO, d.cajas, d.UNIDADES, d.PESO, d.PRECIOIVA, d.IMPORTEf, d.DTO1
@@ -86,6 +86,9 @@ BEGIN TRY
 			, dpv.DEFINICION
 			, articulo.UNICAJA
 			, articulo.peso
+			, dpv.CAJAS
+			, dpv.UNIDADES
+			, dpv.PESO
 		order by max(cpv.sqlFecha) desc, max(cpv.numero) desc
 		for JSON AUTO
 		),''[]'')

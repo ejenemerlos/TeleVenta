@@ -10,6 +10,7 @@ var currentUserLogin = flexygo.context.currentUserLogin;
 var currentUserId = flexygo.context.currentUserId;
 var currentUserFullName = flexygo.context.currentUserFullName;
 var currentSubreference = flexygo.context.currentSubreference;
+var EWtrabajaPeso = flexygo.context.EWtrabajaPeso;
 var UsuariosTV = flexygo.context.usuariosTV;
 var CodigoEmpresa = flexygo.context.CodigoEmpresa;
 var MesesConsumo = flexygo.context.MesesConsumo;
@@ -38,7 +39,7 @@ var calendarioInput = "";
 var paginadorRegistros = 0;
 var paginadorResultados = 0;
 
-var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG", "#dvinputDatosTemp", "#dvDatosTemp", "#trID", "#veloClientes", "flx-module[modulename='usuariosTV']"];
+var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG", "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']"];
 
 $(document).click(function (e) {
     for (var i in ElementosClickOff) {
@@ -824,9 +825,8 @@ function handleEnd(evt) {
             ctx.beginPath();
             ctx.moveTo(ongoingTouches[idx].pageX, ongoingTouches[idx].pageY);
             ctx.lineTo(touches[i].pageX, touches[i].pageY);
-            //ctx.fillRect(touches[i].pageX - 4, touches[i].pageY - 4, 8, 8);  // and a square at the end
-            ongoingTouches.splice(idx, 1);  // remove it; we're done
-        } else { /* console.log("can't figure out which touch to end"); */ }
+            ongoingTouches.splice(idx, 1);
+        }
     }
 }
 

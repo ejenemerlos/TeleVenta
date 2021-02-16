@@ -62,6 +62,7 @@ function estTV(){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvEstTV").html(icoCargando16+" cargando datos...");
 	var contenido = "";
 	var parametros = ''{"modo":"estadisticas","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
+	console.log("estTV - parametros:\n"+parametros);
 	flexygo.nav.execProcess(''pEstTV'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
@@ -69,6 +70,20 @@ function estTV(){
 					  + "&nbsp;&nbsp;&nbsp; Pedidos: "+js[0].pedidos
 					  + "&nbsp;&nbsp;&nbsp; Importe: "+js[0].importe+"&euro;";
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvEstTV").html(contenido);
+			var filtros = js[0].filtros;
+			var losFiltros = "";
+			if(js[0].filtros[0].gestor.length>0){ losFiltros += " gestor,"; } 
+			if(js[0].filtros[0].ruta.length>0){ losFiltros += " ruta,"; } 
+			if(js[0].filtros[0].vendedor.length>0){ losFiltros += " vendedor,"; } 
+			if(js[0].filtros[0].serie.length>0){ losFiltros += " serie,"; } 
+			if(js[0].filtros[0].marca.length>0){ losFiltros += " marca,"; } 
+			if(js[0].filtros[0].familia.length>0){ losFiltros += " familia,"; } 
+			if(js[0].filtros[0].subfamilia.length>0){ losFiltros += " subfamilia "; } 
+			
+			if(losFiltros.length>0){ 
+				losFiltros = losFiltros.substring(0,losFiltros.length-1); 
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFiltrosTV").html("El registro ''"+NombreTeleVenta+"'' contiene filtros de "+losFiltros); 
+			}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFiltrosTV").html("Registro ''"+NombreTeleVenta+"''"); }
 		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }	
 	},false);
 }
@@ -120,6 +135,10 @@ function cargarSubDatos(objeto,cliente,id,pos){ console.log("cargarSubDatos("+ob
 					contenido += "<div class=''dvSub'' onclick=''asignarObjetoDatos(\""+id+"\",' + convert(nvarchar(max),NCHAR(36)) + N'(this).text())''>"+elTXT+"</div>"; 
 				}
 			}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
+			if(objeto==="inciArt"){
+				var inciAsig = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val();
+				if(inciAsig!==""){ contenido = "<div class=''dvSubI'' onclick=''desasignarCliArt(\""+objeto+"\",\""+cliente+"\",\""+id+"\",\""+pos+"\")''>Asignado: "+inciAsig+"</div><br>" + contenido; }
+			}
 		}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosTemp").html(contenido);
 	}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosTemp").remove(); alert(''Error S.P. pSeries!\n''+JSON.stringify(ret)); } }, false);
@@ -127,14 +146,19 @@ function cargarSubDatos(objeto,cliente,id,pos){ console.log("cargarSubDatos("+ob
 
 function asignarObjetoDatos(id,txt){ console.log("asignarObjetoDatos("+id+","+txt+")");
 	if(Left(id,16)==="inpIncidenciaSol"){ 
-		var idid = id.split("inpIncidenciaSol")[1];
-		id="inpIncidenciaSolINP"+idid;
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolImg"+idid).attr("src","./Merlos/images/inciRed.png");
+		var idN = id.split("inpIncidenciaSol")[1];
+		id="inpIncidenciaSolINP"+idN;
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolImg"+idN).attr("src","./Merlos/images/inciRed.png");
 	}
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#"+id).val(txt);
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosTemp").fadeOut(); 
 }
 
+function desasignarCliArt(objeto,cliente,id,pos){
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val("");
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolImg"+id.split("inpIncidenciaSol")[1]).attr("src","./Merlos/images/inciGris.png");
+	cargarSubDatos(objeto,cliente,id,pos);
+}
 
 
 /*  TV_Cliente  **************************************************************************************************************** */
@@ -279,6 +303,7 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	var elDV = "dvLlamadas";
 	var contenido = "";
 	var parametros = ''{"modo":"''+modo+''","cliente":"''+ClienteCodigo+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","usuariosTV":''+UsuariosTV+'',''+paramStd+''}''; 	
+	/**/ console.log("cargarTeleVentaLlamadas parametros: \n"+parametros);
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
@@ -534,9 +559,9 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 		var elSP = "pArticulosBuscar";	
 		var parametros = ''{"registros":''+paginadorRegistros+'',"buscar":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val())+''","cliente":"''+ClienteCodigo+''","fechaTV":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
 		if(modo){ elSP = "pArticulosCliente"; }
-		/**/ console.log(elSP+" parametros:\n"+limpiarCadena(parametros));
+
 		flexygo.nav.execProcess(elSP,'''',null,null,[{"Key":"parametros","Value":limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-			if(ret){ 
+			if(ret){
 				var respuesta = limpiarCadena(ret.JSCode); if(respuesta===""){ respuesta = "[]";} 
 				var contenido="";
 				var art = JSON.parse(respuesta);
@@ -599,9 +624,9 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 									+"	<td class=''trBscCod'' style=''width:10%;'' "+omHover+" >"+art[i].CODIGO+"</td>"
 									+"	<td class=''trBscNom''>"+art[i].NOMBRE+"</td>";
 						if(modo){ 
-							contenido += "<td class=''C'' style=''width:5%;''>"+art[i].articulo[0].CajasALB+"</td>"
-									  +  "<td class=''C'' style=''width:5%;''>"+art[i].articulo[0].UnidadesALB+"</td>"
-									  +  "<td class=''C'' style=''width:5%;''>"+art[i].articulo[0].PesoALB+"</td>";
+							contenido += "<td class=''C'' style=''width:5%;''>"+art[i].CajasALB+"</td>"
+									  +  "<td class=''C'' style=''width:5%;''>"+art[i].UnidadesALB+"</td>"
+									  +  "<td class=''C'' style=''width:5%;''>"+art[i].PesoALB+"</td>";
 						}						
 						contenido += " 	<td class=''C trBscCajas inv'' style=''width:10%;''>"+elPedUniCaja+"</td>"
 									+"	<td class=''C'' style=''width:5%;''>"
@@ -623,7 +648,7 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 									+"		onkeyup=''' + convert(nvarchar(max),NCHAR(36)) + N'(this).css(\"color\",\"#000\"); calcCUP(\"peso\",\"tbArtDispTR"+i+"\","+elPedUniCaja+","+elPeso+",false);'' "
 									+"		onfocus=''celdaValor=this.value'' "
 									+"		onfocusout=''if(celdaValor!==this.value){calcCUP(\"peso\",\"tbArtDispTR"+i+"\","+elPedUniCaja+","+elPeso+",true);}'' "
-									+"		onclick=''' + convert(nvarchar(max),NCHAR(36)) + N'(this).select();'' value=''"+elPesoValor+"'' "+PesoIO+">"
+									+"		onclick=''' + convert(nvarchar(max),NCHAR(36)) + N'(this).select();'' "+PesoIO+">"
 									+"	</td>"
 									+"	<td id=''precioTD"+i+"'' class=''C'' style=''width:5%;''>"
 									+"		<span class=''flx-icon icon-sincronize-1 rotarR'' style=''font-size:12px; color:green;''></span>"
@@ -803,7 +828,7 @@ function calcularImporte(i){
 	var dto = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpDtoSol").val();			if(isNaN(dto)){ dto=0; }
 	var precio = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpPrecioSol").val();	if(isNaN(precio)){ precio=0; }
 	var importe = parseFloat(precio) * parseFloat(uds);
-	if(parseFloat(peso)>0){ importe =  parseFloat(precio) * parseFloat(peso); }
+	if(parseFloat(peso)>0 && parseInt(EWtrabajaPeso)===1){ importe =  parseFloat(precio) * parseFloat(peso); }
 	if(parseFloat(dto)>0){ importe = importe - ((importe*dto)/100); }
 	if(isNaN(importe)){ importe=0; } 
 	' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpImporteSol").html(importe.toFixed(2)+"&euro;");
@@ -966,9 +991,28 @@ function terminarLlamadaDef(pedido,confirmacion){
 		);
 		return;
 	}
+	var incidenciasSinPedido = "";
+	if(PedidoGenerado==="" && PedidoDetalle===""){
+		var articulo = "";
+		var inciArt  = "";
+		var obsArt   = "";
+		var elID     =  0;
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#tbPersEP_Articulos").find("tr").each(function(){
+			articulo = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).attr("data-art");
+			inciArt  = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolINP"+elID).val());	if(inciArt==undefined){ inciArt=""; }
+			obsArt   = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpObservaSolTA0"+elID).val());	if(obsArt==undefined){ obsArt=""; }
+
+			if(inciArt!==""  || obsArt!==""){ 
+				incidenciasSinPedido += ''{"articulo":"''+articulo+''","incidencia":"''+inciArt.split(" - ")[0]+''","descrip":"''+inciArt.split(" - ")[1]+''","observacion":"''+obsArt+''"}''; 
+			}
+			elID++;
+		});
+		incidenciasSinPedido = '',"inciSinPed":[''+incidenciasSinPedido.replace(/}{/g,"},{")+'']'';
+	} 
 	var parametros = ''{"modo":"terminar","cliente":"''+ClienteCodigo+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''"''
 					+'',"incidenciaCliente":"''+incidenciaCliente+''","observaciones":"''+observaciones+''","pedido":"''+pedido+''"''
-					+'',"empresa":"''+flexygo.context.CodigoEmpresa+''","serie":"''+SERIE+''",''+paramStd+''}'';
+					+'',"empresa":"''+CodigoEmpresa+''","serie":"''+SERIE+''"''+incidenciasSinPedido+'',''+paramStd+''}'';
+
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
 			if(ctvll==="llamadasDelCliente"){ flexygo.nav.openPage(''list'',''Clientes'',''(BAJA=0)'',null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); ' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show(); }
