@@ -3,8 +3,9 @@
 		<tr>
 			<td><span class="flx-icon icon-vcard-2 azul3"></span></td>
 			<td colspan="3">
-              <span class="azul3" style="font:14px arial;">Código: 
-              <span id="spanClienteCodigo" class="azul3" style="font:14px arial;">{{CODIGO}}</span></span>
+              <span class="azul3" style="font:14px arial;">Código:</span>
+              <span id="spanClienteCodigo" class="azul3" style="font:14px arial;">{{CODIGO}}</span>
+              <span id="spanClienteBaja" style="margin-left:30px; font:bold 14px arial; color:red;" class="{{BAJA|switch:[0:inv]}}">BAJA: {{FechaBaja}}</span>
             </td>
 		</tr>
 		<tr>

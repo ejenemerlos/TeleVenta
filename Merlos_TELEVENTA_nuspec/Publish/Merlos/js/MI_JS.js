@@ -16,6 +16,7 @@ var CodigoEmpresa = flexygo.context.CodigoEmpresa;
 var MesesConsumo = flexygo.context.MesesConsumo;
 var SERIE = flexygo.context.TVSerie;
 var SERIES = "";
+var IdTeleVenta = "";
 var GestorTeleVenta = "";
 var FechaTeleVenta = "";
 var NombreTeleVenta = "";
@@ -142,7 +143,6 @@ function resetFrm(frm) {
         $("#inputDatosGestor0,#inputDatosGestor,#inputDatosRuta,#inputDatosVendedor,#inputDatosSerie,#inputDatosMarca,#inputDatosFamilia,#inputDatosSubfamilia").html("");
     }
 }
-
 
 
 

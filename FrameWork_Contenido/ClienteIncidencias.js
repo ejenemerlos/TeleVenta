@@ -1,44 +1,65 @@
-<div id="dvRegInci" style='max-height:350px;overflow:hidden;overflow-y:auto;'></div>
-EN DESARROLLO...
+<div id="dvRegInci"></div>
+
 <script>
-// cargarIncidenciasCliente();
+cargarIncidenciasCliente();
 function cargarIncidenciasCliente(){
 	$("#dvRegInci").html(icoCargando16+" <span class='fadeIO' style='color:#1f8eee;'>cargando datos...</span>"); 
 	var ClienteCodigo = $.trim($("#spanClienteCodigo").text());
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
 	var parametros = '{"modo":"incidenciasDelCliente","cliente":"'+ClienteCodigo+'"}';
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){
-			try{
-				var js = JSON.parse(ret.JSCode);
-				var contenido = "<table class='tbStdP'>"
-							  + "	<tr>"
-							  + "		<th>Tipo</th>"
-							  + "		<th>Fecha</th>"
-							  + "		<th class='C'>Hora</th>"
-							  + "		<th>Incidencia</th>"
-							  + "	</tr>";
-				if(js.length>0){
-					for(var i in js){
-						var laFecha = $.trim(js[i].fecha);
-						if((laFecha.split("-")[0]).length===4){ laFecha = laFecha.substr(8,2)+"-"+laFecha.substr(5,2)+"-"+laFecha.substr(0,4); }
-						var inci = js[i].ic[0].nIncidencia; if(inci===undefined){ inci=""; }
-						var observa = js[i].ic[0].observa; if(observa===undefined){ observa=""; }
-						if(inci===""){continue;}
-						contenido +="<tr title='"+observa+"'>"
-								  + "	<td>"+laFecha+"</td>"
-								  + "	<td class='C'>"+Left(js[i].hora,5)+"</td>"
-								  + "	<td>"+inci+"</td>"
-								  + "</tr>";
-					}
-					contenido += "</table>";
-				}else{ contenido = "<span style='color:#1f8eee;'>Sin registros de incidencias!</span>"; }
+		if(ret){	
+			var js = JSON.parse(ret.JSCode);
+			var inciArtNum = js.inciArt.length;
+			var inciPedNum = js.inciPed.length;
+			
+			var inciArtCont = "<table class='tbStd'>"
+							+ "<tr>"
+						    + "	<th>Fecha</th>"
+						    + "	<th>Artículo</th>"
+						    + "	<th>Incidencia</th>"
+						    + "</tr>"; 
+			for(var a in js.inciArt){ 
+				var obs = js.inciArt[a].observaciones; if(obs===null){ obs=""; }
+				inciArtCont +="<tr title='"+obs+"'>"
+						    + "	<td>"+js.inciArt[a].fecha+"</td>"
+						    + "	<td>"+js.inciArt[a].articulo+"</td>"
+						    + "	<td>"+js.inciArt[a].incidencia+" - "+js.inciArt[a].descripcion+"</td>"
+						    + "</tr>"; 
 			}
-			catch{ console.log("pLlamadas - error JSON: "+ret.JSCode); }
+			inciArtCont +="</table><br><br>";
+			
+			var inciPedCont = "<table class='tbStd'>"
+							+ "<tr>"
+						    + "	<th>Fecha</th>"
+						    + "	<th>Incidencia</th>"
+						    + "</tr>"; 
+			for(var b in js.inciPed){ 
+				obs = js.inciPed[b].observaciones; if(obs===null){ obs=""; }
+				inciPedCont +="<tr title='"+obs+"'>"
+						    + "	<td>"+js.inciPed[b].fecha+"</td>"
+						    + "	<td>"+js.inciPed[a].incidencia+" - "+js.inciPed[a].descripcion+"</td>"
+						    + "</tr>"; 
+			}
+			inciPedCont +="</table>";
+			
+			var contenido = "<div id='dvIncidenciasCliente'>"
+						  + "	<div class='dvSub' onclick='incidenciasIO(\"dvInciArt\",\""+inciArtNum+"\")'>Incidencias de Artículos ("+inciArtNum+")</div>"
+						  + "	<div id='dvInciArt' class='dvInci inv' style='max-height:350px;overflow:hidden;overflow-y:auto;'>"+inciArtCont+"</div>"
+						  + "	<div class='dvSub' onclick='incidenciasIO(\"dvInciPed\",\""+inciPedNum+"\")'>Incidencias de Pedidos ("+inciPedNum+")</div>"
+						  + "	<div id='dvInciPed' class='dvInci inv' style='max-height:350px;overflow:hidden;overflow-y:auto;'>"+inciPedCont+"</div>"
+						  + "</div>";
 			$("#dvRegInci").html(contenido);
 		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }	
 	},false);
 }
 
 
+function incidenciasIO(dv, nm) {
+    if (parseInt(nm) > 0) {
+        $("#" + dv).stop();
+        if ($("#" + dv).is(":visible")) { $("#" + dv).slideUp(); }
+        else { $(".dvInci").hide(); $("#" + dv).slideDown(); }
+    }
+}
 </script>

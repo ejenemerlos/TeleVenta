@@ -67,7 +67,7 @@ BEGIN TRY
 	IF EXISTS (select * FROM sys.views where name = 'vArticulosBasic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vArticulosBasic]   as       
-		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from [2020TG].[DBO].articulo where BAJA=0
+		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].articulo where BAJA=0
 	'
 	exec(@Sentencia)
 	select 'vArticulosBasic'
@@ -80,7 +80,9 @@ BEGIN TRY
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vClientes]
 	AS
-	SELECT  C.CODIGO, RTRIM(C.NOMBRE) collate database_default AS NOMBRE , C.NOMBRE2 AS RCOMERCIAL,
+	SELECT C.CODIGO, 
+	cast(C.CODIGO as varchar(50)) as ''Código Cliente'', 
+	RTRIM(C.NOMBRE) collate database_default AS NOMBRE , C.NOMBRE2 AS RCOMERCIAL,
 	C.CIF, cast(RTRIM(C.DIRECCION) as varchar(40))  collate Modern_Spanish_CI_AI  AS DIRECCION, C.CODPOST AS CP, 
 	C.POBLACION  collate Modern_Spanish_CI_AI  AS POBLACION,
 	C.PROVINCIA  collate Modern_Spanish_CI_AI  as provincia, ISNULL(PAIS.NOMBRE,'''') AS PAIS, 
@@ -93,7 +95,8 @@ BEGIN TRY
 	COALESCE(B.SWIFT, SPACE(10)) AS SWIFT, C.VENDEDOR AS VENDEDOR, v.NOMBRE as nVendedor,
 	REPLACE(CONVERT(VARCHAR(MAX), 
 	C.OBSERVACIO),CHAR(13),''<br/>'') AS OBSERVACIO, C.TARIFA AS TARIFA, ISNULL(FP.DIAS_RIESGO,0)AS DIAS_RIESGO, 
-	C.DESCU1 AS DESCU1, C.DESCU2 AS DESCU2, C.OFERTA, C.BLOQ_CLI AS BLOQ_CLI, C.ENV_CLI, C.FECHA_BAJ,
+	C.DESCU1 AS DESCU1, C.DESCU2 AS DESCU2, C.OFERTA, C.BLOQ_CLI AS BLOQ_CLI, C.ENV_CLI,
+	C.FECHA_BAJ, convert(varchar(10),C.FECHA_BAJ,103) as FechaBaja,
 	case when C.FECHA_BAJ IS NULL or C.FECHA_BAJ=''1900-01-01 00:00:00'' THEN 0 ELSE 1 END AS BAJA, 
 	tiva.CODIGO as tipoIVA, isnull(tiva.IVA,0) as IVA, c.AGENCIA,
 	isnull(tiva.RECARG,0) as recargoIVA,
@@ -478,7 +481,7 @@ BEGIN TRY
 	'+@AlterCreate+' VIEW [dbo].[vArticulos]
 	as
 	select replace(cast(art.CODIGO COLLATE Modern_Spanish_CI_AI as varchar(50)),space(1),'''') as CODIGO
-			, replace(art.NOMBRE,''"'',''pulg.'') COLLATE Modern_Spanish_CI_AI as NOMBRE
+			, replace(art.NOMBRE,''"'',''-'') COLLATE Modern_Spanish_CI_AI as NOMBRE
 			, art.FAMILIA, art.MARCA, art.MINIMO
 			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET,
 			art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1,
@@ -1100,218 +1103,33 @@ BEGIN TRY
 	-- 09/07/2020 - Elías Jené: añadir según número de años seleccionados
 	set @controlAnys = 0
 	if @NumEjer>0 BEGIN
-			while @controlAnys<@NumEjer BEGIN
-					set @controlAnys = @controlAnys + 1
-					set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
-					set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
-					if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
-						--26/03/2020 harold si existe el año anterior iniciamos consulta desde allí
-						set @Sentencia = @Sentencia + '
-						SELECT 
-							1 as Nodo
-						, '''+@EJERCICIOAnt+'''+CA.EMPRESA+REPLACE(CA.letra,SPACE(1),''0'')+REPLACE(CA.NUMERO, SPACE(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDALBARAN
-						, '''+@EJERCICIOAnt+''' AS EJER
-						, CA.CLIENTE
-						, CA.EMPRESA  collate Modern_Spanish_CI_AI as EMPRESA
-						, CA.LETRA+CA.NUMERO AS ALBARAN
-						, CA.FECHA as sqlFecha
-						, convert(varchar(10),CA.FECHA,103) as FECHA
-						, '''+@EJERCICIOAnt+'''+CA.EMPRESA+replace(CAST(CA.FACTURA AS VARCHAR(10)), space(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA
-						, CA.FACTURA AS NUMFRA
-						, CAST(CASE WHEN CA.FACTURA = '''' THEN 0 ELSE 1 END AS BIT) AS FACTURADO
-						, CAST(ROUND(CA.IMPORTE,2) AS NUMERIC(18,2)) AS IMPORTE
-						, 0.00 as IVA
-						, CA.IMPORTE as IMPORTEIVA
-						, CA.TOTALDOC as TOTAL
-						, case when CA.TOTALDOC<>0 then replace(replace(replace(convert(varchar, cast(CA.TOTALDOC as money),1),''.'',''_''),'','',''.''),''_'','','')+'' €'' else '''' end  as TOTALf
-						, CAST(COALESCE(CASE WHEN RIGHT(CA.PEDIDO,2) = '''' THEN LTRIM(RTRIM(CA.PEDIDO))
-						  ELSE LTRIM(RTRIM(RIGHT(CA.PEDIDO,2)))+''-''+LTRIM(RTRIM(LEFT(CA.PEDIDO,10))) END, SPACE(0)) AS VARCHAR(13)) AS PEDIDO
-						, ('''+@EJERCICIOAnt+'''+CA.empresa+replace(RIGHT(CA.PEDIDO,2),space(1),''0'')+replace(LEFT(CA.PEDIDO,10),
-							space(1),''0'')) COLLATE Modern_Spanish_CI_AI AS IDPEDIDO
-						, CA.VENDEDOR
-						, CA.ALMACEN
-						, CA.FINAN
-						, CA.PRONTO'
-
-						if @BDENVCLI=''
-						begin
-							set @Sentencia=@Sentencia+' , COALESCE(EC.DIRECCION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS DIRECCION
-						, COALESCE(EC.POBLACION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS POBLACION
-						, COALESCE(EC.CODPOS,SPACE(0)) AS CODPOS
-						, COALESCE(EC.PROVINCIA,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS PROVINCIA'
-						end
-						else
-						begin
-							set @Sentencia=@Sentencia+' , COALESCE(CAD.DIRECCION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS DIRECCION
-						, COALESCE(CAD.POBLACION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS POBLACION
-						, COALESCE(CAD.CODPOS,SPACE(0)) AS CODPOS
-						, COALESCE(CAD.PROVINCIA,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS PROVINCIA'
-						end
-
-	
-						set @Sentencia=@Sentencia+'
-						, CA.FPAG, COALESCE(B.BANCO,SPACE(0)) AS BANCO
-						, COALESCE((B.IBAN+B.CUENTAIBAN),SPACE(0)) AS IBAN
-						, CA.LETRA as letra
-						, ltrim(rtrim(CA.NUMERO)) as NUMERO
-						, vven.NOMBRE COLLATE Modern_Spanish_CI_AI as nVendedor '
-
-						--SV201908014
-						if @BDENVCLI=''
-						begin
-							set @Sentencia=@Sentencia+' , cast(vcli.NOMBRE as varchar(100)) COLLATE Modern_Spanish_CI_AI as nCliente '
-						end
-						else
-						begin
-							set @Sentencia=@Sentencia+' , CAD.NOMBRE COLLATE Modern_Spanish_CI_AI as nCliente'
-						end
-
-						set @Sentencia=@Sentencia+'
-						, vcli.RUTA
-						, CAST(vcon.CLIENTE AS VARCHAR)+Replace(str(CAST(vcon.LINEA AS VARCHAR),4),space(1),''0'') COLLATE Modern_Spanish_CI_AI as contacto
-						, vcon.PERSONA COLLATE Modern_Spanish_CI_AI as nContacto
-	
-						-- Tracking
-						, POR.AGENCIA COLLATE Modern_Spanish_CI_AI as agencia
-						, ltrim(rtrim(ag.NOMBRE)) COLLATE Modern_Spanish_CI_AI as nAgencia
-						, ltrim(rtrim(isnull(trk.VALOR,CA.NUMERO))) as TrackID
-						, vcli.nombre as nFiscal
-						'
-						--Para clientes especiales que usan otra base de datos de direcciones de cliente
-						--201907949 case when ISNULL(ES.NOMBRE, '')='' AND CA.FACTURA='' THEN 'PENDIENTE' WHEN CA.FACTURA!='' THEN 'FACTURADO' ELSE cast(ISNULL(ES.NOMBRE, '') AS VARCHAR(50)) COLLATE Modern_Spanish_CI_AI END AS ESTADO
-						if @BDENVCLI=''
-						begin
-							set @Sentencia = @Sentencia + '
-							, CAST(CASE WHEN CA.FACTURA = '''' THEN (CASE WHEN CA.FACTURABLE=1 THEN ''PENDIENTE'' ELSE ''NO FACTURABLE'' END) ELSE ''FACTURADO'' END AS varchar(50)) COLLATE Modern_Spanish_CI_AI AS ESTADO 
-							FROM '+@GESTIONAnt+'.DBO.C_ALBVEN CA 
-							LEFT JOIN '+@GESTIONAnt+'.dbo.ENV_CLI EC ON CA.CLIENTE = EC.CLIENTE AND CA.ENV_CLI = EC.LINEA '
-						end
-						else
-						begin
-							set @Sentencia = @Sentencia + '
-							, case when ISNULL(ES.NOMBRE, '''')='''' AND CA.FACTURA='''' THEN ''PENDIENTE'' WHEN ISNULL(ES.NOMBRE, '''')='''' AND CA.FACTURA!='''' THEN ''FACTURADO'' ELSE cast(ISNULL(ES.NOMBRE, '''') AS VARCHAR(50)) COLLATE Modern_Spanish_CI_AI END AS ESTADO
-							FROM '+@GESTIONAnt+'.DBO.C_ALBVEN CA 
-							LEFT JOIN '+@BDENVCLI+'.dbo.DIR_CLI EC ON CA.CLIENTE = EC.CLIENTE AND CA.ENV_CLI = EC.LINEA 
-							LEFT JOIN '+@BDENVCLI+'.dbo.C_ALBVEN_ADI CAD ON CA.EMPRESA=CAD.EMPRESA AND CA.LETRA=CAD.LETRA AND CA.NUMERO=CAD.NUMERO AND CAD.EJERCICIO='''+@EJERCICIO+'''
-							LEFT JOIN '+@BDENVCLI+'.dbo.ESTADOS ES ON CAD.ESTADO=ES.CODIGO '
-						end 
-
-						set @Sentencia = @Sentencia + '
-						LEFT JOIN '+@GESTIONAnt+'.DBO.BANC_CLI B ON B.CLIENTE=CA.CLIENTE AND B.CODIGO=CA.BANC_CLI
-						LEFT JOIN '+@GESTIONAnt+'.dbo.clientes vcli on vcli.CODIGO =CA.CLIENTE
-						LEFT JOIN '+@GESTIONAnt+'.dbo.vendedor vven on vven.CODIGO =CA.VENDEDOR
-						LEFT JOIN '+@GESTIONAnt+'.DBO.CONT_CLI  vcon on vcon.CLIENTE=CA.CLIENTE and vcon.LINEA=1
-						LEFT JOIN '+@GESTIONAnt+'.DBO.PORTES POR ON POR.EMPRESA=CA.EMPRESA AND POR.LETRA=CA.LETRA AND POR.ALBARAN=CA.NUMERO
-						LEFT JOIN '+@GESTIONAnt+'.DBO.agencia ag on ag.CODIGO=POR.AGENCIA
-						LEFT JOIN '+@GESTIONAnt+'.[dbo].[multica2]	trk on trk.EMPRESA=CA.EMPRESA and trk.NUMERO=CA.NUMERO and trk.FICHERO=1 and trk.CAMPO=''TRK''
-						WHERE CA.TRASPASADO = 0 AND LEFT(CA.CLIENTE,3)=''430''
+		while @controlAnys<@NumEjer BEGIN
+				set @controlAnys = @controlAnys + 1
+				set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
+				set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
+				if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
+					set @Sentencia = @Sentencia + '
+					SELECT '''+@EJERCICIOAnt+'''+CA.EMPRESA+REPLACE(CA.letra,SPACE(1),''0'')+REPLACE(CA.NUMERO, SPACE(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDALBARAN
+					, CA.CLIENTE
+					, CA.FECHA as sqlFecha
+					, convert(varchar(10),CA.FECHA,103) as FECHA, ltrim(rtrim(CA.NUMERO)) as NUMERO
+					FROM '+@GESTIONAnt+'.DBO.C_ALBVEN CA 
+					WHERE CA.TRASPASADO = 0 AND LEFT(CA.CLIENTE,3)=''430''
 		
-						UNION 
+					UNION 
 
-						'
-						end
-				end
+					'
+					end
+			end
 	end
 
 	set @Sentencia = @Sentencia + '
-	SELECT 
-		1 as Nodo
-	, '''+@EJERCICIO+'''+CA.EMPRESA+REPLACE(CA.letra,SPACE(1),''0'')+REPLACE(CA.NUMERO, SPACE(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDALBARAN
-	, '''+@EJERCICIO+''' AS EJER
-	, CA.CLIENTE
-	, CA.EMPRESA collate Modern_Spanish_CI_AI as EMPRESA
-	, CA.LETRA+CA.NUMERO AS ALBARAN
-	, CA.FECHA as sqlFecha
-	, convert(varchar(10),CA.FECHA,103) as FECHA
-	, '''+@EJERCICIO+'''+CA.EMPRESA+replace(CAST(CA.FACTURA AS VARCHAR(10)), space(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA
-	, CA.FACTURA AS NUMFRA
-	, CAST(CASE WHEN CA.FACTURA = '''' THEN 0 ELSE 1 END AS BIT) AS FACTURADO
-	, CAST(ROUND(CA.IMPORTE,2) AS NUMERIC(18,2)) AS IMPORTE
-	, 0.00 as IVA
-	, CA.IMPORTE as IMPORTEIVA
-	, CA.TOTALDOC as TOTAL
-	, case when CA.TOTALDOC<>0 then replace(replace(replace(convert(varchar, cast(CA.TOTALDOC as money),1),''.'',''_''),'','',''.''),''_'','','')+'' €'' else '''' end  as TOTALf
-    , CAST(COALESCE(CASE WHEN RIGHT(CA.PEDIDO,2) = '''' THEN LTRIM(RTRIM(CA.PEDIDO))
-		 ELSE LTRIM(RTRIM(RIGHT(CA.PEDIDO,2)))+''-''+LTRIM(RTRIM(LEFT(CA.PEDIDO,10))) END, SPACE(0)) AS VARCHAR(13)) AS PEDIDO
-	, ('''+@EJERCICIO+'''+CA.empresa+replace(RIGHT(CA.PEDIDO,2),space(1),''0'')+replace(LEFT(CA.PEDIDO,10),
-		space(1),''0'')) COLLATE Modern_Spanish_CI_AI AS IDPEDIDO
-	, CA.VENDEDOR
-	, CA.ALMACEN
-	, CA.FINAN
-	, CA.PRONTO'
-
-	if @BDENVCLI=''
-	begin
-		set @Sentencia=@Sentencia+' , COALESCE(EC.DIRECCION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS DIRECCION
-	, COALESCE(EC.POBLACION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS POBLACION
-	, COALESCE(EC.CODPOS,SPACE(0)) AS CODPOS
-	, COALESCE(EC.PROVINCIA,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS PROVINCIA'
-	end
-	else
-	begin
-		set @Sentencia=@Sentencia+' , COALESCE(CAD.DIRECCION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS DIRECCION
-	, COALESCE(CAD.POBLACION,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS POBLACION
-	, COALESCE(CAD.CODPOS,SPACE(0)) AS CODPOS
-	, COALESCE(CAD.PROVINCIA,SPACE(0)) COLLATE Modern_Spanish_CI_AI AS PROVINCIA'
-	end
-
-	
-	set @Sentencia=@Sentencia+'
-	, CA.FPAG, COALESCE(B.BANCO,SPACE(0)) AS BANCO
-	, COALESCE((B.IBAN+B.CUENTAIBAN),SPACE(0)) AS IBAN
-	, CA.LETRA as letra
-	, ltrim(rtrim(CA.NUMERO)) as NUMERO
-	, vven.NOMBRE COLLATE Modern_Spanish_CI_AI as nVendedor '
-
-	--SV201908014
-	if @BDENVCLI=''
-	begin
-		set @Sentencia=@Sentencia+' , cast(vcli.NOMBRE as varchar(100)) COLLATE Modern_Spanish_CI_AI as nCliente '
-	end
-	else
-	begin
-		set @Sentencia=@Sentencia+' , CAD.NOMBRE COLLATE Modern_Spanish_CI_AI as nCliente'
-	end
-
-	set @Sentencia=@Sentencia+'
-	, vcli.RUTA
-	, CAST(vcon.CLIENTE AS VARCHAR)+Replace(str(CAST(vcon.LINEA AS VARCHAR),4),space(1),''0'') COLLATE Modern_Spanish_CI_AI as contacto
-	, vcon.PERSONA COLLATE Modern_Spanish_CI_AI as nContacto
-	
-	-- Tracking
-	, POR.AGENCIA COLLATE Modern_Spanish_CI_AI as agencia
-	, ltrim(rtrim(ag.NOMBRE)) COLLATE Modern_Spanish_CI_AI as nAgencia
-	, ltrim(rtrim(isnull(trk.VALOR,CA.NUMERO))) as TrackID
-	, vcli.nombre as nFiscal
-	'
-	--Para clientes especiales que usan otra base de datos de direcciones de cliente
-	--201907949 case when ISNULL(ES.NOMBRE, '')='' AND CA.FACTURA='' THEN 'PENDIENTE' WHEN CA.FACTURA!='' THEN 'FACTURADO' ELSE cast(ISNULL(ES.NOMBRE, '') AS VARCHAR(50)) COLLATE Modern_Spanish_CI_AI END AS ESTADO
-	if @BDENVCLI=''
-	begin
-		set @Sentencia = @Sentencia + '
-		, CAST(CASE WHEN CA.FACTURA = '''' THEN (CASE WHEN CA.FACTURABLE=1 THEN ''PENDIENTE'' ELSE ''NO FACTURABLE'' END) ELSE ''FACTURADO'' END AS varchar(50)) COLLATE Modern_Spanish_CI_AI AS ESTADO 
+	SELECT '''+@EJERCICIO+'''+CA.EMPRESA+REPLACE(CA.letra,SPACE(1),''0'')+REPLACE(CA.NUMERO, SPACE(1), ''0'') COLLATE Modern_Spanish_CI_AI AS IDALBARAN
+		, CA.CLIENTE
+		, CA.FECHA as sqlFecha
+		, convert(varchar(10),CA.FECHA,103) as FECHA, ltrim(rtrim(CA.NUMERO)) as NUMERO
 		FROM '+@GESTION+'.DBO.C_ALBVEN CA 
-		LEFT JOIN '+@GESTION+'.dbo.ENV_CLI EC ON CA.CLIENTE = EC.CLIENTE AND CA.ENV_CLI = EC.LINEA '
-	end
-	else
-	begin
-		set @Sentencia = @Sentencia + '
-		, case when ISNULL(ES.NOMBRE, '''')='''' AND CA.FACTURA='''' THEN ''PENDIENTE'' WHEN ISNULL(ES.NOMBRE, '''')='''' AND CA.FACTURA!='''' THEN ''FACTURADO'' ELSE cast(ISNULL(ES.NOMBRE, '''') AS VARCHAR(50)) COLLATE Modern_Spanish_CI_AI END AS ESTADO
-		FROM '+@GESTION+'.DBO.C_ALBVEN CA 
-		LEFT JOIN '+@BDENVCLI+'.dbo.DIR_CLI EC ON CA.CLIENTE = EC.CLIENTE AND CA.ENV_CLI = EC.LINEA 
-		LEFT JOIN '+@BDENVCLI+'.dbo.C_ALBVEN_ADI CAD ON CA.EMPRESA=CAD.EMPRESA AND CA.LETRA=CAD.LETRA AND CA.NUMERO=CAD.NUMERO AND CAD.EJERCICIO='''+@EJERCICIO+'''
-		LEFT JOIN '+@BDENVCLI+'.dbo.ESTADOS ES ON CAD.ESTADO=ES.CODIGO '
-	end 
-
-	set @Sentencia = @Sentencia + '
-	LEFT JOIN '+@GESTION+'.DBO.BANC_CLI B ON B.CLIENTE=CA.CLIENTE AND B.CODIGO=CA.BANC_CLI
-	LEFT JOIN '+@GESTION+'.dbo.clientes vcli on vcli.CODIGO =CA.CLIENTE
-	LEFT JOIN '+@GESTION+'.dbo.vendedor vven on vven.CODIGO =CA.VENDEDOR
-	LEFT JOIN '+@GESTION+'.DBO.CONT_CLI  vcon on vcon.CLIENTE=CA.CLIENTE and vcon.LINEA=1
-	LEFT JOIN '+@GESTION+'.DBO.PORTES POR ON POR.EMPRESA=CA.EMPRESA AND POR.LETRA=CA.LETRA AND POR.ALBARAN=CA.NUMERO
-	LEFT JOIN '+@GESTION+'.DBO.agencia ag on ag.CODIGO=POR.AGENCIA
-	LEFT JOIN '+@GESTION+'.[dbo].[multica2]	trk on trk.EMPRESA=CA.EMPRESA and trk.NUMERO=CA.NUMERO and trk.FICHERO=1 and trk.CAMPO=''TRK''
-	WHERE CA.TRASPASADO = 0 AND LEFT(CA.CLIENTE,3)=''430''
+		WHERE CA.TRASPASADO = 0 AND LEFT(CA.CLIENTE,3)=''430''
 	'
 	exec (@Sentencia)
 	select  'vAlbaranes'
@@ -1330,69 +1148,33 @@ BEGIN TRY
 					set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
 					set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
 					if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
-						--26/03/2020 harold si existe el año anterior iniciamos consulta desde allí
 						set @Sentencia = @Sentencia + '
-						SELECT (select TOP 1 ba.BARRAS) as CodBar,
+						SELECT 
 						'''+@EJERCICIOAnt+'''+D.empresa+replace(D.letra,space(1),''0'')+replace(D.numero, space(1), ''0'') COLLATE Modern_Spanish_CI_AI as IDALBARAN, 
-						'''+@EJERCICIOAnt+'''+D.empresa+replace(D.letra, space(1), ''0'')+replace(D.numero, space(1), ''0'')+replace(str(D.linia,4),space(1),''0'') 
-						COLLATE Modern_Spanish_CI_AI AS IDALBARANLIN, '''+@EJERCICIOAnt+''' AS EJER, C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.CLIENTE, D.ARTICULO, 
-						D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.SERIE, 
-						D.PRECIO,
-						case when D.PRECIO<>0 then replace(replace(replace(convert(varchar,cast(D.PRECIO as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €''
-						else '''' end as PRECIOf, 
-						D.LINIA, D.DTO1, D.DTO2, 
-						D.IMPORTE,
+						C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.ARTICULO, 
+						D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
 						case when D.IMPORTE<>0 then replace(replace(replace(convert(varchar,cast(D.IMPORTE as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €'' 
-						else '''' end  AS IMPORTEf, 
-						'''+@EJERCICIOAnt+'''+D.EMPRESA+replace(CAST(C.FACTURA AS VARCHAR(10)),space(1),''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA, C.FACTURA AS NUMFRA, 
-						D.EMPRESA collate Modern_Spanish_CI_AI as EMPRESA, D.Tipo_IVA as Tipo_IVA, 
-						d.pverde, 
-						case when D.pverde<>0 then replace(replace(replace(convert(varchar,cast(D.pverde as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €'' 
-						else '''' end  AS pverdef, 
-						case when d.doc=1 then d.DOC_NUM else '''' end as PEDIDO, d.PRECIOIVA , d.IMPDIVIVA, 
-						coalesce(iva.iva,0.00) as porcen_iva, C.VENDEDOR	
-						, isnull(cast(art.PVERDE as int),0) as PVERDEver
-	
+						else '''' end  AS IMPORTEf, d.PRECIOIVA 
 						FROM '+@GESTIONAnt+'.DBO.D_ALBVEN D
 						INNER JOIN '+@GESTIONAnt+'.dbo.C_ALBVEN C ON D.EMPRESA = C.EMPRESA AND D.LETRA = C.LETRA AND D.NUMERO = C.NUMERO
-						left join '+@GESTIONAnt+'.dbo.barras ba on ba.ARTICULO = d.ARTICULO
-						left join '+@GESTIONAnt+'.dbo.tipo_iva iva on iva.codigo=d.TIPO_IVA 
-						left join '+@GESTIONAnt+'.dbo.articulo art on art.codigo=d.articulo
 						WHERE C.TRASPASADO = 0 AND LEFT(D.CLIENTE,3)=''430''
+						
 						UNION 
+
 						'
 						end
 				end
 	end
 
 	set @Sentencia = @Sentencia + '
-	SELECT (select TOP 1 ba.BARRAS) as CodBar,
+	SELECT 
 	'''+@EJERCICIO+'''+D.empresa+replace(D.letra,space(1),''0'')+replace(D.numero, space(1), ''0'') COLLATE Modern_Spanish_CI_AI as IDALBARAN, 
-	'''+@EJERCICIO+'''+D.empresa+replace(D.letra, space(1), ''0'')+replace(D.numero, space(1), ''0'')+replace(str(D.linia,4),space(1),''0'') 
-	COLLATE Modern_Spanish_CI_AI AS IDALBARANLIN, '''+@EJERCICIO+''' AS EJER, C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.CLIENTE, D.ARTICULO, 
-	D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.SERIE, 
-	D.PRECIO,
-	case when D.PRECIO<>0 then replace(replace(replace(convert(varchar,cast(D.PRECIO as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €''
-	else '''' end as PRECIOf, 
-	D.LINIA, D.DTO1, D.DTO2, 
-	D.IMPORTE,
+	C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.ARTICULO, 
+	D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
 	case when D.IMPORTE<>0 then replace(replace(replace(convert(varchar,cast(D.IMPORTE as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €'' 
-	else '''' end  AS IMPORTEf, 
-	'''+@EJERCICIO+'''+D.EMPRESA+replace(CAST(C.FACTURA AS VARCHAR(10)),space(1),''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA, C.FACTURA AS NUMFRA, 
-	D.EMPRESA collate Modern_Spanish_CI_AI as EMPRESA, D.Tipo_IVA as Tipo_IVA, 
-	d.pverde, 
-	case when D.pverde<>0 then replace(replace(replace(convert(varchar,cast(D.pverde as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €'' 
-	else '''' end  AS pverdef, 
-	case when d.doc=1 then d.DOC_NUM else '''' end as PEDIDO, d.PRECIOIVA , d.IMPDIVIVA, 
-	coalesce(iva.iva,0.00) as porcen_iva, C.VENDEDOR
-	
-	, isnull(cast(art.PVERDE as int),0) as PVERDEver
-	
-						FROM '+@GESTION+'.DBO.D_ALBVEN D
-						INNER JOIN '+@GESTION+'.dbo.C_ALBVEN C ON D.EMPRESA = C.EMPRESA AND D.LETRA = C.LETRA AND D.NUMERO = C.NUMERO
-						left join '+@GESTION+'.dbo.barras ba on ba.ARTICULO = d.ARTICULO
-						left join '+@GESTION+'.dbo.tipo_iva iva on iva.codigo=d.TIPO_IVA 
-						left join '+@GESTION+'.dbo.articulo art on art.codigo=d.articulo
+	else '''' end  AS IMPORTEf, d.PRECIOIVA 
+	FROM '+@GESTION+'.DBO.D_ALBVEN D
+	INNER JOIN '+@GESTION+'.dbo.C_ALBVEN C ON D.EMPRESA = C.EMPRESA AND D.LETRA = C.LETRA AND D.NUMERO = C.NUMERO
 	WHERE C.TRASPASADO = 0 AND LEFT(D.CLIENTE,3)=''430''
 	'
 	exec(@Sentencia)

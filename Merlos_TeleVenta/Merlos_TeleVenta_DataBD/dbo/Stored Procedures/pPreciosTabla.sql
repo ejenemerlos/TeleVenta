@@ -10,8 +10,8 @@ BEGIN TRY
 	declare @elPrecio varchar(50)
 	declare @elDto varchar(50)
 
-	set @elPrecio =  (select cast(isnull(PVP,0) as varchar) from ftDonamPreu(@empresa,@CLIENTE,@articulo,'',@unidades,@FechaTeleVenta))
-	set @elDto =  (select cast(isnull(DTO1,0) as varchar) from ftDonamPreu(@empresa,@CLIENTE,@articulo,'',@unidades,@FechaTeleVenta))
+	set @elPrecio =  (select cast(isnull(PVP, 0) as varchar) from ftDonamPreu(@empresa,@CLIENTE,@articulo,'',@unidades,@FechaTeleVenta))
+	set @elDto    =  (select cast(isnull(DTO1,0) as varchar) from ftDonamPreu(@empresa,@CLIENTE,@articulo,'',@unidades,@FechaTeleVenta))
 
 	select CONCAT('[{"articulo":"',@articulo,'","precio":"',@elPrecio,'","dto":"',@elDto,'"}]') as JAVASCRIPT
 	

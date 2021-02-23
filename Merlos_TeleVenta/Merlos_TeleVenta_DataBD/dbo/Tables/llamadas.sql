@@ -1,7 +1,7 @@
 ﻿
 CREATE TABLE [dbo].[llamadas](
 	[usuario] [char](20) NOT NULL,
-	[fecha] [date] NOT NULL,
+	[fecha] [char](10)  NOT NULL,
 	[cliente] [char](20) NOT NULL,
 	[hora] [char](15) NOT NULL,
 	[nombreTV] [nvarchar](100) NULL,

@@ -7,7 +7,7 @@ USING (VALUES
   (N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Clientes',N'Cliente',0,0,N'Text',1,NULL,N'( EXISTS (
  SELECT * FROM vClientes FlxTblFilter 
 
- WHERE ( [vClientes].[CODIGO]  LIKE {~@Param1|22|10|FindString~} 
+ WHERE ( [vClientes].[Código Cliente]  LIKE {~@Param1|0|52|FindString~} 
  or  [vClientes].[NOMBRE]  LIKE {~@Param2|0|82|FindString~} 
  or  [vClientes].[RCOMERCIAL]  LIKE {~@Param3|22|52|FindString~} 
  or  [vClientes].[CIF]  LIKE {~@Param4|22|17|FindString~} 

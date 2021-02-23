@@ -11,7 +11,7 @@ BEGIN TRY
 
 	if @modo='guardar' BEGIN
 		--	comprobar que no exista el nombreTV
-		if exists (select * from llamadas_user where usuario=@usuario and nombreTV=@nombreTV) begin select 'nombreTV_Existe!' as JAVASCRIPT return -1 end
+		if exists (select * from llamadas_user where usuario=@usuario and nombreTV=@nombreTV and fecha=@fecha) begin select 'nombreTV_Existe!' as JAVASCRIPT return -1 end
 
 		declare @i int, @valor varchar(1000) 
 		

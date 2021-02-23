@@ -5,7 +5,7 @@ BEGIN TRY
 MERGE INTO [Objects_Search_Properties] AS Target
 USING (VALUES
   (N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'CIF',N'Cliente',2,3,N'CIF',N'text',1)
- ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'CODIGO',N'Cliente',2,0,N'CODIGO',N'text',1)
+ ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'Código Cliente',N'Cliente',2,0,N'Código Cliente',N'text',1)
  ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'CP',N'Cliente',2,5,N'CP',N'text',1)
  ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'DIRECCION',N'Cliente',2,4,N'DIRECCION',N'text',1)
  ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Cliente',N'NOMBRE',N'Cliente',2,1,N'NOMBRE',N'text',1)

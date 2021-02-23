@@ -287,6 +287,7 @@ BEGIN TRY
 			, @ENTREGA	  varchar(10)
 			, @CONTACTO	  varchar(50) = ''0''
 			, @INCICLI	  varchar(50) = ''''
+			, @INCICLIDescrip varchar(1000) = ''''
 			, @VENDEDOR  varchar(20) = ''01''
 			, @FAMILIA    char(4) = ''''
 			, @OBSERVACIO varchar(8000)
@@ -298,6 +299,8 @@ BEGIN TRY
 			
 			, @EJER VARCHAR(4)
 			, @EMPRESA CHAR(2) = ''01''
+			, @NombreTV varchar(100)
+			, @FechaTV varchar(10)
 			, @PEDIDO CHAR(12)
 			, @FECHA varchar(10) = convert(varchar(10), getdate(), 103)
 			, @FECHAmas1 varchar(10) = convert(varchar(10), dateadd(day,1,getdate()), 103)			
@@ -317,10 +320,12 @@ BEGIN TRY
 			, @clave_ejercicio_empresa	char(6)
 			, @clave_numero				char(10)
 			, @clave varchar(20)
-'set  @Sentencia = @Sentencia + '
+' set  @Sentencia = @Sentencia + '
 	-- Obtener datos del XML ----------------------------------------------------------------------------------------------
 	SET @MODO		= @Values.value(''(/Row/Property[@Name=''''MODO'''']/@Value)[1]''		, ''varchar(50)'')
-	SET @EMPRESA	= @Values.value(''(/Row/Property[@Name=''''EMPRESA'''']/@Value)[1]''	, ''varchar(5)'')
+	SET @EMPRESA	= @Values.value(''(/Row/Property[@Name=''''EMPRESA'''']/@Value)[1]''	, ''varchar(2)'')
+	SET @NombreTV	= @Values.value(''(/Row/Property[@Name=''''NombreTV'''']/@Value)[1]''	, ''varchar(100)'')
+	SET @FechaTV	= @Values.value(''(/Row/Property[@Name=''''FechaTV'''']/@Value)[1]''	, ''varchar(10)'')
 	SET @IDPEDIDO	= @Values.value(''(/Row/Property[@Name=''''IDPEDIDO'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @CLIENTE	= @Values.value(''(/Row/Property[@Name=''''CLIENTE'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @ENV_CLI	= @Values.value(''(/Row/Property[@Name=''''ENV_CLI'''']/@Value)[1]''	, ''int'')
@@ -354,7 +359,8 @@ BEGIN TRY
 	END
 	set @clave_numero = @nuevoValor
 	set @clave = concat(@clave_ejercicio_empresa,@clave_numero,@SERIE)
-'set  @Sentencia = @Sentencia + '
+
+' set  @Sentencia = @Sentencia + '
 
 	--Creamos las variables de trabajo
 	DECLARE @nombreUsuario CHAR(25), @codigo varchar(20), @estado_aux BIT, @aux INT,
@@ -394,6 +400,7 @@ BEGIN TRY
 		else BEGIN select ''NoExiste'' as JAVASCRIPT END
 		return -1
 	END
+' set  @Sentencia = @Sentencia + '
 
 	IF @MODO=''actualizar'' BEGIN
 		update '+@GESTION+'.dbo.c_pedive set ENV_CLI=@ENV_CLI, ENTREGA=@ENTREGA, OBSERVACIO=coalesce(@OBSERVACIO,'''')
@@ -401,7 +408,7 @@ BEGIN TRY
 		select @IDPEDIDO as JAVASCRIPT
 		return -1
 	END
-'set  @Sentencia = @Sentencia + '
+
 
 
 	IF @MODO=''eliminar'' BEGIN
@@ -438,12 +445,13 @@ BEGIN TRY
 	SET @PRONTO = (SELECT pronto FROM ##CLIENTE)
 	SET @ruta   = (SELECT ruta FROM ##CLIENTE)
 	DROP TABLE ##CLIENTE	
+' set  @Sentencia = @Sentencia + '
 
 	SET @almacen = (SELECT almacen FROM '+@GESTION+'.dbo.empresa WHERE codigo = @EMPRESA)
 
 	SET @estado_aux = (SELECT estado FROM '+@COMUN+'.dbo.OPCEMP WHERE tipo_opc = 9003 AND empresa=@EMPRESA)
-'set  @Sentencia = @Sentencia + '
 
+	-- Obtener número según los contadores de Eurowin
 	IF (@estado_aux = 1) BEGIN
 		SET @aux = (SELECT contador FROM '+@GESTION+'.[dbo].series WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra)
 		SET @codigo = REPLICATE('' '', (10 - LEN(@aux)))+CAST((@aux + 1) AS CHAR(10))
@@ -463,13 +471,14 @@ BEGIN TRY
 
 	INSERT INTO '+@GESTION+'.[DBO].c_pedive ( usuario, empresa, numero, fecha, cliente, env_cli, entrega, vendedor, ruta, pronto, iva_inc, divisa
 										, cambio, fpag, letra, hora, almacen,observacio ) 
-	VALUES ( @UserLogin, @EMPRESA, @codigo, @FECHA, @CLIENTE, @env_cli, @ENTREGA, @Vendedor, @ruta, @PRONTO, 0, @divisa, 1
+	VALUES ( @UserLogin, @EMPRESA, @codigo, cast(@FECHA as smalldatetime), @CLIENTE, @env_cli, @ENTREGA, @Vendedor, @ruta, @PRONTO, 0, @divisa, 1
 			, @fpag, @letra, getdate(), @almacen, @OBSERVACIO )
-
+			
 	SET @IDPEDIDO = CONCAT(@EJER,@EMPRESA,@letra,@codigo)
 	declare @IDP varchar(50) 
 	set @IDP = replace(@IDPEDIDO,space(1),''0'')
 	set @IDPEDIDO = LEFT(@IDP,18)	
+' set  @Sentencia = @Sentencia + '
 
 		insert into [dbo].[Pedidos_Familias](EJERCICIO, EMPRESA, NUMERO, LETRA, FAMILIA)
 		values (@EJER, @EMPRESA, @codigo, @letra, @FAMILIA)
@@ -479,15 +488,19 @@ BEGIN TRY
 		insert into Pedidos_Contactos (IDPEDIDO, Cliente, Contacto)
 		values (@IDPEDIDO, @CLIENTE, @CONTACTO)
 
+	--	Incidencia Cliente-Pedido
 		if @INCICLI is not null and @INCICLI<>''''
-		INSERT INTO [dbo].[inci_CliPed] ([pedido],[cliente],[incidencia],[descripcion],[observaciones])
-		VALUES (@IDPEDIDO,@CLIENTE,left(@INCICLI,2),SUBSTRING(@INCICLI,5,len(@INCICLI)),@OBSERVACIO)
-'set  @Sentencia = @Sentencia + '
+		insert into [inci_CliPed] ([empresa],[fecha],[hora],[nombreTV],[idpedido],[cliente],[incidencia]
+									,[descripcion],[observaciones])
+		values (@empresa,@FechaTV
+				, cast(datepart(HOUR,getdate()) as char(2))+'':''+cast(datepart(MINUTE,getdate()) as char(2))
+				, @nombreTV, @idpedido, @cliente, @INCICLI, @INCICLIDescrip, @OBSERVACIO)
 
 	-- ==================================================================================================================================
 	-- Insertamos las lineas del pedido	
 
 		set @LINEAS = ''{"datos":[''+replace(replace(@LINEAS,''_openLL_'',''{''),''_closeLL_'',''}'')+'']}''
+' set  @Sentencia = @Sentencia + '
 
 		declare @valor varchar(max)
 		declare cur CURSOR for select [value] from openjson(@LINEAS,''$.datos'')
@@ -502,6 +515,7 @@ BEGIN TRY
 			declare @jsDto numeric(15,6) = cast(JSON_VALUE(isnull(@valor,''0''),''$.dto'') as numeric(15,6))
 			declare @jsImporte numeric(15,6) = cast(JSON_VALUE(isnull(@valor,''0''),''$.importe'') as numeric(15,6))
 			declare @inciArt char(2) = JSON_VALUE(@valor,''$.incidencia'') 
+			declare @inciArtDescrip char(100) = JSON_VALUE(@valor,''$.incidenciaDescrip'') 
 			declare @obsArt varchar(50) = JSON_VALUE(@valor,''$.observacion'')
 			declare @jsCajas numeric(15,6) = case when  (select isnull(UNICAJA,0) from '+@GESTION+'.dbo.articulo where CODIGO=@jsArticulo)>0 
 												then @jsUnidades / (select isnull(UNICAJA,0) from '+@GESTION+'.dbo.articulo where CODIGO=@jsArticulo)
@@ -531,7 +545,18 @@ BEGIN TRY
 			if len(@minutos)=1 set @minutos = ''0''+@minutos
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
-			if @inciArt is not null and @inciArt<>''''		 
+			if @inciArt is not null and @inciArt<>''''	
+			insert into inci_CliArt (empresa,fecha,hora, nombreTV, idpedido, cliente, articulo, incidencia, descripcion, observaciones)
+				values (@empresa, @FechaTV
+						, cast(datepart(HOUR,getdate()) as char(2))+'':''+cast(datepart(MINUTE,getdate()) as char(2))
+						, @nombreTV, @idpedido, @cliente
+						, @jsArticulo
+						, @inciArt
+						, @inciArtDescrip
+						, @obsArt
+				)
+' set  @Sentencia = @Sentencia + '
+					 
 			insert into [inci_CliArt] ([empresa],[cliente],[fecha],[articulo],[incidencia],[descripcion],[hora])			
 			values(@EMPRESA,@CLIENTE,getdate(),@jsArticulo,@inciArt,@obsArt,@laHora)
 
@@ -540,7 +565,7 @@ BEGIN TRY
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
-'set  @Sentencia = @Sentencia + '
+
 
 	COMMIT TRANSACTION pedidoNuevo
 	SELECT ''{"IdPedido":"''+@IDPEDIDO+''","Ejercicio":"''+@EJER+''","Empresa":"''+@EMPRESA+''","Letra":"''+@letra+''","Codigo":"''+ltrim(rtrim(@codigo))+''"}'' as JAVASCRIPT
