@@ -299,6 +299,7 @@ BEGIN TRY
 			
 			, @EJER VARCHAR(4)
 			, @EMPRESA CHAR(2) = ''01''
+			, @IdTeleVenta varchar(50)
 			, @NombreTV varchar(100)
 			, @FechaTV varchar(10)
 			, @PEDIDO CHAR(12)
@@ -324,6 +325,7 @@ BEGIN TRY
 	-- Obtener datos del XML ----------------------------------------------------------------------------------------------
 	SET @MODO		= @Values.value(''(/Row/Property[@Name=''''MODO'''']/@Value)[1]''		, ''varchar(50)'')
 	SET @EMPRESA	= @Values.value(''(/Row/Property[@Name=''''EMPRESA'''']/@Value)[1]''	, ''varchar(2)'')
+	SET @IdTeleVenta= @Values.value(''(/Row/Property[@Name=''''IdTeleVenta'''']/@Value)[1]'', ''varchar(50)'')
 	SET @NombreTV	= @Values.value(''(/Row/Property[@Name=''''NombreTV'''']/@Value)[1]''	, ''varchar(100)'')
 	SET @FechaTV	= @Values.value(''(/Row/Property[@Name=''''FechaTV'''']/@Value)[1]''	, ''varchar(10)'')
 	SET @IDPEDIDO	= @Values.value(''(/Row/Property[@Name=''''IDPEDIDO'''']/@Value)[1]''	, ''varchar(50)'')
@@ -360,73 +362,16 @@ BEGIN TRY
 	set @clave_numero = @nuevoValor
 	set @clave = concat(@clave_ejercicio_empresa,@clave_numero,@SERIE)
 
-' set  @Sentencia = @Sentencia + '
-
 	--Creamos las variables de trabajo
 	DECLARE @nombreUsuario CHAR(25), @codigo varchar(20), @estado_aux BIT, @aux INT,
 			 @letra CHAR(2), @moneda VARCHAR(3), @fpag VARCHAR(2), @ruta CHAR(2)
 			 set @letra=@SERIE
+' set  @Sentencia = @Sentencia + '
+
 	--Inicializamos las variables donde haremos las inserciones
 	SET @EJER = (select [any] from '+@COMUN+'.[DBO].ejercici where predet=1)
 
 	IF @ENTREGA IS NULL or @ENTREGA='''' set @ENTREGA=@FECHAmas1	
-
-	IF @MODO=''editar'' BEGIN	
-		begin try insert into '+@COMUN+'.dbo.en_uso (Tipo, Clave, Usuario, Terminal) values (@tipo, @clave, @UserLogin, ''WEB'') end try
-		begin catch end catch
-		declare @dvObservacio varchar(1000) = (select OBSERVACIO from '+@GESTION+'.dbo.c_pedive 
-							 where CONCAT(@EJER,empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))=@IDPEDIDO) 
-		declare @dvVendedor varchar(10) = (select VENDEDOR from vPedidos where IDPEDIDO=@IDPEDIDO)
-		select ''{"observacio":"''+@dvObservacio+''","vendedor":"''+@dvVendedor+''"}'' as JAVASCRIPT
-		return -1 
-	END
-
-	IF @MODO=''verificarEnUso'' BEGIN		
-		if exists (select USUARIO, TERMINAL from '+@COMUN+'.dbo.en_uso where TIPO=''PEDIVEN'' and CLAVE=@clave and USUARIO<>@UserLogin) BEGIN
-			select 
-				''EnUso;''+ (select USUARIO  from '+@COMUN+'.dbo.en_uso where TIPO=''PEDIVEN'' and CLAVE=@clave and USUARIO<>@UserLogin) +'';''
-						+ (select TERMINAL from '+@COMUN+'.dbo.en_uso where TIPO=''PEDIVEN'' and CLAVE=@clave and USUARIO<>@UserLogin)
-			as JAVASCRIPT 
-		END
-		else BEGIN select ''Liberado'' as JAVASCRIPT END
-		return -1
-	END
-
-	IF @MODO=''desbloquear'' BEGIN		
-		if exists (select USUARIO, TERMINAL from '+@COMUN+'.dbo.en_uso where TIPO=''PEDIVEN'' and CLAVE=@clave and USUARIO<>@UserLogin) BEGIN
-			delete '+@COMUN+'.dbo.en_uso where Tipo=@tipo and Clave=@clave
-			select ''desbloqueado'' as JAVASCRIPT 
-		END
-		else BEGIN select ''NoExiste'' as JAVASCRIPT END
-		return -1
-	END
-' set  @Sentencia = @Sentencia + '
-
-	IF @MODO=''actualizar'' BEGIN
-		update '+@GESTION+'.dbo.c_pedive set ENV_CLI=@ENV_CLI, ENTREGA=@ENTREGA, OBSERVACIO=coalesce(@OBSERVACIO,'''')
-		where CONCAT(@EJER,empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))=@IDPEDIDO
-		select @IDPEDIDO as JAVASCRIPT
-		return -1
-	END
-
-
-
-	IF @MODO=''eliminar'' BEGIN
-		delete from '+@GESTION+'.dbo.c_pedive where replace(@EJER + EMPRESA + LETRA + NUMERO,'' '',''0'')=@IDPEDIDO
-		delete from '+@GESTION+'.dbo.d_pedive where replace(@EJER + EMPRESA + LETRA + NUMERO,'' '',''0'')=@IDPEDIDO
-		if exists (select * from sys.databases where [name] = '''+@CAMPOS+''') BEGIN
-			delete from '+@CAMPOS+'.dbo.c_presuvew where @EJER + EMPRESA + LETRA + NUMERO=@IDPEDIDO
-		END
-		delete '+@COMUN+'.dbo.en_uso where Tipo=@tipo and Clave=@clave
-		select @IDPEDIDO as JAVASCRIPT
-		return -1
-	END
-
-
-	IF @MODO=''finalizar'' BEGIN		
-		delete '+@COMUN+'.dbo.en_uso where Tipo=@tipo and Clave=@clave
-		return -1	
-	END
 		
 	-- GENERAR PEDIDO
 	SET @fpag	= (SELECT fpag FROM '+@GESTION+'.[dbo].clientes WHERE codigo=@CLIENTE)
@@ -445,7 +390,6 @@ BEGIN TRY
 	SET @PRONTO = (SELECT pronto FROM ##CLIENTE)
 	SET @ruta   = (SELECT ruta FROM ##CLIENTE)
 	DROP TABLE ##CLIENTE	
-' set  @Sentencia = @Sentencia + '
 
 	SET @almacen = (SELECT almacen FROM '+@GESTION+'.dbo.empresa WHERE codigo = @EMPRESA)
 
@@ -462,6 +406,7 @@ BEGIN TRY
 		SET @codigo = REPLICATE('' '', (10 - LEN(@aux)))+CAST((@aux + 1) AS CHAR(10))
 		UPDATE '+@GESTION+'.[dbo].empresa SET pediven = pediven + 1 WHERE codigo=@EMPRESA 
 	END
+' set  @Sentencia = @Sentencia + '
 	
 	IF @REFERCLI IS NULL BEGIN set  @REFERCLI = '''' END
 	IF @PRONTO   IS NULL BEGIN set  @PRONTO   = 0  END
@@ -478,28 +423,19 @@ BEGIN TRY
 	declare @IDP varchar(50) 
 	set @IDP = replace(@IDPEDIDO,space(1),''0'')
 	set @IDPEDIDO = LEFT(@IDP,18)	
-' set  @Sentencia = @Sentencia + '
 
-		insert into [dbo].[Pedidos_Familias](EJERCICIO, EMPRESA, NUMERO, LETRA, FAMILIA)
-		values (@EJER, @EMPRESA, @codigo, @letra, @FAMILIA)
+	insert into [dbo].[Pedidos_Familias](EJERCICIO, EMPRESA, NUMERO, LETRA, FAMILIA)
+	values (@EJER, @EMPRESA, @codigo, @letra, @FAMILIA)
 		
-	-- ==================================================================================================================================
 	--	Guardamos el contacto en Pedidos_contactos
 		insert into Pedidos_Contactos (IDPEDIDO, Cliente, Contacto)
 		values (@IDPEDIDO, @CLIENTE, @CONTACTO)
-
-	--	Incidencia Cliente-Pedido
-		if @INCICLI is not null and @INCICLI<>''''
-		insert into [inci_CliPed] ([empresa],[fecha],[hora],[nombreTV],[idpedido],[cliente],[incidencia]
-									,[descripcion],[observaciones])
-		values (@empresa,@FechaTV
-				, cast(datepart(HOUR,getdate()) as char(2))+'':''+cast(datepart(MINUTE,getdate()) as char(2))
-				, @nombreTV, @idpedido, @cliente, @INCICLI, @INCICLIDescrip, @OBSERVACIO)
 
 	-- ==================================================================================================================================
 	-- Insertamos las lineas del pedido	
 
 		set @LINEAS = ''{"datos":[''+replace(replace(@LINEAS,''_openLL_'',''{''),''_closeLL_'',''}'')+'']}''
+
 ' set  @Sentencia = @Sentencia + '
 
 		declare @valor varchar(max)
@@ -538,6 +474,7 @@ BEGIN TRY
 											, @UserLogin = @UserLogin
 											, @UserID = @UserID
 											, @UserName = @UserName
+' set  @Sentencia = @Sentencia + '
 
 			declare @hora varchar(2) = cast(datepart(HOUR,getdate()) as varchar(2))
 			declare @minutos varchar(2) = cast(datepart(MINUTE,getdate()) as varchar(2))
@@ -545,20 +482,9 @@ BEGIN TRY
 			if len(@minutos)=1 set @minutos = ''0''+@minutos
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
-			if @inciArt is not null and @inciArt<>''''	
-			insert into inci_CliArt (empresa,fecha,hora, nombreTV, idpedido, cliente, articulo, incidencia, descripcion, observaciones)
-				values (@empresa, @FechaTV
-						, cast(datepart(HOUR,getdate()) as char(2))+'':''+cast(datepart(MINUTE,getdate()) as char(2))
-						, @nombreTV, @idpedido, @cliente
-						, @jsArticulo
-						, @inciArt
-						, @inciArtDescrip
-						, @obsArt
-				)
-' set  @Sentencia = @Sentencia + '
-					 
-			insert into [inci_CliArt] ([empresa],[cliente],[fecha],[articulo],[incidencia],[descripcion],[hora])			
-			values(@EMPRESA,@CLIENTE,getdate(),@jsArticulo,@inciArt,@obsArt,@laHora)
+			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	
+			insert into TeleVentaIncidencias (id,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+				values (@IdTeleVenta,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
 
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
@@ -571,6 +497,7 @@ BEGIN TRY
 	SELECT ''{"IdPedido":"''+@IDPEDIDO+''","Ejercicio":"''+@EJER+''","Empresa":"''+@EMPRESA+''","Letra":"''+@letra+''","Codigo":"''+ltrim(rtrim(@codigo))+''"}'' as JAVASCRIPT
 	RETURN -1  
 END TRY
+' set  @Sentencia = @Sentencia + '
 
 BEGIN CATCH
 	ROLLBACK TRANSACTION pedidoNuevo

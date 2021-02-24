@@ -67,7 +67,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 	var nombre = $.trim($("#inpNombreTV").val());	
 		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
-	var elJS = '{"modo":"' + modo + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '",' + paramStd + '}';
+	var elJS = '{"modo":"' + modo + '","IdTeleVenta":"' + IdTeleVenta + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '",' + paramStd + '}';
 	if(modo==="guardar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
@@ -78,7 +78,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 			window["op"+objetos[o]] = '"'+objetos[o]+'":['+tr.replace(/}{/g,"},{")+']';
 		}
 		
-		elJS = '{"modo":"' + modo + '","comprobar":"' + comprobar + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '"'
+		elJS = '{"modo":"' + modo + '","comprobar":"' + comprobar + '","IdTeleVenta":"' + IdTeleVenta + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '"'
 			 + ','+window["opGestor"]+','+window["opRuta"]+','+window["opVendedor"]+','+window["opSerie"]+','+window["opMarca"]+''
 			 +','+window["opFamilia"]+','+window["opSubfamilia"]+',' + paramStd + '}';
 	}

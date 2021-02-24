@@ -5,7 +5,7 @@ BEGIN TRY
 MERGE INTO [Pages] AS Target
 USING (VALUES
   (N'8462DB46-6433-4DED-854E-E390DC933587',N'list',N'Cliente',NULL,N'default',N'list Cliente',N'noicon',N'{{ObjectDescrip}}',NULL,NULL,0,NULL,0,1,0,NULL,0,1)
- ,(N'94822B23-78A9-40EB-936F-062108F2F76D',N'view',N'Cliente',NULL,N'syslayout-1',N'view Cliente',N'noicon',N'{{ObjectDescrip}}',NULL,NULL,0,NULL,0,1,0,NULL,0,1)
+ ,(N'94822B23-78A9-40EB-936F-062108F2F76D',N'view',N'Cliente',NULL,N'default',N'view Cliente',N'noicon',N'{{ObjectDescrip}}',NULL,NULL,0,NULL,0,1,0,NULL,0,1)
  ,(N'Ruta',N'generic',NULL,N'webdefault',N'default',N'Ruta',N'noicon',N'Ruta',NULL,NULL,0,NULL,0,0,0,NULL,0,1)
  ,(N'Supervisor',N'generic',NULL,N'webdefault',N'default',N'Supervisor',N'noicon',N'Supervisor',NULL,NULL,0,NULL,0,0,0,NULL,0,1)
  ,(N'TeleVenta',N'generic',N'Cliente',NULL,N'MI_1_2_1',N'TeleVenta',N'noicon',N'Pantalla de Tele Venta',NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").hide();
@@ -40,8 +40,8 @@ function inicioTeleVenta(){
 
 function recargarTVLlamadas(){ 
 	abrirVelo(icoCargando16 + " recargando datos...");
-	tbLlamadasGlobal_Sel(FechaTeleVenta, NombreTeleVenta); 
-	setTimeout(function(){ tbLlamadasGlobal_Sel(FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
+	tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
+	setTimeout(function(){ tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
 }
 
 function configurarTeleVenta(tf){ console.log("configurarTeleVenta()");
@@ -70,7 +70,7 @@ function configurarTeleVenta(tf){ console.log("configurarTeleVenta()");
 function estTV(){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvEstTV").html(icoCargando16+" cargando datos...");
 	var contenido = "";
-	var parametros = ''{"modo":"estadisticas","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
+	var parametros = ''{"modo":"estadisticas","IdTeleVenta":"''+IdTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
 	console.log("estTV - parametros:\n"+parametros);
 	flexygo.nav.execProcess(''pEstTV'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
@@ -311,10 +311,10 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	ctvll = modo;
 	var elDV = "dvLlamadas";
 	var contenido = "";
-	var parametros = ''{"modo":"''+modo+''","cliente":"''+ClienteCodigo+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","usuariosTV":''+UsuariosTV+'',''+paramStd+''}''; 	
+	var parametros = ''{"modo":"''+modo+''","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","usuariosTV":''+UsuariosTV+'',''+paramStd+''}''; 	
 	/**/ console.log("cargarTeleVentaLlamadas parametros: \n"+parametros);
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if(ret){
+		if(ret){ /**/ console.log("pLlamadas ret:\n"+limpiarCadena(ret.JSCode));
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
 			else{ 
 				contenido = "";
@@ -356,7 +356,7 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 					for(var i in js){
 						var elPedido = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].serie)+" - "+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].pedido);
 						if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].serie)===""){ elPedido=""; }
-						if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].pedido).indexOf("NO!")!==-1){ elPedido = "INCIDENCIA"; }
+						if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].pedido).indexOf("INCIDENCIA")!==-1){ elPedido = "INCIDENCIA"; }
 						if(modo==="llamadasDelCliente"){
 							var laHora = Left(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].hora),5);
 							var laIncidencia = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].incidencia)+" - "+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].ic[0].nIncidencia);	
@@ -372,17 +372,18 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 						}
 						if(modo==="cargarLlamadas"){	
 							var elBG = "";
-							if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].completado)==="1"){ elBG = "style=''background:#FFCFCF;''"; } 
+							var estado = "PENDIENTE";
+							if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].completado)==="1"){ elBG = "style=''background:#FFCFCF;''"; estado="COMPLETADO"; } 							
 							contenido += "<tr "+elBG+" onclick=''TV_SelecionarCliente(\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].cliente)+"\")''>"
 									  +"	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].cliente)+"</td>"
-									  +"	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].NOMBRE)+"</td>"
+									  +"	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].cli[0].NOMBRE)+"</td>"
 									  +"	<td style=''text-align:center;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].horario)+"</td>"
-									  +"	<td data-completado=''"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].completado)+"'' style=''text-align:center;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nCompletado)+"</td>"
+									  +"	<td data-completado=''"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].completado)+"'' style=''text-align:center;''>"+estado+"</td>"
 									  +"	<td style=''text-align:right;''>"+elPedido+"</td>"
 									  +"</tr>";
 						}
 						if(modo==="listaGlobal"){							
-							contenido += "<tr onclick=''tbLlamadasGlobal_Sel(\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha)+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nombreTV)+"\")''>"
+							contenido += "<tr onclick=''tbLlamadasGlobal_Sel(\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].id)+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha)+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nombreTV)+"\")''>"
 									  +"	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha)+"</td>"
 									  +"	<td class=''rolTeleVentaO''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].usuario)+"</td>"
 									  +"	<td>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nombreTV)+"</td>"
@@ -399,9 +400,10 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	},false);
 }
 
-function tbLlamadasGlobal_Sel(fecha,nombre){ console.log("tbLlamadasGlobal_Sel("+fecha+","+nombre+")");
+function tbLlamadasGlobal_Sel(id,fecha,nombre){ console.log("tbLlamadasGlobal_Sel("+id+","+fecha+","+nombre+")");
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(fecha);
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val(nombre);
+	IdTeleVenta = id;
 	FechaTeleVenta = fecha;
 	NombreTeleVenta = nombre;
 	cargarTbConfigOperador("cargar");
@@ -566,7 +568,7 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 		var esconder_spResBtn=false; 
 		var registrosTotales = 0;
 		var elSP = "pArticulosBuscar";	
-		var parametros = ''{"registros":''+paginadorRegistros+'',"buscar":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val())+''","cliente":"''+ClienteCodigo+''","fechaTV":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
+		var parametros = ''{"registros":''+paginadorRegistros+'',"buscar":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val())+''","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","fechaTV":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
 		if(modo){ elSP = "pArticulosCliente"; }
 
 		flexygo.nav.execProcess(elSP,'''',null,null,[{"Key":"parametros","Value":limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
@@ -961,6 +963,7 @@ function terminarLlamada(){
 		var lasLineas = (limpiarCadena(PedidoDetalle)).replace(/}{/g,"},{").replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");
 		var Values = ''<Row rowId="elRowDelObjetoPedido" ObjectName="Pedido">''
 					+	''<Property Name="MODO" Value="Pedido"/>''
+					+	''<Property Name="IdTeleVenta" Value="''+IdTeleVenta+''"/>''
 					+	''<Property Name="FechaTV" Value="''+FechaTeleVenta+''"/>''
 					+	''<Property Name="NombreTV" Value="''+NombreTeleVenta+''"/>''
 					+	''<Property Name="IDPEDIDO" Value="''+PedidoActivo+''"/>''
@@ -975,7 +978,6 @@ function terminarLlamada(){
 					+	"<Property Name=''LINEAS'' Value=''"+lasLineas+"''/>"
 					+	"<Property Name=''OBSERVACIO'' Value=''"+limpiarCadena(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val()))+"''/>"
 					+''</Row>'';
-					/**/ console.log("pedido detalles:\n"+lasLineas);
 		flexygo.nav.execProcess(''pPedido_Nuevo'',''Pedido'',null,null
 		,[{key:''Values'',value:Values}, {key:''ContextVars'',value:ContextVars},{key:''RetValues'',value:RetValues}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 			if(ret && !ret.JSCode.includes("''Error pedidoNuevo !!!")){
@@ -990,7 +992,7 @@ function terminarLlamada(){
 		 },false);
 	}else{ terminarLlamadaDef(); }
 }
-function terminarLlamadaDef(pedido,confirmacion){
+function terminarLlamadaDef(pedido,confirmacion){ console.log("terminarLlamadaDef("+pedido+","+confirmacion+")");
 	var incidenciaCliente = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inciCliente").val()).split(" - ")[0];
 	var incidenciaClienteDescrip = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inciCliente").val()).split(" - ")[1];
 	var observaciones = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val());
@@ -1028,10 +1030,10 @@ function terminarLlamadaDef(pedido,confirmacion){
 		});
 		incidenciasSinPedido = '',"inciSinPed":[''+incidenciasSinPedido.replace(/}{/g,"},{")+'']'';
 	} 
-	var parametros = ''{"modo":"terminar","cliente":"''+ClienteCodigo+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''"''
+	var parametros = ''{"modo":"terminar","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''"''
 					+'',"incidenciaCliente":"''+incidenciaCliente+''","incidenciaClienteDescrip":"''+incidenciaClienteDescrip+''","observaciones":"''+observaciones+''"''
 					+'',"pedido":"''+pedido+''","empresa":"''+CodigoEmpresa+''","serie":"''+SERIE+''"''+incidenciasSinPedido+'',''+paramStd+''}'';
-
+	/**/ console.log("pLlamadas: "+parametros);
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
 			if(ctvll==="llamadasDelCliente"){ flexygo.nav.openPage(''list'',''Clientes'',''(BAJA=0)'',null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); ' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show(); }
@@ -1137,7 +1139,7 @@ function anyadirCliente(){
 
 function dvAnyadirCli_Click(cliente){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvLlamadas").html("<div class=''taC vaM''>"+icoCargando16+" añadiendo el cliente "+cliente+" al listado...</div>");
-	var parametros = ''{"modo":"anyadirCliente","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''"''
+	var parametros = ''{"modo":"anyadirCliente","IdTeleVenta":"''+IdTeleVenta+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''"''
 					+'',"cliente":"''+cliente+''",''+paramStd+''}'';
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){

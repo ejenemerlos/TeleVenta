@@ -4,8 +4,7 @@ BEGIN TRY
 
 MERGE INTO [Modules] AS Target
 USING (VALUES
-  (N'Cliente_Acciones',N'flx-html',N'project',N'Vendedor',NULL,N'Cliente_Acciones',N'Cliente_Acciones',N'none',1,1,1,0,NULL,NULL,N'<div>Registro de Llamadas</div>
-<div id="dvRegLlamadas" style=''max-height:280px;overflow:hidden;overflow-y:auto;''></div>
+  (N'Cliente_Acciones',N'flx-html',N'project',N'Vendedor',NULL,N'Registro de Llamadas',N'Registro de Llamadas',N'default',1,0,1,0,NULL,NULL,N'<div id="dvRegLlamadas" style=''max-height:280px;overflow:hidden;overflow-y:auto;''></div>
 
 <script>
 cargarLlamadasCliente();
@@ -47,7 +46,7 @@ function cargarLlamadasCliente(){
 }
 
 
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flow-chart-2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flow-chart-2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Cliente_Acciones''] .icon-minus").click();',0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Datos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Datos',N'Datos del Cliente',N'default',0,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'client',NULL,NULL,N'DataConnectionString',NULL,NULL,N'Cliente_Datos',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Incidencias',N'flx-html',N'project',NULL,NULL,N'Cliente_Incidencias',N'Incidencias',N'default',0,0,1,0,NULL,NULL,N'<div id="dvRegInci"></div>
 
@@ -59,8 +58,8 @@ function cargarIncidenciasCliente(){
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
 	var parametros = ''{"modo":"incidenciasDelCliente","cliente":"''+ClienteCodigo+''"}'';
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if(ret){	
-			var js = JSON.parse(ret.JSCode);
+		if(ret){	/**/ console.log("pLlamadas incidenciasDelCliente re:\n"+limpiarCadena(ret.JSCode));
+			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			var inciArtNum = js.inciArt.length;
 			var inciPedNum = js.inciPed.length;
 			
@@ -69,13 +68,19 @@ function cargarIncidenciasCliente(){
 						    + "	<th>Fecha</th>"
 						    + "	<th>Artículo</th>"
 						    + "	<th>Incidencia</th>"
+						    + "	<th>Observaciones</th>"
 						    + "</tr>"; 
 			for(var a in js.inciArt){ 
 				var obs = js.inciArt[a].observaciones; if(obs===null){ obs=""; }
+				var inciArtDesc = js.inciArt[a].incidencia+" - "+js.inciArt[a].c[0].ia[0].nombre;
+				var inciArtObs = js.inciArt[a].observaciones;
+				if(js.inciArt[a].c[0].ia[0].nombre===null){ inciArtDesc=""; }
+				if(js.inciArt[a].observaciones===null){ inciArtObs=""; }
 				inciArtCont +="<tr title=''"+obs+"''>"
-						    + "	<td>"+js.inciArt[a].fecha+"</td>"
-						    + "	<td>"+js.inciArt[a].articulo+"</td>"
-						    + "	<td>"+js.inciArt[a].incidencia+" - "+js.inciArt[a].descripcion+"</td>"
+						    + "	<td>"+js.inciArt[a].c[0].fecha+"</td>"
+						    + "	<td>"+js.inciArt[a].articulo+" - "+js.inciArt[a].c[0].ia[0].va[0].nArticulo+"</td>"
+						    + "	<td>"+inciArtDesc+"</td>"
+						    + "	<td>"+inciArtObs+"</td>"
 						    + "</tr>"; 
 			}
 			inciArtCont +="</table><br><br>";
@@ -83,13 +88,17 @@ function cargarIncidenciasCliente(){
 			var inciPedCont = "<table class=''tbStd''>"
 							+ "<tr>"
 						    + "	<th>Fecha</th>"
+						    + "	<th>Pedido</th>"
 						    + "	<th>Incidencia</th>"
+						    + "	<th>Observaciones</th>"
 						    + "</tr>"; 
 			for(var b in js.inciPed){ 
 				obs = js.inciPed[b].observaciones; if(obs===null){ obs=""; }
-				inciPedCont +="<tr title=''"+obs+"''>"
-						    + "	<td>"+js.inciPed[b].fecha+"</td>"
-						    + "	<td>"+js.inciPed[a].incidencia+" - "+js.inciPed[a].descripcion+"</td>"
+				inciPedCont +="<tr>"
+						    + "	<td>"+js.inciPed[b].c[0].fecha+"</td>"
+						    + "	<td>"+js.inciPed[b].c[0].pedido+"</td>"
+						    + "	<td>"+js.inciPed[a].incidencia+" - "+js.inciPed[a].c[0].nombre+"</td>"
+						    + "	<td>"+js.inciPed[a].observaciones+"</td>"
 						    + "</tr>"; 
 			}
 			inciPedCont +="</table>";
@@ -115,7 +124,7 @@ function incidenciasIO(dv, nm) {
 }
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'admin1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Pasos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Pasos',N'Cliente_Pasos',N'none',1,1,1,0,NULL,NULL,N'<span class="btn btn-info" onclick=''flexygo.nav.openPageName("TeleVenta","","","{\"CODIGO\":\"{{CODIGO}}\"}","current",false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));''><span title="Llamada" class="flx-icon icon-phone icon-margin-right"></span><span class="hidden-m">Llamada</span></span>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',0,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,NULL,NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+ ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,NULL,NULL,N'PedidosPlantilla01',NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Cliente_Pedidos''] .icon-minus").click();',0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_view_cabecera',N'flx-html',N'project',NULL,N'(CODIGO=''{{CODIGO}}'')',N'Cliente_view_cabecera',N'Encabezado cliente',N'none',1,1,1,0,NULL,NULL,N'<table class="tbS">
   <tr>
     <th>
@@ -623,7 +632,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());	
 		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
-	var elJS = ''{"modo":"'' + modo + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
+	var elJS = ''{"modo":"'' + modo + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
 	if(modo==="guardar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
@@ -634,7 +643,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 			window["op"+objetos[o]] = ''"''+objetos[o]+''":[''+tr.replace(/}{/g,"},{")+'']'';
 		}
 		
-		elJS = ''{"modo":"'' + modo + ''","comprobar":"'' + comprobar + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''"''
+		elJS = ''{"modo":"'' + modo + ''","comprobar":"'' + comprobar + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''"''
 			 + '',''+window["opGestor"]+'',''+window["opRuta"]+'',''+window["opVendedor"]+'',''+window["opSerie"]+'',''+window["opMarca"]+''''
 			 +'',''+window["opFamilia"]+'',''+window["opSubfamilia"]+'','' + paramStd + ''}'';
 	}

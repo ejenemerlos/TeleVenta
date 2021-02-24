@@ -7,6 +7,7 @@ BEGIN TRY
 			, @artCli varchar(max)
 			, @modo varchar(50) = (select JSON_VALUE(@parametros,'$.modo'))
 			, @articulo varchar(50) = (select JSON_VALUE(@parametros,'$.articulo'))
+			, @IdTeleVenta varchar(50) = (select JSON_VALUE(@parametros,'$.IdTeleVenta'))
 			, @fechaTV varchar(10) = (select JSON_VALUE(@parametros,'$.fechaTV'))
 			, @nombreTV varchar(100) = (select JSON_VALUE(@parametros,'$.nombreTV'))
 			, @usuario varchar(20) = (select JSON_VALUE(@parametros,'$.paramStd[0].currentReference'))
@@ -16,7 +17,7 @@ BEGIN TRY
 			, @subfams varchar(max) = ''
 			, @consulta varchar(max) = ''
 
-	if exists (select marca from marca_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV) BEGIN
+	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo='Marca') BEGIN
 		DECLARE elCursor CURSOR FOR
 			select marca from marca_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV
 			OPEN elCursor
@@ -30,7 +31,7 @@ BEGIN TRY
 	END
 
 	set @registro = ''
-	if exists (select familia from familia_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV) BEGIN
+	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo='Familia') BEGIN
 		DECLARE elCursor CURSOR FOR
 			select familia from familia_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV
 			OPEN elCursor
@@ -44,7 +45,7 @@ BEGIN TRY
 	END
 
 	set @registro = ''
-	if exists (select subfamilia from subfam_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV) BEGIN
+	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo='Subfamilia') BEGIN
 		DECLARE elCursor CURSOR FOR
 			select subfamilia from subfam_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV
 			OPEN elCursor

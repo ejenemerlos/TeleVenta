@@ -30,8 +30,8 @@ function inicioTeleVenta(){
 
 function recargarTVLlamadas(){ 
 	abrirVelo(icoCargando16 + " recargando datos...");
-	tbLlamadasGlobal_Sel(FechaTeleVenta, NombreTeleVenta); 
-	setTimeout(function(){ tbLlamadasGlobal_Sel(FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
+	tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
+	setTimeout(function(){ tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
 }
 
 function configurarTeleVenta(tf){ console.log("configurarTeleVenta()");
@@ -60,7 +60,7 @@ function configurarTeleVenta(tf){ console.log("configurarTeleVenta()");
 function estTV(){
 	$("#dvEstTV").html(icoCargando16+" cargando datos...");
 	var contenido = "";
-	var parametros = '{"modo":"estadisticas","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
+	var parametros = '{"modo":"estadisticas","IdTeleVenta":"'+IdTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
 	console.log("estTV - parametros:\n"+parametros);
 	flexygo.nav.execProcess('pEstTV','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 
@@ -301,10 +301,10 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	ctvll = modo;
 	var elDV = "dvLlamadas";
 	var contenido = "";
-	var parametros = '{"modo":"'+modo+'","cliente":"'+ClienteCodigo+'","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","usuariosTV":'+UsuariosTV+','+paramStd+'}'; 	
+	var parametros = '{"modo":"'+modo+'","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","usuariosTV":'+UsuariosTV+','+paramStd+'}'; 	
 	/**/ console.log("cargarTeleVentaLlamadas parametros: \n"+parametros);
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){
+		if(ret){ /**/ console.log("pLlamadas ret:\n"+limpiarCadena(ret.JSCode));
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
 			else{ 
 				contenido = "";
@@ -346,7 +346,7 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 					for(var i in js){
 						var elPedido = $.trim(js[i].serie)+" - "+$.trim(js[i].pedido);
 						if($.trim(js[i].serie)===""){ elPedido=""; }
-						if($.trim(js[i].pedido).indexOf("NO!")!==-1){ elPedido = "INCIDENCIA"; }
+						if($.trim(js[i].pedido).indexOf("INCIDENCIA")!==-1){ elPedido = "INCIDENCIA"; }
 						if(modo==="llamadasDelCliente"){
 							var laHora = Left($.trim(js[i].hora),5);
 							var laIncidencia = $.trim(js[i].incidencia)+" - "+$.trim(js[i].ic[0].nIncidencia);	
@@ -362,17 +362,18 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 						}
 						if(modo==="cargarLlamadas"){	
 							var elBG = "";
-							if($.trim(js[i].completado)==="1"){ elBG = "style='background:#FFCFCF;'"; } 
+							var estado = "PENDIENTE";
+							if($.trim(js[i].completado)==="1"){ elBG = "style='background:#FFCFCF;'"; estado="COMPLETADO"; } 							
 							contenido += "<tr "+elBG+" onclick='TV_SelecionarCliente(\""+$.trim(js[i].cliente)+"\")'>"
 									  +"	<td>"+$.trim(js[i].cliente)+"</td>"
-									  +"	<td>"+$.trim(js[i].NOMBRE)+"</td>"
+									  +"	<td>"+$.trim(js[i].cli[0].NOMBRE)+"</td>"
 									  +"	<td style='text-align:center;'>"+$.trim(js[i].horario)+"</td>"
-									  +"	<td data-completado='"+$.trim(js[i].completado)+"' style='text-align:center;'>"+$.trim(js[i].nCompletado)+"</td>"
+									  +"	<td data-completado='"+$.trim(js[i].completado)+"' style='text-align:center;'>"+estado+"</td>"
 									  +"	<td style='text-align:right;'>"+elPedido+"</td>"
 									  +"</tr>";
 						}
 						if(modo==="listaGlobal"){							
-							contenido += "<tr onclick='tbLlamadasGlobal_Sel(\""+$.trim(js[i].fecha)+"\",\""+$.trim(js[i].nombreTV)+"\")'>"
+							contenido += "<tr onclick='tbLlamadasGlobal_Sel(\""+$.trim(js[i].id)+"\",\""+$.trim(js[i].fecha)+"\",\""+$.trim(js[i].nombreTV)+"\")'>"
 									  +"	<td>"+$.trim(js[i].fecha)+"</td>"
 									  +"	<td class='rolTeleVentaO'>"+$.trim(js[i].usuario)+"</td>"
 									  +"	<td>"+$.trim(js[i].nombreTV)+"</td>"
@@ -389,9 +390,10 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	},false);
 }
 
-function tbLlamadasGlobal_Sel(fecha,nombre){ console.log("tbLlamadasGlobal_Sel("+fecha+","+nombre+")");
+function tbLlamadasGlobal_Sel(id,fecha,nombre){ console.log("tbLlamadasGlobal_Sel("+id+","+fecha+","+nombre+")");
 	$("#inpFechaTV").val(fecha);
 	$("#inpNombreTV").val(nombre);
+	IdTeleVenta = id;
 	FechaTeleVenta = fecha;
 	NombreTeleVenta = nombre;
 	cargarTbConfigOperador("cargar");
@@ -556,7 +558,7 @@ function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibl
 		var esconder_spResBtn=false; 
 		var registrosTotales = 0;
 		var elSP = "pArticulosBuscar";	
-		var parametros = '{"registros":'+paginadorRegistros+',"buscar":"'+$.trim($("#inpBuscarArticuloDisponible").val())+'","cliente":"'+ClienteCodigo+'","fechaTV":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
+		var parametros = '{"registros":'+paginadorRegistros+',"buscar":"'+$.trim($("#inpBuscarArticuloDisponible").val())+'","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","fechaTV":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'",'+paramStd+'}';
 		if(modo){ elSP = "pArticulosCliente"; }
 
 		flexygo.nav.execProcess(elSP,'',null,null,[{"Key":"parametros","Value":limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
@@ -951,6 +953,7 @@ function terminarLlamada(){
 		var lasLineas = (limpiarCadena(PedidoDetalle)).replace(/}{/g,"},{").replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");
 		var Values = '<Row rowId="elRowDelObjetoPedido" ObjectName="Pedido">'
 					+	'<Property Name="MODO" Value="Pedido"/>'
+					+	'<Property Name="IdTeleVenta" Value="'+IdTeleVenta+'"/>'
 					+	'<Property Name="FechaTV" Value="'+FechaTeleVenta+'"/>'
 					+	'<Property Name="NombreTV" Value="'+NombreTeleVenta+'"/>'
 					+	'<Property Name="IDPEDIDO" Value="'+PedidoActivo+'"/>'
@@ -965,7 +968,6 @@ function terminarLlamada(){
 					+	"<Property Name='LINEAS' Value='"+lasLineas+"'/>"
 					+	"<Property Name='OBSERVACIO' Value='"+limpiarCadena($.trim($("#taObservacionesDelPedido").val()))+"'/>"
 					+'</Row>';
-					/**/ console.log("pedido detalles:\n"+lasLineas);
 		flexygo.nav.execProcess('pPedido_Nuevo','Pedido',null,null
 		,[{key:'Values',value:Values}, {key:'ContextVars',value:ContextVars},{key:'RetValues',value:RetValues}],'modal640x480',false,$(this),function(ret){
 			if(ret && !ret.JSCode.includes("'Error pedidoNuevo !!!")){
@@ -980,7 +982,7 @@ function terminarLlamada(){
 		 },false);
 	}else{ terminarLlamadaDef(); }
 }
-function terminarLlamadaDef(pedido,confirmacion){
+function terminarLlamadaDef(pedido,confirmacion){ console.log("terminarLlamadaDef("+pedido+","+confirmacion+")");
 	var incidenciaCliente = $.trim($("#inciCliente").val()).split(" - ")[0];
 	var incidenciaClienteDescrip = $.trim($("#inciCliente").val()).split(" - ")[1];
 	var observaciones = $.trim($("#taObservacionesDelPedido").val());
@@ -1018,10 +1020,10 @@ function terminarLlamadaDef(pedido,confirmacion){
 		});
 		incidenciasSinPedido = ',"inciSinPed":['+incidenciasSinPedido.replace(/}{/g,"},{")+']';
 	} 
-	var parametros = '{"modo":"terminar","cliente":"'+ClienteCodigo+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'"'
+	var parametros = '{"modo":"terminar","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'"'
 					+',"incidenciaCliente":"'+incidenciaCliente+'","incidenciaClienteDescrip":"'+incidenciaClienteDescrip+'","observaciones":"'+observaciones+'"'
 					+',"pedido":"'+pedido+'","empresa":"'+CodigoEmpresa+'","serie":"'+SERIE+'"'+incidenciasSinPedido+','+paramStd+'}';
-
+	/**/ console.log("pLlamadas: "+parametros);
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 
 			if(ctvll==="llamadasDelCliente"){ flexygo.nav.openPage('list','Clientes','(BAJA=0)',null,'current',false,$(this)); $("#mainNav").show(); }
@@ -1127,7 +1129,7 @@ function anyadirCliente(){
 
 function dvAnyadirCli_Click(cliente){
 	$("#dvLlamadas").html("<div class='taC vaM'>"+icoCargando16+" añadiendo el cliente "+cliente+" al listado...</div>");
-	var parametros = '{"modo":"anyadirCliente","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'"'
+	var parametros = '{"modo":"anyadirCliente","IdTeleVenta":"'+IdTeleVenta+'","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'"'
 					+',"cliente":"'+cliente+'",'+paramStd+'}';
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){

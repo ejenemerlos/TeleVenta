@@ -124,6 +124,10 @@
     <Build Include="dbo\Tables\gestor_user.sql" />
     <Build Include="dbo\Tables\gestores.sql" />
     <Build Include="dbo\Stored Procedures\pPedidoDetalle.sql" />
+    <Build Include="dbo\Tables\TeleVentaCab.sql" />
+    <Build Include="dbo\Tables\TeleVentaDetalle.sql" />
+    <Build Include="dbo\Tables\TeleVentaFiltros.sql" />
+    <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

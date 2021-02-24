@@ -1,4 +1,3 @@
-<div>Registro de Llamadas</div>
 <div id="dvRegLlamadas" style='max-height:280px;overflow:hidden;overflow-y:auto;'></div>
 
 <script>
