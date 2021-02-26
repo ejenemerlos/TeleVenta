@@ -20,6 +20,8 @@ USING (VALUES
 
 ))
 ',1)
+ ,(N'C70909D0-5749-4A5E-9043-6473BB71CBC4',N'inciCLIs',N'inciCLI',0,0,N'Properties',1,NULL,NULL,1)
+ ,(N'1F2FD612-2541-4E30-AD70-A9219B157348',N'inciARTs',N'inciArts',0,0,N'Properties',1,NULL,NULL,1)
 ) AS Source ([SearchId],[ObjectName],[Name],[Generic],[IsDefault],[Type],[Order],[UserId],[SQLSentence],[OriginId])
 ON (Target.[SearchId] = Source.[SearchId])
 WHEN MATCHED AND (

@@ -47,8 +47,8 @@ function cargarIncidenciasCliente(){
 				inciPedCont +="<tr>"
 						    + "	<td>"+js.inciPed[b].c[0].fecha+"</td>"
 						    + "	<td>"+js.inciPed[b].c[0].pedido+"</td>"
-						    + "	<td>"+js.inciPed[a].incidencia+" - "+js.inciPed[a].c[0].nombre+"</td>"
-						    + "	<td>"+js.inciPed[a].observaciones+"</td>"
+						    + "	<td>"+js.inciPed[b].incidencia+" - "+js.inciPed[b].c[0].nombre+"</td>"
+						    + "	<td>"+js.inciPed[b].observaciones+"</td>"
 						    + "</tr>"; 
 			}
 			inciPedCont +="</table>";

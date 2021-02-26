@@ -7,6 +7,8 @@ USING (VALUES
   (N'Cliente',N'ClienteDefaultList',N'ClienteDefaultList',N'DataConnectionString',N'select * from vClientes',0,1,1,0,1,N'Nombre ASC',0,NULL,NULL,1)
  ,(N'Contacto',N'ContactoDefaultList',N'ContactoDefaultList',N'DataConnectionString',N'select * from vContactos',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'gestor',N'gestorDefaultList',N'gestorDefaultList',N'DataConnectionString',N'select * from gestores',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'inciART',N'inciARTDefaultList',N'inciARTDefaultList',N'DataConnectionString',N'select * from vIncidenciasArticulos order by FechaInsertUpdate desc',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'inciCLI',N'inciCLIDefaultList',N'inciCLIDefaultList',N'DataConnectionString',N'select * from vIncidenciasClientes order by FechaInsertUpdate desc',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'IncidenciasArtCli',N'IncidenciasArtCliDefaultList',N'IncidenciasArtCliDefaultList',N'DataConnectionString',N'select * from inci_CliArt',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'IncidenciasArticulo',N'IncidenciasArticuloDefaultList',N'IncidenciasArticuloDefaultList',N'DataConnectionString',N' SELECT [inci_art].[codigo], [inci_art].[codigo] as [codigo_1], [inci_art].[nombre] as [nombre] FROM [inci_art] 
 

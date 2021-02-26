@@ -68,7 +68,7 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Stored Procedures\sp_generate_merge.sql" />
-    <None Include="scripts\data\data.sql" />
+    <None Include="scripts\data\merlos.sql" />
     <Build Include="dbo\Functions\funPrintError.sql" />
     <Build Include="dbo\Stored Procedures\02_CrearStoreds.sql" />
     <Build Include="dbo\Stored Procedures\pBDEW.sql" />
@@ -100,34 +100,25 @@
     <Build Include="dbo\Tables\AlbaranVentaFirmas.sql" />
     <Build Include="dbo\Tables\Pedidos_Contactos.sql" />
     <Build Include="dbo\Tables\Pedidos_Familias.sql" />
-    <Build Include="dbo\Tables\VendSubVend.sql" />
     <Build Include="dbo\Tables\config_telev.sql" />
     <Build Include="dbo\Tables\config_user.sql" />
-    <Build Include="dbo\Tables\marca_user.sql" />
-    <Build Include="dbo\Tables\familia_user.sql" />
-    <Build Include="dbo\Tables\vend_user.sql" />
     <Build Include="dbo\Tables\inci_cli.sql" />
     <Build Include="dbo\Tables\inci_art.sql" />
-    <Build Include="dbo\Tables\inci_CliArt.sql" />
-    <Build Include="dbo\Tables\inci_CliPed.sql" />
     <Build Include="dbo\Tables\clientes_adi.sql" />
     <Build Include="dbo\Tables\llamadas.sql" />
-    <Build Include="dbo\Tables\subfam_user.sql" />
-    <Build Include="dbo\Tables\serie_user.sql" />
     <Build Include="dbo\Stored Procedures\pOfertas.sql" />
-    <Build Include="dbo\Tables\llamadas_user.sql" />
     <Build Include="dbo\Stored Procedures\pPreciosTabla.sql" />
     <Build Include="dbo\Stored Procedures\pClientesBasic.sql" />
     <Build Include="dbo\Stored Procedures\pEstTV.sql" />
     <Build Include="dbo\Tables\cliente_gestor.sql" />
-    <Build Include="dbo\Tables\ruta_user.sql" />
-    <Build Include="dbo\Tables\gestor_user.sql" />
     <Build Include="dbo\Tables\gestores.sql" />
     <Build Include="dbo\Stored Procedures\pPedidoDetalle.sql" />
     <Build Include="dbo\Tables\TeleVentaCab.sql" />
     <Build Include="dbo\Tables\TeleVentaDetalle.sql" />
     <Build Include="dbo\Tables\TeleVentaFiltros.sql" />
     <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
+    <Build Include="dbo\Views\vIncidenciasClientes.sql" />
+    <Build Include="dbo\Views\vIncidenciasArticulos.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

@@ -10,7 +10,7 @@ EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'
 EXEC sp_MSforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'
 
 -- Data merge
-:r .\data\data.sql
+:r .\data\merlos.sql
 
 GO
 

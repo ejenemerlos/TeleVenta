@@ -97,8 +97,8 @@ function cargarIncidenciasCliente(){
 				inciPedCont +="<tr>"
 						    + "	<td>"+js.inciPed[b].c[0].fecha+"</td>"
 						    + "	<td>"+js.inciPed[b].c[0].pedido+"</td>"
-						    + "	<td>"+js.inciPed[a].incidencia+" - "+js.inciPed[a].c[0].nombre+"</td>"
-						    + "	<td>"+js.inciPed[a].observaciones+"</td>"
+						    + "	<td>"+js.inciPed[b].incidencia+" - "+js.inciPed[b].c[0].nombre+"</td>"
+						    + "	<td>"+js.inciPed[b].observaciones+"</td>"
 						    + "</tr>"; 
 			}
 			inciPedCont +="</table>";
@@ -548,6 +548,7 @@ function guardarContacto(io){
 }
 
 ' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Contactos''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'contacts-2',NULL,10,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+ ,(N'inciCLIlistado',N'flx-objectlist',N'project',N'{{ObjectName}}',N'{{ObjectWhere}}',N'Incidencias de Clientes',N'Incidencias de Clientes',N'default',1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'accepted-2',N'syspager-listheader',100,NULL,N'systb-list',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_Cliente',N'flx-html',N'project',NULL,NULL,N'TV_Cliente',N'TV_Cliente',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Cliente <span class=''MIbotonP FR esq05'' onclick=''verFichaDeCliente()''>Ver Cliente</span></div>
 <div id="dvDatosDelCliente" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)

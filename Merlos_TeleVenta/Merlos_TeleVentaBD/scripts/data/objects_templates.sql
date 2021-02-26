@@ -236,6 +236,40 @@ USING (VALUES
     <th>Nombre</th>
     <th>Apellidos</th>
   </tr>',N'</table>',NULL,NULL,0,0,1,1)
+ ,(N'inciARTDefaultList',N'inciART',N'list',N'inciART Default List',N'<tr>
+  <td>{{laFecha}}</td>
+  <td>({{gestor}}) {{nGestor}}</td>
+  <td>({{articulo}}) {{nArticulo}}</td>
+  <td>{{incidencia}} - {{nIncidencia}}</td>
+  <td>({{cliente}}) {{nCliente}}</td>
+  <td>{{pedido}}</td>
+  <td>{{observaciones}}</td>
+</tr>',NULL,NULL,N'<table id="tbInciCLI" class="tbStd">
+  	<tr>
+  		<th>Fecha</th>
+  		<th>Gestor</th>
+  		<th>Artículo</th>
+  		<th>Incidencia</th>
+  		<th>Cliente</th>
+  		<th>Pedido</th>
+  		<th>Observaciones</th>
+	</tr>',N'</table>',NULL,NULL,1,0,1,1)
+ ,(N'inciCLIDefaultList',N'inciCLI',N'list',N'inciCLI Default List',N'<tr>
+  <td>{{laFecha}}</td>
+  <td>({{gestor}}) {{nGestor}}</td>
+  <td>{{incidencia}} - {{nIncidencia}}</td>
+  <td>({{cliente}}) {{nCliente}}</td>
+  <td>{{pedido}}</td>
+  <td>{{observaciones}}</td>
+</tr>',NULL,NULL,N'<table id="tbInciCLI" class="tbStd">
+  	<tr>
+  		<th>Fecha</th>
+  		<th>Gestor</th>
+  		<th>Incidencia</th>
+  		<th>Cliente</th>
+  		<th>Pedido</th>
+  		<th>Observaciones</th>
+	</tr>',N'</table>',NULL,NULL,1,0,1,1)
  ,(N'PedidosPlantilla01',N'Pedido',N'list',N'Listado de Pedidos',N'<tr>
 <td>{{numero}}</td>
 <td>{{LETRA}}</td>

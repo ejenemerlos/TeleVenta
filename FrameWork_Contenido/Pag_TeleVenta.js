@@ -4,7 +4,6 @@ var ClienteCodigo = "";
 var ctvll = "";
 var PedidoGenerado = ""; 
 
-
 if((flexygo.history.get($('main')).defaults)!==null){
 	var elJSON = JSON.parse(flexygo.history.get($('main')).defaults);
 	ClienteCodigo = elJSON.CODIGO;
@@ -133,6 +132,7 @@ function cargarSubDatos(objeto,cliente,id,pos){ console.log("cargarSubDatos("+ob
 					 if(objeto==="inciCli" || objeto==="inciArt")  { elTXT = js[i].codigo+" - "+js[i].nombre; }
 					contenido += "<div class='dvSub' onclick='asignarObjetoDatos(\""+id+"\",$(this).text())'>"+elTXT+"</div>"; 
 				}
+				if(objeto==="inciCli")  { contenido = "<div class='dvSub' onclick='asignarObjetoDatos(\"MT\",\"Llamar más tarde\")'>MT - Llamar más tarde</div>"+contenido;  }
 			}else{ contenido="<div style='color:red;'>Sin resultados!</div>"; }
 			if(objeto==="inciArt"){
 				var inciAsig = $("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val();
@@ -148,7 +148,8 @@ function asignarObjetoDatos(id,txt){ console.log("asignarObjetoDatos("+id+","+tx
 		var idN = id.split("inpIncidenciaSol")[1];
 		id="inpIncidenciaSolINP"+idN;
 		$("#inpIncidenciaSolImg"+idN).attr("src","./Merlos/images/inciRed.png");
-	}
+	}	
+	if(id==="MT"){ id="inciCliente";  mostrarRelojEJG("inciCliente",true);  }
 	$("#"+id).val(txt);
 	$("#dvDatosTemp").fadeOut(); 
 }
@@ -549,6 +550,14 @@ var	RetValues = '<Property Success="False" SuccessMessage="" WarningMessage="" J
 
 cargarIncidencias("art");
 cargarIncidencias("cli");
+
+function llamarMasTardeCliente(horaSel){
+		var parametros = '{"modo":"llamarMasTardeCliente","IdTeleVenta":"'+IdTeleVenta+'","cliente":"'+ClienteCodigo+'","horario":"'+horaSel+'"}'; 
+	flexygo.nav.execProcess('pLlamadas','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+		if(ret){ pedidoTV(); recargarTVLlamadas(); }
+		else{ alert("Error pLlamadas llamarMasTardeCliente!\n"+JSON.stringify(ret)); }
+	},false);
+}
 
 function cargarArticulosDisponibles(modo){ console.log("cargarArticulosDisponibles("+modo+")");
 	$("#spanBotoneraPag , #spResultados, #dvPersEP_Articulos").hide();

@@ -1214,8 +1214,56 @@ BEGIN TRY
 	'
 	exec(@Sentencia)
 	select  'vCliTelfs'
-	
-	
+
+
+
+
+	-- Vista vIncidenciasArticulos
+	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasArticulos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasArticulos] as 	
+		select i.* 
+		, i.FechaInsertUpdate as Fecha
+		, convert(varchar(10),i.FechaInsertUpdate,103) as laFecha
+		, g.nombre as nGestor
+		, ia.nombre as nIncidencia
+		, cli.nombre as nCliente
+		, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
+		, art.NOMBRE as nArticulo
+		from TeleVentaIncidencias i
+		left join gestores g on g.codigo=i.gestor
+		left join inci_art ia on ia.codigo=i.incidencia
+		left join vClientes cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
+		left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+		left join vArticulos art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
+		where i.tipo=''Articulo''
+	'
+	exec(@Sentencia)
+	select  'NombreVista'
+
+
+
+
+	-- Vista vIncidenciasClientes
+	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasClientes] as 	
+	select i.* 
+			, i.FechaInsertUpdate as Fecha
+			, convert(varchar(10),i.FechaInsertUpdate,103) as laFecha
+			, g.NOMBRE as nGestor
+			, cli.NOMBRE as nCliente
+			, icli.nombre as nIncidencia
+			, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
+	from TeleVentaIncidencias i
+	left join vGestores g on g.CODIGO=i.gestor
+	left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=i.cliente
+	left join inci_cli icli on icli.codigo=i.incidencia
+	left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+	where i.tipo=''Cliente''
+	'
+	exec(@Sentencia)
+	select  'NombreVista'
+
+
 	
 	
 	/*

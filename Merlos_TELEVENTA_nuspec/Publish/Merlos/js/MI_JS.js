@@ -50,7 +50,6 @@ $(document).click(function (e) {
 });
 
 
-
 /*
 	*************************
 		     Iconos
@@ -523,13 +522,17 @@ function asignarHora() {
     var horaSel = $("#horaSelecDesde").text() + " - " + $("#horaSelecHasta").text();
     var ultimaHora = "";
 
-    $("#" + inpHoraEJG).val(horaSel);
+    if ($("#mod-TV_Pedido").is(":visible") && $("#inciCliente").is(":visible")) {
+        llamarMasTardeCliente(horaSel);
+    } else {
+        $("#" + inpHoraEJG).val(horaSel);
 
-    $("#tbTablaDeLlamadas").find("img").each(function () {
-        var imgId = $(this).attr("id"); var dia = imgId.split("img")[1]; var diaVal = "inp" + dia + "Horario";
-        if ($(this).attr("src") === "./Merlos/images/icoCheck_I.png" && $("#" + diaVal).val() === "") { $("#" + diaVal).val(horaSel); }
-        if ($("#" + diaVal).val() !== "") { $("#" + imgId).attr("src", "./Merlos/images/icoCheck_I.png"); }
-    });
+        $("#tbTablaDeLlamadas").find("img").each(function () {
+            var imgId = $(this).attr("id"); var dia = imgId.split("img")[1]; var diaVal = "inp" + dia + "Horario";
+            if ($(this).attr("src") === "./Merlos/images/icoCheck_I.png" && $("#" + diaVal).val() === "") { $("#" + diaVal).val(horaSel); }
+            if ($("#" + diaVal).val() !== "") { $("#" + imgId).attr("src", "./Merlos/images/icoCheck_I.png"); }
+        });
+    }
 
     $("#veloRelojEJG").fadeOut(300, function () { $("#veloRelojEJG").remove(); relojEJG_desdeHasta = 0; spanSelec = "horaSelecDesde"; });
 }

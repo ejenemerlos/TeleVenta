@@ -363,7 +363,7 @@ BEGIN TRY
 	set @clave = concat(@clave_ejercicio_empresa,@clave_numero,@SERIE)
 
 	--Creamos las variables de trabajo
-	DECLARE @nombreUsuario CHAR(25), @codigo varchar(20), @estado_aux BIT, @aux INT,
+	DECLARE @nombreUsuario CHAR(25), @codigo char(10), @estado_aux BIT, @aux INT,
 			 @letra CHAR(2), @moneda VARCHAR(3), @fpag VARCHAR(2), @ruta CHAR(2)
 			 set @letra=@SERIE
 ' set  @Sentencia = @Sentencia + '
@@ -397,14 +397,14 @@ BEGIN TRY
 
 	-- Obtener número según los contadores de Eurowin
 	IF (@estado_aux = 1) BEGIN
-		SET @aux = (SELECT contador FROM '+@GESTION+'.[dbo].series WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra)
-		SET @codigo = REPLICATE('' '', (10 - LEN(@aux)))+CAST((@aux + 1) AS CHAR(10))
-		UPDATE '+@GESTION+'.[dbo].series SET contador = contador+1 WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra
+		SET @codigo = cast((SELECT isnull(contador,0)+1 FROM '+@GESTION+'.[dbo].series WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra) as char(10))
+		while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		UPDATE '+@GESTION+'.[dbo].series SET contador=cast(@codigo as int) WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra
 	END
 	ELSE BEGIN
-		SET @aux = (SELECT pediven FROM '+@GESTION+'.[dbo].empresa WHERE codigo=@EMPRESA)
-		SET @codigo = REPLICATE('' '', (10 - LEN(@aux)))+CAST((@aux + 1) AS CHAR(10))
-		UPDATE '+@GESTION+'.[dbo].empresa SET pediven = pediven + 1 WHERE codigo=@EMPRESA 
+		SET @codigo = cast((SELECT isnull(pediven,0)+1 FROM '+@GESTION+'.[dbo].empresa WHERE codigo=@EMPRESA) as char(10))
+		while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		UPDATE '+@GESTION+'.[dbo].empresa SET pediven = cast(@codigo as int) WHERE codigo=@EMPRESA 
 	END
 ' set  @Sentencia = @Sentencia + '
 	
@@ -483,8 +483,8 @@ BEGIN TRY
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
 			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	
-			insert into TeleVentaIncidencias (id,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
-				values (@IdTeleVenta,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
+			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+				values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
 
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	

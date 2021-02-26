@@ -16,8 +16,14 @@ BEGIN TRY
 			, @nombreTV varchar(50)		  = isnull((select JSON_VALUE(@parametros,'$.nombreTV')),'')
 			, @usuariosTV nvarchar(max)	  = ''
 			, @FechaTeleVenta varchar(10) = isnull((select JSON_VALUE(@parametros,'$.FechaTeleVenta')),'')
+			, @horario varchar(20)		  = isnull((select JSON_VALUE(@parametros,'$.horario')),'')
 			, @usuario varchar(20)		  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentReference')),'')
 			, @rol varchar(50)			  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentRole')),'')
+
+	if @modo='llamarMasTardeCliente' begin
+		update TeleVentaDetalle set horario=@horario where id=@IdTeleVenta and cliente=@cliente
+		return -1
+	END
 
 	if @modo='anyadirCliente' begin
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
@@ -85,8 +91,8 @@ BEGIN TRY
 		if @pedido='undefined' begin set @pedido='INCIDENCIA' set @idpedido='' end
 
 		if (@incidenciaCliente is not null and @incidenciaCliente<>'') or (@observaciones is not null and @observaciones<>'') begin
-			insert into TeleVentaIncidencias (id,tipo,incidencia,cliente,idpedido,observaciones) 
-			values (@IdTeleVenta,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
+			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,observaciones) 
+			values (@IdTeleVenta,@usuario,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
 		END
 		
 		update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, serie=@serie, completado=1
@@ -98,8 +104,8 @@ BEGIN TRY
 			declare cur CURSOR for select [value] from openjson(@parametros,'$.inciSinPed')
 			OPEN cur FETCH NEXT FROM cur INTO @valor
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				insert into TeleVentaIncidencias (id,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
-				values (@IdTeleVenta,'Articulo',(select JSON_VALUE(@valor,'$.incidencia')),@cliente,@idpedido
+				insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+				values (@IdTeleVenta,@usuario,'Articulo',(select JSON_VALUE(@valor,'$.incidencia')),@cliente,@idpedido
 						,(select JSON_VALUE(@valor,'$.articulo'))
 						,(select JSON_VALUE(@valor,'$.observacion'))
 				)
