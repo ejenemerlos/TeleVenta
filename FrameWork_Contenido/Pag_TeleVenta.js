@@ -27,10 +27,14 @@ function inicioTeleVenta(){
 	recargarTVLlamadas();
 }
 
-function recargarTVLlamadas(){ 
-	abrirVelo(icoCargando16 + " recargando datos...");
-	tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
-	setTimeout(function(){ tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
+function recargarTVLlamadas(tf){ 
+	if(tf){ 
+		cargarTbConfigOperador("recargar",false);
+	}else{
+		abrirVelo(icoCargando16 + " recargando datos...");
+		tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
+		setTimeout(function(){ tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
+	}
 }
 
 function configurarTeleVenta(tf){ console.log("configurarTeleVenta()");
@@ -303,9 +307,8 @@ function cargarTeleVentaLlamadas(modo){  console.log("cargarTeleVentaLlamadas("+
 	var elDV = "dvLlamadas";
 	var contenido = "";
 	var parametros = '{"modo":"'+modo+'","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","nombreTV":"'+NombreTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","usuariosTV":'+UsuariosTV+','+paramStd+'}'; 	
-	/**/ console.log("cargarTeleVentaLlamadas parametros: \n"+parametros);
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){ /**/ console.log("pLlamadas ret:\n"+limpiarCadena(ret.JSCode));
+		if(ret){
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
 			else{ 
 				contenido = "";
@@ -863,6 +866,8 @@ function buscarArticuloDisponible(){
 	repintarZebra("tbPersEP_Articulos","#fff");
 }
 
+function buscarArtDispCli(){ cargarArticulosDisponibles(ClienteCodigo); }
+
 function pedidoAnyadirDetalle(){
 	$("#tbPersEP_Articulos").find(".trBsc").each(function(){ 
 		 var cod = $(this).find(".trBscCod").text();
@@ -1061,10 +1066,13 @@ function incidencia(modo,id){
 	$("#dvIncidenciasTemp").remove();
 	if(modo==="obs"){
 		var uds = $.trim($("#tbArtDispTR"+id.split("inpObservaSol")[1]).find(".inpCantSol").val());
-		if(uds==="" || parseInt(uds)===0 || isNaN(uds)){ return; }
+		if(uds==="" || parseInt(uds)===0 || isNaN(uds)){ return; }		
+		var pHolder = "placeholder='Observaciones del producto'";
+		var obsArt = $("#inpObservaSolTA"+id.split("inpObservaSol")[1]).val();
+		if(obsArt!==""){ pHolder=""; }
 		$("body").prepend(
 			 "<div id='dvIncidenciasTemp' class='dvTemp'>"
-			+"	<textarea style='width:100%;height:130px;padding:5px;box-sizing:border-box;' placeholder='Observaciones del producto'></textarea>"
+			+"	<textarea style='width:100%;height:130px;padding:5px;box-sizing:border-box;' "+pHolder+">"+obsArt+"</textarea>"
 			+"	<div style='text-align:center;padding:10px;'><span class='MIbotonGreen' "
 			+"		onclick='observacionesArticulo(\""+id+"\")'>guardar</span>"
 			+"	</div>"

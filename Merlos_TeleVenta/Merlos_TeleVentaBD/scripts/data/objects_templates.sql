@@ -271,14 +271,14 @@ USING (VALUES
   		<th>Observaciones</th>
 	</tr>',N'</table>',NULL,NULL,1,0,1,1)
  ,(N'PedidosPlantilla01',N'Pedido',N'list',N'Listado de Pedidos',N'<tr>
-<td>{{numero}}</td>
 <td>{{LETRA}}</td>
+<td onmouseover="verDetallePedidoCliente(''{{IDPEDIDO}}'',''{{EMPRESA}}'',''{{LETRA}}'',''{{numero}}'')">{{numero}}</td>
 <td>{{FECHA}}</td>
 <td class=''taR''>{{TOTALDOCformato}}</td>
-</tr>',N'vPedidosOrderBySQLFECHAdesc',N'CLIENTE=''{{CODIGO}}''',N'<table class=''tbStd''>
+</tr>',N'vPedidosOrderBySQLFECHAdesc',N'CLIENTE=''{{CODIGO}}''',N'<table id="tbPedidosDelCliente" class=''tbStd''>
 <tr>
-<th>Número</th>
 <th>Serie</th>
+<th>Número</th>
 <th>Fecha</th>
 <th class=''taC''>Importe</th>
 </tr>',N'</table>',NULL,NULL,0,0,1,1)

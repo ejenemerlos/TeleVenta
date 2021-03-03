@@ -117,8 +117,8 @@
     <Build Include="dbo\Tables\TeleVentaDetalle.sql" />
     <Build Include="dbo\Tables\TeleVentaFiltros.sql" />
     <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
-    <Build Include="dbo\Views\vIncidenciasClientes.sql" />
     <Build Include="dbo\Views\vIncidenciasArticulos.sql" />
+    <Build Include="dbo\Views\vIncidenciasClientes.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

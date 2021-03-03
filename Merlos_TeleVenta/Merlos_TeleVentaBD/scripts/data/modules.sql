@@ -124,7 +124,7 @@ function incidenciasIO(dv, nm) {
 }
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'admin1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Pasos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Pasos',N'Cliente_Pasos',N'none',1,1,1,0,NULL,NULL,N'<span class="btn btn-info" onclick=''flexygo.nav.openPageName("TeleVenta","","","{\"CODIGO\":\"{{CODIGO}}\"}","current",false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));''><span title="Llamada" class="flx-icon icon-phone icon-margin-right"></span><span class="hidden-m">Llamada</span></span>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,NULL,NULL,N'PedidosPlantilla01',NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Cliente_Pedidos''] .icon-minus").click();',0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+ ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,NULL,NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_view_cabecera',N'flx-html',N'project',NULL,N'(CODIGO=''{{CODIGO}}'')',N'Cliente_view_cabecera',N'Encabezado cliente',N'none',1,1,1,0,NULL,NULL,N'<table class="tbS">
   <tr>
     <th>
@@ -554,7 +554,7 @@ function guardarContacto(io){
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_Llamadas',N'flx-html',N'project',NULL,NULL,N'TV_Llamadas',N'TV_Llamadas',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">
 	Llamadas
-	<div class="dvImg20 icoRecarga fR" onclick="recargarTVLlamadas()"></div>
+	<div class="dvImg20 icoRecarga fR" onclick="recargarTVLlamadas(true)"></div>
 	<span class="MIbotonP fR esq05" style="margin-right:20px;" onclick="anyadirCliente()">Añadir Cliente</span>
 </div>
 <div id="dvLlamadas" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
@@ -631,10 +631,9 @@ function guardarContacto(io){
 function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
 	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val()); 
 	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());	
-		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
 	var elJS = ''{"modo":"'' + modo + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
-	if(modo==="guardar"){
+	if(modo==="guardar" || modo==="recargar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
 			var tr = "";
@@ -648,7 +647,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 			 + '',''+window["opGestor"]+'',''+window["opRuta"]+'',''+window["opVendedor"]+'',''+window["opSerie"]+'',''+window["opMarca"]+''''
 			 +'',''+window["opFamilia"]+'',''+window["opSubfamilia"]+'','' + paramStd + ''}'';
 	}
-	/**/ console.log("elJS: "+elJS);
+
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess(''pOperadorConfig'','''',null,null,[{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
         if (ret) { /**/ console.log("pOperadorConfig ret:\n"+limpiarCadena(ret.JSCode));
@@ -691,7 +690,8 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 					' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV, #inpFechaTV").val("");
 					alert("No se han encontrado llamadas con los parámetros seleccionados!");
 				}
-			}		
+			}	
+			if(modo==="recargar"){ recargarTVLlamadas(); }
         } else { alert(''Error S.P. pOperadorConfig!\n'' + JSON.stringify(ret)); }
     }, false);
 }
@@ -774,6 +774,7 @@ function guardarTeleVenta(tf){
 				<div class="icoLeft img30" onclick="paginador(); cargarArticulosDisponibles();"></div>
 				<div class="icoRight img30" onclick="paginador(true); cargarArticulosDisponibles();"></div>
 			</span>
+			<span id="spBtnBuscarArtDispCli" class="MIboton esq05" onclick="buscarArtDispCli()">Artículos del Cliente</span>
 		</span>
 	</span>
 	<span id="spanPersEPinfo" class="info" style="margin-left: 20px; display: none;">

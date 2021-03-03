@@ -12,6 +12,7 @@
 				<div class="icoLeft img30" onclick="paginador(); cargarArticulosDisponibles();"></div>
 				<div class="icoRight img30" onclick="paginador(true); cargarArticulosDisponibles();"></div>
 			</span>
+			<span id="spBtnBuscarArtDispCli" class="MIboton esq05" onclick="buscarArtDispCli()">Artículos del Cliente</span>
 		</span>
 	</span>
 	<span id="spanPersEPinfo" class="info" style="margin-left: 20px; display: none;">

@@ -12,64 +12,69 @@ BEGIN TRY
 	declare @idTV varchar(50) = 
 	replace(replace(replace(replace(replace(convert(varchar,getdate(),121),' ',''),'/',''),':',''),'.',''),'-','') 
 
-	if @modo='guardar' BEGIN
+	if @modo='guardar' or @modo='recargar' BEGIN
 		--	comprobar que no exista el nombreTV
-			if exists (select * from [TeleVentaCab] where usuario=@usuario and nombre=@nombreTV and fecha=@fecha) begin 
+			if @modo='guardar' and exists (select * from [TeleVentaCab] where usuario=@usuario and nombre=@nombreTV and fecha=@fecha) begin 
 				select 'nombreTV_Existe!' as JAVASCRIPT return -1 
 			end
 
-		insert into [TeleVentaCab] (id,usuario,fecha,nombre) values (@idTV,@usuario,@fecha,@nombreTV)
+		if @modo='guardar' insert into [TeleVentaCab] (id,usuario,fecha,nombre) values (@idTV,@usuario,@fecha,@nombreTV)
+		
+		if @modo='recargar'
+		set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
 
 		declare @i int, @valor varchar(1000) 
 		
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Gestor')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Gestor',(select JSON_VALUE(@valor,'$.Gestor')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur	
+		if @modo='guardar' BEGIN
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Gestor')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Gestor',(select JSON_VALUE(@valor,'$.Gestor')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur	
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Ruta')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Ruta',(select JSON_VALUE(@valor,'$.Ruta')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur	
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Ruta')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Ruta',(select JSON_VALUE(@valor,'$.Ruta')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur	
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Vendedor')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Vendedor',(select JSON_VALUE(@valor,'$.Vendedor')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Vendedor')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Vendedor',(select JSON_VALUE(@valor,'$.Vendedor')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Serie')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Serie',(select JSON_VALUE(@valor,'$.Serie')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Serie')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Serie',(select JSON_VALUE(@valor,'$.Serie')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Marca')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Marca',(select JSON_VALUE(@valor,'$.Marca')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Marca')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Marca',(select JSON_VALUE(@valor,'$.Marca')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Familia')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Familia',(select JSON_VALUE(@valor,'$.Familia')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Familia')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Familia',(select JSON_VALUE(@valor,'$.Familia')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur
 
-		declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Subfamilia')
-		OPEN cur FETCH NEXT FROM cur INTO @i, @valor
-		WHILE (@@FETCH_STATUS=0) BEGIN
-			insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Subfamilia',(select JSON_VALUE(@valor,'$.Subfamilia')))
-			FETCH NEXT FROM cur INTO @i, @valor
-		END CLOSE cur deallocate cur
+			declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Subfamilia')
+			OPEN cur FETCH NEXT FROM cur INTO @i, @valor
+			WHILE (@@FETCH_STATUS=0) BEGIN
+				insert into [TeleVentaFiltros] (id,tipo,valor) values (@idTV,'Subfamilia',(select JSON_VALUE(@valor,'$.Subfamilia')))
+				FETCH NEXT FROM cur INTO @i, @valor
+			END CLOSE cur deallocate cur
+		END
 
 		--	obtener llamadas según criterios
 			declare   @nDia varchar(10)
@@ -113,16 +118,10 @@ BEGIN TRY
 				select '''+@idTV+''' as id, a.cliente, a.hora_'+@nDia+' as horario
 				from clientes_adi a
 				left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
-				where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+'
+				where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
+					  and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
 		')
 	END
-
-	/*
-	exec pOperadorConfig @elJS=N'{"modo":"guardar","comprobar":"true","IdTeleVenta":"1451353110254813","nombreTV":"6"
-	,"fecha":"24-02-2021","Gestor":[{"Gestor":"g1"}],"Ruta":[],"Vendedor":[{"Vendedor":"03"}],"Serie":[{"Serie":"01"}],"Marca":[]
-	,"Familia":[{"Familia":"01"}],"Subfamilia":[{"Subfamilia":"ZZZZ"}],"paramStd":[{"currentRole":"Admins","currentReference":"909"}]}'
-	*/
-
 
 	set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
 

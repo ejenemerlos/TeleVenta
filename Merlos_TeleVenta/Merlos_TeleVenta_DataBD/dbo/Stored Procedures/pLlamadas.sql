@@ -95,8 +95,13 @@ BEGIN TRY
 			values (@IdTeleVenta,@usuario,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
 		END
 		
-		update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, serie=@serie, completado=1
-		where id=@IdTeleVenta and cliente=@cliente
+		if exists (select * from [TeleVentaDetalle] where id=@IdTeleVenta and cliente=@cliente and completado=1) BEGIN
+			insert into [TeleVentaDetalle] (id,cliente,idpedido,pedido,serie,completado)
+			values (@IdTeleVenta,@cliente,@idpedido,@pedido,@serie,1)
+		END ELSE BEGIN
+			update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, serie=@serie, completado=1
+			where id=@IdTeleVenta and cliente=@cliente
+		END
 
 		-- si hay incidencias de artículos
 		if exists (select * from openjson(@parametros,'$.inciSinPed')) BEGIN

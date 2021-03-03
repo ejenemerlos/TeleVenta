@@ -476,6 +476,22 @@ BEGIN TRY
 											, @UserName = @UserName
 ' set  @Sentencia = @Sentencia + '
 
+			-- linea de observaciones
+			if @obsArt is not null and @obsArt<>'''' BEGIN
+				INSERT INTO '+@GESTION+'.[DBO].d_pedive (usuario, empresa, numero, linia, articulo, definicion, unidades, precio, dto1, dto2
+					, importe, tipo_iva, coste, cliente, precioiva, importeiva, cajas, familia, preciodiv, importediv, peso, letra
+					, impdiviva, prediviva, RECARG)
+				VALUES (
+						 @currentReference
+						,@EMPRESA
+						,@codigo
+						,(select isnull(MAX(LINIA),0)+1 from '+@GESTION+'.dbo.d_pedive 
+						 where CONCAT('''+@ANY+''',EMPRESA,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  
+						 collate Modern_Spanish_CI_AI=@IDPEDIDO)
+						,'''',@obsArt,0,0,0,0,0,'''',0,@cliente,0,0,0,'''',0,0,0,@letra,0,0,0
+						)
+			END	
+
 			declare @hora varchar(2) = cast(datepart(HOUR,getdate()) as varchar(2))
 			declare @minutos varchar(2) = cast(datepart(MINUTE,getdate()) as varchar(2))
 			if len(@hora)=1 set @hora = ''0''+@hora

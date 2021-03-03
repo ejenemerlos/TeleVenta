@@ -65,10 +65,9 @@ $("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos(($(this).te
 function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
 	var fecha = $.trim($("#inpFechaTV").val()); 
 	var nombre = $.trim($("#inpNombreTV").val());	
-		/**/ console.log("fecha: "+fecha+" - nombre: "+nombre);
 	
 	var elJS = '{"modo":"' + modo + '","IdTeleVenta":"' + IdTeleVenta + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '",' + paramStd + '}';
-	if(modo==="guardar"){
+	if(modo==="guardar" || modo==="recargar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
 			var tr = "";
@@ -82,7 +81,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 			 + ','+window["opGestor"]+','+window["opRuta"]+','+window["opVendedor"]+','+window["opSerie"]+','+window["opMarca"]+''
 			 +','+window["opFamilia"]+','+window["opSubfamilia"]+',' + paramStd + '}';
 	}
-	/**/ console.log("elJS: "+elJS);
+
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess('pOperadorConfig','',null,null,[{'Key':'elJS','Value':limpiarCadena(elJS)}],'modal640x480',false,$(this),function(ret){
         if (ret) { /**/ console.log("pOperadorConfig ret:\n"+limpiarCadena(ret.JSCode));
@@ -125,7 +124,8 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 					$("#inpNombreTV, #inpFechaTV").val("");
 					alert("No se han encontrado llamadas con los parámetros seleccionados!");
 				}
-			}		
+			}	
+			if(modo==="recargar"){ recargarTVLlamadas(); }
         } else { alert('Error S.P. pOperadorConfig!\n' + JSON.stringify(ret)); }
     }, false);
 }
