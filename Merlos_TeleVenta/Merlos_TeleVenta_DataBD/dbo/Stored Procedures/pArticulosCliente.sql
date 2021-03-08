@@ -73,7 +73,7 @@ BEGIN TRY
 	set @consulta = CONCAT('select (
 	select isnull(
 		(select dpv.articulo as CODIGO
-			, dpv.DEFINICION as NOMBRE
+			, replace(dpv.DEFINICION,''"'',''-'') as NOMBRE
 			, articulo.UNICAJA
 			, articulo.peso
 			, dpv.CAJAS as CajasALB
@@ -97,7 +97,7 @@ BEGIN TRY
 	SELECT 
 	''',@ejercicioAnt,'''+D.empresa+replace(D.letra,space(1),''0'')+replace(D.numero, space(1), ''0'') COLLATE Modern_Spanish_CI_AI as IDALBARAN, 
 	C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.ARTICULO, 
-	D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
+	replace(D.DEFINICION,''"'',''-'') as DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
 	'''' AS IMPORTEf, d.PRECIOIVA 
 	FROM [',@gestionAnt,'].DBO.D_ALBVEN D
 	INNER JOIN [',@gestionAnt,'].dbo.C_ALBVEN C ON D.EMPRESA = C.EMPRESA AND D.LETRA = C.LETRA AND D.NUMERO = C.NUMERO
@@ -109,7 +109,7 @@ BEGIN TRY
 				SELECT 
 				''',@ejercicio,'''+D.empresa+replace(D.letra,space(1),''0'')+replace(D.numero, space(1), ''0'') COLLATE Modern_Spanish_CI_AI as IDALBARAN, 
 				C.LETRA+D.NUMERO AS ALBARAN, C.FECHA, D.ARTICULO, 
-				D.DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
+				replace(D.DEFINICION,''"'',''-'') as DEFINICION, D.UNIDADES, D.CAJAS, D.PESO, D.DTO1,
 				''''  AS IMPORTEf, d.PRECIOIVA 
 				FROM [',@gestion,'].DBO.D_ALBVEN D
 				INNER JOIN [',@gestion,'].dbo.C_ALBVEN C ON D.EMPRESA = C.EMPRESA AND D.LETRA = C.LETRA AND D.NUMERO = C.NUMERO
