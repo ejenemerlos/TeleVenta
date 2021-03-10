@@ -1,0 +1,18 @@
+
+Paso 0 	- Web.Config -> modificar cadena de conexión y eliminar linea de DEBUG si existe.
+		
+		Cadena de Conexión para el WebConfig:
+		<connectionStrings>
+			<clear />
+			<add name="ConfConnectionString" connectionString="Data Source=(local);Initial Catalog=TELEVENTA_BD;Persist Security Info=True;User ID=UserId;Password=Password" providerName="System.Data.SqlClient" />
+			<add name="DataConnectionString" connectionString="Data Source=(local);Initial Catalog=TELEVENTA_DataBD;Persist Security Info=True;User ID=UserId;Password=Password" providerName="System.Data.SqlClient" />
+		</connectionStrings>
+		
+  
+Paso 1 	- Archivo [proyecto].nuspec -> poner la versión a generar
+		- CMD - Generar el paquete NuGet:
+		nuget pack Merlos_TeleVenta.nuspec
+		
+
+Paso 2 	- CMD - Subir el paquete NuGet al Servidor:
+		dotnet nuget push Merlos_TeleVenta.1.0.0.2.nupkg -k oy2njvb3laeg7bzqvb5anpfriamw7czenank6yib2hmeq4 -s https://api.nuget.org/v3/index.json --timeout 600

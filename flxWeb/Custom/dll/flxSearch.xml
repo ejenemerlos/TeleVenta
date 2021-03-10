@@ -1,0 +1,333 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+flxSearch
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.Filtering.SearchCriteria">
+ <summary>
+ Class SearchCriteria.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.SearchId">
+ <summary>
+ The identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.CollectionName">
+ <summary>
+ The collection name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.Descrip">
+ <summary>
+ The description
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.IconClass">
+ <summary>
+ The icon class
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.Count">
+ <summary>
+ The count
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.Filter">
+ <summary>
+ The filter
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.Active">
+ <summary>
+ The active
+ </summary>
+</member>
+<member name="F:FLEXYGO.Filtering.SearchCriteria.Order">
+ <summary>
+ The order
+ </summary>
+</member>
+<member name="T:FLEXYGO.Filtering.Search">
+ <summary>
+ Class Search.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.GetSearchWhere(System.String,System.String,FLEXYGO.filterHelper[],System.String,System.String)">
+ <summary>
+ Gets the search string for current user.
+ </summary>
+ <param name="SearchId">The filter collection identifier</param>
+ <param name="SearchType">The filter type</param>
+ <param name="FilterValues">Each filter value</param>
+ <param name="ObjectName">Returns only searches for given object. Returns all if blank</param>
+ <param name="UserId">The current User Id</param>
+ <returns>A Basecollection of select strings.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.GetSearchCriterias(System.String,System.String,System.String)">
+ <summary>
+ Gets the search string for current user.
+ </summary>
+ <param name="UserId">The User Id</param>
+ <param name="findString">The string used for filtering</param>
+ <param name="ObjectName">Returns only searches for given object. Returns all if blank</param>
+ <returns>A Basecollection of select strings.</returns>
+ <exception cref="T:System.Exception"></exception>
+ <example>
+ select * from [Objects] where exists (
+ -- BUILD SELECT
+ Select * from {{Main Object Table}} o
+ -- BUILD RUTES RELATIONS FOR EACH TABLE IN PATHS
+ inner join {{Path Object Table}} On o.{{Main Object Table primary Key}}={{Path Object Table}}.{{PATH Object Table primary Key}}
+ -- BUILD COMBOS
+ inner join({{combo SQL Sentence}}) cmb1 On cmb1.{{combo ValueFiled }}= {{PATH Object Table}}.{{FILTER Propertyname}}
+ -- BUILD WHERE
+ where
+ -- BUILD FILTER
+ (o.Descrip Like '%x%' or o.ObjectName like '%x%' or Objects_properties.PropertyName like '%x%' or cmb1.descrip like '%' )
+ -- BUILD RELATION
+ And {{Main Object Table}}.{{Main Object Table primary Key}} = o.{{Main Object Table primary Key}}
+ )
+ </example>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.GetSearchCriteriasBySearchId(System.String,System.String,System.String)">
+ <summary>
+ Gets the search string for current user and search
+ </summary>
+ <param name="UserId">The User Id</param>
+ <param name="findString">The string used for filtering</param>
+ <param name="SearchId">Returns only searches for given object. Returns all if blank</param>
+ <returns>A string</returns>
+ <exception cref="T:System.Exception"></exception>
+ <example>
+ select * from [Objects] where exists (
+ -- BUILD SELECT
+ Select * from {{Main Object Table}} o
+ -- BUILD RUTES RELATIONS FOR EACH TABLE IN PATHS
+ inner join {{Path Object Table}} On o.{{Main Object Table primary Key}}={{Path Object Table}}.{{PATH Object Table primary Key}}
+ -- BUILD COMBOS
+ inner join({{combo SQL Sentence}}) cmb1 On cmb1.{{combo ValueFiled }}= {{PATH Object Table}}.{{FILTER Propertyname}}
+ -- BUILD WHERE
+ where
+ -- BUILD FILTER
+ (o.Descrip Like '%x%' or o.ObjectName like '%x%' or Objects_properties.PropertyName like '%x%' or cmb1.descrip like '%' )
+ -- BUILD RELATION
+ And {{Main Object Table}}.{{Main Object Table primary Key}} = o.{{Main Object Table primary Key}}
+ )
+ </example>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.GetUserSearchCriteriaSettings(System.String)">
+ <summary>
+ Gets the user search criteria settings.
+ </summary>
+ <param name="UserId">The user identifier.</param>
+ <returns>BaseCollection.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.SaveUserSearchCriteriaOrder(System.String,System.Data.DataTable)">
+ <summary>
+ Saves the user search criteria order.
+ </summary>
+ <param name="UserId">The user identifier.</param>
+ <param name="OrderedObjects">The ordered objects.</param>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">
+ </exception>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.SaveUserSearchCriteriaCheck(System.String,System.String,System.Boolean)">
+ <summary>
+ Saves the user search criteria check.
+ </summary>
+ <param name="UserId">The user identifier.</param>
+ <param name="SearchId">The serachId.</param>
+ <param name="Enabled">if set to <c>true</c> [enabled].</param>
+ <returns><c>true</c> if worked, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">
+ </exception>
+</member>
+<member name="M:FLEXYGO.Filtering.Search.GetSqlFilter(System.String,System.Data.DataView,System.Boolean)">
+ <summary>
+ Gets the SQL filter.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="filters">The filters.</param>
+ <param name="Generic">Specifies if the filter is generic or not.</param>
+ <returns>System.String.</returns>
+ <exception cref="T:System.Exception">
+ Error in pNet_SaveSearchCriteria
+ or
+ </exception>
+</member>
+<member name="T:FLEXYGO.WhereExistsBuilder">
+ <summary>
+ Class WhereExistsBuilder.
+ </summary>
+</member>
+<member name="F:FLEXYGO.WhereExistsBuilder._searchObjectTable">
+ <summary>
+ The search object table
+ </summary>
+</member>
+<member name="F:FLEXYGO.WhereExistsBuilder._searchObjectKeys">
+ <summary>
+ The search object keys
+ </summary>
+</member>
+<member name="F:FLEXYGO.WhereExistsBuilder._searchProperties">
+ <summary>
+ The search properties
+ </summary>
+</member>
+<member name="F:FLEXYGO.WhereExistsBuilder._pathObjects">
+ <summary>
+ The path objects
+ </summary>
+</member>
+<member name="F:FLEXYGO.WhereExistsBuilder._propertySelects">
+ <summary>
+ The property selects
+ </summary>
+</member>
+<member name="M:FLEXYGO.WhereExistsBuilder.#ctor(System.String,FLEXYGO.Utilities.General.BaseCollection,FLEXYGO.Utilities.General.BaseCollection,System.Collections.Generic.Dictionary{System.String,FLEXYGO.PathObject},System.Collections.Generic.Dictionary{System.String,FLEXYGO.PropertySelects})">
+ <summary>
+ Initializes a new instance of the  class.
+ </summary>
+ <param name="searchObjectTable">The search object table.</param>
+ <param name="searchObjectKeys">The search object keys.</param>
+ <param name="searchProperties">The search properties.</param>
+ <param name="pathObjects">The path objects.</param>
+ <param name="propertySelects">The property selects.</param>
+</member>
+<member name="M:FLEXYGO.WhereExistsBuilder.GetExists">
+ <summary>
+ Gets the exists.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="T:FLEXYGO.PathObject">
+ <summary>
+ Class PathObject.
+ </summary>
+</member>
+<member name="F:FLEXYGO.PathObject.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.PathObject.ObjectTable">
+ <summary>
+ The object table
+ </summary>
+</member>
+<member name="F:FLEXYGO.PathObject.TableKeys">
+ <summary>
+ The table keys
+ </summary>
+</member>
+<member name="T:FLEXYGO.PropertySelects">
+ <summary>
+ Class PropertySelects.
+ </summary>
+</member>
+<member name="F:FLEXYGO.PropertySelects.SqlSentence">
+ <summary>
+ The SQL sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.PropertySelects.DisplayField">
+ <summary>
+ The display field
+ </summary>
+</member>
+<member name="F:FLEXYGO.PropertySelects.ValueField">
+ <summary>
+ The value field
+ </summary>
+</member>
+<member name="T:FLEXYGO.filterHelper">
+ <summary>
+ Class filterHelper.
+ </summary>
+</member>
+<member name="P:FLEXYGO.filterHelper.ObjectName">
+ <summary>
+ Gets or sets the name of the object.
+ </summary>
+ <value>The name of the object.</value>
+</member>
+<member name="P:FLEXYGO.filterHelper.ObjectProperty">
+ <summary>
+ Gets or sets the object property.
+ </summary>
+ <value>The object property.</value>
+</member>
+<member name="P:FLEXYGO.filterHelper.ObjectPath">
+ <summary>
+ Gets or sets the object path.
+ </summary>
+ <value>The object path.</value>
+</member>
+<member name="P:FLEXYGO.filterHelper.Value">
+ <summary>
+ Gets or sets the value.
+ </summary>
+ <value>The value.</value>
+</member>
+<member name="P:FLEXYGO.filterHelper.FilterType">
+ <summary>
+ Gets or sets the type of the filter.
+ </summary>
+ <value>The type of the filter.</value>
+</member>
+<member name="F:FLEXYGO.filterHelper._ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.filterHelper._ObjectProperty">
+ <summary>
+ The object property
+ </summary>
+</member>
+<member name="F:FLEXYGO.filterHelper._ObjectPath">
+ <summary>
+ The object path
+ </summary>
+</member>
+<member name="F:FLEXYGO.filterHelper._Value">
+ <summary>
+ The value
+ </summary>
+</member>
+<member name="F:FLEXYGO.filterHelper._FilterType">
+ <summary>
+ The filter type
+ </summary>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+</members>
+</doc>

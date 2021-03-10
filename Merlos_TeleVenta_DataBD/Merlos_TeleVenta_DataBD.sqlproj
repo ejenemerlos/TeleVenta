@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>flxDB_Data</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{3fc7451a-4b44-4a23-8560-8f7a74cfc5e0}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>Merlos_TeleVenta_DataBD</RootNamespace>
+    <AssemblyName>Merlos_TeleVenta_DataBD</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo" />
+    <Folder Include="dbo\Functions" />
+    <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="dbo\Tables" />
+    <Folder Include="dbo\User Defined Types" />
+    <Folder Include="dbo\Views" />
+    <Folder Include="scripts" />
+    <Folder Include="scripts\data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Stored Procedures\sp_generate_merge.sql" />
+    <None Include="scripts\data\merlos.sql" />
+    <Build Include="dbo\Functions\funPrintError.sql" />
+    <Build Include="dbo\Stored Procedures\02_CrearStoreds.sql" />
+    <Build Include="dbo\Stored Procedures\pBDEW.sql" />
+    <Build Include="dbo\Stored Procedures\pComunes.sql" />
+    <Build Include="dbo\Stored Procedures\pConfigBBDD.sql" />
+    <Build Include="dbo\Stored Procedures\pConfigPrimeraBBDD.sql" />
+    <Build Include="dbo\Stored Procedures\pConfiguracionLanzar.sql" />
+    <Build Include="dbo\Stored Procedures\pEmpresas.sql" />
+    <Build Include="dbo\Stored Procedures\pReconfigurarElPortal.sql" />
+    <Build Include="dbo\Stored Procedures\pVersiones.sql" />
+    <Build Include="dbo\Stored Procedures\pConfiguracion.sql" />
+    <Build Include="dbo\Stored Procedures\pClienteHorarioLlamadas.sql" />
+    <Build Include="dbo\Stored Procedures\pClientesADI.sql" />
+    <Build Include="dbo\Stored Procedures\pClienteDatos.sql" />
+    <Build Include="dbo\Stored Procedures\pUltimosPedidos.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulos.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulosBuscar.sql" />
+    <Build Include="dbo\Stored Procedures\pLlamadas.sql" />
+    <Build Include="dbo\Stored Procedures\pSeries.sql" />
+    <Build Include="dbo\Stored Procedures\pIncidencias.sql" />
+    <Build Include="dbo\Stored Procedures\pInpDatos.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulosCliente.sql" />
+    <Build Include="dbo\Stored Procedures\pOperadorConfig.sql" />
+    <Build Include="dbo\Stored Procedures\pObjetoDatos.sql" />
+    <Build Include="dbo\Stored Procedures\01_CrearVistas.sql" />
+    <Build Include="dbo\Stored Procedures\01_CrearFunciones.sql" />
+    <Build Include="dbo\Tables\Configuracion.sql" />
+    <Build Include="dbo\Tables\Configuracion_SQL.sql" />
+    <Build Include="dbo\Tables\AlbaranVentaFirmas.sql" />
+    <Build Include="dbo\Tables\Pedidos_Contactos.sql" />
+    <Build Include="dbo\Tables\Pedidos_Familias.sql" />
+    <Build Include="dbo\Tables\config_telev.sql" />
+    <Build Include="dbo\Tables\config_user.sql" />
+    <Build Include="dbo\Tables\inci_cli.sql" />
+    <Build Include="dbo\Tables\inci_art.sql" />
+    <Build Include="dbo\Tables\clientes_adi.sql" />
+    <Build Include="dbo\Tables\llamadas.sql" />
+    <Build Include="dbo\Stored Procedures\pOfertas.sql" />
+    <Build Include="dbo\Stored Procedures\pPreciosTabla.sql" />
+    <Build Include="dbo\Stored Procedures\pClientesBasic.sql" />
+    <Build Include="dbo\Stored Procedures\pEstTV.sql" />
+    <Build Include="dbo\Tables\cliente_gestor.sql" />
+    <Build Include="dbo\Tables\gestores.sql" />
+    <Build Include="dbo\Stored Procedures\pPedidoDetalle.sql" />
+    <Build Include="dbo\Tables\TeleVentaCab.sql" />
+    <Build Include="dbo\Tables\TeleVentaDetalle.sql" />
+    <Build Include="dbo\Tables\TeleVentaFiltros.sql" />
+    <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
+    <Build Include="dbo\Views\vIncidenciasArticulos.sql" />
+    <Build Include="dbo\Views\vIncidenciasClientes.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="scripts\Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="flxDB_Data.refactorlog" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>Merlos_TeleVenta</id>
+    <version>1.0.4.5</version>
+    <title>Merlos TeleVenta Eurowin</title>
+    <authors>Merlos</authors>
+    <owners>Merlos Infor, S.L.</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>WebApp para la gestión de TeleVenta sobre el ERP de Sage Eurowin. http://merlos.net</description>
+    <copyright>Copyright © 2020 Merlos</copyright>
+	<projectUrl>http://merlos.net</projectUrl>
+	<licenseUrl>http://merlos.net</licenseUrl>
+	<iconUrl>http://81.184.0.61:8460/webservice/utils/img/merlos/isotipo.png</iconUrl>
+	<tags>WebApp para la gestión de TeleVenta sobre el ERP de Sage Eurowin</tags>
+    <releaseNotes/>
+    <dependencies></dependencies>
+  </metadata>
+  <files>
+    <file src=".\publish\bin\**\*.*" target="lib\net46\" />
+    <file src=".\publish\**\*.*" target="content\" exclude=".\publish\bin\**\*.*;.\publish\nuget\**\*.*"/>
+    <file src=".\install.ps1" target="tools\" />
+  </files>
+</package>

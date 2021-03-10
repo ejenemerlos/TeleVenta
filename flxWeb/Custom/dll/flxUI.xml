@@ -1,0 +1,4494 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+flxUI
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.UI.Chart">
+ <summary>
+ Class Chart
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Chart.GetHTML(System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the HTML content for chart.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>ChartHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Chart.GetSQLValues(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition,System.String)">
+ <summary>
+ Gets the SQL values.
+ </summary>
+ <param name="eo">The entity object.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>ArrayList.</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in Chart
+ or
+ Error Creating Chart
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.Chart.ChartHelper">
+ <summary>
+ Class ChartHelper is used for sending the chart info though the chart controller.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Values">
+ <summary>
+ The values in a arraylist
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Options">
+ <summary>
+ The chart options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Buttons">
+ <summary>
+ The Module toolbar buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.columNames">
+ <summary>
+ The colum names
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Params">
+ <summary>
+ The parameters
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Settings">
+ <summary>
+ The chart settings
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Labels">
+ <summary>
+ The chart labels
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Series">
+ <summary>
+ The series
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Value">
+ <summary>
+ The value
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.ChartBackground">
+ <summary>
+ The ChartBackground
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.ChartBorder">
+ <summary>
+ The ChartBorder
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Title">
+ <summary>
+ The chart title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.ChartType">
+ <summary>
+ The chart type
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chart.ChartHelper.Cache">
+ <summary>
+ The Cache value
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit">
+ <summary>
+ Class Edit
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetEditTemplate(System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.Boolean)">
+ <summary>
+ Gets the edit template based on an object name, an object where and a module Id.
+ returns a EditHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="Defaults">Default values as KeyValuePairs</param>
+ <param name="TemplateId">TemplateId to use</param>
+ <param name="Clone">If we are cloning an existing object then the object where will be removed and also the key property values will be removed</param>
+ <returns>EditHelper.</returns>
+ <exception cref="T:System.Exception">Module object name and module object where can't be blank</exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ExecLoadProcess(System.String,FLEXYGO.Processing.ProcessManager.FormSender)">
+ <summary>
+ Execute load process.
+ </summary>
+ <param name="ProcessName">Name of the process.</param>
+ <param name="ActionSender">The action sender.</param>
+ <returns>List(Of FormAction).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetReportParamsTemplate(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Gets the reports params template based on an Report Id.
+ returns a ReportParamsHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="ReportName">The report identifier.</param>
+ <param name="Defaults">Default values as KeyValuePairs</param>
+ <returns>ReportParamsHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetReportTemplate(FLEXYGO.Objects.EntityObject)">
+ <summary>
+ Gets the dafault report template and its data based on object data.
+ </summary>
+ <param name="ObjectEntity">Object to get data from</param>
+ <returns>Template.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetProcessParamsTemplate(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Gets the process params template based on an Report Id.
+ returns a ProcessParamsHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="ProcessName">The process identifier.</param>
+ <param name="Defaults">Default values as KeyValuePairs</param>
+ <returns>ProcessParamsHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ReportParamsDefaults(FLEXYGO.Objects.Settings.ObjectReportsParamCollection,FLEXYGO.Objects.EntityObject,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parse report params defaults.
+ </summary>
+ <param name="Params">The params.</param>
+ <param name="Entity">The entity.</param>
+ <param name="Defaults">the defaults.</param>
+ <returns>ObjectReportsParamCollection.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ProcessParamsDefaults(FLEXYGO.Objects.Settings.ProcessParamCollection,FLEXYGO.Objects.EntityObject,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parse process params defaults.
+ </summary>
+ <param name="Params">The params.</param>
+ <param name="Entity">The entity.</param>
+ <param name="Defaults">the defaults.</param>
+ <returns>ProcessParamCollection.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ParseParamsDefaults(FLEXYGO.Objects.Settings.ObjectPropertyCollection,FLEXYGO.Objects.EntityObject,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parse params defaults.
+ </summary>
+ <param name="Params">The params.</param>
+ <param name="Entity">The entity.</param>
+ <param name="Defaults">the defaults.</param>
+ <returns>ObjectPropertyCollection.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetProcessTemplate(FLEXYGO.Objects.EntityObject)">
+ <summary>
+ Gets the dafault process template and its data based on object data.
+ </summary>
+ <param name="ObjectEntity">Object to get data from</param>
+ <returns>Template.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetPropConfig(System.String,System.String,System.String)">
+ <summary>
+ Get property configuration.
+ </summary>
+ <param name="Mode">Object, Process or Report</param>
+ <param name="Name">Name of the object.</param>
+ <param name="PropertyName">Name of the property.</param>
+ <returns>ObjectProperty.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetComboData(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String)">
+ <summary>
+ Gets the combo data.
+ </summary>
+ <param name="Mode">Object, Process or Report</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="PropertyName">Name of the property.</param>
+ <param name="CryptedSql">The crypted SQL.</param>
+ <param name="CryptedFilter">The crypted filter.</param>
+ <param name="Value">The value.</param>
+ <param name="Page">The page.</param>
+ <param name="AdditionalWhere">The additional where.</param>
+ <returns>List(Of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetComboText(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String)">
+ <summary>
+ Gets the combo value and display text for a defined value
+ </summary>
+ <param name="Mode">Object, Process or Report</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="PropertyName">Name of the property.</param>
+ <param name="CryptedSql">The crypted SQL.</param>
+ <param name="CryptedFilter">The crypted filter.</param>
+ <param name="Value">The value.</param>
+ <param name="Page">The page.</param>
+ <param name="AdditionalWhere">The additional where.</param>
+ <param name="SQLValueField">The SQL Value Field.</param>
+ <returns>List(Of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetComboDataView(System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the combo data.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ViewName">Name of the view with the sql sentence.</param>
+ <param name="DisplayField">The display field.</param>
+ <param name="Value">The value.</param>
+ <param name="Page">The page.</param>
+ <param name="PageSize">The page size.</param>
+ <param name="AdditionalWhere">The additional where.</param>
+ <param name="SQLFilter">The SQL filter.</param>
+ <param name="CnnString">The connection string.</param>
+ <returns>List(of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ResizeProperties(System.String,FLEXYGO.UI.Edit.PropertyResize[])">
+ <summary>
+ Resizes the form properties only for designers.
+ </summary>
+ <param name="Mode">Edit,Process or Report</param>
+ <param name="Properties">The properties as PropertyResizeObject</param>
+ <returns>Boolean.</returns>
+ <exception cref="T:System.Exception">User must be designer</exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.InsertSeparator(System.String,System.String,System.String,System.Int32)">
+ <summary>
+ Inserts form separator.  Only for designers
+ </summary>
+<param name="Mode">Edit/Process/Reports</param>
+<param name="Name">The Object/Process/Reports Name</param>
+<param name="PropertyName">The Property Name</param>
+ <param name="Above">defines if inserted above the property or under</param>
+ <returns>Boolean.</returns>
+ <exception cref="T:System.Exception">User must be designer</exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.InsertPlaceHolder(System.String,System.String,System.String,System.Int32)">
+ <summary>
+ Inserts form place holder. Only for designers
+ </summary>
+<param name="Mode">Edit/Process/Reports</param>
+<param name="Name">The Object/Process/Reports Name</param>
+<param name="PropertyName">The Property Name</param>
+ <param name="Above">defines if inserted above the property or under</param>
+ <returns>Boolean.</returns>
+ <exception cref="T:System.Exception">User must be designer</exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetNewProperties(System.String)">
+ <summary>
+ Gets a lis of object properties.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <returns>List(Of String).</returns>
+ <exception cref="T:System.Exception">User must be designer</exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.AddNewFields(System.String,System.String,System.Int32,System.String)">
+ <summary>
+ Adds the new field to the database table and append it as object property. Only for designers
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="FieldName">The table for the new table field.</param>
+ <param name="FieldType">The SQL Datatype for the new table field</param>
+ <param name="TableName">The table name</param>
+ <returns>Boolean</returns>
+ <exception cref="T:System.Exception">
+ Error on insert property 
+ or
+ User must be designer
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.AddNewDetachedProperty(System.String,System.String,System.String)">
+ <summary>
+ Adds a new object detached property. Only for designers
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="PropertyName">Name of the property.</param>
+ <param name="PropertyLabel">The property label.</param>
+ <returns>Boolean.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">
+ Error in insert dettached property {0}
+ or
+ User must be designer
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.AddNewProperties(System.String,System.String[])">
+ <summary>
+ Adds the new properties. Only for designers
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="Properties">The properties.</param>
+ <returns>Boolean</returns>
+ <exception cref="T:System.Exception">
+ Error on insert property 
+ or
+ User must be designer
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.CopyPropertyFromObj(FLEXYGO.Data.DataManager,FLEXYGO.Objects.EntityObject,System.String,System.String)">
+ <summary>
+ Copy property values from child object property.
+ </summary>
+ <param name="Dm">Config Datamanager</param>
+ <param name="Ent">Entity object to set values</param>
+ <param name="ObjectName">Name of the collection</param>
+ <param name="PropName">Name of the property</param>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ProcessLoadDependencies(System.String,System.String,System.String,System.Boolean,System.Boolean,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Process de change event of a property with dependencies
+ returns a list with the form actions to process.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ProcessName">Name of the process.</param>
+ <param name="ReportName">Name of the report.</param>
+ <param name="IsNew">Object is new or not</param>
+ <param name="IsView">Is view or not</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <returns>List(Of FormAction).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ProcessAllDependencies(System.String,System.String,System.String,System.Boolean,System.Boolean,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Process de change event of a property with dependencies
+ returns a list with the form actions to process.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ProcessName">Name of the process.</param>
+ <param name="ReportName">Name of the report.</param>
+ <param name="IsNew">Object is new or not</param>
+ <param name="IsView">Is view or not</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <returns>List(Of FormAction).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ProcessAllListDependencies(System.Collections.Generic.List{FLEXYGO.UI.Edit.ObjectRowDependencyHelper})">
+ <summary>
+ Process de change event of a property with dependencies
+ returns a list with the form actions to process.
+ </summary>
+ <param name="ObjectRowDependency">Array with dependency params.</param>
+ <returns>BaseCollection.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ProcessDependencies(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Process de change event of a property with dependencies
+ returns a list with the form actions to process.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ProcessName">Name of the object.</param>
+ <param name="ReportName">Name of the object.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <returns>List(Of FormAction).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ValidateProperty(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Process de change event of a property with validate
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ProcessName">Name of the object.</param>
+ <param name="ReportName">Name of the object.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ValuesToSql(FLEXYGO.Objects.Settings.ObjectPropertyCollection,FLEXYGO.Utilities.General.BaseCollection@)">
+ <summary>
+ Converts values to correct SQL values.
+ </summary>
+ <param name="PropConfig">Property config collection</param>
+ <param name="Col">The col.</param>
+ <returns>BaseCollection.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException"></exception>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetDependencyActions(FLEXYGO.Objects.Settings.ObjectDependantProperty,FLEXYGO.Objects.Settings.ObjectProperty,FLEXYGO.Utilities.General.BaseCollection,System.String,System.Boolean,System.Boolean)">
+ <summary>
+ Process a dependency action
+ returns the FormAction
+ </summary>
+ <param name="Dep">Dependency configuration</param>
+ <param name="RepProp">Dependant property</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <param name="PropValue">The changed property value</param>
+ <param name="IsView">Is view</param>
+ <param name="IsNew">Is new</param>
+ <returns>FormAction.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.ParseSQLdependency(System.String,FLEXYGO.Utilities.General.BaseCollection)">
+ <summary>
+ Parse a SQL sentence
+ returns the sql parsed
+ </summary>
+ <param name="SqlSentence">Sql sentence to parse</param>
+ <param name="Properties">Array with the properties and his values.</param>
+ <returns>SQL parsed.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.SaveDependenciesConfig(System.String,System.String,System.String,System.String,FLEXYGO.UI.Edit.DependencyHelper[])">
+ <summary>
+ Save the dependencies of a property. Only for designers
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ProcessName">The Process Name</param>
+ <param name="ReportName">The Report Name</param>
+ <param name="PropertyName">The Property Name</param>
+ <param name="Dependencies">Dependencies config collection</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Edit.GetEditConfig(System.String)">
+ <summary>
+ Gets the config template based on an object name
+ returns a EditHelper as an EditHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <returns>EditHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Edit.ObjectRowDependencyHelper">
+ <summary>
+ Class ObjectRowDependencyHelper.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.ObjectRowDependencyHelper.RowId">
+ <summary>
+ The row id.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.ObjectRowDependencyHelper.ObjectName">
+ <summary>
+ The object name.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.ObjectRowDependencyHelper.IsNew">
+ <summary>
+ Is new .
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.ObjectRowDependencyHelper.Properties">
+ <summary>
+ The properties.
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit.DependencyHelper">
+ <summary>
+ Class DependencyHelper.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.ObjectName">
+ <summary>
+ Gets or sets the name of the object.
+ </summary>
+ <value>The name of the object.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.PropertyName">
+ <summary>
+ Gets or sets the name of the property.
+ </summary>
+ <value>The name of the property.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.DependingPropertyName">
+ <summary>
+ Gets or sets the name of the depending property.
+ </summary>
+ <value>The name of the depending property.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.Order">
+ <summary>
+ Gets or sets the order.
+ </summary>
+ <value>The order.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.Active">
+ <summary>
+ Gets or sets a value indicating whether this <see cref="T:FLEXYGO.UI.Edit.DependencyHelper"/> is active.
+ </summary>
+ <value><c>true</c> if active; otherwise, <c>false</c>.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.Descrip">
+ <summary>
+ Gets or sets the descrip.
+ </summary>
+ <value>The descrip.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLValue">
+ <summary>
+ Gets or sets the SQL value.
+ </summary>
+ <value>The SQL value.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLComboSentence">
+ <summary>
+ Gets or sets the SQL combo sentence.
+ </summary>
+ <value>The SQL combo sentence.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLComboFilter">
+ <summary>
+ Gets or sets the SQL combo filter.
+ </summary>
+ <value>The SQL combo filter.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLEnabled">
+ <summary>
+ Gets or sets the SQL enabled.
+ </summary>
+ <value>The SQL enabled.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.EnabledValues">
+ <summary>
+ Gets or sets the enabled values.
+ </summary>
+ <value>The enabled values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.DisabledValues">
+ <summary>
+ Gets or sets the disabled values.
+ </summary>
+ <value>The disabled values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLVisible">
+ <summary>
+ Gets or sets the SQL visible.
+ </summary>
+ <value>The SQL visible.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.VisibleValues">
+ <summary>
+ Gets or sets the visible values.
+ </summary>
+ <value>The visible values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.HiddenValues">
+ <summary>
+ Gets or sets the hidden values.
+ </summary>
+ <value>The hidden values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLClass">
+ <summary>
+ Gets or sets the SQL class.
+ </summary>
+ <value>The SQL class.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLRequired">
+ <summary>
+ Gets or sets the SQL required.
+ </summary>
+ <value>The SQL required.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.RequiredValues">
+ <summary>
+ Gets or sets the required values.
+ </summary>
+ <value>The required values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.NotRequiredValues">
+ <summary>
+ Gets or sets the not required values.
+ </summary>
+ <value>The not required values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.PropertyValue">
+ <summary>
+ Gets or sets Properties to apply dependency.
+ </summary>
+ <value>The Custom Property values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.CusPropName">
+ <summary>
+ Gets or sets Custom Property Name.
+ </summary>
+ <value>The Custom Property values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.SQLCustomProperty">
+ <summary>
+ Gets or sets SQL Custom Property  values.
+ </summary>
+ <value>The Custom Property values.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.DependencyHelper.ConnStringId">
+ <summary>
+ Gets or sets connection string values.
+ </summary>
+ <value>The connection string values.</value>
+</member>
+<member name="T:FLEXYGO.UI.Edit.PropertyResize">
+ <summary>
+ Class PropertyResize.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.Name">
+ <summary>
+ Gets or sets the name of the object.
+ </summary>
+ <value>The name of the object.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.PropertyName">
+ <summary>
+ Gets or sets the name of the property.
+ </summary>
+ <value>The name of the property.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.PositionX">
+ <summary>
+ Gets or sets the X position on the Form.
+ </summary>
+ <value>The position x.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.PositionY">
+ <summary>
+ Gets or sets the Y position on the Form.
+ </summary>
+ <value>The position y.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.Width">
+ <summary>
+ Gets or sets the control width.
+ </summary>
+ <value>The width.</value>
+</member>
+<member name="P:FLEXYGO.UI.Edit.PropertyResize.Height">
+ <summary>
+ Gets or sets the control height.
+ </summary>
+ <value>The height.</value>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._Name">
+ <summary>
+ The object/process/report name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._PropertyName">
+ <summary>
+ The property name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._PositionX">
+ <summary>
+ The x position 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._PositionY">
+ <summary>
+ The y position
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._Width">
+ <summary>
+ The width
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.PropertyResize._Height">
+ <summary>
+ The height
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit.EditHelper">
+ <summary>
+ Class EditHelper with:
+ Template
+ Properties
+ Buttons
+ Object Name
+ Object Where
+ Title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.TemplateList">
+ <summary>
+ The optional template list
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.Properties">
+ <summary>
+ The properties
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EditHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit.ReportParamsHelper">
+ <summary>
+ Class ReportParamsHelper with:
+ Template
+ Properties
+ Buttons
+ Object Name
+ Object Where
+ Title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.ReportName">
+ <summary>
+ The ReportName
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.Properties">
+ <summary>
+ The report parameters
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ReportParamsHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit.ProcessParamsHelper">
+ <summary>
+ Class ProcessParamsHelper with:
+ Template
+ Properties
+ Buttons
+ Object Name
+ Object Where
+ Title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.ProcessName">
+ <summary>
+ The Process Id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.Properties">
+ <summary>
+ The report parameters
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.RunButtonText">
+ <summary>
+ The Run Button Text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.ProcessParamsHelper.JSforParams">
+ <summary>
+ The JSforParams
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Edit.EFieldTypeTemplate">
+ <summary>
+ Enum EFieldTypeTemplate defines creatable field types
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Varchar50">
+ <summary>
+ Varchar 50 length
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Varchar100">
+ <summary>
+ Varchar 100 length
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Varchar250">
+ <summary>
+ Varchar 250 length
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Varchar1000">
+ <summary>
+ Varchar 1000 length
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.VarcharMAX">
+ <summary>
+ Varchar unlimited length
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Integer32">
+ <summary>
+ Integer 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Decimal182">
+ <summary>
+ Decimal with 2 scale 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Decimal184">
+ <summary>
+ Decimal with 4 scale 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.Bit">
+ <summary>
+ Boolean
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.DateOnly">
+ <summary>
+ Date without time
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Edit.EFieldTypeTemplate.DateWithTime">
+ <summary>
+ Date with time
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.FileBrowser.GetData(System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String},System.String,System.String)">
+ <summary>
+ Reads data for carousel module
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <returns>returns list of images as ActionResult.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Mail">
+ <summary>
+ Class Mail
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetMailConfig(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the Mail Config
+ </summary>
+ <param name="ModuleName">Name of the module.</param>
+ <param name="PageName">Name of the page.</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">Where of the object.</param>
+ <returns>MailConfig.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetMailFolders">
+ <summary>
+ Gets the Mail Folders
+ </summary>
+ <returns>List(Of FLEXYGO.Mails.MailFolder).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetMailHeaders(System.Int32,System.Int32,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Object)">
+ <summary>
+ Gets the Mail Headers
+ </summary>
+ <param name="Page">Page number.</param>
+ <param name="PageSize">Page size</param>
+ <param name="Folder">Name of the folder.</param>
+ <param name="Seen">Seen</param>
+ <param name="MailAddress">Name of the mail address.</param>
+ <param name="Subject">Subject</param>
+ <param name="Body">Body</param>
+ <param name="MailDateMin">Mail date min</param>
+ <param name="MailDateMax">Mail date max</param>
+ <returns>List(Of FLEXYGO.Mails.MailHeader).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetObjectInfo(System.String,System.String,System.String,System.String,FLEXYGO.UI.Mail.MailConfig@)">
+ <summary>
+ Gets the Object Filters and Link Info
+ </summary>
+ <param name="ModuleName">Name of the module.</param>
+ <param name="PageName">Name of the page.</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">Where of the object.</param>
+ <param name="Config">Mail Configuration Items</param>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetMail(System.String,System.String)">
+ <summary>
+ Gets the Object Config
+ </summary>
+ <param name="MessageId">Id of the message</param>
+ <returns>MailView</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.GetMailBadgeValue(System.String)">
+ <summary>
+ Gets theMail Pending to read messages
+ </summary>
+ <returns>MailView</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.UpdateMailNoticeBadge(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Update mail notice icon using SignalR Controller
+ </summary>
+ <param name="Entity">Not Used</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Mail.EnableMailSettings(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Enable mail options
+ </summary>
+ <param name="Entity">Not Used</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Mail.MailConfig">
+ <summary>
+ Class MailConfig
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailConfig.Folders">
+ <summary>
+ Folders
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailConfig.Toolbar">
+ <summary>
+ Toolbar
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailConfig.EmailFilter">
+ <summary>
+ Email Filter
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailConfig.ObjectName">
+ <summary>
+ Object Name To Link It
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailConfig.ObjectId">
+ <summary>
+ Object Id To Link It
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Mail.MailConfig.ShowSettingsOption">
+ <summary>
+ ShowSettingd
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Mail.MailView">
+ <summary>
+ Class MailView
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailView.Mail">
+ <summary>
+ Mail
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Mail.MailView.Toolbar">
+ <summary>
+ Toolbar
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.MenuManager">
+ <summary>
+ Class Navigation
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.MenuManager.DeleteMenu(System.String)">
+ <summary>
+ Delete the Menu by identifier.
+ </summary>
+ <param name="MenuId">The Menu identifier.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.MenuManager.AddMenu(System.String)">
+ <summary>
+ Adds the Menu as new text menu.
+ </summary>
+ <param name="AppName">The app identifier.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.MenuManager.RelocateMenu(System.String,System.String,System.Object)">
+ <summary>
+ Delete the Menu by identifier.
+ </summary>
+ <param name="Id">The Menu identifier.</param>
+ <param name="ParentId">The parent Menu identifier.</param>
+ <param name="Order">The order of the Menu.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.MenuManager.GetMenus(System.Object)">
+ <summary>
+ Refreshes Menus
+ </summary>
+ <returns>Boolean.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Page">
+ <summary>
+ Class Page
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetPageByName(System.String,System.String,System.String)">
+ <summary>
+ Gets the page by identifier.
+ </summary>
+ <param name="PageName">The page identifier.</param>
+ <param name="ObjectName">The objec Name</param>
+ <param name="ObjectWhere">The objec Name</param>
+ <returns>Environment.Page.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetModuleManagerModules(System.String)">
+ <summary>
+ Gets page modules for modulemanager.
+ </summary>
+ <param name="PageName">The page identifier.</param>
+ <returns>Environment.Page.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetHelpById(System.String)">
+ <summary>
+ Gets the help by identifier.
+ </summary>
+ <param name="HelpId">The help identifier.</param>
+ <returns>HelpPage.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetPageByObject(System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Gets the page by object name and.
+ </summary>
+ <param name="StrType">Page Type.</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">Where of the object.</param>
+ <param name="IsClone">Is clone.</param>
+ <returns>Environment.Page.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetPageObjectDefaults(System.String,System.String,System.String)">
+ <summary>
+ Gets the object defaults for the loaded page
+ </summary>
+ <param name="StrType">Page Type.</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">Where of the object.</param>
+ <returns>Environment.Page.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.RemoveDisabledSQLModules(FLEXYGO.Environment.PageModules,FLEXYGO.Objects.IEntity)">
+ <summary>
+ Remove disabled SQL modules.
+ </summary>
+ <param name="Page">Page.</param>
+ <param name="IObject">Object interface.</param>
+</member>
+<member name="M:FLEXYGO.UI.Page.GetPageTabModules(System.String,System.String,System.String)">
+ <summary>
+ Gets the page tab modules.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <returns>PageModules.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Page.CheckModuleFilters(FLEXYGO.Environment.PageModules,FLEXYGO.Objects.Settings.IObjectSettings,System.String,System.String)">
+ <summary>
+ Checks the module filters.
+ </summary>
+ <param name="Page">The page.</param>
+ <param name="ObjSetting">The object setting.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="TabName">The tab identifier.</param>
+</member>
+<member name="M:FLEXYGO.UI.Page.CheckModuleDefaults(FLEXYGO.Environment.PageModules,FLEXYGO.Objects.IEntity)">
+ <summary>
+ Checks if exists modules with collections related to the parent page object to set the defaults
+ </summary>
+ <param name="Page">The page modules.</param>
+ <param name="Entity">The object/collection.</param>
+</member>
+<member name="M:FLEXYGO.UI.Page.RemoveModulesForNewObject(FLEXYGO.Environment.Page)">
+ <summary>
+ Remove not available for new objects.
+ </summary>
+ <param name="Page">The page</param>
+</member>
+<member name="M:FLEXYGO.UI.Page.RemoveModulesForNewObject(FLEXYGO.Environment.PageModules)">
+ <summary>
+ Remove not available for new objects.
+ </summary>
+ <param name="Page">The page</param>
+</member>
+<member name="M:FLEXYGO.UI.Page.SavePageConfig(System.String,System.String,System.String,FLEXYGO.UI.Page.ConfigModuleHelper[])">
+ <summary>
+ Save the page modules configuration.
+ </summary>
+ <param name="PageName">Page Id to reconfigure</param>
+ <param name="LayoutName">The new layout name</param>
+ <param name="ObjectName">The object name</param>
+ <param name="Modules">List of new modules associated to the page.</param>
+ <returns>String.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Page.ConfigModuleHelper">
+ <summary>
+ Class ConfigModuleHelper.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.ModuleName">
+ <summary>
+ The Module id
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.LayoutPositionId">
+ <summary>
+ The position of the module inside the layout.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.RelationWhere">
+ <summary>
+ Additional where inside the module
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.Order">
+ <summary>
+ The module's order inside the layout position
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.TabName">
+ <summary>
+ The module's tab id container
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Page.ConfigModuleHelper.TabOrder">
+ <summary>
+ The module's order inside the tab
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Scheduler">
+ <summary>
+ Class Scheduler
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Scheduler.GetSchedulerTemplate(System.String)">
+ <summary>
+ Gets the Scheduler Template
+ </summary>
+ <param name="ModuleName">Name of the module.</param>
+ <returns>SchedulerItemHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Scheduler.GetSchedulerConfig(System.String)">
+ <summary>
+ Gets the Scheduler Config
+ </summary>
+ <param name="Scheduler">Name of the scheduler.</param>
+ <returns>List(Of SchedulerHelper).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Scheduler.GetSchedulerResult(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String[],System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the Results of Scheduler Config
+ </summary>
+ <param name="ObjectName">Name of the Object.</param>
+ <param name="ViewName">Name of the View.</param>
+ <param name="Start">Start date</param>
+ <param name="End">End date</param>
+ <param name="StartDate">Name of the field Start date.</param>
+ <param name="EndDate">Name of the field End date.</param>
+ <param name="StartTime">Name of the field Start time.</param>
+ <param name="EndTime">Name of the field End time.</param>
+ <param name="Duration">Name of the field Duration.</param>
+ <param name="DescripTemplate">Appointment template</param>
+ <param name="Keys">Name of the field Key.</param>
+ <param name="Color">Name of the field Color.</param>
+ <param name="UserIdField">Name of the field UserIdField.</param>
+ <param name="Filter">Filter of the view.</param>
+ <param name="TextColor">Text color.</param>
+ <param name="AdditionalWhere">Additional where.</param>
+ <param name="TokenDefault">Token default.</param>
+ <param name="AllDayField">All day field.</param>
+ <returns>SchedulerResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.Scheduler.ConvertTimeStringToHours(System.String)">
+ <summary>
+ Convert Time String To Hours
+ </summary>
+ <param name="Time">Time string.</param>
+ <returns>Integer.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Scheduler.SchedulerItemHelper">
+ <summary>
+ Class SchedulerItemHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.SchedulerName">
+ <summary>
+ The scheduler name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.ActiveMode">
+ <summary>
+ The active mode
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.MonthView">
+ <summary>
+ The month view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.AgendaWeekView">
+ <summary>
+ The agenda week view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.AgendaDayView">
+ <summary>
+ The agenda day view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.ListWeekView">
+ <summary>
+ The list week view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.SQLValueField">
+ <summary>
+ The SQL value field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.SQLDisplayField">
+ <summary>
+ The SQL display field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.SQLFilterField">
+ <summary>
+ The SQL filter field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.DirectTemplate">
+ <summary>
+ The direct template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.ViewName">
+ <summary>
+ The view name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.MaxTime">
+ <summary>
+ The max time
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.MinTime">
+ <summary>
+ The min time
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.OnClickEvent">
+ <summary>
+ The on click event
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.TokenDefault">
+ <summary>
+ The token default
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.AllDaySlot">
+ <summary>
+ The all day slot
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.SlotDuration">
+ <summary>
+ The slot duration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.PageType">
+ <summary>
+ The page type
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.Target">
+ <summary>
+ The target
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerItemHelper.EventLimit">
+ <summary>
+ The EventLimit
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Scheduler.SchedulerHelper">
+ <summary>
+ Class SchedulerHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.key">
+ <summary>
+ The key
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.table">
+ <summary>
+ The table
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.SQLSentence">
+ <summary>
+ The SQL sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.SchedulerName">
+ <summary>
+ The scheduler name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.ViewName">
+ <summary>
+ The view name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.StartDateField">
+ <summary>
+ The start date field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.EndDateField">
+ <summary>
+ The end date field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.StartTimeField">
+ <summary>
+ The start time field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.EndTimeField">
+ <summary>
+ The end time field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.DurationField">
+ <summary>
+ The duration field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.ColorField">
+ <summary>
+ The color field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.DescripTemplate">
+ <summary>
+ The descrip template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.Icon">
+ <summary>
+ The icon
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.UserIdField">
+ <summary>
+ The user id field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.TextColorField">
+ <summary>
+ The text color field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.CanInsert">
+ <summary>
+ The can insert
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.CanView">
+ <summary>
+ The can view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.CanEdit">
+ <summary>
+ The can edit
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerHelper.AllDayField">
+ <summary>
+ The all day field
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Scheduler.SchedulerResult">
+ <summary>
+ Class SchedulerResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.Id">
+ <summary>
+ The id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.Descrip">
+ <summary>
+ The descrip
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.Row">
+ <summary>
+ The row
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.StartDate">
+ <summary>
+ The start date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.EndDate">
+ <summary>
+ The end date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.StartTime">
+ <summary>
+ The start time
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.EndTime">
+ <summary>
+ The end time
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.Duration">
+ <summary>
+ The duration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.Color">
+ <summary>
+ The color
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.TextColor">
+ <summary>
+ The text color
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Scheduler.SchedulerResult.AllDayField">
+ <summary>
+ The all day field
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerView">
+ <summary>
+ Class SchedulerView
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerView.GetSchedulerConfig(System.String)">
+ <summary>
+ Gets the Scheduler Config
+ </summary>
+ <param name="ModuleName">Name of the scheduler.</param>
+ <returns>SchedulerViewResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerView.GetSchedulerViewConfig(System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.UI.SchedulerView.SchedulerConfigResult[])">
+ <summary>
+ Gets the Scheduler View Config
+ </summary>
+ <param name="ObjName">Object name.</param>
+ <param name="ObjectWhere">Object where.</param>
+ <param name="ModuleName">Name of the scheduler.</param>
+ <param name="Start">Start date.</param>
+ <param name="End">End date.</param>
+ <param name="AdditionalWhere">Additional where.</param>
+ <param name="SchedulerConfig">Scheduler Config.</param>
+ <returns>SchedulerViewResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerView.GetSchedulerResult(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String},System.String,FLEXYGO.UI.SchedulerView.SchedulerViewResult[],System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the Results of Scheduler View Config
+ </summary>
+ <param name="ObjectName">Name of the Object.</param>
+ <param name="ViewName">Name of the View.</param>
+ <param name="Start">Start date</param>
+ <param name="End">End date</param>
+ <param name="StartDate">Name of the field Start date.</param>
+ <param name="Keys">Keys.</param>
+ <param name="Color">Color.</param>
+ <param name="Result">Result.</param>
+ <param name="DescripTemplate">Descrip template.</param>
+ <param name="PageType">Page type.</param>
+ <param name="Target">Target.</param>
+ <param name="CanView">Can view.</param>
+ <param name="CanEdit">Can edit.</param>
+ <param name="AdditionalWhere">Additional where.</param>
+ <param name="ModObj">Module object.</param>
+ <param name="ModWhere">Module Where.</param>
+ <param name="Table">Table.</param>
+ <param name="ObjName">Object name.</param>
+ <param name="ObjectWhere">Object where.</param>
+ <param name="ModuleName">Module name.</param>
+ <returns>SchedulerViewResult().</returns>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerView.SchedulerConfigResult">
+ <summary>
+ Class SchedulerConfigResult.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.ObjectName">
+ <summary>
+ The objectName
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.ViewName">
+ <summary>
+ The ViewName
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.StartDateField">
+ <summary>
+ The StartDateField
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.ColorField">
+ <summary>
+ The ColorField
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.DescripTemplate">
+ <summary>
+ The DescripTemplate
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.CanView">
+ <summary>
+ Can view
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.CanEdit">
+ <summary>
+ Can edit
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.CanInsert">
+ <summary>
+ Can insert
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.Icon">
+ <summary>
+ The icon
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.Table">
+ <summary>
+ The table
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.Key">
+ <summary>
+ The Key
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.PageType">
+ <summary>
+ The PageType
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.SchedulerView.SchedulerConfigResult.Target">
+ <summary>
+ The Target
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerView.SchedulerViewResult">
+ <summary>
+ Class SchedulerResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.calendar">
+ <summary>
+ The calendar
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.id">
+ <summary>
+ The id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.key">
+ <summary>
+ The key
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.table">
+ <summary>
+ The Table
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.eventName">
+ <summary>
+ The event name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.Row">
+ <summary>
+ The row
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.Date">
+ <summary>
+ The date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.color">
+ <summary>
+ The upload error
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.pageType">
+ <summary>
+ The page type
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.target">
+ <summary>
+ The target
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.canView">
+ <summary>
+ Can view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerView.SchedulerViewResult.canEdit">
+ <summary>
+ Can edit
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Timeline">
+ <summary>
+ Class Timeline
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.GetTimeline(System.String,System.String,System.String,System.String,System.String,FLEXYGO.filterHelper[])">
+ <summary>
+ Gets the timeline module based on provided parameters.
+ Returns a TimelineHelper as a TimelineHelper
+ </summary>
+ <param name="PageName">The page identifier.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="ObjectName">The object identifier.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="SearchId">The search id.</param>
+ <param name="FilterValues">The filter values.</param>
+ <returns>TimelineHelper.</returns>
+ <exception cref="T:System.Exception">
+ Module object name can't be blank
+ or
+ Error in web service getTimeline
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.GetItems">
+ <summary>
+ Get items.
+ Returns a ....
+ </summary>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.GetFilterWhere(System.Object,FLEXYGO.filterHelper[],FLEXYGO.Objects.EntityCollection)">
+ <summary>
+ Get filter where based on provided parameters.
+ Returns a FilterWhere as a string
+ </summary>
+ <param name="searchId">Search Id.</param>
+ <param name="filterValues">Filter values.</param>
+ <param name="timelineSettingEntityCollection">Timeline Setting Entity Collection.</param>
+ <returns>FilterWhere.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.BuildSuperWhere(System.String,System.String)">
+ <summary>
+ Build super where based on provided parameters.
+ Returns a SuperWhere as a string
+ </summary>
+ <param name="ObjectWhere">object where.</param>
+ <param name="FilterWhere">Filter where.</param>
+ <returns>SuperWhere.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Timeline.TimelineHelper">
+ <summary>
+ Class TimelineHelper.
+ Provide information of timeline setting and content data
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.TimelineSetting">
+ <summary>
+ Timeline Setting
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.Groups">
+ <summary>
+ The Groups
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.Items">
+ <summary>
+ The Items
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.Defaults">
+ <summary>
+ The defaults
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.Toolbar">
+ <summary>
+ The Module Toolbar
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.FilterWhere">
+ <summary>
+ The filter where
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.SearchSettings">
+ <summary>
+ The search settings
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineHelper.SavedSearches">
+ <summary>
+ The saved Searches Collection
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.TimelineHelper.#ctor(System.String,System.String,System.String,System.String,FLEXYGO.filterHelper[],FLEXYGO.Environment.ModuleToolbar)">
+ <summary>
+ Create timeline entity configuration.
+ </summary>
+ <param name="TimelineSettingName">Timeline Setting Name.</param>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="T:FLEXYGO.UI.Timeline.TimelineSetting">
+ <summary>
+ Class TimelineSetting.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.TimelineSettingName">
+ <summary>
+ The timeline setting name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.TimelineSettingDescrip">
+ <summary>
+ The timeline setting description
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.EntityConfiguration">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.Advanced">
+ <summary>
+ Advanced
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.Editable">
+ <summary>
+ Editable
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.WithGroups">
+ <summary>
+With groups
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ShowItemsWithoutGroup">
+ <summary>
+ Show items without group
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.TitleItemsWithoutGroup">
+ <summary>
+ The title of items without group 
+ </summary>
+ 
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.LayoutName">
+ <summary>
+ The layout name of items without group
+ </summary>
+ 
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.DefaultRangeName">
+ <summary>
+ The default range name
+ </summary>
+ 
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ShowControls">
+ <summary>
+ The Show controls
+ </summary>
+ 
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.OnInsertOpenNewWithDefaults">
+ <summary>
+ Show items without group
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.PropertyDescrip">
+ <summary>
+ The property descrip
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.PropertyStartDate">
+ <summary>
+ The property start date
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.CanEditPropertyStartDate">
+ <summary>
+ The property start date security
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.PropertyEndDate">
+ <summary>
+ The property end date
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.CanEditPropertyEndDate">
+ <summary>
+ The property end date security
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.PropertyGroup">
+ <summary>
+ The property group
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.CanEditPropertyGroup">
+ <summary>
+ The property group security
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupViewName">
+ <summary>
+ The group view name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupIdField">
+ <summary>
+ The group id field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupDescripField">
+ <summary>
+ The group description field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupClassNameField">
+ <summary>
+ The group class name field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupStyleField">
+ <summary>
+ The group style field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.GroupContentTemplate">
+ <summary>
+ The group content template
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemViewName">
+ <summary>
+ The item view name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemDescripField">
+ <summary>
+ The item description field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemStartDateField">
+ <summary>
+ The item start date field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemEndDateField">
+ <summary>
+ The item end date field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemGroupField">
+ <summary>
+ The item group field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemEditableField">
+ <summary>
+ The item editable field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemClassNameField">
+ <summary>
+ The item class name field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemStyleField">
+ <summary>
+ The item style field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemTypeField">
+ <summary>
+ The item type field
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemContentTemplate">
+ <summary>
+ The item content template
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.ItemVisibleFrameTemplate">
+ <summary>
+ The item visible frame template
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.OnMovingFunction">
+ <summary>
+ The OnMoving function
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.OnDropObjectOnItemFunction">
+ <summary>
+ The OnDropObjectOnItem function
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.OnDeleteFunction">
+ <summary>
+ The OnDeleteFunction function
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.CustomOptions">
+ <summary>
+ The custom options
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineSetting.DefaultTime">
+ <summary>
+ The DefaultTime field
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.TimelineSetting.#ctor(System.String)">
+ <summary>
+ Create timeline entity configuration.
+ </summary>
+ <param name="TimelineSettingName">Timeline Setting Name.</param>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="T:FLEXYGO.UI.Timeline.TimelineEntityConfiguration">
+ <summary>
+ Class TimelineEntityConfiguration.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.CollectionName">
+ <summary>
+ The collection name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.TableName">
+ <summary>
+ The table name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.ObjectKeys">
+ <summary>
+ The object keys
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.CanInsert">
+ <summary>
+ Can insert
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.CanUpdate">
+ <summary>
+ Can update
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.CanDelete">
+ <summary>
+ Can delete
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Timeline.TimelineEntityConfiguration.#ctor(System.String)">
+ <summary>
+ Create timeline entity configuration.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="T:FLEXYGO.UI.Map">
+ <summary>
+ Class Map
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Map.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Returns an MapHelper as a MapsHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <returns>MapsHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Map.GetMarkers(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Gets markers from SQL sentence.
+ </summary>
+ <param name="eo">The EntityObject.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>ArrayList</returns>
+ <exception cref="T:System.Exception">
+ Error Creating Marker
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.Map.MarkerHelper">
+ <summary>
+ Class MarkerHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.lat">
+ <summary>
+ Latitude
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.lng">
+ <summary>
+ Longitude
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.address">
+ <summary>
+ The Address
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.content">
+ <summary>
+ InfoWindow Content
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.icon">
+ <summary>
+ Marker Icon
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.label">
+ <summary>
+ Marker Label
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.zIndex">
+ <summary>
+ Marker zIndex
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MarkerHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Map.MapsHelper">
+ <summary>
+ Class MapsHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MapsHelper.Markers">
+ <summary>
+ Markers ArrayList
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MapsHelper.Options">
+ <summary>
+ Json Options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Map.MapsHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerYear">
+ <summary>
+ Class SchedulerYear
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerYear.GetSchedulerHolidays(System.String,System.String,System.String)">
+ <summary>
+ Gets the Scheduler Template
+ </summary>
+ <param name="ModuleName">Name of the module.</param>
+ <param name="Start">Start date.</param>
+ <param name="End">End date.</param>
+ <returns>SchedulerItemHelper().</returns>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerYear.GetSchedulerYearConfig(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the Scheduler Config
+ </summary>
+ <param name="ObjName">Object name.</param>
+ <param name="ObjectWhere">Object where.</param>
+ <param name="ModuleName">Name of the scheduler.</param>
+ <param name="Start">Start date.</param>
+ <param name="End">End date.</param>
+ <param name="AdditionalWhere">Additional where.</param>
+ <param name="Filter">Filter.</param>
+ <returns>SchedulerYearResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerYear.GetSchedulerResult(System.String,System.String,System.String,System.String,System.String,System.Collections.ArrayList,System.String,FLEXYGO.UI.SchedulerYear.SchedulerYearResult[],System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the Results of Scheduler Config
+ </summary>
+ <param name="ObjectName">Name of the Object.</param>
+ <param name="ViewName">Name of the View.</param>
+ <param name="Start">Start date</param>
+ <param name="End">End date</param>
+ <param name="StartDate">Name of the field Start date.</param>
+ <param name="Keys">Keys.</param>
+ <param name="Color">Color.</param>
+ <param name="Result">Result.</param>
+ <param name="DescripTemplate">Descrip template.</param>
+ <param name="PageType">Page type.</param>
+ <param name="Target">Target.</param>
+ <param name="CanView">Can view.</param>
+ <param name="CanEdit">Can edit.</param>
+ <param name="AdditionalWhere">Additional where.</param>
+ <param name="ModObj">Module object.</param>
+ <param name="ModWhere">Module Where.</param>
+ <param name="Table">Table.</param>
+ <param name="ObjName">Object name.</param>
+ <param name="ObjectWhere">Object where.</param>
+ <param name="ModuleName">Module name.</param>
+ <param name="Filter">Filter.</param>
+ <param name="UserIdField">Name of the field user id.</param>
+ <param name="TokenDefault">Token default.</param>
+ <returns>SchedulerYearResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.SchedulerYear.GetSchedulerCombo(System.String)">
+ <summary>
+ Gets the Scheduler Combo
+ </summary>
+ <param name="ModuleName">Name of the module.</param>
+ <returns>SchedulerComboItemHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerYear.SchedulerItemHelper">
+ <summary>
+ Class SchedulerItemHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerItemHelper.Date">
+ <summary>
+ The date
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerYear.SchedulerYearResult">
+ <summary>
+ Class SchedulerResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.calendar">
+ <summary>
+ The calendar
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.id">
+ <summary>
+ The id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.key">
+ <summary>
+ The key
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.table">
+ <summary>
+ The Table
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.eventName">
+ <summary>
+ The event name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.Row">
+ <summary>
+ The row
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.Date">
+ <summary>
+ The date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.color">
+ <summary>
+ The upload error
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.pageType">
+ <summary>
+ The page type
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.target">
+ <summary>
+ The target
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.canView">
+ <summary>
+ Can view
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerYearResult.canEdit">
+ <summary>
+ Can edit
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper">
+ <summary>
+ Class SchedulerComboItemHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.SQLValueField">
+ <summary>
+ The SQL value field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.SQLDisplayField">
+ <summary>
+ The SQL display field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.SQLFilterField">
+ <summary>
+ The SQL filter field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.DirectTemplate">
+ <summary>
+ The direct template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SchedulerYear.SchedulerComboItemHelper.ViewName">
+ <summary>
+ The view name
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Navigation">
+ <summary>
+ Class Navigation
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.GetMainNodes">
+ <summary>
+ Gets main nodes.
+ </summary>
+ <returns>NavigationNodes.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.GetNavNodes">
+ <summary>
+ Gets the nav nodes.
+ </summary>
+ <returns>NavigationNodes.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.GetNodesById(System.String,System.Boolean)">
+ <summary>
+ Gets the nodes by identifier.
+ </summary>
+ <param name="ParentId">The parent identifier.</param>
+ <param name="HideAutoSQLNodes">Boolean to set if we want to generate the auto SQL nodes</param>
+ <returns>NavigationNodes.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.GetAreaNode(System.String)">
+ <summary>
+ Gets the nodes based on the area table.
+ </summary>
+ <param name="ParentId">The parent identifier.</param>
+ <returns>NavigationNodes.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.GetProcessesNodes(System.String,System.String,System.String)">
+ <summary>
+ Gets the processes associated to and from an object for an area
+ </summary>
+ <param name="AreaId">Area of the process.</param>
+ <param name="Source">Object associated to process</param>
+ <param name="Target">Object output of process.</param>
+ <returns>List(Of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.DeleteNode(System.String)">
+ <summary>
+ Delete the node by identifier.
+ </summary>
+ <param name="NodeId">The node identifier.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.RelocateNode(System.String,System.String,System.String)">
+ <summary>
+ Delete the node by identifier.
+ </summary>
+ <param name="Id">The node identifier.</param>
+ <param name="ParentId">The parent node identifier.</param>
+ <param name="Order">The order of the node.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Navigation.RefreshNodes">
+ <summary>
+ Refreshes nodes
+ </summary>
+ <returns>Boolean.</returns>
+</member>
+<member name="T:FLEXYGO.UI.ImageManager">
+ <summary>
+ Class ImageManager
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.GetImages(System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="ImageId">Image Id.</param>
+ <returns>ImageResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.GetImagesFLX(System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="ImageId">Image id.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.GetImagesERP(System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="ImageId">Image id.</param>
+ <returns>ImageResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.SetImage(System.String,System.String,System.String,System.String,System.Boolean,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Set Image.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <param name="Name">Name.</param>
+ <param name="Base64">Base64.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.SetImageFLX(System.String,System.String,System.String,System.String,System.Boolean,FLEXYGO.Configuration.Tokens.ConfToken,System.String)">
+ <summary>
+ Set Image.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <param name="Name">Name.</param>
+ <param name="Base64">Base64.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.SetImageERP(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Set Image.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <param name="Name">Name.</param>
+ <param name="Base64">Base64.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveImage(System.String,System.String)">
+ <summary>
+ Remove Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveImageFLX(System.String)">
+ <summary>
+ Remove Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveImageERP(System.String,System.String)">
+ <summary>
+ Remove Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.UpdateImage(System.String,System.Boolean,System.Int32,System.String)">
+ <summary>
+ Update Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="MainImage">Main Image.</param>
+ <param name="OrderNumber">Order Number.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.UpdateImageFLX(System.String,System.Boolean,System.Int32)">
+ <summary>
+ Update Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="MainImage">Main Image.</param>
+ <param name="OrderNumber">Order Number.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.UpdateImageERP(System.String,System.Boolean,System.Int32,System.String)">
+ <summary>
+ Update Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="MainImage">Main Image.</param>
+ <param name="OrderNumber">Order Number.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.GetClassification">
+ <summary>
+ Get Categories.
+ </summary>
+ <returns>ClassificationResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveAllImages(System.String,System.String)">
+ <summary>
+ Remove all Images.
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveAllImagesFLX(System.String,System.String)">
+ <summary>
+ Remove all Images.
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.RemoveAllImagesERP(System.String,System.String)">
+ <summary>
+ Remove all Images.
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.DownloadAllImages(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the images
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.DownloadAllImagesFLX(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the images
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns> 
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.DownloadAllImagesERP(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the images
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.ImageManager.GetConfigObj(System.String)">
+ <summary>
+ Get configuration.
+ </summary>
+ <param name="ObjectName">Related object name.</param>
+ <returns>ConfigResult.</returns>
+</member>
+<member name="F:FLEXYGO.UI.ImageManager.ImageLock">
+ <summary>
+ SyncLock Object
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.ImageManager.ConfigResult">
+ <summary>
+ Class ConfigResult.
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.ImageManager.ImageResult">
+ <summary>
+ Class ImageResult.
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.ImageManager.ClassificationResult">
+ <summary>
+ Class ClassificationResult.
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Kanban">
+ <summary>
+ Class Kanban
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Kanban.GetKanban(System.String,System.String,System.String,System.Object,FLEXYGO.filterHelper[])">
+ <summary>
+ Gets the kanban module based on provided parameters.
+ Returns a KanbanHelper as a KanbanHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <returns>KanbanHelper.</returns>
+ <exception cref="T:System.Exception">
+ Module object name can't be blank
+ or
+ Error in web service getKanban
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.Kanban.LoadKanbanSettings(System.String)">
+ <summary>
+ Gets the kanban settings.
+ Returns a KanbanSettingsHelper.
+ </summary>
+ <param name="KanbanSettingsName">Kanban settings name.</param>
+ <returns>KanbanSettingsHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Kanban.KanbanHelper">
+ <summary>
+ Class KanbanHelper.
+ Provide information of kanban settings and board data
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.KanbanSettings">
+ <summary>
+ Kanban Settings
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Columns">
+ <summary>
+ The columns
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Cards">
+ <summary>
+ The cards
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Defaults">
+ <summary>
+ The defaults
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Descrip">
+ <summary>
+ The descrip
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.BoardId">
+ <summary>
+ The board identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.BoardOrder">
+ <summary>
+ The board order
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.FilterObjectName">
+ <summary>
+ The filter object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.FilterObjectWhere">
+ <summary>
+ The filter object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.SearchSettings">
+ <summary>
+ The search settings
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanHelper.SavedSearches">
+ <summary>
+ The saved Searches Collection
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Kanban.KanbanSettingsHelper">
+ <summary>
+ Class KanbanSettingsHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.KanbanSettingsName">
+ <summary>
+ The kanban settings name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.BoardTitleTemplate">
+ <summary>
+ The board title template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.BoardDescripTemplate">
+ <summary>
+ The board descrip template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.BoardObjectName">
+ <summary>
+ The board object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.ColumnViewName">
+ <summary>
+ The column view name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.ColumnDescripField">
+ <summary>
+ The column descrip field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.ColumnIdField">
+ <summary>
+ The column identifier field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.ColumnCssClassField">
+ <summary>
+ The column CSS class field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.ColumnIconIdField">
+ <summary>
+ The column icon identifier field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardObjectName">
+ <summary>
+ The card object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardViewName">
+ <summary>
+ The card view name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardIdField">
+ <summary>
+ The card identifier field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardColumnIdField">
+ <summary>
+ The card column identifier field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardDescripField">
+ <summary>
+ The card descrip field
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.CardContentTemplate">
+ <summary>
+ The card content template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.onChangeColumnProcess">
+ <summary>
+ The on change column process
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.onCardClick">
+ <summary>
+ Event to launch when users clicks on a target
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.EndBoxLastState">
+ <summary>
+ State to archive target.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.EndBoxProcess">
+ <summary>
+ Process to launch when drop target in End Box Zone
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.EndBoxText">
+ <summary>
+ Text for End Box Zone
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.EndBoxIconName">
+ <summary>
+ Icon for End Box Zone
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Kanban.KanbanSettingsHelper.EndBoxCssClass">
+ <summary>
+ Css Cass for End Box Zone
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.List">
+ <summary>
+ Class List
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.List.GetList(System.String,System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.String,System.Object,FLEXYGO.filterHelper[],System.String,System.String,System.Nullable{System.Int32},System.String)">
+ <summary>
+ Gets the list based on provided parameters.
+ Returns a ListHelper as a ListHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <param name="Page">The list page number.</param>
+ <param name="OrderInfo">The order info</param>
+ <param name="AdditionalWhere">The additional where.</param>
+ <param name="Mode"> (list|edit) Defines if the list is linked or not to the object</param>
+ <param name="SearchId">The search id</param>
+ <param name="FilterValues">The filter values</param>
+ <param name="TemplateId">The template id</param>
+ <param name="ViewId">The view id</param>
+ <param name="PageSize">The page size</param>
+ <param name="PresetId">The preset id</param>
+ <returns>ListHelper.</returns>
+ <exception cref="T:System.Exception">
+ Module object name can't be blank
+ or
+ Error in web service getList
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.List.GetSearch(System.String,System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.String,System.Object,FLEXYGO.filterHelper[])">
+ <summary>
+ Gets the list based on provided parameters.
+ Returns a ListHelper as a ListHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <param name="Page">The list page number.</param>
+ <param name="OrderInfo">The order info.</param>
+ <param name="AdditionalWhere">The additional where.</param>
+ <param name="Mode"> (object|list) Defines if the list is linked or not to the object</param>
+ <param name="SearchId">The search id</param>
+ <param name="FilterValues"> The filter values</param>
+ SearchId As Object, ByVal FilterValues
+ <returns>ListHelper.</returns>
+ <exception cref="T:System.Exception">
+ Module object name can't be blank
+ or
+ Error in web service getList
+ </exception>
+</member>
+<member name="M:FLEXYGO.UI.List.LoadFilters(System.String,System.Boolean,System.Boolean)">
+ <summary>
+ Loads the filters.
+ </summary>
+ <param name="CollectionName">Name of the collection.</param>
+ <param name="IncludeGeneric">if set to <c>true</c> [include generic].</param>
+ <param name="IncludeNonGeneric">if set to <c>true</c> [include non generic].</param>
+ <returns>SearchSettingsCollection.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error loading filters {0}</exception>
+</member>
+<member name="M:FLEXYGO.UI.List.LoadPresets(FLEXYGO.Objects.EntityCollection)">
+ <summary>
+ Loads Object Preset Filters.
+ </summary>
+ <param name="Collection" >The Collection.</param>
+ <returns>BaseCollection.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error loading filters {0}</exception>
+</member>
+<member name="M:FLEXYGO.UI.List.SecureProperty(System.String,System.String)">
+ <summary>
+ Secures the property.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="PropertyName">Name of the property.</param>
+ <returns>ObjectProperty.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error Obtaining Properties for Object {0}</exception>
+</member>
+<member name="M:FLEXYGO.UI.List.LoadUserSavedSearches(System.String)">
+ <summary>
+ Loads the user saved searches.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <returns>UserSavedSearchesCollection.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error loading saved filter values for object {0}</exception>
+</member>
+<member name="M:FLEXYGO.UI.List.GetPageList(System.String,System.String,System.Int32,System.Int32,System.Boolean,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.String)">
+ <summary>
+ Gets the list based on provided parameters.
+ Returns a ListHelper as a List(Of BaseCollection)
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="CryptedSql">The crypted SQL.</param>
+ <param name="Page">The page.</param>
+ <param name="PageSize">The pagesize.</param>
+ <param name="RemoveKeys">The pagesize.</param>
+ <param name="Filters">The pagesize.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>List(Of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.List.GetCount(System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.String)">
+ <summary>
+ Gets the number of rows count.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="CryptedSql">The crypted SQL.</param>
+ <param name="Filters">The Filters.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>Integer.</returns>
+</member>
+<member name="M:FLEXYGO.UI.List.GetData(System.String@,System.String,System.Int32,System.Int32,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder})">
+ <summary>
+ Gets the data based on page, page size and where sentence.
+ </summary>
+ <param name="SQLSentence">The SQL sentece.</param>
+ <param name="connstringId">The connection string id.</param>
+ <param name="Page">The page.</param>
+ <param name="Pagesize">The page size.</param>
+ <param name="OrderBy">The order by.</param>
+ <returns>a DataTable.</returns>
+</member>
+<member name="M:FLEXYGO.UI.List.SetTableDataKeys(System.Collections.Generic.List{FLEXYGO.Utilities.General.BaseCollection},System.String,System.Boolean)">
+ <summary>
+ Sets the table keys.
+ </summary>
+ <param name="TableData">The table data.</param>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="removeKey">if set to <c>true</c> [remove key].</param>
+ <returns>List(Of BaseCollection).</returns>
+</member>
+<member name="M:FLEXYGO.UI.List.GetBagPage(System.String,System.String)">
+ <summary>
+ Gets the list based on provided parameters.
+ Returns a ListHelper as an String()
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <returns>String().</returns>
+ <exception cref="T:System.Exception">
+ Module object name can't be blank
+ or
+ Error in web service getList
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.List.ListHelper">
+ <summary>
+ Class ListHelper.
+ Provide information on:
+ Template
+ TemplateList
+ Pager
+ Header Buttons
+ Row buttons
+ Object Name
+ Object Where
+ Object Title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.TemplateList">
+ <summary>
+ The optional template list
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.ViewList">
+ <summary>
+ The optional view list
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Pager">
+ <summary>
+ The pager
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.SearchSettings">
+ <summary>
+ The Search Settings Collection
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.SavedSearches">
+ <summary>
+ The saved Searches Collection
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.RowButtons">
+ <summary>
+ The row buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.ChildObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Searcher">
+ <summary>
+ If has a search control
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Properties">
+ <summary>
+ Object Property Collection Settings
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.Presets">
+ <summary>
+ Object Presets
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.CanInsert">
+ <summary>
+ Object Insert Permits
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.CanUpdate">
+ <summary>
+ Object Update Permits
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.List.ListHelper.CanDelete">
+ <summary>
+ Object Delete Permits
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.OrgChart">
+ <summary>
+ Class OrgChart
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.OrgChart.GetNodes(System.String,System.String,System.String,System.String)">
+ <summary>
+ Returns an OrgChartHelper as an OrgChartHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page PageName.</param>
+ <returns>OrgChartHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.OrgChart.GetSQLData(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Gets the SQL value.
+ </summary>
+ <param name="eo">The EntityObject.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>Datatable with the orgchart values</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in EasyPie
+ or
+ Error Creating EasyPie Value
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.OrgChart.OrgChartHelper">
+ <summary>
+ Class OrgChartHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.OrgChart.OrgChartHelper.Options">
+ <summary>
+ The options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.OrgChart.OrgChartHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.OrgChart.OrgChartHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Rss">
+ <summary>
+ Class Rss
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Rss.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the content for an RSS module.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>RssHelper</returns>
+</member>
+<member name="M:FLEXYGO.UI.Rss.CreateHtmlFromRss(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Creates HTML content from Rss feed and XSLT transformation file.
+ </summary>
+ <param name="eo">The entity object.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>System.String.</returns>
+ <exception cref="T:System.Exception">
+ No XML path in RSS Feed
+ or
+ Error Creating Html in Rss Feed module
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.Rss.RssHelper">
+ <summary>
+ Class RssHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Rss.RssHelper.Html">
+ <summary>
+ The Html
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Rss.RssHelper.Buttons">
+ <summary>
+ The Buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SQLFeed">
+ <summary>
+ Class SQLFeed
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.SQLFeed.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the HTML content for an SQL Feed module.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>SQLFeedHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.SQLFeed.CreateHtmlFromXML(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Creates HTML content from SQL Sentence and XSLT transformation file.
+ </summary>
+ <param name="eo">The entity object.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>System.String.</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in SQL Feed
+ or
+ Error Creating Html in SQLFeed module
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.SQLFeed.SQLFeedHelper">
+ <summary>
+ Class SQLFeedHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SQLFeed.SQLFeedHelper.Html">
+ <summary>
+ The HTML result
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SQLFeed.SQLFeedHelper.Buttons">
+ <summary>
+ The buttons toolbar
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Test">
+ <summary>
+ Class Test
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestsToRun">
+ <summary>
+ The DLL path
+ Public DllPath As String = "~/bin/UnitTest.dll"
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Test.ExecuteTest(System.String,System.String,System.String)">
+ <summary>
+ Executes test to current database
+ </summary>
+ <returns>TestResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Test.GetTests">
+ <summary>
+ Executes test to current database
+ </summary>
+ <returns>List(Of TestResult).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Test.LoadTests">
+ <summary>
+ LoadTests
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Test.TestResult">
+ <summary>
+ Class TestResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.Result">
+ <summary>
+ The test result 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.TestClass">
+ <summary>
+ The test class
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.TestName">
+ <summary>
+ The test name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.LastError">
+ <summary>
+ The last error
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.TestTile">
+ <summary>
+ The test dll title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestResult.TestId">
+ <summary>
+ The test Id
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Test.TestElement">
+ <summary>
+ Class TestElement.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestElement.TestId">
+ <summary>
+ The Id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestElement.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestElement.Path">
+ <summary>
+ The path
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Test.TestElement.ExcludeCategories">
+ <summary>
+ The exclude categories
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.View">
+ <summary>
+ Class View
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.View.GetViewTemplate(System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the view template based on an object name, an object where and a module Id.
+ returns a ViewHelper as a ViewHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <param name="TemplateId">Optional TemplateId</param>
+ <returns>ViewHelper.</returns>
+ <exception cref="T:System.Exception">Module object name and module object where can't be blank</exception>
+</member>
+<member name="T:FLEXYGO.UI.View.ViewHelper">
+ <summary>
+ Class ViewHelper.
+ Template
+ Buttons
+ Object Name
+ Object Where
+ Title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.Template">
+ <summary>
+ The template
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.TemplateList">
+ <summary>
+ The optional template list
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.IsNew">
+ <summary>
+ The object is new
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.ObjectWhere">
+ <summary>
+ The object where
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.Title">
+ <summary>
+ The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.View.ViewHelper.Properties">
+ <summary>
+ The properties
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.SparkLine">
+ <summary>
+ Class SparkLine
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.SparkLine.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the HTML.
+ </summary>
+ <param name="ObjectName">The object name.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>SparkLineHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.SparkLine.GetSQLValues(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Gets the SQL values.
+ </summary>
+ <param name="eo">The eo.</param>
+ <param name="modDef">The mod definition.</param>
+ <returns>ArrayList.</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in Sparkline
+ or
+ Error Creating SparkLine
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.SparkLine.SparkLineHelper">
+ <summary>
+ Class SparkLineHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SparkLine.SparkLineHelper.Values">
+ <summary>
+ The values
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SparkLine.SparkLineHelper.Options">
+ <summary>
+ The options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.SparkLine.SparkLineHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Notify">
+ <summary>
+ Class Notify
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Notify.GetNotice(System.String)">
+ <summary>
+ Gets the Node JSon for a given Notice.
+ </summary>
+ <param name="NoticeId">Notice Id</param>
+ <returns>NavigationNode.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Notify.SetNoticeIsRead(System.String)">
+ <summary>
+ Sets a Notice to read for current User. If NoticeId is nothing Set all 
+ Notices a read
+ </summary>
+ <param name="NoticeId">Notice Id</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Notify.GetBadgeValue">
+ <summary>
+ Gets notification active count
+ </summary>
+ <returns>Integer.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Gipe">
+ <summary>
+ Class Gipe
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.ObjectsRelations">
+ <summary>
+ Class ObjectsRelations
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.ObjectsRelations.GetHTML(System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the HTML displaying related objects. Depending on mode parameter it will display related objects,
+ related processes or related reports
+ Returns an HtmlHelper as a Html.HtmlHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <param name="Mode">Mode Can be Objects, Processes or Reports</param>
+ <returns>Html.HtmlHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.MasterTable">
+ <summary>
+ Class MasterTable
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.GetSettings(System.String)">
+ <summary>
+ Gets the Master Table settings.
+ Returns a MasterTable as a MasterTableSettings
+ </summary>
+ <param name="TableName">Name of the table.</param>
+ <returns>MasterTableSettings.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.GetTableData(System.String)">
+ <summary>
+ Gets the master table data.
+ </summary>
+ <param name="TableName">Name of the table.</param>
+ <returns>List(Of BaseCollection).</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.Insert(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Inserts values in the specified master table name.
+ </summary>
+ <param name="TableName">Name of the table.</param>
+ <param name="values">The values.</param>
+ <returns>BaseCollection.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.Update(System.String,FLEXYGO.Utilities.General.KeyValuePairs[],FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Updates the specified  values using keys in master table.
+ </summary>
+ <param name="TableName">Name of the table.</param>
+ <param name="keys">The keys.</param>
+ <param name="values">The values.</param>
+ <returns>BaseCollection.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.Delete(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Deletes the specified master table data.
+ </summary>
+ <param name="TableName">Name of the table.</param>
+ <param name="keys">The keys.</param>
+ <returns>Boolean.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.UI.MasterTable.ArrayToMTP(FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Creates MasterTable properties from an Array.
+ </summary>
+ <param name="arr">The arr.</param>
+ <returns>MasterTableProperties.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Html">
+ <summary>
+ Class Html
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Html.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the HTML content for an HTML module a SQL Feed or an Rss Feed.
+ Returns an HtmlHelper as a HtmlHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="moduleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>HtmlHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Html.HtmlHelper">
+ <summary>
+ Class HtmlHelper.
+ Includes:
+ HtmlText
+ CssText
+ ScriptText
+ Module Toolbar buttons
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper._HtmlText">
+ <summary>
+ The HTML text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper._HtmlHeader">
+ <summary>
+ The HTML Header
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper._HtmlFooter">
+ <summary>
+ The HTML footer
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Html.HtmlHelper.HtmlText">
+ <summary>
+ The Body content
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Html.HtmlHelper.HtmlHeader">
+ <summary>
+ The Header content
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Html.HtmlHelper.HtmlFooter">
+ <summary>
+ The Footer Content
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper.CssText">
+ <summary>
+ The CSS text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper.ScriptText">
+ <summary>
+ The script text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Html.HtmlHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Network">
+ <summary>
+ Class Network
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Network.GetData(System.String,System.String,System.String,System.Boolean,System.Int32,System.Int32,System.String,System.String)">
+ <summary>
+ Gets the data content for network graphic
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="Details">If we want the details(True) or the relations (False).</param>
+ <param name="ParentId">Node Parent Id</param>
+ <param name="MaxId">Max id used with nodes</param>
+ <returns>NetworkHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Network.NetworkHelper">
+ <summary>
+ Class NetworkHelper is used for sending the graphic info though the controller.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Network.NetworkHelper.Nodes">
+ <summary>
+ The nodes in a arraylist
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Network.NetworkHelper.Edges">
+ <summary>
+ The edges in a arraylist
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Funnel">
+ <summary>
+ Class Funnel
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Funnel.GetHTML(System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Returns an FunnelHelper as a FunnelHelper
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>FunnelHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Funnel.GetFunnel(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition,System.String)">
+ <summary>
+ Gets data funnel from SQL sentence.
+ </summary>
+ <param name="eo">The EntityObject.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>ArrayList</returns>
+ <exception cref="T:System.Exception">
+ Error getting data funnel
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.Funnel.FunnelHelper">
+ <summary>
+ Class FunnelHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Funnel.FunnelHelper.Data">
+ <summary>
+ Data ArrayList
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Funnel.FunnelHelper.Options">
+ <summary>
+ Json Options
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Funnel.FunnelData">
+ <summary>
+ Class MapsHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Funnel.FunnelData.label">
+ <summary>
+ label String
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Funnel.FunnelData.value">
+ <summary>
+ value Integer
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Funnel.FunnelData.backgroundColor">
+ <summary>
+ backgroundColor String
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Image">
+ <summary>
+ Class Image
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Image.SaveFile(System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Saves base64 image as a file.
+ </summary>
+ <param name="Mode">Object,Process or Report</param>
+ <param name="ObjectName">Object Name.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="FileName">File name.</param>
+ <param name="Base64">A base64 Image.</param>
+ <returns>ImageRetHelper.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Image.ImageRetHelper">
+ <summary>
+ Class ImageRetHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Image.ImageRetHelper.Value">
+ <summary>
+ The value
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Image.ImageRetHelper.Text">
+ <summary>
+ The text
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.File">
+ <summary>
+ Class File
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.File.SaveFile(System.String,System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Save File.
+ </summary>
+ <param name="Mode">Object,Process or Report</param>
+ <param name="ObjectName">Object Name.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="Base64">Base64.</param>
+ <param name="Name">Name.</param>
+ <returns>FileResult.</returns>
+</member>
+<member name="T:FLEXYGO.UI.File.FileResult">
+ <summary>
+ Class FileResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.File.FileResult.path">
+ <summary>
+ The path
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.File.FileResult.fileError">
+ <summary>
+ The file error
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.EasyPie">
+ <summary>
+ Class EasyPie
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.EasyPie.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Returns an EasyPieHelper.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page PageName.</param>
+ <returns>EasyPieHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.EasyPie.GetSQLData(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Gets the SQL value.
+ </summary>
+ <param name="eo">The EntityObject.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>Datatable with the pie values</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in EasyPie
+ or
+ Error Creating EasyPie Value
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.EasyPie.EasyPieHelper">
+ <summary>
+ Class EasyPieHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyPie.EasyPieHelper.Data">
+ <summary>
+ The value
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyPie.EasyPieHelper.Options">
+ <summary>
+ The options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyPie.EasyPieHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Chatter">
+ <summary>
+ Class Chatter
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Chatter.GetMessages(System.String,System.String)">
+ <summary>
+ Set Messages.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <returns>List(Of MessageResult).</returns>
+</member>
+<member name="M:FLEXYGO.UI.Chatter.SetMessage(System.String,System.String,System.Nullable{System.Guid},System.String,FLEXYGO.UI.Chatter.Attachment[])">
+ <summary>
+ Set Messages.
+ </summary>
+ <param name="DestinationObjectName">Destination Object Name.</param>
+ <param name="DestinationParentMessage">Destination Parent Message.</param>
+ <param name="Content">Content.</param>
+ <param name="Attachments">Attachments.</param>
+ <returns>MessageResult.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Chatter.MessageResult">
+ <summary>
+ Class MessageResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.messageId">
+ <summary>
+ Themessage id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.avatar">
+ <summary>
+ The avatar
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.author">
+ <summary>
+ The author
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.insertionDate">
+ <summary>
+ The insertion date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.content">
+ <summary>
+ The content
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.parentMessage">
+ <summary>
+ The parent message
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.attachmentsCount">
+ <summary>
+ The attachments count
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Chatter.MessageResult.attachments">
+ <summary>
+ The attachments
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Chatter.Attachment">
+ <summary>
+ Class Attachment.
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Chatter.Attachment.name">
+ <summary>
+ The Name
+ </summary>
+</member>
+<member name="P:FLEXYGO.UI.Chatter.Attachment.base64">
+ <summary>
+ The Base64
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.DocumentManager">
+ <summary>
+ Class DocumentManager
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDocument(System.String,System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="DocGuid">Document Guid.</param>
+ <returns>DocumentResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDocumentFLX(System.String,System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="DocGuid">Document Guid.</param>
+ <returns>DocumentResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDocumentERP(System.String,System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="DocGuid">Document Guid.</param>
+ <returns>DocumentResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.AppendToDocument(System.String,System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Saves Document.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocumentId">Document id.</param>
+ <param name="Base64">A base64 Partial Document.</param>
+ <param name="LastAppend">Last Append.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDocumentPathERP(System.String,System.String,System.String)">
+ <summary>
+ Get Document Path ERP.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocGuid">Document id.</param>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDocumentPathFLX(System.String,System.String,System.String)">
+ <summary>
+ Get Document Path FLX.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocGuid">Document id.</param>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.SetDocument(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Saves Document.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocumentName">Document name.</param>
+ <param name="DocumentType">Document type.</param>
+ <param name="Base64">A base64 Document.</param>
+ <param name="CloudId">Cloud id.</param>
+ <param name="CloudLink">Cloud link.</param>
+ <param name="DownloadLink">Download link.</param>
+ <param name="DocAction">Document action.</param>
+ <param name="PartialUpload">Partial upload.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.SetDocumentFLX(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Saves Document.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocumentName">Document name.</param>
+ <param name="DocumentType">Document type.</param>
+ <param name="Base64">A base64 Document.</param>
+ <param name="CloudId">Cloud id.</param>
+ <param name="CloudLink">Cloud link.</param>
+ <param name="DownloadLink">Download link.</param>
+ <param name="DocAction">Document action.</param>
+ <param name="DefaultCategory">Default category.</param>
+ <param name="PartialUpload">Partial upload.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.SetDocumentERP(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Saves Document.
+ </summary>
+ <param name="ObjectName">Object name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocumentName">Document name.</param>
+ <param name="DocumentType">Document type.</param>
+ <param name="Base64">A base64 Document.</param>
+ <param name="CloudId">Cloud id.</param>
+ <param name="CloudLink">Cloud link.</param>
+ <param name="DownloadLink">Download link.</param>
+ <param name="DocAction">Document action.</param>
+ <param name="DefaultCategory">Default category.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetPathFromName(FLEXYGO.Data.DataManager,System.String)">
+ <summary>
+ Get Path From Name.
+ </summary>
+ <param name="dm">Data manager.</param>
+ <param name="Name">Name.</param>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetTypeFromExtension(FLEXYGO.Data.DataManager,System.String)">
+ <summary>
+ Get Type From Extension.
+ </summary>
+ <param name="dm">Data manager.</param>
+ <param name="DocumentType">Document type.</param>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.RemoveDocument(System.String,System.String,System.String)">
+ <summary>
+ Remove Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.RemoveDocumentFLX(System.String,System.String,System.String)">
+ <summary>
+ Remove Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.RemoveDocumentERP(System.String,System.String,System.String)">
+ <summary>
+ Remove Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.UpdateDocument(System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Update Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Related Object Name.</param>
+ <param name="ObjectId">Related Object Id.</param>
+ <param name="Name">Document Name.</param>
+ <param name="Description">Document Description.</param>
+ <param name="CategoryId">Document CategoryId.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.UpdateDocumentFLX(System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Update Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Related Object Name.</param>
+ <param name="ObjectId">Related Object Id.</param>
+ <param name="Name">Document Name.</param>
+ <param name="Description">Document Description.</param>
+ <param name="CategoryId">Document CategoryId.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.UpdateDocumentERP(System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Update Document.
+ </summary>
+ <param name="DocGuid">Document DocGuid.</param>
+ <param name="ObjectName">Related Object Name.</param>
+ <param name="ObjectId">Related Object Id.</param>
+ <param name="Name">Document Name.</param>
+ <param name="Description">Document Description.</param>
+ <param name="CategoryId">Document CategoryId.</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetCategories(System.String,System.String)">
+ <summary>
+ Get Categories.
+ </summary>
+ <param name="Mode">Mode.</param>
+ <param name="ObjectName">Related Object Name.</param>
+ <returns>CategoryResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetCategoriesERP(System.String)">
+ <summary>
+ Get ERP Categories.
+ </summary>
+ <param name="Filter">Filter.</param>
+ <returns>CategoryResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetCategoriesFLX(System.String)">
+ <summary>
+ Get FLX Categories.
+ </summary>
+ <param name="Filter">Filter.</param>
+ <returns>CategoryResult().</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetConfig(System.String)">
+ <summary>
+ Get configuration.
+ </summary>
+ <param name="ObjectName">Related object name.</param>
+ <returns>ConfigResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetConfigObj(System.String)">
+ <summary>
+ Get configuration.
+ </summary>
+ <param name="ObjectName">Related object name.</param>
+ <returns>ConfigResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDriveAccount(System.String)">
+ <summary>
+ Get Drive Account.
+ </summary>
+ <param name="Code">Code.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.GetDriveToken">
+ <summary>
+ Get Drive Token.
+ </summary>
+ <returns>String.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.DownloadAllDocuments(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the documents
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysDocuments Object Id</param>
+ <returns>DocumentResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.DownloadAllDocumentsFLX(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the documents
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ImageResult.</returns> 
+</member>
+<member name="M:FLEXYGO.UI.DocumentManager.DownloadAllDocumentsERP(System.String,System.String)">
+ <summary>
+ Downloads a zip with all the documents
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysDOcuments Object Id</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="T:FLEXYGO.UI.DocumentManager.ConfigResult">
+ <summary>
+ Class ConfigResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.mode">
+ <summary>
+ The mode
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.ERPObjectName">
+ <summary>
+ The ERP object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.DefaultCategoryId">
+ <summary>
+ The default category id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.CategoryFilter">
+ <summary>
+ The category filter
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.dropboxFolderCreate">
+ <summary>
+ The "dropbox folder create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.dropboxFolderLink">
+ <summary>
+ The "dropbox folder link" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.dropboxFileCreate">
+ <summary>
+ The "dropbox file create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.dropboxFileLink">
+ <summary>
+ The "dropbox file link" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.driveFolderCreate">
+ <summary>
+ The "drive folder create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.driveFolderLink">
+ <summary>
+ The "drive folder link" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.driveFileCreate">
+ <summary>
+ The "drive file create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.driveFileLink">
+ <summary>
+ The "drive file link" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.diskFolderCreate">
+ <summary>
+ The "disk folder create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.diskFolderLink">
+ <summary>
+ The "disk folder link" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.diskFileCreate">
+ <summary>
+ The "disk file create" configuration
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.ConfigResult.diskFileLink">
+ <summary>
+ The "disk file link" configuration
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.DocumentManager.CategoryResult">
+ <summary>
+ Class CategoryResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.CategoryResult.categoryId">
+ <summary>
+ The category id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.CategoryResult.category">
+ <summary>
+ The category
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.DocumentManager.DocumentResult">
+ <summary>
+ Class DocumentResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.docGuid">
+ <summary>
+ The doc guid
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.creationDate">
+ <summary>
+ The creation date
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.category">
+ <summary>
+ The category
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.categoryId">
+ <summary>
+ The category id
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.description">
+ <summary>
+ The description
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.downloadLink">
+ <summary>
+ The download link
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.name">
+ <summary>
+ The name
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.path">
+ <summary>
+ The path
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.origin">
+ <summary>
+ The 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.iconClass">
+ <summary>
+ The icon class
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.documentType">
+ <summary>
+ The document type
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.documentError">
+ <summary>
+ Document error 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.permissionError">
+ <summary>
+ Permission error
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.extension">
+ <summary>
+ The extension
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.inProgress">
+ <summary>
+ In progress 
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.DocumentManager.DocumentResult.javacode">
+ <summary>
+ JavaCode
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Utils">
+ <summary>
+ Class Utils
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Utils.GetModuleInfo(System.String@,System.String@,System.String,System.String)">
+ <summary>
+ Gets the module information and changes ObjectName and Object where depending if the module has an ObjectName or Object Where.
+ It also parses object description
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page identifier.</param>
+ <returns>ModuleDefinition.</returns>
+ <exception cref="T:System.Exception">Module object name can't be blank</exception>
+</member>
+<member name="T:FLEXYGO.UI.Utils.XSLHelper">
+ <summary>
+ Class XSLHelper used for translating XSL Files
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Utils.XSLHelper.Translate(System.Object)">
+ <summary>
+ Translates the specified string.
+ </summary>
+ <param name="str">The string.</param>
+ <returns>System.String.</returns>
+</member>
+<member name="T:FLEXYGO.UI.Upload">
+ <summary>
+ Class Upload
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.Upload.Upload(System.String,System.String,System.String)">
+ <summary>
+ Upload.
+ </summary>
+ <param name="Base64">Base64.</param>
+ <param name="Name">Name.</param>
+ <param name="Path">Path.</param>
+ <returns>UploadResult.</returns>
+</member>
+<member name="M:FLEXYGO.UI.Upload.GetConfig(System.String,System.String,System.String,System.String)">
+ <summary>
+ Get Config.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectWhere">Object Where.</param>
+ <param name="ModuleName">Module Name.</param>
+ <param name="PageName">Page Name.</param>
+ <returns>UploadConfig.</returns>
+ 
+</member>
+<member name="T:FLEXYGO.UI.Upload.UploadConfig">
+ <summary>
+ Class UploadConfig.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Upload.UploadConfig.cssText">
+ <summary>
+ The CSS text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Upload.UploadConfig.scriptText">
+ <summary>
+ The script text
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Upload.UploadConfig.path">
+ <summary>
+ The path
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.Upload.UploadResult">
+ <summary>
+ Class UploadResult.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Upload.UploadResult.path">
+ <summary>
+ The path
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.Upload.UploadResult.uploadError">
+ <summary>
+ The upload error
+ </summary>
+</member>
+<member name="T:FLEXYGO.UI.EasyLine">
+ <summary>
+ Class EasyLine
+ </summary>
+</member>
+<member name="M:FLEXYGO.UI.EasyLine.GetHTML(System.String,System.String,System.String,System.String)">
+ <summary>
+ Returns an EasyLineHelper.
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="PageName">The page PageName.</param>
+ <returns>EasyLineHelper.</returns>
+</member>
+<member name="M:FLEXYGO.UI.EasyLine.GetSQLData(FLEXYGO.Objects.EntityObject,FLEXYGO.Environment.ModuleDefinition)">
+ <summary>
+ Gets the SQL value.
+ </summary>
+ <param name="eo">The EntityObject.</param>
+ <param name="modDef">The module definition.</param>
+ <returns>Datatable with the line values</returns>
+ <exception cref="T:System.Exception">
+ No SQL Sentence in EasyLine
+ or
+ Error Creating EasyLine Value
+ </exception>
+</member>
+<member name="T:FLEXYGO.UI.EasyLine.EasyLineHelper">
+ <summary>
+ Class EasyLineHelper.
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyLine.EasyLineHelper.Data">
+ <summary>
+ The value
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyLine.EasyLineHelper.Options">
+ <summary>
+ The options
+ </summary>
+</member>
+<member name="F:FLEXYGO.UI.EasyLine.EasyLineHelper.Buttons">
+ <summary>
+ The buttons
+ </summary>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
+</members>
+</doc>

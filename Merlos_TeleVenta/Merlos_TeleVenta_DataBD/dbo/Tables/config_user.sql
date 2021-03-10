@@ -1,8 +1,0 @@
-﻿CREATE TABLE [dbo].[config_user](
-	[usuario] [char](20) NOT NULL,
-	[modif_filtros] [bit] NULL,
-	CONSTRAINT [PK_config_user] PRIMARY KEY CLUSTERED 
-(
-	[usuario] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
