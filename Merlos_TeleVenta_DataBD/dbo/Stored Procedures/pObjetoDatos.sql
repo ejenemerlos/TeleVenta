@@ -17,6 +17,10 @@ BEGIN TRY
 		set @respuesta = (select * from inci_art for JSON AUTO) 
 	END
 
+	if @objeto='Tarifas' BEGIN
+		set @respuesta = (select CODIGO, NOMBRE from vTarifas for JSON AUTO) 
+	END
+
 	select isnull(@respuesta,'') as JAVASCRIPT
 	RETURN -1
 END TRY

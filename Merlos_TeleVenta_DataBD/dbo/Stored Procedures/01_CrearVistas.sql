@@ -75,7 +75,7 @@ BEGIN TRY
 
 
 
-	-- Vista vClientes
+	-- Vista vClientes  --  también en Script.PreDeployment1.sql
 	IF EXISTS (select * FROM sys.views where name = 'vClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vClientes]
@@ -102,11 +102,17 @@ BEGIN TRY
 	isnull(tiva.RECARG,0) as recargoIVA,
 	C.RUTA, r.NOMBRE as nRuta,
 	mLat.VALOR as LATITUD, mLon.VALOR as LONGITUD,
+' set @Sentencia = @Sentencia + '
 	case when 
 		isnull(ca.lunes,0)=0 and isnull(ca.martes,0)=0 and isnull(ca.miercoles,0)=0 and isnull(ca.jueves,0)=0 and isnull(ca.viernes,0)=0 
 		and isnull(ca.sabado,0)=0 and isnull(ca.domingo,0)=0 
 	then 0 else 1 end as horarioAsignado,
-	isnull(cg.gestor,'''') as gestor, isnull(cg.nombreGestor,'''') as nGestor, isnull(cg.usuarioGestor,'''') as uGestor 
+
+	isnull((select * from cliente_gestor where cliente collate SQL_Latin1_General_CP1_CI_AS=C.codigo 
+	for JSON AUTO,INCLUDE_NULL_VALUES),''[]'') as gestores
+
+	, isnull(o.observaciones,'''') as ObservacionesInternas
+
 	FROM '+@GESTION+'.DBO.CLIENTES C 
 	LEFT JOIN '+@GESTION+'.dbo.telf_cli tc ON tc.CLIENTE = C.CODIGO AND tc.ORDEN = 1 
 	LEFT JOIN '+@GESTION+'.dbo.CONTlf_CLI ct ON ct.CLIENTE = C.CODIGO AND ct.PREDET = 1 
@@ -119,7 +125,7 @@ BEGIN TRY
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLat ON mLat.CODIGO=C.CODIGO and mLat.FICHERO=''CLIENTES'' and mLat.CAMPO=''LAT''
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLon ON mLon.CODIGO=C.CODIGO and mLon.FICHERO=''CLIENTES'' and mLon.CAMPO=''LGT''
 	LEFT JOIN clientes_adi ca on ca.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
-	LEFT JOIN cliente_gestor cg on cg.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
+	LEFT JOIN ObservacionesInternas o on o.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
 	WHERE LEFT(C.CODIGO,3)=''430''
 	'
 	exec(@Sentencia)
@@ -474,20 +480,23 @@ BEGIN TRY
 
 
 
-	-- Vista vArticulos
+	-- Vista vArticulos  --  también en Script.PreDeployment1.sql
 	IF EXISTS (select * FROM sys.views where name = 'vArticulos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vArticulos]
 	as
 	select replace(cast(art.CODIGO COLLATE Modern_Spanish_CI_AI as varchar(50)),space(1),'''') as CODIGO
 			, replace(art.NOMBRE,''"'',''-'') COLLATE Modern_Spanish_CI_AI as NOMBRE
 			, art.FAMILIA, art.MARCA, art.MINIMO
-			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET,
-			art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1,
-			art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP, 
-			art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1 
+			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET
+			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
+			, art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
+			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, coalesce(pvp.pvp,0.00) as pvp
+			, isnull(st.StockVirtual,0) as StockVirtual
 	from '+@GESTION+'.[DBO].articulo art
+	left join vStock st on st.ARTICULO=art.CODIGO
+	left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
+	and pvp.tarifa collate Modern_Spanish_CS_AI=(select TarifaMinima from Configuracion_SQL)
 	' 
 	exec(@Sentencia)
 	select  'vArticulos'
@@ -629,37 +638,37 @@ BEGIN TRY
 	-- 09/07/2020 - Elías Jené: añadir según número de años seleccionados
 	set @controlAnys = 0
 	if @NumEjer>0 BEGIN
-			while @controlAnys<@NumEjer BEGIN
-					set @controlAnys = @controlAnys + 1
-					set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
-					set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
-					if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
-						--26/03/2020 harold si existe el año anterior iniciamos consulta desde allí
-						set @Sentencia = @Sentencia + 'SELECT CAST(previ.PERIODO AS VARCHAR(4))+previ.empresa+CAST(previ.CLIENTE AS VARCHAR)+replace(previ.FACTURA,space(1),''0'')
-							+replace(str(previ.ORDEN,4),space(1),''0'') COLLATE Modern_Spanish_CI_AI as IDGIRO, CAST(previ.PERIODO AS VARCHAR(4)) AS EJER, 
-							previ.EMPRESA collate Modern_Spanish_CI_AI as EMPRESA, previ.CLIENTE, CAST(previ.PERIODO AS VARCHAR(4))+previ.EMPRESA+replace(CAST(previ.FACTURA AS VARCHAR(10)),
-							space(1),''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA, previ.FACTURA AS NUMFRA, previ.ORDEN, previ.EMISION, previ.VENCIM, 
-							CAST(ROUND(previ.IMPORTE, 2) AS NUMERIC (18,2)) AS IMPORTE, previ.BANCO, previ.COBRO, previ.IMPAGADO, 
-							CAST(CASE WHEN previ.BANCO = '''' AND previ.COBRO IS NULL THEN 0 ELSE 1 END AS BIT) AS PAGADO,
-							previ.FACTURA as ''Número'',
-							convert(varchar(10), previ.EMISION, 103) as ''Fecha de emisión'',
-							convert(varchar(10), previ.VENCIM, 103) as ''Fecha de vencimiento'',
-							previ.IMPORTE as ''Importe total'',
-							vcli.NOMBRE as nCliente,
-							ca.bultos
-						FROM '+@COMUN+'.dbo.PREVI_CL previ
-						LEFT JOIN vClientes vcli on vcli.CODIGO=previ.CLIENTE
-						left join (select ca.empresa, ca.factura, sum(convert(numeric(10,5),ee.bultos)) as bultos 
-						from '+@GESTIONAnt+'.dbo.c_albven ca 
-						inner join '+@GESTIONAnt+'.dbo.envioeti ee on ee.empresa=ca.empresa and ee.numero=ca.numero and ee.letra=ca.letra 
-						where ca.factura!='''' group by ca.empresa, ca.factura) ca on ca.empresa=previ.empresa and ca.factura=previ.factura
-						WHERE LEFT(previ.CLIENTE,3)=''430''
+		while @controlAnys<@NumEjer BEGIN
+			set @controlAnys = @controlAnys + 1
+			set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
+			set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
+			if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
+				--26/03/2020 harold si existe el año anterior iniciamos consulta desde allí
+				set @Sentencia = @Sentencia + 'SELECT CAST(previ.PERIODO AS VARCHAR(4))+previ.empresa+CAST(previ.CLIENTE AS VARCHAR)+replace(previ.FACTURA,space(1),''0'')
+					+replace(str(previ.ORDEN,4),space(1),''0'') COLLATE Modern_Spanish_CI_AI as IDGIRO, CAST(previ.PERIODO AS VARCHAR(4)) AS EJER, 
+					previ.EMPRESA collate Modern_Spanish_CI_AI as EMPRESA, previ.CLIENTE, CAST(previ.PERIODO AS VARCHAR(4))+previ.EMPRESA+replace(CAST(previ.FACTURA AS VARCHAR(10)),
+					space(1),''0'') COLLATE Modern_Spanish_CI_AI AS IDFACTURA, previ.FACTURA AS NUMFRA, previ.ORDEN, previ.EMISION, previ.VENCIM, 
+					CAST(ROUND(previ.IMPORTE, 2) AS NUMERIC (18,2)) AS IMPORTE, previ.BANCO, previ.COBRO, previ.IMPAGADO, 
+					CAST(CASE WHEN previ.BANCO = '''' AND previ.COBRO IS NULL THEN 0 ELSE 1 END AS BIT) AS PAGADO,
+					previ.FACTURA as ''Número'',
+					convert(varchar(10), previ.EMISION, 103) as ''Fecha de emisión'',
+					convert(varchar(10), previ.VENCIM, 103) as ''Fecha de vencimiento'',
+					previ.IMPORTE as ''Importe total'',
+					vcli.NOMBRE as nCliente,
+					ca.bultos
+				FROM '+@COMUN+'.dbo.PREVI_CL previ
+				LEFT JOIN vClientes vcli on vcli.CODIGO=previ.CLIENTE
+				left join (select ca.empresa, ca.factura, sum(convert(numeric(10,5),ee.bultos)) as bultos 
+				from '+@GESTIONAnt+'.dbo.c_albven ca 
+				inner join '+@GESTIONAnt+'.dbo.envioeti ee on ee.empresa=ca.empresa and ee.numero=ca.numero and ee.letra=ca.letra 
+				where ca.factura!='''' group by ca.empresa, ca.factura) ca on ca.empresa=previ.empresa and ca.factura=previ.factura
+				WHERE LEFT(previ.CLIENTE,3)=''430''
 						
-						UNION
+				UNION
 
-						'
-						end
-				end
+				'
+			end
+		end
 	end 
 
 
@@ -804,11 +813,9 @@ BEGIN TRY
 
 
 
-	-- Vista vGiros
+	-- Vista vGiros  --  también en Script.PreDeployment1.sql
 	IF EXISTS (select * FROM sys.views where name = 'vGiros')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-
-	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[vGiros]
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vGiros]
 	AS
 	SELECT 
 		CAST(previ.PERIODO AS VARCHAR(4))+previ.empresa+CAST(previ.CLIENTE AS VARCHAR)+replace(previ.FACTURA,space(1),''0'')
@@ -834,7 +841,7 @@ BEGIN TRY
 		vcli.RUTA
 	FROM '+@COMUN+'.dbo.PREVI_CL previ
 	LEFT JOIN vClientes vcli on vcli.CODIGO=previ.CLIENTE
-	WHERE CAST(CASE WHEN previ.BANCO = '''' AND previ.COBRO IS NULL THEN 0 ELSE 1 END AS BIT)=0  AND LEFT(previ.CLIENTE,3)=''430'' and previ.VENCIM>dateadd(year,-1,getdate())
+	WHERE CAST(CASE WHEN previ.BANCO = '''' AND previ.COBRO IS NULL THEN 0 ELSE 1 END AS BIT)=0  AND LEFT(previ.CLIENTE,3)=''430''
 	'
 	exec(@Sentencia)
 	select  'vGiros'
@@ -875,13 +882,23 @@ BEGIN TRY
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vOfertas]
 	AS
-	SELECT REPLACE(TIPO+CLIENTE+ARTICULO+FAMILIA+SUBFAMILIA+STR(LINEA,5),SPACE(1),'''') AS IDOFERTA,TIPO, CLIENTE, ARTICULO, FAMILIA, SUBFAMILIA, MARCA, LINDES, LINEA, FECHA_IN, FECHA_FIN, UNI_INI, UNI_FIN, PVP, DTO1, DTO2, MONEDA, TARIFA
+	SELECT REPLACE(TIPO+CLIENTE+ARTICULO+FAMILIA+SUBFAMILIA+STR(LINEA,5),SPACE(1),'''') AS IDOFERTA,TIPO, CLIENTE, ARTICULO
+	, FAMILIA, SUBFAMILIA, MARCA, LINDES, LINEA, FECHA_IN, FECHA_FIN, UNI_INI, UNI_FIN, PVP, DTO1, DTO2, MONEDA, TARIFA
 	FROM (
-	SELECT ''CLIENTE'' AS TIPO, CLIENTE, ARTICULO, FAMILIA, SUBFAMILIA, MARCA, '''' AS LINDES, LINIA AS LINEA, FECHA_IN, FECHA_FIN, UNI_MIN AS UNI_INI, (CASE WHEN UNI_MAX=0 THEN 999999.99 ELSE UNI_MAX END) AS UNI_FIN, PVP, DTO1, DTO2, MONEDA, '''' AS TARIFA FROM '+@GESTION+'.DBO.DESCUEN
-	UNION 
-	SELECT ''ARTICULO'' AS TIPO, '''' AS CLIENTE, ARTICULO, '''' AS FAMILIA, '''' AS SUBFAMILIA, '''' AS MARCA, '''' AS  LINDES, LINEA, FECHA_IN, FECHA_FIN , DESDE AS UNI_INI, (CASE WHEN HASTA=0 THEN 999999.99 ELSE HASTA END) AS UD_FIN, PVP, DESCUENTO AS DTO1, 0 AS DTO2, MONEDA, TARIFA FROM '+@GESTION+'.DBO.OFERTAS
-	UNION 
-	SELECT ''LINDESC'' AS TIPO, C.CODIGO AS CLIENTE, D.ARTICULO, D.FAMILIA, D.SUBFAMILIA, D.MARCA, D.CODIGO AS LINDES, D.LINEA, D.FECHA_IN, D.FECHA_FIN, D.UNI_INI, D.UNI_FIN, D.PVP, D.DTO1, D.DTO2, D.MONEDA, '''' AS TARIFA FROM '+@GESTION+'.DBO.CLIENTES C INNER JOIN '+@GESTION+'.DBO.LIN_DESC D ON D.CODIGO=C.LIN_DES
+		SELECT ''CLIENTE'' AS TIPO, CLIENTE, ARTICULO, FAMILIA, SUBFAMILIA, MARCA, '''' AS LINDES, LINIA AS LINEA
+			, FECHA_IN, FECHA_FIN, UNI_MIN AS UNI_INI, (CASE WHEN UNI_MAX=0 THEN 999999.99 ELSE UNI_MAX END) AS UNI_FIN
+			, PVP, DTO1, DTO2, MONEDA, '''' AS TARIFA 
+		FROM '+@GESTION+'.DBO.DESCUEN
+		UNION 
+		SELECT ''ARTICULO'' AS TIPO, '''' AS CLIENTE, ARTICULO, '''' AS FAMILIA, '''' AS SUBFAMILIA, '''' AS MARCA, '''' AS  LINDES
+			, LINEA, FECHA_IN, FECHA_FIN , DESDE AS UNI_INI, (CASE WHEN HASTA=0 THEN 999999.99 ELSE HASTA END) AS UD_FIN
+			, PVP, DESCUENTO AS DTO1, 0 AS DTO2, MONEDA, TARIFA 
+		FROM '+@GESTION+'.DBO.OFERTAS
+		UNION 
+		SELECT ''LINDESC'' AS TIPO, C.CODIGO AS CLIENTE, D.ARTICULO, D.FAMILIA, D.SUBFAMILIA, D.MARCA, D.CODIGO AS LINDES
+			, D.LINEA, D.FECHA_IN, D.FECHA_FIN, D.UNI_INI, D.UNI_FIN, D.PVP, D.DTO1, D.DTO2, D.MONEDA, '''' AS TARIFA 
+		FROM '+@GESTION+'.DBO.CLIENTES C 
+		INNER JOIN '+@GESTION+'.DBO.LIN_DESC D ON D.CODIGO=C.LIN_DES
 	) O 
 	'
 	exec(@Sentencia)

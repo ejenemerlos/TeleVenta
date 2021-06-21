@@ -1,4 +1,9 @@
-<div class="tvTitulo esq1100">Pedido</div>
+<div class="tvTitulo esq1100">Pedido
+	<span id="spNoCobrarPortes" class="flR">
+		<img src="" id="imgPedidoNoCobrarPortes" style="width:30px; cursor:pointer;" onclick="PedidoNoPortes()">
+		&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>
+	</span>
+</div>
 <div id="dvDatosDelClienteMin"></div>
 <div id="dvPedido" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
 	<span id="spanBotoneraPag" class="vaM">
@@ -32,3 +37,12 @@
 		<div id="dvPedidoDetalle"></div>
 	</div>
 </div>
+
+<script>	
+	if(PedidoNoCobrarPortes===1){ $("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }else{ $("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
+	
+	function PedidoNoPortes(){
+		if(PedidoNoCobrarPortes===1){ PedidoNoCobrarPortes=0; $("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
+		else{ PedidoNoCobrarPortes=1; $("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }
+	}
+</script>

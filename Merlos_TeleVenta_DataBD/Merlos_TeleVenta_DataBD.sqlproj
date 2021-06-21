@@ -10,8 +10,7 @@
     <ProjectGuid>{3fc7451a-4b44-4a23-8560-8f7a74cfc5e0}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>Merlos_TeleVenta_DataBD</RootNamespace>
     <AssemblyName>Merlos_TeleVenta_DataBD</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
@@ -49,7 +48,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -68,7 +66,6 @@
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Stored Procedures\sp_generate_merge.sql" />
-    <None Include="scripts\data\merlos.sql" />
     <Build Include="dbo\Functions\funPrintError.sql" />
     <Build Include="dbo\Stored Procedures\02_CrearStoreds.sql" />
     <Build Include="dbo\Stored Procedures\pBDEW.sql" />
@@ -119,11 +116,21 @@
     <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
     <Build Include="dbo\Views\vIncidenciasArticulos.sql" />
     <Build Include="dbo\Views\vIncidenciasClientes.sql" />
+    <Build Include="dbo\Tables\ObservacionesInternas.sql" />
+    <Build Include="dbo\Tables\llamadasOD.sql" />
+    <Build Include="dbo\Tables\inci_CliArt.sql" />
+    <Build Include="dbo\Tables\inciCliPed.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="flxDB_Data.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="scripts\Script.PreDeployment1.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="scripts\data\merlos_PreDeployment_1.sql" />
   </ItemGroup>
 </Project>

@@ -20,6 +20,22 @@ USING (VALUES
 
 ))
 ',1)
+ ,(N'FFE29BE5-BCD5-46DB-ABB8-52F076910A36',N'Pedidos',N'Pedidos',0,0,N'Text',1,NULL,N'( EXISTS (
+ SELECT * FROM vPedidos FlxTblFilter 
+
+ WHERE ( [vPedidos].[LETRA]  LIKE {~@Param1|22|4|FindString~} 
+ or  CONVERT(varchar,[vPedidos].[sqlFecha]) Like {~@Param2|16|200|FindString~} 
+ or  [vPedidos].[FECHA]  LIKE {~@Param3|0|12|FindString~} 
+ or  [vPedidos].[USUARIO]  LIKE {~@Param4|22|27|FindString~} 
+ or  [vPedidos].[nDireccion]  LIKE {~@Param5|22|82|FindString~} 
+ or  [vPedidos].[nVendedor]  LIKE {~@Param6|22|32|FindString~} 
+ or  [vPedidos].[nCliente]  LIKE {~@Param7|22|82|FindString~} 
+ or  [vPedidos].[numero]  LIKE {~@Param8|22|12|FindString~} 
+)
+ AND  [vPedidos].[IDPEDIDO] = [FlxTblFilter].[IDPEDIDO] 
+
+))
+',1)
  ,(N'C70909D0-5749-4A5E-9043-6473BB71CBC4',N'inciCLIs',N'inciCLI',0,0,N'Properties',1,NULL,NULL,1)
  ,(N'1F2FD612-2541-4E30-AD70-A9219B157348',N'inciARTs',N'inciArts',0,0,N'Properties',1,NULL,NULL,1)
 ) AS Source ([SearchId],[ObjectName],[Name],[Generic],[IsDefault],[Type],[Order],[UserId],[SQLSentence],[OriginId])

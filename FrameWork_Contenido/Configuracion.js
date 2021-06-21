@@ -26,15 +26,7 @@
 			</td>
 		</tr>
 		<tr>
-			<th>Serie Pedidos</th>
-			<td>
-				&nbsp;&nbsp;
-				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click('Serie'); event.stopPropagation();" readonly>
-				<div id="dvSerieListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
-			</td>
-		</tr>
-		<tr>
+			<tr>
 			<th>Meses de consumo</th>
 			<td>
 				&nbsp;&nbsp;
@@ -44,6 +36,35 @@
 				&nbsp;<div class="icoMas img20" onclick="masmenos(true,'inpMesesConsumo',1,12)"></div>
 				&nbsp;&nbsp;<span class="MIbotonGreen esq05" onclick="asignarMesesConsumo()">asignar</span>
 				<span id="spanAsignacionAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>
+			<th>Serie Pedidos</th>
+			<td>
+				&nbsp;&nbsp;
+				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click('Serie'); event.stopPropagation();" readonly>
+				<div id="dvSerieListado" class="dvListaDatos"></div>
+				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>		
+		<tr>
+			<th>Tarifa mínima</th>
+			<td>
+				&nbsp;&nbsp;
+				<input type="text" id="inpTarifaMinima" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click('TarifaMinima'); event.stopPropagation();" readonly>
+				<div id="dvTarifaMinimaListado" class="dvListaDatos"></div>
+				<span id="spanAsignacionTarifaMinimaAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td></td>
+		</tr>
+		<tr>
+			<th style="height:20px;"></th>
+			<td>
+				<img src="./Merlos/images/BtnDesO.png" id="imgNoCobrarPortes" class="OpcionIO"> No Cobrar Portes
+				&nbsp;&nbsp;&nbsp;
+				<img src="./Merlos/images/BtnDesO.png" id="imgMostrarStockVirtual" class="OpcionIO"> Mostrar Stock Virtual
 			</td>
 		</tr>
 	</table>
@@ -78,7 +99,8 @@
 	abrirVelo(veloContenido,400);
 	
 	var SeriesCargadas = false;
-	var elementosDIV = ["dvSerieListado"];
+	var TarifasCargadas = false;
+	var elementosDIV = ["dvSerieListado","dvTarifaMinimaListado"];
 	
 	$(document).on("click",function(e) {
 		for(var i in elementosDIV){
@@ -183,12 +205,13 @@
 						limpiarLaCache();
 						//$("#mainNav").show();
 						flexygo.nav.execProcess('GoHome','','',null,null,'current',false,$(this));
-					}else{ alert('Error S.P.!!!\n'+ret); } }, false);					
-			}else{ alert('Error S.P.!!!\n'+ret); } 			
+					}else{ alert('Error S.P. pConfigBBDD!!!\n'+ret); } }, false);					
+			}else{ alert('Error S.P. pConfiguracionLanzar!!!\n'+ret); } 			
 		}, false);
 	}
 	
 	function verificarVersionEW(comun){
+		/***** */ lanzarConfiguracion(true); return; /****** */
 		flexygo.nav.execProcess('pVersiones','',null,null, 
 		[
 		 {'Key':'modo','Value':'EW'}
@@ -202,7 +225,7 @@
 				alert("Esta versión de Eurowin\n"
 					 +"no es compatible con este producto!"); 
 			}
-		}else{ alert('Error S.P.!!!\n'+ret); } }, false);
+		}else{ alert('Error S.P. pVersiones!!!\n'+ret); } }, false);
 	}		
 		
 	function tAhora() {	var d = new Date();	var n = d.getTime(); return n; }	
@@ -233,23 +256,44 @@
 	
 	function asignarMesesConsumo(){
 		MesesConsumo = $("#inpMesesConsumo").val();
-		flexygo.nav.execProcess('pConfiguracion','',null,null, 
-		[{'Key':'modo','Value':'MesesConsumo'},{'Key':'valor','Value':$("#inpMesesConsumo").val()}], 'modal640x480', false, $(this), function(ret){if(ret){ 
+		var parametros = '{"modo":"MesesConsumo","valor":"'+$("#inpMesesConsumo").val()+'"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
 			cargarConfiguracion(); 
 			$("#spanAsignacionAviso").fadeIn(); setTimeout(function(){ $("#spanAsignacionAviso").fadeOut(); },2000);
-		}else{ alert('Error S.P. pConfiguracion!!!\n'+ret); } }, false);
+		}else{ alert('Error S.P. pConfiguracion - MesesConsumo!!!\n'+ret); } }, false);
 	}
 	
 	function cargarConfiguracion(){
-		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'modo','Value':'lista'}],'modal640x480', false, $(this), function(ret){if(ret){
+		var parametros = '{"modo":"lista"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			esperarCargaSeries(js.ConfSQL[0].TVSerie);
+			esperarCargaTarifas(js.ConfSQL[0].TVTarifa);
 			$("#inpMesesConsumo").val(js.ConfSQL[0].MesesConsumo); 
 			$("#dvConfiguracion").fadeIn();
 			cargarSeries();
+			cargarTarifas();
+			// Interruptores
+			for(var i in js.IO){
+				if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; $("#img"+js.IO[i].nombre).attr("src",BtnDesO); }
+				else{window["Conf"+js.IO[i].nombre]=1; $("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
+			}
+			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
 			cerrarVelo();
-		}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
+			limpiarLaCache();
+		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
 	}
+	
+	function reconfigurarElPortal(){
+		veloContenido =  '<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">'
+						+'<br><br><span class="info">reconfigurando, espera, por favor...</span>';
+		abrirVelo(veloContenido,400);
+		var parametros = '{"modo":"reconfigurar"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+			if(ret){ location.reload();  }
+		}, false);
+	}
+	
 	
 	function cargarSeries(){
 		var contenido = "";
@@ -268,21 +312,55 @@
 	}
 	function asignarSerie(serie){
 		SERIE = serie;
-		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'modo','Value':'TVSerie'},{'Key':'valor','Value':serie}],'modal640x480', false, $(this), function(ret){if(ret){
+		var parametros = '{"modo":"TVSerie","valor":"'+serie+'"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
 			$("#inpSerie").val(serie);
 			$("#dvSerieListado").stop().slideUp();
 			$("#spanAsignacionSerieAviso").fadeIn(); 
 			limpiarLaCache();
 			setTimeout(function(){ $("#spanAsignacionSerieAviso").fadeOut(); },2000);
-		}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
+		}else{ alert("Error SP: pConfiguracion - TVSerie!!!\n"+ret); }}, false);
 	}
 	
-	function reconfigurarElPortal(){
-		veloContenido =  '<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">'
-						+'<br><br><span class="info">reconfigurando, espera, por favor...</span>';
-		abrirVelo(veloContenido,400);
-		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'modo','Value':'reconfigurar'}],'modal640x480', false, $(this), function(ret){
-			if(ret){ location.reload();  }
-		}, false);
+	function cargarTarifas(){
+		var contenido = "";
+		flexygo.nav.execProcess('pObjetoDatos','',null,null,[{'Key':'elJS','Value':'{"objeto":"Tarifas"}'}], 'modal640x480', false, $(this), function(ret){if(ret){
+			var js = JSON.parse(ret.JSCode);
+			if(js.length>0){
+				for(var i in js){ contenido += "<div class='dvLista' onclick='asignarTarifa(\""+js[i].CODIGO+"\")'>"+js[i].CODIGO+" - "+js[i].NOMBRE+"</div>"; }
+			}else{ contenido="<div style='color:red;'>Sin resultados!</div>"; }
+			$("#dvTarifaMinimaListado").html(contenido);
+			TarifasCargadas=true;
+		}else{ alert('Error S.P. pTarifas!!!\n'+ret); } }, false);
+	}
+	function esperarCargaTarifas(tarifa){
+		if(TarifasCargadas){ $("#inpTarifaMinima").val(tarifa); }
+		else{ setTimeout(function(){ esperarCargaTarifas(tarifa); },200); }
+	}
+	function asignarTarifa(tarifa){
+		TARIFA = tarifa;
+		var parametros = '{"modo":"TVTarifa","valor":"'+tarifa+'"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
+			$("#inpTarifaMinima").val(tarifa);
+			$("#dvTarifaMinimaListado").stop().slideUp();
+			$("#spanAsignacionTarifaAviso").fadeIn(); 
+			limpiarLaCache();
+			setTimeout(function(){ $("#spanAsignacionTarifaAviso").fadeOut(); },2000);
+		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
+	}
+
+	
+	$(".OpcionIO").off().on("click",function(){
+		var v = $(this).attr("id");
+		var nombre = v.split("img")[1];
+		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; $("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; $("#"+v).attr("src",BtnDesO); }
+		ConfiguracionDelPortal('actualizar',nombre,eval(window["Conf"+nombre]));
+	});
+	
+	function ConfiguracionDelPortal(modo,nombre,valor){
+		var parametros = '{"modo":"actualizar","nombre":"'+nombre+'","valor":"'+valor+'"}';
+		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){
+			cargarConfiguracion(); 
+		}else{ alert('Error S.P. pConfiguracion -actualizar !!!\n'+ret); } }, false);
 	}
 </script>

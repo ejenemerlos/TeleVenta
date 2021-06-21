@@ -292,6 +292,7 @@ BEGIN TRY
 			, @FAMILIA    char(4) = ''''
 			, @OBSERVACIO varchar(8000)
 			, @LINEAS varchar(max)
+			, @NoCobrarPortes bit
 			, @UserLogin  varchar(50)
 			, @UserID	  varchar(50)=''''
 			, @UserName	  varchar(50)=''''
@@ -339,6 +340,7 @@ BEGIN TRY
 	SET @FAMILIA	= @Values.value(''(/Row/Property[@Name=''''FAMILIA'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @LINEAS		= @Values.value(''(/Row/Property[@Name=''''LINEAS'''']/@Value)[1]''	, ''varchar(max)'')
+	SET @NoCobrarPortes = @Values.value(''(/Row/Property[@Name=''''NoCobrarPortes'''']/@Value)[1]'', ''bit'')
 
 	SET @UserLogin			= @ContextVars.value(''(/Row/Property[@Name=''''currentUserLogin'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @UserID				= @ContextVars.value(''(/Row/Property[@Name=''''currentUserId'''']/@Value)[1]''		, ''varchar(50)'')
@@ -498,12 +500,54 @@ BEGIN TRY
 			if len(@minutos)=1 set @minutos = ''0''+@minutos
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
-			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	
-			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
-				values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
+			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	BEGIN
+				if not exists (select * from TeleVentaIncidencias 
+								where id=@IdTeleVenta and gestor=@currentReference
+								and tipo=''Articulo'' and incidencia=@inciArt
+								and cliente=@cliente
+								and articulo=@jsArticulo
+				) BEGIN
+					insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+					values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
+				END
+				ELSE BEGIN 
+					update TeleVentaIncidencias set observaciones=@obsArt
+					where id=@IdTeleVenta and gestor=@currentReference
+					and tipo=''Articulo'' and incidencia=@inciArt
+					and cliente=@cliente
+					and articulo=@jsArticulo
+				END
+			END
 
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
+' set  @Sentencia = @Sentencia + '
+
+		-- No Cobrar Portes
+		if @NoCobrarPortes=1 BEGIN
+			declare @tbTemp varchar(1000)= concat(''##tbTmp''
+			,replace(replace(replace(replace(replace(convert(varchar,getdate(),121),'' '',''''),''/'',''''),'':'',''''),''.'',''''),''-'',''''))
+
+			declare @CAMPOS char(8) = (select CAMPOS from Configuracion_SQL)
+			exec(''
+				IF OBJECT_ID(''''tempdb..''+@tbTemp+'''''') IS NOT NULL BEGIN drop table ''+@tbTemp+'' END
+				IF EXISTS (SELECT * FROM sysdatabases WHERE (name = ''''''+@CAMPOS+'''''')) BEGIN
+					IF EXISTS (select * from [''+@CAMPOS+''].INFORMATION_SCHEMA.TABLES where TABLE_NAME=''''c_pediveew'''') BEGIN
+						IF NOT EXISTS (select * from [''+@CAMPOS+''].INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=''''c_pediveew'''' 
+										and COLUMN_NAME=''''EWNOPORT'''') BEGIN
+							ALTER TABLE [''+@CAMPOS+''].dbo.c_pediveew ADD EWNOPORT bit default(0)
+						END 
+						select 1 as insertar into ''+@tbTemp+''
+					END 
+				END
+			'')	
+			exec(''	
+				if (select insertar from ''+@tbTemp+'')=1
+				INSERT INTO [''+@CAMPOS+''].dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWNOPORT) 
+				VALUES (''''''+@EJER+'''''',''''''+@EMPRESA+'''''',''''''+@codigo+'''''',''''''+@letra+'''''',1)
+				drop table ''+@tbTemp+''
+			'')
+		END
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO

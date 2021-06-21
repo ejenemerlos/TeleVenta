@@ -8,23 +8,30 @@ USING (VALUES
 	<table>
 		<tr>
 			<td><span class="flx-icon icon-vcard-2 azul3"></span></td>
-			<td colspan="3">
+			<td>
               <span class="azul3" style="font:14px arial;">Código:</span>
               <span id="spanClienteCodigo" class="azul3" style="font:14px arial;">{{CODIGO}}</span>
               <span id="spanClienteBaja" style="margin-left:30px; font:bold 14px arial; color:red;" class="{{BAJA|switch:[0:inv]}}">BAJA: {{FechaBaja}}</span>
             </td>
+			<td id="tdGestores" rowspan="6" style="vertical-align:top; background:#EDEFF3; padding:10px; box-sizing:border-box;">
+              <span class="azul3" style="font:14px arial;">Gestores</span>
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  <span id="btnrAsignarGestor" class="flR"><span class="MIbotonBlue ml20" onclick="asignarGestor(); event.stopPropagation();">Asignar Gestor</span></span>
+			  <span id="btnAsignarGestorAV" class="ml20 avTXT inv"></span>			  
+			  <br><br><div id="dvGestoresCliente" style="max-height:60px; overflow:hidden; overflow-y:auto;"></div>
+			</td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-man azul2"></span></td>
-			<td colspan="3"><span class="azul2" style="font:bold 16px arial;">{{NOMBRE}}</span></td>
+			<td><span class="azul2" style="font:bold 16px arial;">{{NOMBRE}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-map-point"></span></td>
-			<td colspan="3"><span style="font:12px arial;">{{DIRECCION}}</span></td>
+			<td><span style="font:12px arial;">{{DIRECCION}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="fa fa-map-o"></span></td>
-			<td colspan="3"><span style="font:12px arial;">{{CP}} {{POBLACION}} {{PROVINCIA}}</span></td>
+			<td><span style="font:12px arial;">{{CP}} {{POBLACION}} {{PROVINCIA}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-phone"></span></td>
@@ -33,14 +40,6 @@ USING (VALUES
 		<tr>
 			<td><span class="flx-icon icon-email"></span></td>
 			<td><span style="font:12px arial;">{{EMAIL}}</span></td>
-			<td style="text-align:right;"><span class="{{gestor|switch:[:inv]}}"><span  class="azul3" style="font:14px arial;">Gestor: </span> ({{gestor}}) {{nGestor}}</span></td>
-			<td style="text-align:right;">
-				<span id="btnrAsignarGestor">
-					<span class="MIbotonBlue ml20" onclick="asignarGestor(); event.stopPropagation();">Asignar Gestor</span>
-					<span class="MIbotonBlue ml20 {{gestor|switch:[:inv]}}" onclick="asignarGestor(''quitarGestor'');  event.stopPropagation();">Quitar Gestor</span>
-				</span>
-				<span id="btnAsignarGestorAV" class="ml20 avTXT inv"></span>
-			</td>
 		</tr>
 	</table>
 </div>
@@ -195,6 +194,23 @@ USING (VALUES
 		}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''usuariosTV'']").css("margin-top","-180px").stop().slideDown(); }		
 	}
 	
+	function cargarGestoresCliente(gestoresDelCliente){
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#dvGestoresCliente").html("");
+		var contenido = "";
+		for(var i in gestoresDelCliente){ contenido +="<div>"
+													+"	<div class=''img16 icoAspa'' "
+													+"	onclick=''asignarGestor(\"quitarGestor\",\""+gestoresDelCliente[i].gestor+"\",\""+gestoresDelCliente[i].nombreGestor+"\")''></div> "
+													+"	&nbsp;&nbsp;&nbsp; "
+													+	gestoresDelCliente[i].gestor+" - "+gestoresDelCliente[i].nombreGestor
+													+"</div>"; }
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#dvGestoresCliente").html(contenido);
+	}
+	
+	
+	var gestoresDelCliente = "";
+	try{ gestoresDelCliente = JSON.parse(''{{gestores}}'');}catch{} 
+	if(gestoresDelCliente.length>0){ cargarGestoresCliente(gestoresDelCliente); }
+	
 	cargarTablasDeLlamadas();
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1)
  ,(N'ClienteDefaultList',N'Cliente',N'list',N'Cliente Default List',N'  <tr onclick="flexygo.nav.openPage(''view'',''Cliente'',''CODIGO=\''{{CODIGO}}\'''',''{\''CODIGO\'':\''{{CODIGO}}\''}'',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));">
@@ -209,7 +225,7 @@ USING (VALUES
     <td><span class="fa fa-map-o  icon-margin-right "></span><a href="https://maps.google.com/maps?q={{DIRECCION|isnull:{{translate|Sin dirección}}}} {{CP}} {{POBLACION}}" target="_blank">{{DIRECCION|isnull:Sin dirección}} {{CP}} {{POBLACION}}</a></td>
   </tr>',NULL,NULL,N'<table class="tbStd">
   <tr>
-    <th class="C"><img src="./Merlos/images/relojBlanco.png" width="16"></th>
+    <th class="C"><img src="./Merlos/images/relojAzul.png" width="16"></th>
     <th>Código</th>
     <th>Nombre</th>
     <th>Teléfono</th>
@@ -282,6 +298,41 @@ USING (VALUES
 <th>Fecha</th>
 <th class=''taC''>Importe</th>
 </tr>',N'</table>',NULL,NULL,0,0,1,1)
+ ,(N'RecibosPendienteDefaultList',N'RecibosPendiente',N'list',N'RecibosPendiente Default List',N'<tr>
+   	<td class="{{currentRole|Switch:[Cliente:inv]}}">{{nCliente}}</td>
+    <td class="C">{{ORDEN}}</td>
+    <td>{{NUMFRA}}</td>
+    <td>{{Fecha de emisión}}</td>
+    <td>{{Fecha de vencimiento}}</td>
+   	<td class="R recibosImporte">{{ImporteTotalF}}</td>
+</tr>',NULL,NULL,N'<table id="tbRecibosPendientes" class="tbStd">
+	<tr>
+		<th class="{{currentRole|Switch:[Cliente:inv]}}">Cliente</th>
+		<th>Orden</th>
+		<th>Factura</th>
+		<th>Fecha de emisión</th>
+		<th>Fecha de vencimiento</th>
+		<th>Importe</th>
+	</tr>',N'<tr style="border-top:1px solid #11698E;">
+   	<td></td>
+    <td></td>
+    <td class="L colorAzulMedio">Cantidad</td>
+   	<td id="recibosTdCantidadTotal" class="C colorAzulMedio"></td>
+    <td class="L colorAzulMedio">Importe Total</td>
+   	<td id="recibosTdImporteTotal"  class="R colorAzulMedio"></td>
+  </tr>
+</table>
+
+<script>
+  var recibosCantidad = 0;
+  var RecibosImporteTotal = 0.00;
+  ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbRecibosPendientes").find(".recibosImporte").each(function(){
+    recibosCantidad++;
+    RecibosImporteTotal += parseFloat((' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).replace(" €","").replace(" &euro;","").replace(",","."));
+  });
+  ' + convert(nvarchar(max),NCHAR(36)) + N'("#recibosTdCantidadTotal").html(recibosCantidad);
+  ' + convert(nvarchar(max),NCHAR(36)) + N'("#recibosTdImporteTotal").html(RecibosImporteTotal.toFixed(2)+" &euro;");
+</script>',NULL,NULL,1,0,1,1)
  ,(N'usuariosTV',N'sysUser',N'list',N'usuariosTV',N'<tr onclick="asignarGestor(''asignarGestor'',''{{Reference}}'',''{{Name}} {{SurName}}'',''{{UserName}}'')">
   <td>{{Name}}</td>
   <td>{{SurName}}</td>

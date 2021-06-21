@@ -2,23 +2,30 @@
 	<table>
 		<tr>
 			<td><span class="flx-icon icon-vcard-2 azul3"></span></td>
-			<td colspan="3">
+			<td>
               <span class="azul3" style="font:14px arial;">Código:</span>
               <span id="spanClienteCodigo" class="azul3" style="font:14px arial;">{{CODIGO}}</span>
               <span id="spanClienteBaja" style="margin-left:30px; font:bold 14px arial; color:red;" class="{{BAJA|switch:[0:inv]}}">BAJA: {{FechaBaja}}</span>
             </td>
+			<td id="tdGestores" rowspan="6" style="vertical-align:top; background:#EDEFF3; padding:10px; box-sizing:border-box;">
+              <span class="azul3" style="font:14px arial;">Gestores</span>
+			  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			  <span id="btnrAsignarGestor" class="flR"><span class="MIbotonBlue ml20" onclick="asignarGestor(); event.stopPropagation();">Asignar Gestor</span></span>
+			  <span id="btnAsignarGestorAV" class="ml20 avTXT inv"></span>			  
+			  <br><br><div id="dvGestoresCliente" style="max-height:60px; overflow:hidden; overflow-y:auto;"></div>
+			</td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-man azul2"></span></td>
-			<td colspan="3"><span class="azul2" style="font:bold 16px arial;">{{NOMBRE}}</span></td>
+			<td><span class="azul2" style="font:bold 16px arial;">{{NOMBRE}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-map-point"></span></td>
-			<td colspan="3"><span style="font:12px arial;">{{DIRECCION}}</span></td>
+			<td><span style="font:12px arial;">{{DIRECCION}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="fa fa-map-o"></span></td>
-			<td colspan="3"><span style="font:12px arial;">{{CP}} {{POBLACION}} {{PROVINCIA}}</span></td>
+			<td><span style="font:12px arial;">{{CP}} {{POBLACION}} {{PROVINCIA}}</span></td>
 		</tr>
 		<tr>
 			<td><span class="flx-icon icon-phone"></span></td>
@@ -27,14 +34,6 @@
 		<tr>
 			<td><span class="flx-icon icon-email"></span></td>
 			<td><span style="font:12px arial;">{{EMAIL}}</span></td>
-			<td style="text-align:right;"><span class="{{gestor|switch:[:inv]}}"><span  class="azul3" style="font:14px arial;">Gestor: </span> ({{gestor}}) {{nGestor}}</span></td>
-			<td style="text-align:right;">
-				<span id="btnrAsignarGestor">
-					<span class="MIbotonBlue ml20" onclick="asignarGestor(); event.stopPropagation();">Asignar Gestor</span>
-					<span class="MIbotonBlue ml20 {{gestor|switch:[:inv]}}" onclick="asignarGestor('quitarGestor');  event.stopPropagation();">Quitar Gestor</span>
-				</span>
-				<span id="btnAsignarGestorAV" class="ml20 avTXT inv"></span>
-			</td>
 		</tr>
 	</table>
 </div>
@@ -188,6 +187,23 @@
 			},false);
 		}else{ $("flx-module[modulename='usuariosTV']").css("margin-top","-180px").stop().slideDown(); }		
 	}
+	
+	function cargarGestoresCliente(gestoresDelCliente){
+		$("#dvGestoresCliente").html("");
+		var contenido = "";
+		for(var i in gestoresDelCliente){ contenido +="<div>"
+													+"	<div class='img16 icoAspa' "
+													+"	onclick='asignarGestor(\"quitarGestor\",\""+gestoresDelCliente[i].gestor+"\",\""+gestoresDelCliente[i].nombreGestor+"\")'></div> "
+													+"	&nbsp;&nbsp;&nbsp; "
+													+	gestoresDelCliente[i].gestor+" - "+gestoresDelCliente[i].nombreGestor
+													+"</div>"; }
+		$("#dvGestoresCliente").html(contenido);
+	}
+	
+	
+	var gestoresDelCliente = "";
+	try{ gestoresDelCliente = JSON.parse('{{gestores}}');}catch{} 
+	if(gestoresDelCliente.length>0){ cargarGestoresCliente(gestoresDelCliente); }
 	
 	cargarTablasDeLlamadas();
 </script>

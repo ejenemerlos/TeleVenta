@@ -28,6 +28,15 @@ var TVfamilias = "";
 var TVsubfamilias = "";
 var fechaAnterior = "";
 var autoNombreTV = false;
+var ClienteOferta = false;
+var PedidoNoCobrarPortes = 0;
+var ConfNoCobrarPortes = 0;
+var ConfMostrarStockVirtual = 0;
+var TARIFA = "";
+var ObservacionesDelPedido = "";
+var ObservacionesInternas = "";
+var tfArticuloSeleccionado = "";
+var tfArticuloSeleccionadoI = 0;
 
 var paramStd = '"paramStd":[{"currentRole":"' + currentRole + '","currentReference":"' + currentReference + '"}]';
 
@@ -55,10 +64,14 @@ $(document).click(function (e) {
 		     Iconos
 	*************************
 */
+/* Ejemplo de uso: <div class='img20 icoRecarga' onclick="resetFrm('OpcionesTV')"></div> */
 var icoCargando16 = "<div class='img16 icoCargando rotarR'></div>";
 var icoDownC = "<div class='img16 icoDownC'></div>";
 var icoRecarga16 = "<div class='img16 icoRecarga'></div>";
 var icoRecargaAzul20 = "<div class='img20 icoRecargaAzul'></div>";
+var icoAspa = "<div class='img16 icoAspa'></div>";
+var BtnDesI = "./Merlos/images/BtnDesI.png";
+var BtnDesO = "./Merlos/images/BtnDesO.png";
 
 
 /*
@@ -82,6 +95,15 @@ function abrirVelo(contenido, ancho) {
     if(ancho===null || !ancho || ancho===""){ ancho=500; }
     $("#dvVelo").remove();
     $("body").prepend("<div id='dvVelo' class='inv'><div id='dvVeloContenido' class='C' style='width:" + ancho + "px;'>" + contenido + "</div></div>");
+    $("#dvVelo").stop().fadeIn();
+}
+function abrirIcoCarga() {
+    $("#dvVelo").remove();
+    $("body").prepend(
+        "<div id='dvVelo' class='dvVelo inv' style='text-align:center'>"
+        +"  <img src='./Merlos/images/icoCarga150.png' style='width:100px; margin-top:100px;' class='rotarR'>"
+        +"</div>"
+    );
     $("#dvVelo").stop().fadeIn();
 }
 function cerrarVelo() { $("#dvVelo").stop().fadeOut().html(""); }
@@ -411,7 +433,41 @@ function mostrarElCalendarioEJG(elInput, tf = false, formato = "dma", separador 
 
 function cerrarCalendarioEJG() { $("#dvCalendarioEJG").remove(); }
 
+function formatFecha(f){
+	var fecha = new Date(f); 
+	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
+	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
+	var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD;
+	return laFecha;
+}
 
+function formatFechaHora(f){
+	var fecha = new Date(f); 
+	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
+	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
+	var nfH = fecha.getHours(); 	nfH = nfH < 10 ? "0" + (nfH):nfH;
+	var nfi = fecha.getMinutes(); 	nfi = nfi < 10 ? "0" + (nfi):nfi;
+	var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD + "T" + nfH + ":" + nfi;
+	return laFecha;
+}
+
+function formatSqlFecha(f){
+	var fecha = new Date(f); 
+	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
+	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
+	var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear();
+	return laFecha;
+}
+
+function formatSqlFechaHora(f){
+	var fecha = new Date(f); 
+	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
+	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
+	var nfH = fecha.getHours(); 	nfH = nfH < 10 ? "0" + (nfH):nfH;
+	var nfi = fecha.getMinutes(); 	nfi = nfi < 10 ? "0" + (nfi):nfi;
+	var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear() + " " + nfH + ":" + nfi;
+	return laFecha;
+}
 
 /*	
 	***************
@@ -605,7 +661,7 @@ function esJSON(str) {
 
 // Limpiar Cadena
 function limpiarCadena(cadena) {
-    return cadena.replace(/\r/g, "").replace(/\n/g, "").replace(/\t/g, "").replace(/\b/g, "").replace(/\f/g, "").replace(/\\/g, "");
+    return cadena.replace(/\r/g, "<br>").replace(/\n/g, "<br>").replace(/\t/g, "").replace(/\b/g, "").replace(/\f/g, "").replace(/\\/g, "");
 }
 
 

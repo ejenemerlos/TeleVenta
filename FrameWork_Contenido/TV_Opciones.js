@@ -2,8 +2,11 @@
 	<table id="tbOpciones">
 		<tr>
 			<th>
-				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#accfdd;" ></div>
-				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#92D6B6;" ></div>
+				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#333333;" ></div>
+				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#333333;" ></div>
+			</th>
+			<th>
+				<div id="dvSerieTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;"></div>
 			</th>
 			<th><div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;" ></div></th>
 			<th>
@@ -16,15 +19,15 @@
 	</table>
 </div>
 
-<div id="dvConfiguracionTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
-	<table id="tbConfiguracionOperador">
+<div id="dvConfiguracionTeleVenta" class="mi-module">
+	<table id="tbConfiguracionOperador" class="tbFrm">
 		<tr>
 			<th colspan="2" class="thO" style="vertical-align:middle; text-align:left;">Nombre registro llamadas</th>
 			<td colspan="6" id="inputDatosNombreTV">
 				<input type="text" id="inpNombreTV" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;">
 			</td>
 			<td style="vertical-align:middle; text-align:center;">
-				<div class='img20 icoRecargaAzul' onclick="resetFrm('OpcionesTV')"></div>
+				<div class='img30 icoRecarga' onclick="resetFrm('OpcionesTV')"></div>
 			</td>
 		</tr>
 		<tr>			
@@ -59,14 +62,16 @@
 
 <script>
 $("#inpFechaTV").val(FechaTeleVenta);
+$("#dvSerieTV").html(SERIE + '&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>');
 $("#dvFechaTV").html(FechaTeleVenta);
 $("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos(($(this).text()).split(" ")[0]); event.stopPropagation(); });
 
-function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
+function cargarTbConfigOperador(modo,comprobar){
 	var fecha = $.trim($("#inpFechaTV").val()); 
 	var nombre = $.trim($("#inpNombreTV").val());	
 	
 	var elJS = '{"modo":"' + modo + '","IdTeleVenta":"' + IdTeleVenta + '","nombreTV":"' + nombre + '","fecha":"' + fecha + '",' + paramStd + '}';
+	
 	if(modo==="guardar" || modo==="recargar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
@@ -84,7 +89,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess('pOperadorConfig','',null,null,[{'Key':'elJS','Value':limpiarCadena(elJS)}],'modal640x480',false,$(this),function(ret){
-        if (ret) { /**/ console.log("pOperadorConfig ret:\n"+limpiarCadena(ret.JSCode));
+        if (ret) {
 			if(ret.JSCode==="nombreTV_Existe!"){ alert("El nombre ya existe en la base de datos!"); return; }
 			
             var js = JSON.parse(limpiarCadena(ret.JSCode));   
@@ -170,7 +175,7 @@ function inputTbDatosAsignar(id,valor){
 	}
 	$("#dvinputDatosTemp").fadeOut(300,function(){ $("#dvinputDatosTemp").remove(); });
 }
-function inputTbDatosEliminar(id,valor){ console.log("inputTbDatosEliminar("+id+","+valor+")");
+function inputTbDatosEliminar(id,valor){
 	var contenido = "";
 	$("#inputDatos"+id).find("div").each(function(){
 		if($(this).text()!==valor){ 
@@ -178,7 +183,6 @@ function inputTbDatosEliminar(id,valor){ console.log("inputTbDatosEliminar("+id+
 		}
 	});
 	$("#inputDatos"+id).html(contenido);
-	console.log("autoNombreTV: "+autoNombreTV+" contenido: "+contenido);
 	if(autoNombreTV && contenido===""){ $("#inpNombreTV").val( ($("#inpNombreTV").val()).replace("+"+id,"").replace(id,"") ); }
 	if(Left($("#inpNombreTV").val(),1)==="+"){ $("#inpNombreTV").val(($("#inpNombreTV").val()).replace("+","")); }
 }
@@ -191,6 +195,24 @@ function guardarTeleVenta(tf){
 	FechaTeleVenta=fecha;
 	$("#dvFechaTV").html(fecha);
 	cargarTbConfigOperador("guardar",tf);
+}
+
+function seriesTV(){
+	abrirVelo(icoCargando16+" cargando series...");
+	var contenido = "";
+	flexygo.nav.execProcess('pSeries','',null,null,[{'Key':'modo','Value':'Serie'}], 'modal640x480', false, $(this), function(ret){if(ret){
+		var js = JSON.parse(ret.JSCode);
+		if(js.length>0){
+			for(var i in js){ contenido += "<div class='dvLista' onclick='asignarSerieGlobal(\""+js[i].codigo+"\")'>"+js[i].codigo+" - "+js[i].nombre+"</div>"; }
+		}else{ contenido="<div style='color:red;'>Sin resultados!</div>"; }
+		abrirVelo(contenido);
+	}else{ alert('Error S.P. pSeries!!!\n'+ret); } }, false);
+}
+
+function asignarSerieGlobal(laSerie){
+	SERIE = laSerie;
+	$("#dvSerieTV").html(SERIE + '&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>');
+	cerrarVelo();
 }
 
 </script>

@@ -8,7 +8,7 @@ function cargarIncidenciasCliente(){
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
 	var parametros = '{"modo":"incidenciasDelCliente","cliente":"'+ClienteCodigo+'"}';
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){	/**/ console.log("pLlamadas incidenciasDelCliente re:\n"+limpiarCadena(ret.JSCode));
+		if(ret){
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			var inciArtNum = js.inciArt.length;
 			var inciPedNum = js.inciPed.length;

@@ -1,6 +1,7 @@
-﻿body, form {
-    background: #333333;
-    color: #dddddd;
+﻿html {
+    background: url('../../Merlos/images/Fondo.jpg') no-repeat center fixed;
+    background-size: cover;
+    color: #4985D6;
     height: 100%;
     font-family: 'latolight','Helvetica, Arial','sans-serif';
 }
@@ -57,7 +58,7 @@ a {
 }
 
 .logo {
-    background-image: url('../../img/logo.png');
+    background-image: 0;
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center top;

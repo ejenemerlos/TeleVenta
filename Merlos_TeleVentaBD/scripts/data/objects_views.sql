@@ -16,6 +16,7 @@ USING (VALUES
  ,(N'IncidenciasCliente',N'IncidenciasClienteDefaultList',N'IncidenciasClienteDefaultList',N'DataConnectionString',N'select * from inci_cli',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Pedido',N'PedidoDefaultList',N'PedidoDefaultList',N'DataConnectionString',N'select * from vPedidos',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Pedido',N'vPedidosOrderBySQLFECHAdesc',N'Pedidos listado orden sqlFecha desc',N'DataConnectionString',N'select * from vPedidos',0,0,1,0,0,N'sqlFecha desc',0,NULL,NULL,1)
+ ,(N'RecibosPendiente',N'RecibosPendienteDefaultList',N'RecibosPendienteDefaultList',N'DataConnectionString',N'select * from vGiros',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Vendedor',N'VendedorDefaultList',N'VendedorDefaultList',N'DataConnectionString',N'select * from vVendedores',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Vendedor',N'vVendedoresCombo',N'Listado Vendedores',N'DataConnectionString',N'select CODIGO, NOMBRE from vVendedores',0,0,1,0,0,N'NOMBRE ASC',0,NULL,NULL,1)
 ) AS Source ([ObjectName],[ViewName],[Descrip],[ConnStringId],[SQLSentence],[NoFilter],[ShowAsGrid],[Active],[System],[IsDefault],[OrderBy],[Offline],[PrimaryKeys],[IndexFields],[OriginId])

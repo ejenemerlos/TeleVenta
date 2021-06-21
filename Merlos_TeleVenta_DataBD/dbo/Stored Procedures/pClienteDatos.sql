@@ -5,6 +5,7 @@ BEGIN TRY
 		  , @gestor varchar(50) = isnull((select JSON_VALUE(@parametros,'$.gestor')),'')
 		  , @nGestor varchar(100) = isnull((select JSON_VALUE(@parametros,'$.nGestor')),'')
 		  , @modo varchar(50) = isnull((select JSON_VALUE(@parametros,'$.modo')),'')
+		  , @observaciones varchar(8000) = isnull((select JSON_VALUE(@parametros,'$.observaciones')),'')
 		  , @FechaTeleVenta varchar(10) = isnull((select JSON_VALUE(@parametros,'$.FechaTeleVenta')),'')
 
 	if @modo = 'verTodosLosTelfs' BEGIN
@@ -13,13 +14,18 @@ BEGIN TRY
 	END
 
 	if @modo = 'asignarGestor' BEGIN
-		if exists (select * from cliente_gestor where cliente=@cliente)
-		update cliente_gestor set cliente=@cliente, gestor=@gestor, nombreGestor=@nGestor where cliente=@cliente
-		else insert into cliente_gestor (cliente, gestor, nombreGestor) values (@cliente, @gestor, @nGestor)
+		if not exists (select * from cliente_gestor where cliente=@cliente and gestor=@gestor)
+		insert into cliente_gestor (cliente, gestor, nombreGestor) values (@cliente, @gestor, @nGestor)
 	END
 
 	if @modo = 'quitarGestor' BEGIN
-		delete cliente_gestor where cliente=@cliente
+		delete cliente_gestor where cliente=@cliente and gestor=@gestor
+	END
+
+	if @modo = 'ObservacionesInternas' BEGIN
+		if exists (select * from ObservacionesInternas where cliente=@cliente)
+			update ObservacionesInternas set observaciones=@observaciones where cliente=@cliente
+		else insert into ObservacionesInternas (cliente,observaciones) values (@cliente,@observaciones)
 	END
 	
 	if @modo = 'datos'
@@ -28,12 +34,15 @@ BEGIN TRY
 		, (select count(pedido)  from vPedidos where CLIENTE collate SQL_Latin1_General_CP1_CI_AS=cli.CODIGO) as numPedidos
 		, (select sum(TOTALDOC)  from vPedidos where CLIENTE collate SQL_Latin1_General_CP1_CI_AS=cli.CODIGO) as ImportePedidos
 		, replace(convert(varchar(10),dateadd(day,(select DIAS_ENTRE from vDatosEmpresa where CODIGO collate Modern_Spanish_CI_AI=(select EMPRESA from Configuracion_SQL)),cast(@FechaTeleVenta as smalldatetime)),103),'/','-') as FechaEntrega
+		, cli.ObservacionesInternas		
 		from vClientes cli
-		where cli.CODIGO =@cliente for JSON AUTO) as JAVASCRIPT	
+		where cli.CODIGO=@cliente for JSON AUTO,INCLUDE_NULL_VALUES) as JAVASCRIPT	
 
 	ELSE select 
 		(select *
 		, replace(convert(varchar(10),dateadd(day,(select DIAS_ENTRE from vDatosEmpresa where CODIGO collate Modern_Spanish_CI_AI=(select EMPRESA from Configuracion_SQL)),cast(@FechaTeleVenta as smalldatetime)),103),'/','-') as FechaEntrega
+		, (select count(CLIENTE) from vGiros where CLIENTE=@cliente) as numRecibos
+		, (select isnull(sum([Importe total]),0.00) from vGiros where CLIENTE=@cliente) as importeRecibos
 		 from vClientes where CODIGO=@cliente for JSON AUTO) as JAVASCRIPT	
 
 	RETURN -1

@@ -13,6 +13,7 @@ BEGIN TRY
 			, @pedido varchar(50) = ''
 			, @elWhere varchar(1000) = ''
 			, @IdTeleVenta varchar(50)	  = isnull((select JSON_VALUE(@parametros,'$.IdTeleVenta')),'')
+			, @nuevaLlamada varchar(50)	  = isnull((select JSON_VALUE(@parametros,'$.nuevaLlamada')),'')
 			, @nombreTV varchar(50)		  = isnull((select JSON_VALUE(@parametros,'$.nombreTV')),'')
 			, @usuariosTV nvarchar(max)	  = ''
 			, @FechaTeleVenta varchar(10) = isnull((select JSON_VALUE(@parametros,'$.FechaTeleVenta')),'')
@@ -22,6 +23,12 @@ BEGIN TRY
 
 	if @modo='llamarMasTardeCliente' begin
 		update TeleVentaDetalle set horario=@horario where id=@IdTeleVenta and cliente=@cliente
+		return -1
+	END
+
+	if @modo='llamarOtroDia' begin		
+		insert into [llamadasOD] (IdTeleVentaOrigen,cliente,fechaHora)
+		values (@IdTeleVenta,@cliente,@nuevaLlamada)
 		return -1
 	END
 
@@ -88,7 +95,7 @@ BEGIN TRY
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
 		set @pedido = (select JSON_VALUE(@parametros,'$.pedido'))		
 		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,@serie,replicate('0',10-len(@pedido)),@pedido) collate Modern_Spanish_CI_AI 
-		if @pedido='undefined' begin set @pedido='INCIDENCIA' set @idpedido='' end
+		if @pedido='undefined' begin set @pedido=@incidenciaClienteDescrip set @serie='' set @idpedido='' end
 
 		if (@incidenciaCliente is not null and @incidenciaCliente<>'') or (@observaciones is not null and @observaciones<>'') begin
 			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,observaciones) 
@@ -103,17 +110,31 @@ BEGIN TRY
 			where id=@IdTeleVenta and cliente=@cliente
 		END
 
-		-- si hay incidencias de artículos
+		-- si hay incidencias de artículos sin hacer pedido
 		if exists (select * from openjson(@parametros,'$.inciSinPed')) BEGIN
 			declare @valor varchar(1000) 
 			declare cur CURSOR for select [value] from openjson(@parametros,'$.inciSinPed')
 			OPEN cur FETCH NEXT FROM cur INTO @valor
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
-				values (@IdTeleVenta,@usuario,'Articulo',(select JSON_VALUE(@valor,'$.incidencia')),@cliente,@idpedido
+				if not exists (
+					select * from TeleVentaIncidencias 
+					where id=@IdTeleVenta and gestor=@usuario
+					and tipo='Articulo' and incidencia=(select JSON_VALUE(@valor,'$.incidencia'))
+					and cliente=@cliente
+					and articulo=(select JSON_VALUE(@valor,'$.articulo'))
+				) BEGIN
+					insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+					values (
+						 @IdTeleVenta,@usuario,'Articulo'
+						,(select JSON_VALUE(@valor,'$.incidencia'))
+						,@cliente
+						,@idpedido
 						,(select JSON_VALUE(@valor,'$.articulo'))
 						,(select JSON_VALUE(@valor,'$.observacion'))
-				)
+					)
+				END ELSE BEGIN
+					update TeleVentaIncidencias set idpedido=@idpedido, observaciones=(select JSON_VALUE(@valor,'$.observacion'))
+				END
 				FETCH NEXT FROM cur INTO @valor
 			END CLOSE cur deallocate cur
 		END
@@ -121,19 +142,67 @@ BEGIN TRY
 
 	if @modo='listaGlobal' begin
 		if @rol='Admins' or @rol='AdminPortal' or @rol='VerTodosLosClientes'
-			select isnull((select distinct id, nombre as nombreTV, fecha, cast(fecha as date) as fechaDT, usuario
-							from [TeleVentaCab]	order by cast(fecha as date) desc for JSON AUTO)
+			select isnull(
+				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
+				,(select count(distinct cliente) from TeleVentaDetalle where id=t.id) as clientes
+				,(select count(completado) from TeleVentaDetalle where id=t.id and completado=1) as llamadas
+				,(select count(idpedido) from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'') as pedidos
+				,(
+					select SUM(TOTALDOC) from vPedidos where IdPedido collate Modern_Spanish_CI_AI  in 
+					(select idpedido from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'')
+				 ) as importe
+				from [TeleVentaCab]	t order by cast(t.fecha as date) desc for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		else 
-			select isnull((select distinct id, nombre as nombreTV, fecha, cast(fecha as date) as fechaDT, usuario
-							from [TeleVentaCab] where usuario=@usuario order by cast(fecha as date) desc for JSON AUTO)
+			select isnull(
+				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
+				,(select count(distinct cliente) from TeleVentaDetalle where id=t.id) as clientes
+				,(select count(completado) from TeleVentaDetalle where id=t.id and completado=1) as llamadas
+				,(select count(idpedido) from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'') as pedidos
+				,(
+					select SUM(TOTALDOC) from vPedidos where IdPedido collate Modern_Spanish_CI_AI  in 
+					(select idpedido from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'')
+				 ) as importe
+				from [TeleVentaCab] t where t.usuario=@usuario order by cast(t.fecha as date) desc for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		RETURN -1
 	END
 
-	--	retornar llamadas
+	-- registrar incidencia de artículos sin realizar pedidos
+	if @modo='incidenciaArticulo' BEGIN
+		if not exists (select * from TeleVentaIncidencias 
+						where id=@IdTeleVenta and gestor=@usuario
+						and tipo='Articulo' and incidencia=isnull((select JSON_VALUE(@parametros,'$.incidencia')),'')
+						and cliente=@cliente
+						and articulo=isnull((select JSON_VALUE(@parametros,'$.articulo')),'')
+		) BEGIN
+			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+			values (@IdTeleVenta,@usuario,'Articulo'
+					,isnull((select JSON_VALUE(@parametros,'$.incidencia')),'')
+					,@cliente
+					,''
+					,isnull((select JSON_VALUE(@parametros,'$.articulo')),'')
+					,isnull((select JSON_VALUE(@parametros,'$.observaciones')),'')
+			)
+		END
+		ELSE BEGIN 
+			update TeleVentaIncidencias set observaciones=isnull((select JSON_VALUE(@parametros,'$.observaciones')),'') 
+			where id=@IdTeleVenta and gestor=@usuario
+			and tipo='Articulo' and incidencia=isnull((select JSON_VALUE(@parametros,'$.incidencia')),'')
+			and cliente=@cliente
+			and articulo=isnull((select JSON_VALUE(@parametros,'$.articulo')),'')
+		END
+	END
+
+	--	retornar llamadas (cargarLlamadas)
 		select isnull((select td.*
 		, cli.NOMBRE
+		, (
+			select top 1 FECHA 
+			from vpedidos 
+			where CLIENTE=CLI.CODIGO
+			order by sqlFecha desc
+		) as ultimoPedido
 		from TeleVentaDetalle td 
 		left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=td.cliente
 		where td.id=@IdTeleVenta

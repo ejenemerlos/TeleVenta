@@ -58,7 +58,7 @@ function cargarIncidenciasCliente(){
 	if(ClienteCodigo===undefined || ClienteCodigo===""){ setTimeout(function(){ cargarIncidenciasCliente(); },100); return; }
 	var parametros = ''{"modo":"incidenciasDelCliente","cliente":"''+ClienteCodigo+''"}'';
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if(ret){	/**/ console.log("pLlamadas incidenciasDelCliente re:\n"+limpiarCadena(ret.JSCode));
+		if(ret){
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			var inciArtNum = js.inciArt.length;
 			var inciPedNum = js.inciPed.length;
@@ -124,7 +124,7 @@ function incidenciasIO(dv, nm) {
 }
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'admin1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_Pasos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Pasos',N'Cliente_Pasos',N'none',1,1,1,0,NULL,NULL,N'<span class="btn btn-info" onclick=''flexygo.nav.openPageName("TeleVenta","","","{\"CODIGO\":\"{{CODIGO}}\"}","current",false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));''><span title="Llamada" class="flx-icon icon-phone icon-margin-right"></span><span class="hidden-m">Llamada</span></span>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,NULL,NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+ ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,N'systb-search',NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Cliente_view_cabecera',N'flx-html',N'project',NULL,N'(CODIGO=''{{CODIGO}}'')',N'Cliente_view_cabecera',N'Encabezado cliente',N'none',1,1,1,0,NULL,NULL,N'<table class="tbS">
   <tr>
     <th>
@@ -195,15 +195,7 @@ function cargarDatosCliente(){
 			</td>
 		</tr>
 		<tr>
-			<th>Serie Pedidos</th>
-			<td>
-				&nbsp;&nbsp;
-				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click(''Serie''); event.stopPropagation();" readonly>
-				<div id="dvSerieListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
-			</td>
-		</tr>
-		<tr>
+			<tr>
 			<th>Meses de consumo</th>
 			<td>
 				&nbsp;&nbsp;
@@ -213,6 +205,35 @@ function cargarDatosCliente(){
 				&nbsp;<div class="icoMas img20" onclick="masmenos(true,''inpMesesConsumo'',1,12)"></div>
 				&nbsp;&nbsp;<span class="MIbotonGreen esq05" onclick="asignarMesesConsumo()">asignar</span>
 				<span id="spanAsignacionAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>
+			<th>Serie Pedidos</th>
+			<td>
+				&nbsp;&nbsp;
+				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click(''Serie''); event.stopPropagation();" readonly>
+				<div id="dvSerieListado" class="dvListaDatos"></div>
+				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>		
+		<tr>
+			<th>Tarifa mínima</th>
+			<td>
+				&nbsp;&nbsp;
+				<input type="text" id="inpTarifaMinima" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click(''TarifaMinima''); event.stopPropagation();" readonly>
+				<div id="dvTarifaMinimaListado" class="dvListaDatos"></div>
+				<span id="spanAsignacionTarifaMinimaAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
+			</td>
+		</tr>
+		<tr>
+			<th></th>
+			<td></td>
+		</tr>
+		<tr>
+			<th style="height:20px;"></th>
+			<td>
+				<img src="./Merlos/images/BtnDesO.png" id="imgNoCobrarPortes" class="OpcionIO"> No Cobrar Portes
+				&nbsp;&nbsp;&nbsp;
+				<img src="./Merlos/images/BtnDesO.png" id="imgMostrarStockVirtual" class="OpcionIO"> Mostrar Stock Virtual
 			</td>
 		</tr>
 	</table>
@@ -247,7 +268,8 @@ function cargarDatosCliente(){
 	abrirVelo(veloContenido,400);
 	
 	var SeriesCargadas = false;
-	var elementosDIV = ["dvSerieListado"];
+	var TarifasCargadas = false;
+	var elementosDIV = ["dvSerieListado","dvTarifaMinimaListado"];
 	
 	' + convert(nvarchar(max),NCHAR(36)) + N'(document).on("click",function(e) {
 		for(var i in elementosDIV){
@@ -352,12 +374,13 @@ function cargarDatosCliente(){
 						limpiarLaCache();
 						//' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show();
 						flexygo.nav.execProcess(''GoHome'','''','''',null,null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));
-					}else{ alert(''Error S.P.!!!\n''+ret); } }, false);					
-			}else{ alert(''Error S.P.!!!\n''+ret); } 			
+					}else{ alert(''Error S.P. pConfigBBDD!!!\n''+ret); } }, false);					
+			}else{ alert(''Error S.P. pConfiguracionLanzar!!!\n''+ret); } 			
 		}, false);
 	}
 	
 	function verificarVersionEW(comun){
+		/***** */ lanzarConfiguracion(true); return; /****** */
 		flexygo.nav.execProcess(''pVersiones'','''',null,null, 
 		[
 		 {''Key'':''modo'',''Value'':''EW''}
@@ -371,7 +394,7 @@ function cargarDatosCliente(){
 				alert("Esta versión de Eurowin\n"
 					 +"no es compatible con este producto!"); 
 			}
-		}else{ alert(''Error S.P.!!!\n''+ret); } }, false);
+		}else{ alert(''Error S.P. pVersiones!!!\n''+ret); } }, false);
 	}		
 		
 	function tAhora() {	var d = new Date();	var n = d.getTime(); return n; }	
@@ -402,23 +425,44 @@ function cargarDatosCliente(){
 	
 	function asignarMesesConsumo(){
 		MesesConsumo = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val();
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null, 
-		[{''Key'':''modo'',''Value'':''MesesConsumo''},{''Key'':''valor'',''Value'':' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val()}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){ 
+		var parametros = ''{"modo":"MesesConsumo","valor":"''+' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val()+''"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
 			cargarConfiguracion(); 
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeIn(); setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeOut(); },2000);
-		}else{ alert(''Error S.P. pConfiguracion!!!\n''+ret); } }, false);
+		}else{ alert(''Error S.P. pConfiguracion - MesesConsumo!!!\n''+ret); } }, false);
 	}
 	
 	function cargarConfiguracion(){
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''modo'',''Value'':''lista''}],''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
+		var parametros = ''{"modo":"lista"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			esperarCargaSeries(js.ConfSQL[0].TVSerie);
+			esperarCargaTarifas(js.ConfSQL[0].TVTarifa);
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val(js.ConfSQL[0].MesesConsumo); 
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfiguracion").fadeIn();
 			cargarSeries();
+			cargarTarifas();
+			// Interruptores
+			for(var i in js.IO){
+				if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesO); }
+				else{window["Conf"+js.IO[i].nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
+			}
+			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
 			cerrarVelo();
-		}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
+			limpiarLaCache();
+		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
 	}
+	
+	function reconfigurarElPortal(){
+		veloContenido =  ''<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">''
+						+''<br><br><span class="info">reconfigurando, espera, por favor...</span>'';
+		abrirVelo(veloContenido,400);
+		var parametros = ''{"modo":"reconfigurar"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
+			if(ret){ location.reload();  }
+		}, false);
+	}
+	
 	
 	function cargarSeries(){
 		var contenido = "";
@@ -437,22 +481,56 @@ function cargarDatosCliente(){
 	}
 	function asignarSerie(serie){
 		SERIE = serie;
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''modo'',''Value'':''TVSerie''},{''Key'':''valor'',''Value'':serie}],''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
+		var parametros = ''{"modo":"TVSerie","valor":"''+serie+''"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpSerie").val(serie);
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieListado").stop().slideUp();
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeIn(); 
 			limpiarLaCache();
 			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeOut(); },2000);
-		}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
+		}else{ alert("Error SP: pConfiguracion - TVSerie!!!\n"+ret); }}, false);
 	}
 	
-	function reconfigurarElPortal(){
-		veloContenido =  ''<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">''
-						+''<br><br><span class="info">reconfigurando, espera, por favor...</span>'';
-		abrirVelo(veloContenido,400);
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''modo'',''Value'':''reconfigurar''}],''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){
-			if(ret){ location.reload();  }
-		}, false);
+	function cargarTarifas(){
+		var contenido = "";
+		flexygo.nav.execProcess(''pObjetoDatos'','''',null,null,[{''Key'':''elJS'',''Value'':''{"objeto":"Tarifas"}''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
+			var js = JSON.parse(ret.JSCode);
+			if(js.length>0){
+				for(var i in js){ contenido += "<div class=''dvLista'' onclick=''asignarTarifa(\""+js[i].CODIGO+"\")''>"+js[i].CODIGO+" - "+js[i].NOMBRE+"</div>"; }
+			}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
+			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvTarifaMinimaListado").html(contenido);
+			TarifasCargadas=true;
+		}else{ alert(''Error S.P. pTarifas!!!\n''+ret); } }, false);
+	}
+	function esperarCargaTarifas(tarifa){
+		if(TarifasCargadas){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpTarifaMinima").val(tarifa); }
+		else{ setTimeout(function(){ esperarCargaTarifas(tarifa); },200); }
+	}
+	function asignarTarifa(tarifa){
+		TARIFA = tarifa;
+		var parametros = ''{"modo":"TVTarifa","valor":"''+tarifa+''"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
+			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpTarifaMinima").val(tarifa);
+			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvTarifaMinimaListado").stop().slideUp();
+			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeIn(); 
+			limpiarLaCache();
+			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeOut(); },2000);
+		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
+	}
+
+	
+	' + convert(nvarchar(max),NCHAR(36)) + N'(".OpcionIO").off().on("click",function(){
+		var v = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).attr("id");
+		var nombre = v.split("img")[1];
+		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesO); }
+		ConfiguracionDelPortal(''actualizar'',nombre,eval(window["Conf"+nombre]));
+	});
+	
+	function ConfiguracionDelPortal(modo,nombre,valor){
+		var parametros = ''{"modo":"actualizar","nombre":"''+nombre+''","valor":"''+valor+''"}'';
+		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
+			cargarConfiguracion(); 
+		}else{ alert(''Error S.P. pConfiguracion -actualizar !!!\n''+ret); } }, false);
 	}
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Contactos',N'flx-sqllist',N'project',N'Contactos',N'CLIENTE=''{{CODIGO}}''',N'Contactos',N'Contactos',N'default',1,0,1,0,N'select * from vContactos where CLIENTE=''{{CODIGO}}''',N'<div id="dvContactosBotonera" style="padding:10px;">
@@ -559,17 +637,18 @@ function guardarContacto(io){
 </div>
 <div id="dvLlamadas" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'TV_LlamadasTV',N'flx-html',N'project',NULL,NULL,N'TV_LlamadasTV',N'TV_LlamadasTV',N'none',0,0,0,0,NULL,NULL,N'<div class="tvTitulo esq1100">
-	Llamadas Tele Venta
-</div>
-<div id="dvLlamadasTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
+ ,(N'TV_LlamadasTV',N'flx-html',N'project',NULL,NULL,N'TV_LlamadasTV',N'TV_LlamadasTV',N'none',0,0,0,0,NULL,NULL,N'<div class="tvTitulo esq1100">Llamadas Tele Venta</div>
+<div id="dvLlamadasTeleVenta" class="mi-module"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_OpcionesLlamada',N'flx-html',N'project',NULL,NULL,N'TV_OpcionesLlamada',N'TV_OpcionesLlamada',N'none',1,1,1,0,NULL,NULL,N'<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
 	<table id="tbOpciones">
 		<tr>
 			<th>
-				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#accfdd;" ></div>
-				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#92D6B6;" ></div>
+				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#333333;" ></div>
+				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#333333;" ></div>
+			</th>
+			<th>
+				<div id="dvSerieTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;"></div>
 			</th>
 			<th><div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;" ></div></th>
 			<th>
@@ -582,15 +661,15 @@ function guardarContacto(io){
 	</table>
 </div>
 
-<div id="dvConfiguracionTeleVenta" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
-	<table id="tbConfiguracionOperador">
+<div id="dvConfiguracionTeleVenta" class="mi-module">
+	<table id="tbConfiguracionOperador" class="tbFrm">
 		<tr>
 			<th colspan="2" class="thO" style="vertical-align:middle; text-align:left;">Nombre registro llamadas</th>
 			<td colspan="6" id="inputDatosNombreTV">
 				<input type="text" id="inpNombreTV" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;">
 			</td>
 			<td style="vertical-align:middle; text-align:center;">
-				<div class=''img20 icoRecargaAzul'' onclick="resetFrm(''OpcionesTV'')"></div>
+				<div class=''img30 icoRecarga'' onclick="resetFrm(''OpcionesTV'')"></div>
 			</td>
 		</tr>
 		<tr>			
@@ -625,14 +704,16 @@ function guardarContacto(io){
 
 <script>
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(FechaTeleVenta);
+' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>'');
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(FechaTeleVenta);
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos((' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).split(" ")[0]); event.stopPropagation(); });
 
-function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOperador("+modo+","+comprobar+")");
+function cargarTbConfigOperador(modo,comprobar){
 	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val()); 
 	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());	
 	
 	var elJS = ''{"modo":"'' + modo + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
+	
 	if(modo==="guardar" || modo==="recargar"){
 		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
 		for(var o in objetos){
@@ -650,7 +731,7 @@ function cargarTbConfigOperador(modo,comprobar){ console.log("cargarTbConfigOper
 
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess(''pOperadorConfig'','''',null,null,[{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-        if (ret) { /**/ console.log("pOperadorConfig ret:\n"+limpiarCadena(ret.JSCode));
+        if (ret) {
 			if(ret.JSCode==="nombreTV_Existe!"){ alert("El nombre ya existe en la base de datos!"); return; }
 			
             var js = JSON.parse(limpiarCadena(ret.JSCode));   
@@ -736,7 +817,7 @@ function inputTbDatosAsignar(id,valor){
 	}
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").fadeOut(300,function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").remove(); });
 }
-function inputTbDatosEliminar(id,valor){ console.log("inputTbDatosEliminar("+id+","+valor+")");
+function inputTbDatosEliminar(id,valor){
 	var contenido = "";
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).find("div").each(function(){
 		if(' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()!==valor){ 
@@ -744,7 +825,6 @@ function inputTbDatosEliminar(id,valor){ console.log("inputTbDatosEliminar("+id+
 		}
 	});
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).html(contenido);
-	console.log("autoNombreTV: "+autoNombreTV+" contenido: "+contenido);
 	if(autoNombreTV && contenido===""){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val( (' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val()).replace("+"+id,"").replace(id,"") ); }
 	if(Left(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val(),1)==="+"){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val((' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val()).replace("+","")); }
 }
@@ -759,8 +839,31 @@ function guardarTeleVenta(tf){
 	cargarTbConfigOperador("guardar",tf);
 }
 
+function seriesTV(){
+	abrirVelo(icoCargando16+" cargando series...");
+	var contenido = "";
+	flexygo.nav.execProcess(''pSeries'','''',null,null,[{''Key'':''modo'',''Value'':''Serie''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
+		var js = JSON.parse(ret.JSCode);
+		if(js.length>0){
+			for(var i in js){ contenido += "<div class=''dvLista'' onclick=''asignarSerieGlobal(\""+js[i].codigo+"\")''>"+js[i].codigo+" - "+js[i].nombre+"</div>"; }
+		}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
+		abrirVelo(contenido);
+	}else{ alert(''Error S.P. pSeries!!!\n''+ret); } }, false);
+}
+
+function asignarSerieGlobal(laSerie){
+	SERIE = laSerie;
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>'');
+	cerrarVelo();
+}
+
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'TV_Pedido',N'flx-html',N'project',NULL,NULL,N'TV_Pedido',N'TV_Pedido',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedido</div>
+ ,(N'TV_Pedido',N'flx-html',N'project',NULL,NULL,N'TV_Pedido',N'TV_Pedido',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedido
+	<span id="spNoCobrarPortes" class="flR">
+		<img src="" id="imgPedidoNoCobrarPortes" style="width:30px; cursor:pointer;" onclick="PedidoNoPortes()">
+		&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>
+	</span>
+</div>
 <div id="dvDatosDelClienteMin"></div>
 <div id="dvPedido" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
 	<span id="spanBotoneraPag" class="vaM">
@@ -793,7 +896,17 @@ function guardarTeleVenta(tf){
 		</span>
 		<div id="dvPedidoDetalle"></div>
 	</div>
-</div>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</div>
+
+<script>	
+	if(PedidoNoCobrarPortes===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
+	
+	function PedidoNoPortes(){
+		if(PedidoNoCobrarPortes===1){ PedidoNoCobrarPortes=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
+		else{ PedidoNoCobrarPortes=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }
+	}
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+ ,(N'TV_Recibos_Pendientes',N'flx-objectlist',N'project',N'RecibosPendientes',N'CLIENTE=''{{CODIGO}}''',N'TV_Recibos_Pendientes',N'Recibos Pendientes',N'default',1,0,1,0,NULL,NULL,N'{{Fecha de vencimiento}}',NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''TV_Recibos_Pendientes''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',N'syspager-listboth',20,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_UltimosPedidos',N'flx-html',N'project',NULL,NULL,N'TV_UltimosPedidos',N'TV_UltimosPedidos',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedidos</div>
 <div id="dvUltimosPedidos" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)

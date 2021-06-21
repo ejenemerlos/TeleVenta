@@ -1,17 +1,90 @@
-﻿
+﻿/*	MERLOS CSS v.1.0.0.2 */
+
+/*  Colores */
+.colorNegro {
+    color: #333333;
+}
+
+.colorAzulOscuro {
+    color: #19456B;
+}
+
+.colorAzulMedio {
+    color: #11698E;
+}
+
+.colorAzulClaro {
+    color: #68CDF9;
+}
+
+.colorVerde {
+    color: #16C79A;
+}
+
+.colorGris {
+    color: #E1E3E7;
+}
+
+.colorGrisClaro {
+    color: #EDEFF3;
+}
+
+
+
+/* ENTORNO */
+header {
+    background: #FFF !important;
+}
+
+#mainMenu span {
+    color: #333 !important;
+}
+
+#mainNav {
+    background: #EDEFF3 !important;
+}
+
+.cntHeader, .bg-module {
+    background: #68CDF9 !important;
+    font: bold 16px arial;
+    color: #333333 !important;
+}
+
+
+.active {
+    background: #11698E !important;
+    color: #FFF !important;
+}
+
+flx-nav[mode="nav"] li {
+    background: #FFFFFF !important;
+    color: #333333 !important;
+}
+
+flx-nav[mode=nav] li > span:hover {
+    background: #11698E !important;
+    color: #FFFFFF !important;
+}
+
+flx-nav[mode=nav] li > .active {
+    background: #16C79A !important;
+    color: #FFFFFF !important;
+}
+
 
 /* Estilos Globales */
 #dvVelo {
-    z-index:900;
-    position:fixed;
-    width:100%;
-    height:100%;
-    top:0;
-    left:0;
-    background:rgba(240,240,240,.9);
-    padding-top:100px;
-    box-sizing:border-box;
+    z-index: 900;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(240,240,240,.9);
+    padding-top: 100px;
+    box-sizing: border-box;
 }
+
 #dvVeloContenido {
     background: #FFF;
     padding: 20px;
@@ -27,9 +100,11 @@
 .w100 {
     width: 100%;
 }
+
 .w50 {
     width: 50%;
 }
+
 .w25 {
     width: 25%;
 }
@@ -45,6 +120,7 @@
 .R {
     text-align: right !important;
 }
+
 .taL {
     text-align: left !important;
 }
@@ -60,32 +136,69 @@
 .pl20 {
     padding-left: 20px;
 }
+
 .ml20 {
     margin-left: 20px;
 }
+
 .zi100 {
-    z-index:100; position:relative;
+    z-index: 100;
+    position: relative;
 }
 
-.bsbb{ box-sizing:border-box; }
+.flL {
+    float: left;
+}
 
-.S{text-decoration:underline !important;}
+.flR {
+    float: right;
+}
 
-.c_Red{color:red !important;}
-.c_Green{color:green !important;}
-.c_Blue{color:blue !important;}
-.c_Orange{color:orange !important;}
-.c_Yellow{color:yellow !important;}
-.c_Brown{color:brown !important;}
+.bsbb {
+    box-sizing: border-box;
+}
 
-.info{font:14px arial; color:dimgray; }
+.S {
+    text-decoration: underline !important;
+}
+
+.c_Red {
+    color: red !important;
+}
+
+.c_Green {
+    color: green !important;
+}
+
+.c_Blue {
+    color: blue !important;
+}
+
+.c_Orange {
+    color: orange !important;
+}
+
+.c_Yellow {
+    color: yellow !important;
+}
+
+.c_Brown {
+    color: brown !important;
+}
+
+.info {
+    font: 14px arial;
+    color: dimgray;
+}
 
 .vaT {
     vertical-align: top;
 }
+
 .vaM {
     vertical-align: middle;
 }
+
 .vaB {
     vertical-align: bottom;
 }
@@ -97,6 +210,7 @@
 .FR {
     float: right;
 }
+
 .fL {
     float: left;
 }
@@ -106,8 +220,8 @@
 }
 
 .avTXT {
-    font:bold 14px arial;
-    color:green;
+    font: bold 14px arial;
+    color: green;
 }
 
 .dvImg20 {
@@ -116,14 +230,39 @@
     height: 20px;
 }
 
-.brd{border:1px solid #999;}
-.brd0{border:0;background:red;}
-.pdng0{padding:0px;}
-.pdng5{padding:0px;}
+.dvImg30 {
+    display: inline;
+    width: 30px;
+    height: 30px;
+}
 
-.curP{ cursor:pointer; }
+.brd {
+    border: 1px solid #999;
+}
 
-.esq05{	border-radius:5px;	-moz-border-radius:5px; -webkit-border-radius:5px; }
+.brd0 {
+    border: 0;
+    background: red;
+}
+
+.pdng0 {
+    padding: 0px;
+}
+
+.pdng5 {
+    padding: 0px;
+}
+
+.curP {
+    cursor: pointer;
+}
+
+.esq05 {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
 .esq10 {
     border-radius: 10px;
     -moz-border-radius: 10px;
@@ -142,16 +281,34 @@
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
 }
 
-.bsbb{box-sizing:border-box;}
+.bsbb {
+    box-sizing: border-box;
+}
 
-.rotar-90 { -webkit-transform: rotate(-90deg); transform: rotate(-90deg); }
+.rotar-90 {
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
 
-.active{background:#E0F2F7 !important; color:#4985D6 !important;}
+.active {
+    background: #E0F2F7 !important;
+    color: #4985D6 !important;
+}
 
-.tit{ background:#4985D6; font:bold 16px arial; color:#FFF; padding:5px 10px;}
+.tit {
+    background: #4985D6;
+    font: bold 16px arial;
+    color: #FFF;
+    padding: 5px 10px;
+}
 
-.vis{display:;}
-.inv{display:none;}
+.vis {
+    display:;
+}
+
+.inv {
+    display: none;
+}
 
 .ovH {
     overflow: hidden;
@@ -159,16 +316,17 @@
 
 .ovY {
     overflow: hidden;
-    overflow-y:auto;
+    overflow-y: auto;
 }
+
 .dvTemp {
-    z-index:100;
+    z-index: 100;
     position: absolute;
-    width:300px;
+    width: 300px;
     max-height: 200px;
-    padding:10px;
-    box-sizing:border-box;
-    background:#f2f2f2;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #fff;
     overflow: hidden;
     overflow-y: auto;
     border-radius: 5px;
@@ -195,7 +353,7 @@ input {
 }
 
 .msj {
-    font:14px arial;
+    font: 14px arial;
     color: #4985D6;
 }
 
@@ -205,18 +363,21 @@ input {
     height: 14px;
     vertical-align: middle;
 }
+
 .img16 {
     display: inline-block;
     width: 16px;
     height: 16px;
     vertical-align: middle;
 }
+
 .img20 {
     display: inline-block;
     width: 20px;
     height: 20px;
     vertical-align: middle;
 }
+
 .img30 {
     display: inline-block;
     width: 30px;
@@ -227,6 +388,7 @@ input {
 .azul2 {
     color: #5DB5E6;
 }
+
 .azul3 {
     color: #20719E;
 }
@@ -261,7 +423,7 @@ input {
         background: #FFCC38;
     }
 
-    .dvListaDatos {
+.dvListaDatos {
     display: none;
     z-index: 2;
     position: absolute;
@@ -269,9 +431,9 @@ input {
     min-width: 200px;
     background: #FFF;
     padding: 10px;
-    max-height:200px;
-    overflow:hidden;
-    overflow-y:auto;
+    max-height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
@@ -279,16 +441,28 @@ input {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
 .dvLista {
-    background: #b1bac1;
+    background: #EDEFF3;
     padding: 4px;
-    margin:2px;
+    margin: 2px;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
     .dvLista:hover {
         background: #dfeffc;
+        cursor: pointer;
+    }
+
+.dvRiesgo {
+    background: #FFF;
+    padding: 3px 5px;
+}
+
+    .dvRiesgo:hover {
+        background: #CEFFC8;
         cursor: pointer;
     }
 
@@ -296,7 +470,7 @@ input {
     z-index: 2;
     position: absolute;
     width: 600px;
-    margin-left:60px;
+    margin-left: 60px;
     padding: 10px;
     box-sizing: border-box;
     background: #D7EDFF;
@@ -304,6 +478,13 @@ input {
     -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+}
+
+.mi-module {
+    border: 1px solid #b2b3b6;
+    background: #FFF;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 
@@ -382,6 +563,7 @@ input {
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
     .MIbotonRed:hover {
         background: #FF3B3B;
         cursor: pointer;
@@ -448,28 +630,33 @@ input {
 
 .MIbtnF {
     padding: 5px 10px;
-    box-sizing:border-box;
-    background: #323f4b;
+    box-sizing: border-box;
+    background: #19456B;
     font: bold 14px arial;
     color: #cedfe3;
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
 }
+
     .MIbtnF:hover {
-        background: #516d85;
+        background: #11698E;
         color: #FFF;
         cursor: pointer;
         -webkit-box-shadow: 0 0 6px 2px rgba(80,110,130,0.5);
         box-shadow: 0 0 6px 2px rgba(80,110,130,0.5);
     }
 
-
+.OpcionIO {
+    width: 30px;
+    cursor: pointer;
+}
 
 
 
 
 /*  ICONOS */
+/* Ejemplo de uso: <div class='img20 icoRecarga' onclick="resetFrm('OpcionesTV')"></div> */
 .icoCarga {
     background-image: url("../../Merlos/images/icoCarga.png");
     background-repeat: no-repeat;
@@ -488,6 +675,7 @@ input {
         background-size: cover;
         cursor: pointer;
     }
+
 .icoMenos {
     background-image: url("../../Merlos/images/icoMenos.png");
     background-repeat: no-repeat;
@@ -540,7 +728,7 @@ input {
         cursor: pointer;
     }
 
-.icoLeft{
+.icoLeft {
     background-image: url("../../Merlos/images/irLO.png");
     background-repeat: no-repeat;
     background-size: cover;
@@ -552,6 +740,7 @@ input {
         background-size: cover;
         cursor: pointer;
     }
+
 .icoRight {
     background-image: url("../../Merlos/images/irRO.png");
     background-repeat: no-repeat;
@@ -581,6 +770,7 @@ input {
         background-image: url("../../Merlos/images/icoReCargaI.png");
         cursor: pointer;
     }
+
 .icoRecargaAzul {
     background-image: url("../../Merlos/images/icoReCargaAzul.png");
     background-repeat: no-repeat;
@@ -589,6 +779,28 @@ input {
 
     .icoRecargaAzul:hover {
         background-image: url("../../Merlos/images/icoReCargaAzul_I.png");
+        cursor: pointer;
+    }
+
+.icoAspa {
+    background-image: url("../../Merlos/images/aspaO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoAspa:hover {
+        background-image: url("../../Merlos/images/aspaI.png");
+        cursor: pointer;
+    }
+
+.icoGuardar {
+    background-image: url("../../Merlos/images/icoGuardarO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoGuardar:hover {
+        background-image: url("../../Merlos/images/icoGuardarI.png");
         cursor: pointer;
     }
 
@@ -662,55 +874,52 @@ table {
     width: 100%;
     border-collapse: collapse;
 }
-table td , table th {
-    vertical-align:middle;
+
+    table td, table th {
+        vertical-align: middle;
+    }
+
+.tbFrm {
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
 }
+
+    .tbFrm th, .tbFrm td {
+        padding: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+    }
+
+    .tbFrm th {
+        background: #edeff3;
+    }
+
+    .tbFrm td {
+        background: #fff;
+    }
 
 #tbConfiguracion {
-    border-collapse: separate; border-spacing:1px;
-}
-    #tbConfiguracion th, #tbConfiguracion td {
-        padding:5px; 
-        box-sizing:border-box;
-    }
-    #tbConfiguracion th {
-        background: #999;
-        font: 14px arial;
-        color: #FFF;
-    }
-    #tbConfiguracion td {
-        background: #CCC;
-    }
-
-#tbConfiguracionOperador {
     border-collapse: separate;
     border-spacing: 1px;
+    border: 1px solid #E1E3E7;
 }
-    #tbConfiguracionOperador th, #tbConfiguracionOperador td {
+
+    #tbConfiguracion th, #tbConfiguracion td {
         padding: 5px;
         box-sizing: border-box;
-        vertical-align:top;
     }
 
-    #tbConfiguracionOperador th {
-        background: #1B5C20;
+    #tbConfiguracion th {
+        background: #E1E3E7;
         font: 14px arial;
-        color: #BFFFC4;
+        color: #333;
     }
-        #tbConfiguracionOperador th:hover {
-            background: #2B9B33;
-            cursor: pointer;
-            color: #FFF;
-        }
-        #tbConfiguracionOperador th.thO:hover {
-            background: #1B5C20;
-            font: 14px arial;
-            color: #BFFFC4;
-            cursor: default;
-        }
-    #tbConfiguracionOperador td {
-        background: #CCC;
+
+    #tbConfiguracion td {
+        background: #FFF;
     }
+
 
 .dvTR:nth-child(odd) {
     background: #e0e0e0;
@@ -725,44 +934,42 @@ table td , table th {
 .tbStd {
     width: 100%;
     border-collapse: collapse;
-    border-bottom: 4px solid #4985D6;
+    border-bottom: 4px solid #68CDF9;
+    border: 1px solid #b2b3b6;
 }
 
-    .tbStd tr th, .tbStd tr td {
+    .tbStd tr th {
         border: 1px solid #CCC;
         vertical-align: top;
         text-align: left;
-        padding: 6px;
+        color: #333333;
     }
 
     .tbStd th {
-        box-sizing: border-box;
+        padding: 10px;
         font: bold 14px arial;
-        color: #FFF;
-        background: #999;
+        background: #EDEFF3;
     }
 
     .tbStd td {
-        padding: 5px;
-        box-sizing: border-box;
+        padding: 10px;
         font: 14px arial;
-        color: #333;
     }
 
-    .tbStd a {
-        color: #666;
+    .tbStd tr:nth-child(odd) {
+        background-color: #EDEFF3;
     }
 
     .tbStd tr:hover {
         background: #E0F2F7 !important;
         cursor: pointer;
-        color: #FFF;
+        color: #666;
     }
 
 .tbStdC {
     width: 100%;
     border-collapse: collapse;
-    border:0;
+    border: 0;
 }
 
 .tbStdP {
@@ -780,7 +987,7 @@ table td , table th {
 
     .tbStdP th {
         box-sizing: border-box;
-        font:  14px arial;
+        font: 14px arial;
         color: #FFF;
         background: #999;
     }
@@ -791,8 +998,9 @@ table td , table th {
         font: 14px arial;
         color: #333;
     }
+
     .tbStdP tr:nth-child(odd) {
-        background:#FFF;
+        background: #FFF;
     }
 
     .tbStdP tr:hover {
@@ -813,19 +1021,22 @@ table td , table th {
     border-collapse: collapse;
     border-bottom: 4px solid #4985D6;
 }
+
     .tbS th {
-        font:10px arial;
-        color:#666;
+        font: 10px arial;
+        color: #666;
     }
 
 #tbTablaDeLlamadas td {
-    vertical-align:middle;
+    vertical-align: middle;
 }
+
 #tbTablaDeLlamadas input {
-    text-align:center;
+    text-align: center;
     width: 100px;
     padding: 3px;
 }
+
 #tbTablaDeLlamadas img {
     width: 16px;
     cursor: pointer;
@@ -839,10 +1050,11 @@ table td , table th {
 }
 
 #tbPersEP_Articulos, #tbPersEP_ArticulosCab {
-    width:100%;
-    border-collapse:separate;
-    border-spacing:1px;
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px;
 }
+
     #tbPersEP_ArticulosCab th {
         background: #999;
         font: bold12px arial;
@@ -850,30 +1062,36 @@ table td , table th {
         padding: 4px;
         box-sizing: border-box;
     }
+
     #tbPersEP_Articulos td {
         font: 14px arial;
         color: #333;
         padding: 4px;
         box-sizing: border-box;
     }
+
     #tbPersEP_Articulos tr:hover {
-        background:#90fee3;
-        cursor:pointer;
+        background: #90fee3;
+        cursor: pointer;
     }
+
     #tbPersEP_Articulos tr:nth-child(odd) {
         background-color: #F2F2F2;
     }
+
     #tbPersEP_Articulos tr:nth-child(even) {
         background-color: #FFF;
     }
+
     #tbPersEP_Articulos input {
-        text-align:center;
+        text-align: center;
     }
 
-#tbLlamadasBuscador  input{
-    width:100%;
-    padding:2px;
+#tbLlamadasBuscador input {
+    width: 100%;
+    padding: 2px;
 }
+
 #tbLlamadas tr:hover {
     background: #d1ecff;
     cursor: pointer;
@@ -928,6 +1146,7 @@ table td , table th {
     background: #4985D6;
     color: #FFF !important;
 }
+
 .calendarioEJGAnt {
     background: #999;
     color: #FFF !important;
@@ -941,27 +1160,32 @@ table td , table th {
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
 }
+
 #tbRelojEJG td {
-    text-align:center;
-    vertical-align:middle;
+    text-align: center;
+    vertical-align: middle;
     border: 1px solid #CCC;
     padding: 3px;
 }
+
 #tbRelojEJG th {
     font: 12px arial;
     color: #323f4b;
     padding: 3px;
 }
+
 #tbRelojEJG td:hover {
     border: 1px solid green;
     background: green;
     color: #FFF !important;
     cursor: pointer;
 }
+
 #tbRelojEJG td.h {
     font: bold 12px arial;
     color: #1e91e2;
 }
+
 #tbRelojEJG td.m {
     font: bold 12px arial;
     color: #e2761e;
@@ -970,9 +1194,9 @@ table td , table th {
 
 .tCnfT {
     padding: 5px;
-    background: #666;
-    font: 14px arial;
-    color: #FFF;
+    background: #68CDF9;
+    font: 16px arial;
+    color: #333333;
     margin-bottom: 2px;
 }
 
@@ -980,10 +1204,10 @@ table td , table th {
 
 
 .tvTitulo {
-    background: #323f4b;
-    padding:6px;
-    font:14px arial;
-    color:#FFF;
+    background: #68CDF9;
+    padding: 6px;
+    font: 16px arial;
+    color: #333333;
 }
 
 .tbTV {
@@ -991,14 +1215,19 @@ table td , table th {
     border-collapse: separate;
     border-spacing: 2px;
 }
-.tbTV th, .tbTV td { padding:4px;   }
+
+    .tbTV th, .tbTV td {
+        padding: 4px;
+    }
+
     .tbTV th {
         font: 14px arial;
         color: #323f4b;
         background: #E9F6FF;
     }
+
     .tbTV td {
-        font:bold 14px arial;
+        font: bold 14px arial;
         color: #333;
         background: #C9D9E3;
     }

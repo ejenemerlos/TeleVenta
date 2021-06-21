@@ -6179,6 +6179,13 @@
     <Content Include="js\tests\utils.tests.js" />
     <Content Include="Merlos\css\MI_CSS.css" />
     <Content Include="Merlos\images\anyadir.png" />
+    <Content Include="Merlos\images\aspaI.png" />
+    <Content Include="Merlos\images\aspaO.png" />
+    <Content Include="Merlos\images\BtnDesI.png" />
+    <Content Include="Merlos\images\BtnDesO.png" />
+    <Content Include="Merlos\images\btnLedAzulI.png" />
+    <Content Include="Merlos\images\btnLedI.png" />
+    <Content Include="Merlos\images\btnLedO.png" />
     <Content Include="Merlos\images\calendario.png" />
     <Content Include="Merlos\images\cargando.png" />
     <Content Include="Merlos\images\cargandoBl.png" />
@@ -6197,11 +6204,14 @@
     <Content Include="Merlos\images\hand_ok.png" />
     <Content Include="Merlos\images\icoAsignarRightBl50px.png" />
     <Content Include="Merlos\images\icoCarga.png" />
+    <Content Include="Merlos\images\icoCarga150.png" />
     <Content Include="Merlos\images\icoCheck_I.png" />
     <Content Include="Merlos\images\icoCheck_O.png" />
     <Content Include="Merlos\images\icoDown.png" />
     <Content Include="Merlos\images\icoDownC.png" />
     <Content Include="Merlos\images\icoDown_I.png" />
+    <Content Include="Merlos\images\icoGuardarI.png" />
+    <Content Include="Merlos\images\icoGuardarO.png" />
     <Content Include="Merlos\images\icoHDDblue50px.png" />
     <Content Include="Merlos\images\icoMas.png" />
     <Content Include="Merlos\images\icoMas_I.png" />
@@ -6257,6 +6267,7 @@
     <Content Include="Merlos\images\OOR.gif" />
     <Content Include="Merlos\images\OO_GreenSage.png" />
     <Content Include="Merlos\images\punto.png" />
+    <Content Include="Merlos\images\relojAzul.png" />
     <Content Include="Merlos\images\relojBlanco.png" />
     <Content Include="Merlos\images\relojRojo.png" />
     <Content Include="Merlos\images\relojVerde.png" />

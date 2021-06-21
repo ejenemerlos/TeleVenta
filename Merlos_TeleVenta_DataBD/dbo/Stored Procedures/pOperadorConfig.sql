@@ -86,11 +86,11 @@ BEGIN TRY
 		declare cur CURSOR for select valor from [TeleVentaFiltros] where id=@idTV and tipo='Gestor'
 		OPEN cur FETCH NEXT FROM cur into @valor
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				set @gestores = CONCAT(@gestores, ' cli.gestor='''+@valor+'''')
+				set @gestores = CONCAT(@gestores, ' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')
 			FETCH NEXT FROM cur INTO @valor END 
 		CLOSE cur deallocate cur
 		if @gestores is null set @gestores='' 
-		ELSE set @gestores=' and ('+replace(@gestores,''' cli.gestor',''' OR cli.gestor')+') '
+		ELSE set @gestores=' and ('+replace(@gestores,''' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ',''' OR a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')+') '
 
 		-- -- montar where rutas
 		declare cur CURSOR for select valor from [TeleVentaFiltros] where id=@idTV and tipo='Ruta'
@@ -119,8 +119,17 @@ BEGIN TRY
 				from clientes_adi a
 				left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
 				where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
-					  and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
+				and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
 		')
+
+		-- comrpobar [Llamar otro día] y añadir al televenta si coinciden las fechas
+		insert into [TeleVentaDetalle] (id,cliente,horario)
+			select @idTV as id
+				,  cliente
+				,  substring(cast(fechaHora as varchar),13,5)+' - '+substring(cast(fechaHora as varchar),13,5) as horario
+			from llamadasOD
+			where convert(varchar(10),fechaHora,105)=@fecha and insertada=0
+		update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)=@fecha
 	END
 
 	set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
