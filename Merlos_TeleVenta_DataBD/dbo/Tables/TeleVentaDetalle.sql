@@ -3,7 +3,7 @@
 	[cliente] [varchar](50) NULL,
 	[horario] [varchar](20) NULL,
 	[idpedido] [varchar](50) NULL,
-	[pedido] [varchar](10) NULL,
+	[pedido] [varchar](50) NULL,
 	[serie] [varchar](2) NULL,
 	[completado] [int] NULL,
 	[FechaInsertUpdate] [datetime] NOT NULL

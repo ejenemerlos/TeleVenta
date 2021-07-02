@@ -138,32 +138,41 @@ BEGIN TRY
 				FETCH NEXT FROM cur INTO @valor
 			END CLOSE cur deallocate cur
 		END
+
+		-- actualizar tabla TeleVentaCab
+		declare @clientes int = (select count(distinct cliente) from TeleVentaDetalle where id=@IdTeleVenta)
+		declare @llamadas int = (select count(completado) from TeleVentaDetalle where id=@IdTeleVenta and completado=1)
+		declare @pedidos  int = (select count(idpedido) from TeleVentaDetalle where id=@IdTeleVenta and idpedido is not null 
+								and idpedido<>'')
+		declare @importe numeric(15,6) = (select sum(coalesce(totaldoc,0)) from vPedidos 
+						where IDPEDIDO collate Modern_Spanish_CI_AI in (select IDPEDIDO from TeleVentaDetalle where id=@IdTeleVenta))
+
+		update TeleVentaCab set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, importe=@importe where id=@IdTeleVenta
 	END
 
 	if @modo='listaGlobal' begin
 		if @rol='Admins' or @rol='AdminPortal' or @rol='VerTodosLosClientes'
 			select isnull(
 				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-				,(select count(distinct cliente) from TeleVentaDetalle where id=t.id) as clientes
-				,(select count(completado) from TeleVentaDetalle where id=t.id and completado=1) as llamadas
-				,(select count(idpedido) from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'') as pedidos
-				,(
-					select SUM(TOTALDOC) from vPedidos where IdPedido collate Modern_Spanish_CI_AI  in 
-					(select idpedido from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'')
-				 ) as importe
-				from [TeleVentaCab]	t order by cast(t.fecha as date) desc for JSON AUTO)
+					, clientes, llamadas, pedidos, importe
+					from [TeleVentaCab] t
+					inner join TeleVentaDetalle d on d.id=t.id
+					left join vPedidos p on p.idpedido=d.idpedido collate database_default
+					group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, importe
+					order by cast(t.fecha as date) desc 
+				for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		else 
 			select isnull(
 				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-				,(select count(distinct cliente) from TeleVentaDetalle where id=t.id) as clientes
-				,(select count(completado) from TeleVentaDetalle where id=t.id and completado=1) as llamadas
-				,(select count(idpedido) from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'') as pedidos
-				,(
-					select SUM(TOTALDOC) from vPedidos where IdPedido collate Modern_Spanish_CI_AI  in 
-					(select idpedido from TeleVentaDetalle where id=t.id and idpedido is not null and idpedido<>'')
-				 ) as importe
-				from [TeleVentaCab] t where t.usuario=@usuario order by cast(t.fecha as date) desc for JSON AUTO)
+					, clientes, llamadas, pedidos, importe
+				from [TeleVentaCab] t
+				inner join TeleVentaDetalle d on d.id=t.id
+				left join vPedidos p on p.idpedido=d.idpedido collate database_default
+				where t.usuario=@usuario 
+				group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, importe
+				order by cast(t.fecha as date) desc 
+				for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		RETURN -1
 	END

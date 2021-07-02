@@ -7,8 +7,7 @@
 }
 
 a {
-    background: #333333;
-    color: #dddddd;
+    color: #666666;
     text-decoration: none;
 }
 
@@ -96,7 +95,7 @@ a {
 .login input[type='text'], .login input[type='password'] {
     font-size: 1.5em;
     background: transparent;
-    color: #dddddd;
+    color: #666666;
     border: none;
     border-bottom: solid 1px #dddddd;
     width: 255px;

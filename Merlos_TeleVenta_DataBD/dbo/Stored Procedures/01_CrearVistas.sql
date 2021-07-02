@@ -66,7 +66,8 @@ BEGIN TRY
 	-- Vista [vArticulosBasic]
 	IF EXISTS (select * FROM sys.views where name = 'vArticulosBasic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[vArticulosBasic]   as       
+	'+@AlterCreate+' VIEW [dbo].[
+	losBasic]   as       
 		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].articulo where BAJA=0
 	'
 	exec(@Sentencia)
@@ -492,11 +493,17 @@ BEGIN TRY
 			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
 			, art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
 			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, coalesce(pvp.pvp,0.00) as pvp
-			, isnull(st.StockVirtual,0) as StockVirtual
+			, isnull(SUM(st.StockVirtual),0) as StockVirtual
 	from '+@GESTION+'.[DBO].articulo art
 	left join vStock st on st.ARTICULO=art.CODIGO
 	left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
 	and pvp.tarifa collate Modern_Spanish_CS_AI=(select TarifaMinima from Configuracion_SQL)
+	group by art.CODIGO, art.NOMBRE
+			, art.FAMILIA, art.MARCA, art.MINIMO
+			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET
+			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
+			, art.CARAC, art.UNICAJA, art.peso, art.litros, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
+			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1,pvp.pvp
 	' 
 	exec(@Sentencia)
 	select  'vArticulos'

@@ -89,7 +89,7 @@ function cargarTbConfigOperador(modo,comprobar){
 
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess('pOperadorConfig','',null,null,[{'Key':'elJS','Value':limpiarCadena(elJS)}],'modal640x480',false,$(this),function(ret){
-        if (ret) {
+		if (ret) {
 			if(ret.JSCode==="nombreTV_Existe!"){ alert("El nombre ya existe en la base de datos!"); return; }
 			
             var js = JSON.parse(limpiarCadena(ret.JSCode));   

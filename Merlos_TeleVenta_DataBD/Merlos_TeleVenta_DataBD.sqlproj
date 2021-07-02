@@ -87,7 +87,6 @@
     <Build Include="dbo\Stored Procedures\pSeries.sql" />
     <Build Include="dbo\Stored Procedures\pIncidencias.sql" />
     <Build Include="dbo\Stored Procedures\pInpDatos.sql" />
-    <Build Include="dbo\Stored Procedures\pArticulosCliente.sql" />
     <Build Include="dbo\Stored Procedures\pOperadorConfig.sql" />
     <Build Include="dbo\Stored Procedures\pObjetoDatos.sql" />
     <Build Include="dbo\Stored Procedures\01_CrearVistas.sql" />
@@ -114,8 +113,6 @@
     <Build Include="dbo\Tables\TeleVentaDetalle.sql" />
     <Build Include="dbo\Tables\TeleVentaFiltros.sql" />
     <Build Include="dbo\Tables\TeleVentaIncidencias.sql" />
-    <Build Include="dbo\Views\vIncidenciasArticulos.sql" />
-    <Build Include="dbo\Views\vIncidenciasClientes.sql" />
     <Build Include="dbo\Tables\ObservacionesInternas.sql" />
     <Build Include="dbo\Tables\llamadasOD.sql" />
     <Build Include="dbo\Tables\inci_CliArt.sql" />
