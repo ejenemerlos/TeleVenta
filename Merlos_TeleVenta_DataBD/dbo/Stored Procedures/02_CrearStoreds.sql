@@ -292,7 +292,6 @@ BEGIN TRY
 			, @FAMILIA    char(4) = ''''
 			, @OBSERVACIO varchar(8000)
 			, @LINEAS varchar(max)
-			, @NoCobrarPortes bit
 			, @UserLogin  varchar(50)
 			, @UserID	  varchar(50)=''''
 			, @UserName	  varchar(50)=''''
@@ -323,6 +322,7 @@ BEGIN TRY
 			, @clave_numero				char(10)
 			, @clave varchar(20)
 ' set  @Sentencia = @Sentencia + '
+
 	-- Obtener datos del XML ----------------------------------------------------------------------------------------------
 	SET @MODO		= @Values.value(''(/Row/Property[@Name=''''MODO'''']/@Value)[1]''		, ''varchar(50)'')
 	SET @EMPRESA	= @Values.value(''(/Row/Property[@Name=''''EMPRESA'''']/@Value)[1]''	, ''varchar(2)'')
@@ -340,7 +340,6 @@ BEGIN TRY
 	SET @FAMILIA	= @Values.value(''(/Row/Property[@Name=''''FAMILIA'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @LINEAS		= @Values.value(''(/Row/Property[@Name=''''LINEAS'''']/@Value)[1]''	, ''varchar(max)'')
-	SET @NoCobrarPortes = @Values.value(''(/Row/Property[@Name=''''NoCobrarPortes'''']/@Value)[1]'', ''bit'')
 
 	SET @UserLogin			= @ContextVars.value(''(/Row/Property[@Name=''''currentUserLogin'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @UserID				= @ContextVars.value(''(/Row/Property[@Name=''''currentUserId'''']/@Value)[1]''		, ''varchar(50)'')
@@ -351,7 +350,7 @@ BEGIN TRY
 	if @ENV_CLI is null or @ENV_CLI='''' 
 	set @ENV_CLI = isnull((select ISNULL(LINEA,0) from vContactos where CLIENTE=@CLIENTE and LINEA=0),0)
 
-	-- en USO
+	/*-- en USO
 	set @clave_ejercicio_empresa = LEFT(@IDPEDIDO,6)
 	set @clave_numero = RIGHT(@IDPEDIDO,10)
 	declare @nuevoValor varchar(10) = '''', @pos int = 0, @noEsCero int = 0
@@ -362,13 +361,13 @@ BEGIN TRY
 		set @nuevoValor = @nuevoValor + @caracter
 	END
 	set @clave_numero = @nuevoValor
-	set @clave = concat(@clave_ejercicio_empresa,@clave_numero,@SERIE)
+	set @clave = concat(@clave_ejercicio_empresa,@clave_numero,@SERIE)*/
+' set  @Sentencia = @Sentencia + '
 
 	--Creamos las variables de trabajo
 	DECLARE @nombreUsuario CHAR(25), @codigo char(10), @estado_aux BIT, @aux INT,
 			 @letra CHAR(2), @moneda VARCHAR(3), @fpag VARCHAR(2), @ruta CHAR(2)
 			 set @letra=@SERIE
-' set  @Sentencia = @Sentencia + '
 
 	--Inicializamos las variables donde haremos las inserciones
 	SET @EJER = (select [any] from '+@COMUN+'.[DBO].ejercici where predet=1)
@@ -379,19 +378,24 @@ BEGIN TRY
 	SET @fpag	= (SELECT fpag FROM '+@GESTION+'.[dbo].clientes WHERE codigo=@CLIENTE)
 	SET @PRONTO = (SELECT PRONTO FROM '+@GESTION+'.[dbo].clientes WHERE codigo=@CLIENTE)
 	SET @ruta	= isnull((SELECT ruta FROM '+@GESTION+'.[dbo].clientes WHERE codigo=@CLIENTE),'''')
-	SET @nVENDEDOR = (SELECT nombre FROM vVendedores WHERE codigo=(select isnull(VENDEDOR,''01'') from vClientes where CODIGO=@CLIENTE))
+	SET @nVENDEDOR = (SELECT nombre FROM '+@GESTION+'.[dbo].vendedor WHERE codigo=@Vendedor)
 		
 	SET @nombreUsuario = ''FLEXYGO##V_''+@UserLogin
 	
-	IF @OBSERVACIO IS NULL or @OBSERVACIO='''' SET @OBSERVACIO = (SELECT OBSERVACIO from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE)
-	IF @OBSERVACIO IS NULL SET @OBSERVACIO = ''''
+	IF @OBSERVACIO IS NULL or @OBSERVACIO='''' 
+		SET @OBSERVACIO = (SELECT OBSERVACIO from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE)
+	IF @OBSERVACIO IS NULL 
+		SET @OBSERVACIO = ''''
 
-	SET @SentenciaSQL = ''SELECT fpag, pronto, ruta INTO ##CLIENTE FROM '+@GESTION+'.[dbo].clientes WHERE codigo = ''+@CLIENTE
+	/*SET @SentenciaSQL = ''SELECT fpag, pronto, ruta INTO ##CLIENTE FROM '+@GESTION+'.[dbo].clientes WHERE codigo = ''+@CLIENTE
 	EXEC(@SentenciaSQL)
 	SET @fpag   = (SELECT fpag FROM ##CLIENTE)
 	SET @PRONTO = (SELECT pronto FROM ##CLIENTE)
 	SET @ruta   = (SELECT ruta FROM ##CLIENTE)
-	DROP TABLE ##CLIENTE	
+	DROP TABLE ##CLIENTE	*/
+' set  @Sentencia = @Sentencia + '
+
+	SELECT @fpag=fpag, @PRONTO=pronto, @ruta=ruta FROM '+@GESTION+'.[dbo].clientes WHERE codigo = @CLIENTE
 
 	SET @almacen = (SELECT almacen FROM '+@GESTION+'.dbo.empresa WHERE codigo = @EMPRESA)
 
@@ -400,21 +404,24 @@ BEGIN TRY
 	-- Obtener número según los contadores de Eurowin
 	IF (@estado_aux = 1) BEGIN
 		SET @codigo = cast((SELECT isnull(contador,0)+1 FROM '+@GESTION+'.[dbo].series WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra) as char(10))
-		while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		--while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		 set @codigo=space(10-len(ltrim(rtrim(@codigo))))+ltrim(rtrim(@codigo))
+
 		UPDATE '+@GESTION+'.[dbo].series SET contador=cast(@codigo as int) WHERE tipodoc = 2 AND empresa=@EMPRESA AND serie=@letra
 	END
 	ELSE BEGIN
 		SET @codigo = cast((SELECT isnull(pediven,0)+1 FROM '+@GESTION+'.[dbo].empresa WHERE codigo=@EMPRESA) as char(10))
-		while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		--while len(@codigo)<10 begin set @codigo=CONCAT(space(1),@codigo) end
+		set @codigo=space(10-len(ltrim(rtrim(@codigo))))+ltrim(rtrim(@codigo))
 		UPDATE '+@GESTION+'.[dbo].empresa SET pediven = cast(@codigo as int) WHERE codigo=@EMPRESA 
 	END
-' set  @Sentencia = @Sentencia + '
 	
 	IF @REFERCLI IS NULL BEGIN set  @REFERCLI = '''' END
 	IF @PRONTO   IS NULL BEGIN set  @PRONTO   = 0  END
 
-	declare @divisa char(3) = isnull((select isnull(MONEDA,'''') from '+@COMUN+'.dbo.paises where CODIGO=
-								(select PAIS from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE)),0)
+	declare @pais char(3)
+	set @pais= (select PAIS from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE)
+	declare @divisa char(3) = isnull((select isnull(MONEDA,'''') from '+@COMUN+'.dbo.paises where CODIGO=@pais),0)
 
 	INSERT INTO '+@GESTION+'.[DBO].c_pedive ( usuario, empresa, numero, fecha, cliente, env_cli, entrega, vendedor, ruta, pronto, iva_inc, divisa
 										, cambio, fpag, letra, hora, almacen,observacio ) 
@@ -424,7 +431,8 @@ BEGIN TRY
 	SET @IDPEDIDO = CONCAT(@EJER,@EMPRESA,@letra,@codigo)
 	declare @IDP varchar(50) 
 	set @IDP = replace(@IDPEDIDO,space(1),''0'')
-	set @IDPEDIDO = LEFT(@IDP,18)	
+	set @IDPEDIDO = LEFT(@IDP,18)
+' set  @Sentencia = @Sentencia + '
 
 	insert into [dbo].[Pedidos_Familias](EJERCICIO, EMPRESA, NUMERO, LETRA, FAMILIA)
 	values (@EJER, @EMPRESA, @codigo, @letra, @FAMILIA)
@@ -437,9 +445,7 @@ BEGIN TRY
 	-- Insertamos las lineas del pedido	
 
 		set @LINEAS = ''{"datos":[''+replace(replace(@LINEAS,''_openLL_'',''{''),''_closeLL_'',''}'')+'']}''
-
-' set  @Sentencia = @Sentencia + '
-
+		
 		declare @valor varchar(max)
 		declare cur CURSOR for select [value] from openjson(@LINEAS,''$.datos'')
 		OPEN cur FETCH NEXT FROM cur INTO @valor
@@ -455,12 +461,19 @@ BEGIN TRY
 			declare @inciArt char(2) = JSON_VALUE(@valor,''$.incidencia'') 
 			declare @inciArtDescrip char(100) = JSON_VALUE(@valor,''$.incidenciaDescrip'') 
 			declare @obsArt varchar(50) = JSON_VALUE(@valor,''$.observacion'')
-			declare @jsCajas numeric(15,6) = case when  (select isnull(UNICAJA,0) from '+@GESTION+'.dbo.articulo where CODIGO=@jsArticulo)>0 
-												then @jsUnidades / (select isnull(UNICAJA,0) from '+@GESTION+'.dbo.articulo where CODIGO=@jsArticulo)
-												else 0.00 END
+			declare @jsCajas numeric(15,6) = case when  (select isnull(UNICAJA,0) from '+@GESTION+'.dbo.articulo 
+											where CODIGO=@jsArticulo)>0 
+											then @jsUnidades / (select isnull(UNICAJA,0) 
+											from '+@GESTION+'.dbo.articulo where CODIGO=@jsArticulo)
+											else 0.00 END
+' set  @Sentencia = @Sentencia + '
+
 			EXEC [pPedido_Nuevo_Linea_I]	  @MODO = ''''
 											, @Emp = @EMPRESA
 											, @IDPEDIDO = @IDPEDIDO
+											, @NUMERO=@codigo
+											, @LETRA=@letra
+											, @CLIENTE=@CLIENTE
 											, @ARTICULO = @jsArticulo
 											, @DESCRIP = @jsDescrip
 											, @cajas = @jsCajas
@@ -476,7 +489,7 @@ BEGIN TRY
 											, @UserLogin = @UserLogin
 											, @UserID = @UserID
 											, @UserName = @UserName
-' set  @Sentencia = @Sentencia + '
+
 
 			-- linea de observaciones
 			if @obsArt is not null and @obsArt<>'''' BEGIN
@@ -493,62 +506,21 @@ BEGIN TRY
 						,'''',@obsArt,0,0,0,0,0,'''',0,@cliente,0,0,0,'''',0,0,0,@letra,0,0,0
 						)
 			END	
-
+' set  @Sentencia = @Sentencia + '
+			
 			declare @hora varchar(2) = cast(datepart(HOUR,getdate()) as varchar(2))
 			declare @minutos varchar(2) = cast(datepart(MINUTE,getdate()) as varchar(2))
 			if len(@hora)=1 set @hora = ''0''+@hora
 			if len(@minutos)=1 set @minutos = ''0''+@minutos
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
-			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	BEGIN
-				if not exists (select * from TeleVentaIncidencias 
-								where id=@IdTeleVenta and gestor=@currentReference
-								and tipo=''Articulo'' and incidencia=@inciArt
-								and cliente=@cliente
-								and articulo=@jsArticulo
-				) BEGIN
-					insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
-					values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
-				END
-				ELSE BEGIN 
-					update TeleVentaIncidencias set observaciones=@obsArt
-					where id=@IdTeleVenta and gestor=@currentReference
-					and tipo=''Articulo'' and incidencia=@inciArt
-					and cliente=@cliente
-					and articulo=@jsArticulo
-				END
-			END
+			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	
+			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
+				values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
 
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
-' set  @Sentencia = @Sentencia + '
-
-		-- No Cobrar Portes
-		if @NoCobrarPortes=1 BEGIN
-			declare @tbTemp varchar(1000)= concat(''##tbTmp''
-			,replace(replace(replace(replace(replace(convert(varchar,getdate(),121),'' '',''''),''/'',''''),'':'',''''),''.'',''''),''-'',''''))
-
-			declare @CAMPOS char(8) = (select CAMPOS from Configuracion_SQL)
-			exec(''
-				IF OBJECT_ID(''''tempdb..''+@tbTemp+'''''') IS NOT NULL BEGIN drop table ''+@tbTemp+'' END
-				IF EXISTS (SELECT * FROM sysdatabases WHERE (name = ''''''+@CAMPOS+'''''')) BEGIN
-					IF EXISTS (select * from [''+@CAMPOS+''].INFORMATION_SCHEMA.TABLES where TABLE_NAME=''''c_pediveew'''') BEGIN
-						IF NOT EXISTS (select * from [''+@CAMPOS+''].INFORMATION_SCHEMA.COLUMNS where TABLE_NAME=''''c_pediveew'''' 
-										and COLUMN_NAME=''''EWNOPORT'''') BEGIN
-							ALTER TABLE [''+@CAMPOS+''].dbo.c_pediveew ADD EWNOPORT bit default(0)
-						END 
-						select 1 as insertar into ''+@tbTemp+''
-					END 
-				END
-			'')	
-			exec(''	
-				if (select insertar from ''+@tbTemp+'')=1
-				INSERT INTO [''+@CAMPOS+''].dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWNOPORT) 
-				VALUES (''''''+@EJER+'''''',''''''+@EMPRESA+'''''',''''''+@codigo+'''''',''''''+@letra+'''''',1)
-				drop table ''+@tbTemp+''
-			'')
-		END
-
+		
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
 
@@ -557,7 +529,7 @@ BEGIN TRY
 	SELECT ''{"IdPedido":"''+@IDPEDIDO+''","Ejercicio":"''+@EJER+''","Empresa":"''+@EMPRESA+''","Letra":"''+@letra+''","Codigo":"''+ltrim(rtrim(@codigo))+''"}'' as JAVASCRIPT
 	RETURN -1  
 END TRY
-' set  @Sentencia = @Sentencia + '
+
 
 BEGIN CATCH
 	ROLLBACK TRANSACTION pedidoNuevo
@@ -593,6 +565,9 @@ set  @Sentencia = '
 '+@AlterCreate+'  PROCEDURE [dbo].[pPedido_Nuevo_Linea_I]		 @MODO			varchar(50)	
 													,@Emp			char(2) = ''01''
 													,@IDPEDIDO		varchar(50)
+													,@NUMERO		varchar(50)
+													,@LETRA			char(2)
+													,@CLIENTE		varchar(50)
 													,@ARTICULO		char(15)
 													,@DESCRIP		char(75)
 													,@cajas			numeric(10,2)
@@ -611,12 +586,8 @@ set  @Sentencia = '
 AS
 BEGIN TRY
 	DECLARE	 @EJER			varchar(4)
-			,@CLIENTE		varchar(20)
-			,@NUMERO		char(10)
-			,@ENTREGA		varchar(10)
 			,@TIPO_IVA		char(2)
 			,@IVA			numeric(20,2)
-			,@LETRA			char(2)
 			,@linia			int
 			,@precio_IVA	numeric(20,2)	
 			,@recargoPC		numeric(20,2)
@@ -629,28 +600,23 @@ BEGIN TRY
 			,@Mensaje		varchar(max)
 			,@MensajeError	VARCHAR(MAX)
 			,@recargo		bit
-' set  @Sentencia =  @Sentencia + '
+' set  @Sentencia = @Sentencia + '
 	declare @sentencia varchar(max) = ''''
-	declare @GESTION   varchar(20)	= ''[''+(select GESTION from Configuracion_SQL)+'']''
-	declare @CAMPOS	   varchar(10)  = ''[''+(select CAMPOS from Configuracion_SQL)+'']''
-	declare @EJERCICIO char(4)		= (select EJERCICIO from Configuracion_SQL)
 
 	if @DESCRIP is null set @DESCRIP=''''
 	SET @EJER = (select [any] from '+@COMUN+'.[DBO].ejercici where predet=1)
 
-	set @NUMERO   = (select NUMERO  FROM vPedidos where IDPEDIDO=@IDPEDIDO)
-	set @ENTREGA  = (select ENTREGA from vPedidos where IDPEDIDO=@IDPEDIDO)
-	set @letra    = (select letra   from vPedidos where IDPEDIDO=@IDPEDIDO)
-	set @CLIENTE  = (select CLIENTE from vPedidos where IDPEDIDO=@IDPEDIDO)
-	set @linia	  = (select isnull(max(LINIA),0)+1 from vPedidos_Detalle where IDPEDIDO=@IDPEDIDO)	
-	set @coste	  = (select isnull(COST_ULT1,0) from vArticulos where codigo=@ARTICULO)
-	set @familia  = (select familia   from vArticulos where codigo=@ARTICULO)
+	set @linia	  = (select isnull(max(LINIA),0)+1 from '+@GESTION+'.dbo.d_pedive where empresa=@Emp and numero=@numero and letra=@letra)	
 
-	declare @IVAcliente char(2) = 
-			ISNULL((select CODIGO from '+@GESTION+'.dbo.tipo_iva where CODIGO=(select TIPO_IVA from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE)),''0'')
-	declare @IVAarticulo char(2) = 
-			ISNULL((select CODIGO from '+@GESTION+'.dbo.tipo_iva where CODIGO=(select TIPO_IVA from '+@GESTION+'.dbo.articulo where CODIGO=@ARTICULO)),''0'')
-	if @IVAcliente=0 set @TIPO_IVA=@IVAarticulo else set @TIPO_IVA=@IVAcliente
+	select @familia=familia, @coste=COST_ULT1  from vArticulos where codigo=@ARTICULO
+
+	declare @IVAcliente char(2) = ISNULL((select TIPO_IVA from '+@GESTION+'.dbo.clientes where CODIGO=@CLIENTE),''00'')
+	declare @IVAarticulo char(2) = ISNULL((select TIPO_IVA from '+@GESTION+'.dbo.articulo where CODIGO=@articulo),''00'')
+			
+	if @IVAcliente=0 
+		set @TIPO_IVA=@IVAarticulo 
+	else 
+		set @TIPO_IVA=@IVAcliente
 
 	set @precio_IVA = (@IMPORTE  * (select IVA from '+@GESTION+'.dbo.tipo_iva where CODIGO=@TIPO_IVA)) / 100
 	set @importeiva = ((@IMPORTE * (select IVA from '+@GESTION+'.dbo.tipo_iva where CODIGO=@TIPO_IVA)) / 100) + @IMPORTE
@@ -663,37 +629,17 @@ BEGIN TRY
 	END ELSE set @recargo=0
 
 	IF @peso is null set @peso=0
-' set  @Sentencia =  @Sentencia + '
+' set  @Sentencia = @Sentencia + '
+
 	--------------------------------------------------------------------------------------------------------------
 	--	Insertar Registro	
-		set @sentencia = 
-		''INSERT INTO ''+@GESTION+''.[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
-					, importe, tipo_iva, coste, cliente, precioiva, importeiva, cajas, familia, preciodiv, importediv, peso, letra
-					, impdiviva, prediviva, RECARG)
-			VALUES (''''''+@UserName
-					+'''''', ''''''+@Emp
-					+'''''', ''''''+@NUMERO
-					+'''''', ''''''+cast(@linia as varchar)
-					+'''''', ''''''+@ARTICULO
-					+'''''', ''''''+@DESCRIP
-					+'''''', ''''''+cast(@UNIDADES as varchar)
-					+'''''', ''''''+cast(@PRECIO	as varchar)
-					+'''''', ''''''+cast(@DTO1	as varchar)
-					+'''''', ''''''+cast(@DTO2	as varchar)
-					+'''''', ''''''+cast(@IMPORTE as varchar)
-					+'''''', ''''''+@TIPO_IVA
-					+'''''', ''''''+cast(@coste	as varchar)
-					+'''''', ''''''+@CLIENTE
-					+'''''', ''''''+cast(@precio_iva	as varchar)
-					+'''''', ''''''+cast(@importeiva	as varchar)
-					+'''''', ''''''+cast(@cajas		as varchar)
-					+'''''', ''''''+@familia
-					+'''''', ''''''+cast(@PRECIO	as varchar)
-					+'''''', ''''''+cast(@IMPORTE as varchar)
-					+'''''', ''''''+cast(@peso	as varchar)
-					+'''''', ''''''+@letra
-					+'''''', 0, 0, ''''''+cast(@recargo as varchar)+'''''')''
-		EXEC (@sentencia)
+
+	INSERT INTO '+@GESTION+'.[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
+				, importe, tipo_iva, coste, cliente, precioiva, importeiva, cajas, familia, preciodiv, importediv, peso, letra
+				, impdiviva, prediviva, RECARG)
+	VALUES (@UserName,@Emp,@NUMERO,@linia,@ARTICULO,@DESCRIP,@UNIDADES, @PRECIO, @DTO1,@DTO2,@IMPORTE
+				,@TIPO_IVA,@coste,@CLIENTE,@precio_iva,@importeiva,@cajas,@familia,@PRECIO,@IMPORTE,@peso,@letra
+				, 0, 0, @recargo)
 
 	-- camposAD
 	IF OBJECT_ID('''+@CAMPOS+'.dbo.D_PEDIVEEW'') IS NOT NULL BEGIN
@@ -704,7 +650,7 @@ BEGIN TRY
 			values (@EJER, @Emp, @NUMERO, @LETRA, @linia)
 		END
 	END
-' set  @Sentencia =  @Sentencia + '	
+	
 	RETURN -1  
 END TRY
 
@@ -1175,7 +1121,7 @@ BEGIN TRY
 		CLOSE elCursor deallocate elCursor
 		if LEN(@marcas)>0 set @marcas = '' AND ('' + SUBSTRING(@marcas,4,LEN(@marcas))+ '')''
 	END
-
+' set @Sentencia = @Sentencia + '
 	set @registro = ''''
 	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo=''Familia'') BEGIN
 		DECLARE elCursor CURSOR FOR
@@ -1207,6 +1153,7 @@ BEGIN TRY
 	set @MesesConsumo = (select top 1 MesesConsumo from Configuracion_SQL)
 	set @desde = replace(convert(varchar(10),dateadd(month, - @MesesConsumo,getdate()),103),''/'',''-'')
 	
+' set @Sentencia = @Sentencia + '
 
 	-- -------------------------------------------------------------------
 	--      Últimas ventas del artículo (al pasar sobre el artículo)
@@ -1221,7 +1168,7 @@ BEGIN TRY
 		WITH VENTAS (FECHA, CLIENTE, ARTICULO, DEFINICION, CAJAS, UDS, PESO, PRECIO, DTO1, IMPORTE)
 		AS
 		(
-			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, DAV.DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio, dav.dto1, dav.importe FROM [2021YB].DBO.C_ALBVEN CAV 
+			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, DAV.DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio, dav.dto1, dav.importe FROM '+@GESTION+'.DBO.C_ALBVEN CAV 
 			INNER JOIN [''+@gestion+''].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
 			INNER JOIN [''+@gestion+''].DBO.CLIENTES CLI ON CLI.CODIGO=CAV.CLIENTE
 			INNER JOIN [''+@gestion+''].DBO.ARTICULO ART ON ART.CODIGO=DAV.ARTICULO
@@ -1241,6 +1188,7 @@ BEGIN TRY
 			WHERE CLI.FECHA_BAJ IS NULL AND ART.BAJA=0 AND CAV.FECHA>=GETDATE()-(30*CON.MesesConsumo) AND CAV.TRASPASADO=0
 			AND CLI.CODIGO=''''''+@cliente+'''''' ''+@marcas+'' '' +@familias+ '' '' +@subfams+ ''
 		)
+' set @Sentencia = @Sentencia + '
 
 		SELECT ISNULL(
 			(
@@ -1258,6 +1206,7 @@ BEGIN TRY
 	END
 
 
+' set @Sentencia = @Sentencia + '
 
 	-- -------------------------------------------------------------------
 	-- Última venta del Cliente (Listado general al hacer clic en PEDIDO)
@@ -1295,6 +1244,7 @@ BEGIN TRY
 		WHERE CLI.FECHA_BAJ IS NULL AND ART.BAJA=0 AND CAV.FECHA>=GETDATE()-(30*CON.MesesConsumo) AND CAV.TRASPASADO=0
 		AND CLI.CODIGO=''''''+@cliente+'''''' ''+@marcas+'' '' +@familias+ '' '' +@subfams+ ''
 	)
+' set @Sentencia = @Sentencia + '
 
 	select isnull(
 	( 
@@ -1326,6 +1276,68 @@ END CATCH
 '
 exec(@Sentencia)
 select  'pArticulosCliente'
+
+
+
+
+--Procedimiento pOfertas
+IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pOfertas' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+set @Sentencia = @AlterCreate + ' PROCEDURE [dbo].[pOfertas] (@parametros varchar(max))
+AS
+BEGIN TRY
+	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,''$.modo'')),'''')
+	declare @cliente varchar(50) = isnull((select JSON_VALUE(@parametros,''$.cliente'')),'''')
+	declare @articulo varchar(20) = (select JSON_VALUE(@parametros,''$.articulo''))
+	declare @fecha    smalldatetime = cast((select JSON_VALUE(@parametros,''$.fecha'')) as smalldatetime)
+
+	if @modo=''ofertasDelCliente'' BEGIN
+		select isnull((
+			SELECT * FROM 
+				(
+				SELECT CLI.CODIGO AS CLIENTE, OFE.ARTICULO
+				, convert(varchar(10),OFE.FECHA_IN) as FECHA_IN
+				, convert(varchar(10),OFE.FECHA_FIN) as FECHA_FIN
+				, OFE.DESDE AS UNI_INI
+				, (CASE WHEN OFE.HASTA=0 THEN 999999.99 ELSE OFE.HASTA END) AS UNI_FIN, OFE.PVP, OFE.DESCUENTO AS DTO1
+				,  OFE.MONEDA, OFE.TARIFA 
+				FROM '+@GESTION+'.DBO.CLIENTES CLI 
+				INNER JOIN '+@GESTION+'.DBO.OFERTAS OFE ON 1=1 
+				WHERE CLI.OFERTA=1 AND OFE.TARIFA='''' AND CLI.CODIGO=@cliente
+				UNION ALL
+				SELECT CLI.CODIGO AS CLIENTE, OFE.ARTICULO
+				, convert(varchar(10),OFE.FECHA_IN) as FECHA_IN
+				, convert(varchar(10),OFE.FECHA_FIN) as FECHA_FIN
+				, OFE.DESDE AS UNI_INI
+				, (CASE WHEN OFE.HASTA=0 THEN 999999.99 ELSE OFE.HASTA END) AS UNI_FIN, OFE.PVP, OFE.DESCUENTO AS DTO1
+				,  OFE.MONEDA, OFE.TARIFA 
+				FROM '+@GESTION+'.DBO.CLIENTES CLI 
+				INNER JOIN '+@GESTION+'.DBO.OFERTAS OFE ON OFE.TARIFA=CLI.TARIFA 
+				WHERE CLI.OFERTA=1 AND OFE.TARIFA!=''''  AND CLI.CODIGO=@cliente
+				) A
+			for JSON AUTO, INCLUDE_NULL_VALUES
+		),''[]'') as JAVASCRIPT
+		return -1
+	END
+
+	select isnull((
+			select PVP, DTO1 from vOfertas		--	select * from vOfertas
+			where ARTICULO=@articulo and FECHA_IN<=cast(@fecha as smalldatetime) and FECHA_FIN>=cast(@fecha as smalldatetime)
+				  and (CLIENTE=@cliente or TARIFA='''')
+			for JSON AUTO, INCLUDE_NULL_VALUES
+	),''[]'') as JAVASCRIPT
+	
+	RETURN -1
+END TRY
+
+BEGIN CATCH	
+	DECLARE @CatchError NVARCHAR(MAX)
+	SET @CatchError=ERROR_MESSAGE()+char(13)+ERROR_NUMBER()+char(13)+ERROR_PROCEDURE()+char(13)+@@PROCID+char(13)+ERROR_LINE()
+	RAISERROR(@CatchError,12,1)
+	RETURN 0
+END CATCH
+'
+exec(@Sentencia)
+select  'pOfertas'
 
 
 

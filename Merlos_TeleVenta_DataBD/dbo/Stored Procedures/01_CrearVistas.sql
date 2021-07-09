@@ -66,8 +66,7 @@ BEGIN TRY
 	-- Vista [vArticulosBasic]
 	IF EXISTS (select * FROM sys.views where name = 'vArticulosBasic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[
-	losBasic]   as       
+	'+@AlterCreate+' VIEW [dbo].[vArticulosBasic]   as       
 		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].articulo where BAJA=0
 	'
 	exec(@Sentencia)

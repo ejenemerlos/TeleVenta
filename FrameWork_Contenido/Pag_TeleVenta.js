@@ -34,7 +34,7 @@ function recargarTVLlamadas(tf){ console.log("recargarTVLlamadas()");
 		cargarTbConfigOperador("recargar",false);
 	}else{
 		abrirVelo(icoCargando16 + " recargando datos...");
-		//tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
+		tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); 
 		setTimeout(function(){ tbLlamadasGlobal_Sel(IdTeleVenta,FechaTeleVenta, NombreTeleVenta); cerrarVelo(); },1000);
 	}
 }
@@ -106,7 +106,7 @@ function cargarConfiguracionTV(elCallBack){console.log("cargarConfiguracionTV()"
 		for(var i in js.IO){if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; }else{window["Conf"+js.IO[i].nombre]=1; }}
 		if(ConfNoCobrarPortes===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
 		if(elCallBack){ elCallBack(); }
-	}else{ alert("Error SP: cargarConfiguracionTV - pConfiguracion - lista!!!\n"+ret); }}, false);
+	}else{ alert("Error SP: cargarConfiguracionTV - pConfiguracion - lista!!!\n"+JSON.stringify(ret)); }}, false);
 }
 
 function pedidoTV(){ console.log("pedidoTV()");
@@ -118,8 +118,15 @@ function pedidoTV(){ console.log("pedidoTV()");
 		$("#dvDatosDelClienteMin").html(datosDelCliente);
 		$(".moduloTV, #btnConfiguracion").hide();
 		$(".moduloPedido").stop().fadeIn();
-		cargarConfiguracionTV(function(){cargarArticulosDisponibles(ClienteCodigo);});	
-		_CargarOfertasCliente=true;		
+		cargarConfiguracionTV(function(){cargarArticulosDisponibles(ClienteCodigo);});
+		
+		// comprobar si tiene Ofertas
+		var parametros = '{"modo":"ofertasDelCliente","cliente":"'+ClienteCodigo+'","fecha":"'+FechaTeleVenta+'",'+paramStd+'}';
+		flexygo.nav.execProcess('pOfertas','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+			if(ret){ console.log("pOfertas ret: "+limpiarCadena(ret.JSCode));
+				var js = JSON.parse(limpiarCadena(ret.JSCode));
+				if(js.length>0){ $("#btnClienteOfertas").addClass("fadeIO"); }else{ $("#btnClienteOfertas").removeClass("fadeIO"); }
+		}else{ alert("Error SP: pOfertas - ofertasDelCliente!!!\n"+JSON.stringify(ret)); }}, false);
 	}else{
 		$("#btnPedido").text("Pedido");
 		$(".moduloTV, #btnConfiguracion").stop().fadeIn();
@@ -347,7 +354,6 @@ function verFichaDeCliente(){
 
 function ofertasDelCliente(){console.log("ofertasDelCliente()");
 	var parametros = '{"modo":"ofertasDelCliente","cliente":"'+ClienteCodigo+'","fecha":"'+FechaTeleVenta+'",'+paramStd+'}';
-	console.log("pOfertas parametros: "+limpiarCadena(parametros));
 	flexygo.nav.execProcess('pOfertas','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ console.log("pOfertas ret: "+limpiarCadena(ret.JSCode));
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
@@ -369,8 +375,8 @@ function ofertasDelCliente(){console.log("ofertasDelCliente()");
 				for(var i in js){
 					contenido += "<tr onclick='ofertaArticuloBuscar(\""+$.trim(js[i].ARTICULO)+"\")'>"
 							  +  "	<td class='taL'>"+$.trim(js[i].ARTICULO)+"</td>"
-							  +  "	<td class='taC'>"+$.trim(js[i].fechaIni)+"</td>"
-							  +  "	<td class='taC'>"+$.trim(js[i].fechaFin)+"</td>"
+							  +  "	<td class='taC'>"+$.trim(js[i].FECHA_IN)+"</td>"
+							  +  "	<td class='taC'>"+$.trim(js[i].FECHA_FIN)+"</td>"
 							  +  "	<td class='taR'>"+parseFloat(js[i].PVP).toFixed(2)+"</td>"
 							  +  "	<td class='taR'>"+parseFloat(js[i].DTO1).toFixed(2)+"</td>"
 							  +  "</tr>";
@@ -545,7 +551,7 @@ function asignarserieconfig(){
 	flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'modo','Value':'TVSerie'},{'Key':'valor','Value':serie}],'modal640x480', false, $(this), function(ret){if(ret){
 		$("#spanAsignacionSerieAviso").fadeIn(); // SERIE = serie;
 		setTimeout(function(){ $("#spanAsignacionSerieAviso").fadeOut(); },2000);
-	}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
+	}else{ alert("Error SP: pConfiguracion!!!\n"+JSON.stringify(ret)); }}, false);
 }
 
 function TV_SelecionarCliente(cliente){ console.log("TV_SelecionarCliente("+cliente+")");
@@ -872,8 +878,9 @@ function cargarPrecio(i,inp){
 		+',"FechaTeleVenta":"'+FechaTeleVenta+'"'
 		+',' + paramStd
 	+'}';
+	console.log("pPreciosTabla parametros: "+parametros);
 	flexygo.nav.execProcess('pPreciosTabla','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-	if(ret){
+	if(ret){console.log("pPreciosTabla ret:\n"+limpiarCadena(ret.JSCode));
 		try{										
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			var PT = js[0].precioTarifa; if(isNaN(PT) || PT===""){ PT=0.00; }
@@ -892,20 +899,6 @@ function cargarPrecio(i,inp){
 				+"value='"+parseFloat(DT).toFixed(2)+"'>"
 			);
 			$("#"+inp).focus();
-			if(ClienteOferta){ 
-				var param = '{"cliente":"'+ClienteCodigo+'","articulo":"'+elArticulo+'","fecha":"'+FechaTeleVenta+'",'+paramStd+'}';
-				flexygo.nav.execProcess('pOfertas','',null,null,[{'Key':'parametros','Value':limpiarCadena(param)}],'modal640x480',false,$(this),function(rrr){
-					if(rrr){ 
-						var jsO = JSON.parse(limpiarCadena(rrr.JSCode));
-						if(jsO.length>0){ 
-							$('#tbArtDispTR'+i).find("td").css("background","#D1FFD9"); 
-							if(parseFloat(jsO[0].PVP)>0){ $('#tbArtDispTR'+i).find(".inpPrecioSol").val(parseFloat(jsO[0].PVP).toFixed(2)); }
-							if(parseFloat(jsO[0].DTO1)>0){ $('#tbArtDispTR'+i).find(".inpDtoSol").val(parseFloat(jsO[0].DTO1).toFixed(2)); }
-						}
-					}
-					else{ alert("Error pOfertas!\n"+JSON.stringify(rrr)); }
-				 },false);
-			}
 		}catch{ alert("Error JSON pPreciosTabla - verArticuloPrecio!\n"+JSON.stringify(ret)); }									
 	}else{ alert("Error RET - pPreciosTabla - verArticuloPrecio!\n"+JSON.stringify(ret)); }
  },false);

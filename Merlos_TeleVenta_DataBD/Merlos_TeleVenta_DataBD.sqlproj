@@ -102,7 +102,6 @@
     <Build Include="dbo\Tables\inci_art.sql" />
     <Build Include="dbo\Tables\clientes_adi.sql" />
     <Build Include="dbo\Tables\llamadas.sql" />
-    <Build Include="dbo\Stored Procedures\pOfertas.sql" />
     <Build Include="dbo\Stored Procedures\pPreciosTabla.sql" />
     <Build Include="dbo\Stored Procedures\pClientesBasic.sql" />
     <Build Include="dbo\Stored Procedures\pEstTV.sql" />
