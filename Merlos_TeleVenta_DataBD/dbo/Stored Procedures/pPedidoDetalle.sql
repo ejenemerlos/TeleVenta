@@ -3,7 +3,11 @@ AS
 BEGIN TRY
 	declare @idpedido varchar(20) = (select JSON_VALUE(@parametros,'$.idpedido'))
 
-	select isnull((select * from vPedidos_Detalle where IDPEDIDO=@idpedido for JSON AUTO),'[]') as JAVASCRIPT
+	select isnull((
+			select * from vPedidos_Detalle 
+			where IDPEDIDO=@idpedido and ARTICULO is not null and ARTICULO<>''
+			for JSON AUTO
+	),'[]') as JAVASCRIPT
 	
 	RETURN -1
 END TRY

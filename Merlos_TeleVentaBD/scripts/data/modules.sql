@@ -371,7 +371,7 @@ function cargarDatosCliente(){
 						' + convert(nvarchar(max),NCHAR(36)) + N'(".configSeccion").hide(); ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfiguracion").fadeIn(); 
 						if(ret.JSCode!==""){ alert(ret.JSCode); }
 						else{ cerrarVelo(); }
-						limpiarLaCache();
+						GblLimpiarLaCache();
 						//' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show();
 						flexygo.nav.execProcess(''GoHome'','''','''',null,null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));
 					}else{ alert(''Error S.P. pConfigBBDD!!!\n''+ret); } }, false);					
@@ -449,7 +449,7 @@ function cargarDatosCliente(){
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
 			cerrarVelo();
-			limpiarLaCache();
+			GblLimpiarLaCache();
 		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
 	}
 	
@@ -486,7 +486,7 @@ function cargarDatosCliente(){
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpSerie").val(serie);
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieListado").stop().slideUp();
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeIn(); 
-			limpiarLaCache();
+			GblLimpiarLaCache();
 			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVSerie!!!\n"+ret); }}, false);
 	}
@@ -513,7 +513,7 @@ function cargarDatosCliente(){
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpTarifaMinima").val(tarifa);
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvTarifaMinimaListado").stop().slideUp();
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeIn(); 
-			limpiarLaCache();
+			GblLimpiarLaCache();
 			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
 	}
@@ -907,8 +907,8 @@ function asignarSerieGlobal(laSerie){
 	}
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_Recibos_Pendientes',N'flx-objectlist',N'project',N'RecibosPendientes',N'CLIENTE=''{{CODIGO}}''',N'TV_Recibos_Pendientes',N'Recibos Pendientes',N'default',1,0,1,0,NULL,NULL,N'{{Fecha de vencimiento}}',NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''TV_Recibos_Pendientes''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',N'syspager-listboth',20,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'TV_UltimosPedidos',N'flx-html',N'project',NULL,NULL,N'TV_UltimosPedidos',N'TV_UltimosPedidos',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedidos</div>
-<div id="dvUltimosPedidos" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
+ ,(N'TV_UltimosPedidos',N'flx-html',N'project',NULL,NULL,N'TV_UltimosPedidos',N'TV_UltimosPedidos',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Últimos Artículos Pedidos</div>
+<div id="dvUltimosPedidos" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;" onmouseleave="cerrarAVT()"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'usuariosTV',N'flx-objectlist',N'project',N'gestores',NULL,N'usuariosTV',N'Gestores',N'clean',0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',N'syspager-listfooter',20,NULL,NULL,NULL,N'gestores',NULL,N'inv sombra zi100',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
 ) AS Source ([ModuleName],[TypeId],[ClassId],[ObjectName],[ObjectFilter],[Descrip],[Title],[ContainerId],[CollapsibleButton],[FullscreenButton],[RefreshButton],[SearchButton],[SQlSentence],[Header],[HTMLText],[Footer],[Empty],[CssText],[ScriptText],[ChartTypeId],[ChartSettingName],[Series],[Labels],[Value],[Params],[JsonOptions],[Path],[TransFormFilePath],[IconName],[PagerId],[PageSize],[ConnStringID],[ToolbarName],[GridbarName],[TemplateId],[HeaderClass],[ModuleClass],[JSAfterLoad],[Searcher],[ShowWhenNew],[ManualInit],[SchedulerName],[TimelineSettingName],[KanbanSettingsName],[ChartBackground],[ChartBorder],[Reserved],[Cache],[Offline],[OriginId])

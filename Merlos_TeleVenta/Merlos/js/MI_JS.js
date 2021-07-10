@@ -81,14 +81,15 @@ var BtnDesO = "./Merlos/images/BtnDesO.png";
 */
 $(document).mousedown(function (e) { if (e.detail > 1) { e.preventDefault(); } });
 
-function limpiarLaCache(){
+function GblLimpiarLaCache(){
+    if(currentRole!=="Admins"){ return; }
     flexygo.nav.execProcess('ReloadCache', '', '', null, null, 'current', false, $(this));
-    cacheAutoClick();
+    GblCacheAutoClick();
 }	
 	
-function cacheAutoClick(){
+function GblCacheAutoClick(){
 	var botonYes = $("body").find(".lobibox-btn-yes");
-	if(botonYes.is(":visible")){ botonYes.click(); }else{ setTimeout(cacheAutoClick,500); }
+	if(botonYes.is(":visible")){ botonYes.click(); }else{ setTimeout(GblCacheAutoClick,500); }
 }
 
 function abrirVelo(contenido, ancho) {

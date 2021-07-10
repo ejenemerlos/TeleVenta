@@ -202,7 +202,7 @@
 						$(".configSeccion").hide(); $("#dvConfiguracion").fadeIn(); 
 						if(ret.JSCode!==""){ alert(ret.JSCode); }
 						else{ cerrarVelo(); }
-						limpiarLaCache();
+						GblLimpiarLaCache();
 						//$("#mainNav").show();
 						flexygo.nav.execProcess('GoHome','','',null,null,'current',false,$(this));
 					}else{ alert('Error S.P. pConfigBBDD!!!\n'+ret); } }, false);					
@@ -280,7 +280,7 @@
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
 			cerrarVelo();
-			limpiarLaCache();
+			GblLimpiarLaCache();
 		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
 	}
 	
@@ -317,7 +317,7 @@
 			$("#inpSerie").val(serie);
 			$("#dvSerieListado").stop().slideUp();
 			$("#spanAsignacionSerieAviso").fadeIn(); 
-			limpiarLaCache();
+			GblLimpiarLaCache();
 			setTimeout(function(){ $("#spanAsignacionSerieAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVSerie!!!\n"+ret); }}, false);
 	}
@@ -344,7 +344,7 @@
 			$("#inpTarifaMinima").val(tarifa);
 			$("#dvTarifaMinimaListado").stop().slideUp();
 			$("#spanAsignacionTarifaAviso").fadeIn(); 
-			limpiarLaCache();
+			GblLimpiarLaCache();
 			setTimeout(function(){ $("#spanAsignacionTarifaAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
 	}

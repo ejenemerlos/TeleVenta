@@ -95,6 +95,8 @@ BEGIN TRY
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
 		set @pedido = (select JSON_VALUE(@parametros,'$.pedido'))		
 		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,@serie,replicate('0',10-len(@pedido)),@pedido) collate Modern_Spanish_CI_AI 
+		if @pedido='undefined' and (@incidenciaClienteDescrip is null or @incidenciaClienteDescrip='undefined' or @incidenciaClienteDescrip='')
+		begin set @incidenciaClienteDescrip='Sin Pedido!' end
 		if @pedido='undefined' begin set @pedido=@incidenciaClienteDescrip set @serie='' set @idpedido='' end
 
 		if (@incidenciaCliente is not null and @incidenciaCliente<>'') or (@observaciones is not null and @observaciones<>'') begin
