@@ -292,6 +292,7 @@ BEGIN TRY
 			, @FAMILIA    char(4) = ''''
 			, @OBSERVACIO varchar(8000)
 			, @LINEAS varchar(max)
+			, @NoCobrarPortes char(1)
 			, @UserLogin  varchar(50)
 			, @UserID	  varchar(50)=''''
 			, @UserName	  varchar(50)=''''
@@ -340,6 +341,7 @@ BEGIN TRY
 	SET @FAMILIA	= @Values.value(''(/Row/Property[@Name=''''FAMILIA'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @LINEAS		= @Values.value(''(/Row/Property[@Name=''''LINEAS'''']/@Value)[1]''	, ''varchar(max)'')
+	SET @NoCobrarPortes	= @Values.value(''(/Row/Property[@Name=''''NoCobrarPortes'''']/@Value)[1]''	, ''char(1)'')
 
 	SET @UserLogin			= @ContextVars.value(''(/Row/Property[@Name=''''currentUserLogin'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @UserID				= @ContextVars.value(''(/Row/Property[@Name=''''currentUserId'''']/@Value)[1]''		, ''varchar(50)'')
@@ -521,9 +523,12 @@ BEGIN TRY
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
 		
+		-- PORTES
+		insert into [CAMPOSYB].DBO.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,VISTA,EWNOPORT)
+		values(@EJER,@EMPRESA,@codigo,@letra,0,@NoCobrarPortes)
+
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
-
 
 	COMMIT TRANSACTION pedidoNuevo
 	SELECT ''{"IdPedido":"''+@IDPEDIDO+''","Ejercicio":"''+@EJER+''","Empresa":"''+@EMPRESA+''","Letra":"''+@letra+''","Codigo":"''+ltrim(rtrim(@codigo))+''"}'' as JAVASCRIPT
