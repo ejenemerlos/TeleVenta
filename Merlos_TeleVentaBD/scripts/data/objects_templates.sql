@@ -71,7 +71,7 @@ USING (VALUES
 	<div class="azul3" style="font:14px; arial;"><br>Periodicidad de llamadas</div>
 	<table id="tbTablaDeLlamadasPeriodo" class="tbLlamadas">
 		<tr>
-			<td><img id="imgDiaria" src="./Merlos/images/icoCheck_I.png" alt="1"> Diaria</td>
+			<td><img id="imgDiaria" src="./Merlos/images/icoCheck_O.png" alt="1"> Diaria</td>
 			<td><img id="imgSemanal" src="./Merlos/images/icoCheck_O.png" alt="2"> Semanal</td>
 			<td><img id="imgQuincenal" src="./Merlos/images/icoCheck_O.png" alt="3"> Quincenal</td>
 			<td><img id="imgMensual" src="./Merlos/images/icoCheck_O.png" alt="4"> Mensual</td>
@@ -288,7 +288,8 @@ USING (VALUES
 	</tr>',N'</table>',NULL,NULL,1,0,1,1)
  ,(N'PedidosPlantilla01',N'Pedido',N'list',N'Listado de Pedidos',N'<tr>
 <td>{{LETRA}}</td>
-<td onmouseover="verDetallePedidoCliente(''{{IDPEDIDO}}'',''{{EMPRESA}}'',''{{LETRA}}'',''{{numero}}'')">{{numero}}</td>
+<td onmouseover="verDetallePedidoCliente(''{{IDPEDIDO}}'',''{{EMPRESA}}'',''{{LETRA}}'',''{{numero}}'')"
+    onmouseleave="dentroDelDiv=false; cerrarAVT();">{{numero}}</td>
 <td>{{FECHA}}</td>
 <td class=''taR''>{{TOTALDOCformato}}</td>
 </tr>',N'vPedidosOrderBySQLFECHAdesc',N'CLIENTE=''{{CODIGO}}''',N'<table id="tbPedidosDelCliente" class=''tbStd''>

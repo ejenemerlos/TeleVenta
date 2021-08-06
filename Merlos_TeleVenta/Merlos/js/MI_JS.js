@@ -947,7 +947,7 @@ function guardarFirma() {
 function borrarFirma() { ctx.clearRect(0, 0, elFirma.width, elFirma.height); }
 function cancelarFirma() { borrarFirma(); $(".seccion").hide(); $("#dvFinalizar").fadeIn(); }
 
-
+/*
 function verDetallePedidoCliente(idpedido, empresa, letra, numero, i) {
     var pedido = letra + "-" + numero.trim();
     var contenido = icoCargando16 + " cargando lineas del pedido " + pedido + "...";
@@ -988,4 +988,51 @@ function verDetallePedidoCliente(idpedido, empresa, letra, numero, i) {
             abrirVelo(contenido,800);
         } else { alert("Error SP: pPedidoDetalle!!!" + JSON.stringify(ret)); }
     }, false);
+}*/
+
+var ArticuloClienteBuscando = false;
+function verDetallePedidoCliente(idpedido, empresa, letra, pedido, i){
+	if(ArticuloClienteBuscando){return;}
+	ArticuloClienteBuscando=true;
+	dentroDelDiv=true;
+	var contenido = icoCargando16+" cargando lineas del pedido "+pedido+"..."; 
+	abrirAVT(contenido);
+	contenido =  "<span style='font:bold 16px arial; color:#666;'>Datos del pedido "+pedido+"</span>"
+				+"<br><br>"
+				+"<div style='max-height:300px; overflow:hidden; overflow-y:auto;'>"
+				+"	<table id='tbPedidosDetalle' class='tbStd'>"
+				+"		<tr>"
+				+"			<th>Artículo</th>"
+				+"			<th>Descipción</th>"
+				+"			<th class='C'>Cajas</th>"
+				+"			<th class='C'>Uds.</th>"
+				+"			<th class='C'>Peso</th>"
+				+"			<th class='C'>Precio</th>"
+				+"			<th class='C'>Dto</th>"
+				+"			<th class='C'>Importe</th>"
+				+"		</tr>"; 
+	var parametros = '{"idpedido":"'+idpedido+'",'+paramStd+'}';
+	flexygo.nav.execProcess('pPedidoDetalle','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+		if(ret){ 
+			var js = JSON.parse(limpiarCadena(ret.JSCode));   
+			if(js.length>0){
+				for(var j in js){ 
+					contenido   +="<tr>"
+								+"		<td>"+js[j].ARTICULO+"</td>"
+								+"		<td>"+js[j].DEFINICION+"</td>"
+								+"		<td class='C'>"+js[j].cajas+"</td>"
+								+"		<td class='C'>"+js[j].UNIDADES+"</td>"
+								+"		<td class='C'>"+js[j].PESO+"</td>"
+								+"		<td class='C'>"+js[j].PRECIO+"</td>"
+								+"		<td class='C'>"+js[j].DTO1+"</td>"
+								+"		<td class='R'>"+js[j].IMPORTEf+"</td>"
+								+"	</tr>"; 
+				}
+				contenido += "</table></div>";
+			}else{ contenido = "No se han obtenido resultados! <span class='flR' onclick='cerrarVelo()'>"+icoAspa+"</span>"; }
+			abrirAVT(contenido,800);
+			ArticuloClienteBuscando=false;
+			if(!dentroDelDiv){cerrarAVT();}
+		}else{ alert("Error SP: pPedidoDetalle!!!"+JSON.stringify(ret)); }
+	},false);	
 }

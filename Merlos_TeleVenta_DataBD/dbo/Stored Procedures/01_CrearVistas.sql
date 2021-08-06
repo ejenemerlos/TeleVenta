@@ -108,8 +108,15 @@ BEGIN TRY
 		and isnull(ca.sabado,0)=0 and isnull(ca.domingo,0)=0 
 	then 0 else 1 end as horarioAsignado,
 
-	isnull((select * from cliente_gestor where cliente collate SQL_Latin1_General_CP1_CI_AS=C.codigo 
-	for JSON AUTO,INCLUDE_NULL_VALUES),''[]'') as gestores
+	isnull(
+		(
+			select a.cliente, a.gestor, b.nombre + '' '' + isnull(b.apellidos,'''') as nombreGestor
+			from cliente_gestor a 
+			left join gestores b on b.codigo=a.gestor
+			where a.cliente collate SQL_Latin1_General_CP1_CI_AS=C.codigo 
+			for JSON AUTO,INCLUDE_NULL_VALUES
+		)
+	,''[]'') as gestores
 
 	, isnull(o.observaciones,'''') as ObservacionesInternas
 
