@@ -516,7 +516,7 @@ BEGIN TRY
 			if len(@minutos)=1 set @minutos = ''0''+@minutos
 			declare @laHora varchar(5) = @hora+'':''+@minutos
 
-			if (@inciArt is not null and @inciArt<>'''') or (@obsArt is not null and @obsArt<>'''')	
+			if (@inciArt is not null) or (@obsArt is not null and @obsArt<>'''')	
 			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,articulo,observaciones) 
 				values (@IdTeleVenta,@currentReference,''Articulo'',@inciArt,@cliente,@idpedido,@jsArticulo,@obsArt)
 
@@ -524,7 +524,7 @@ BEGIN TRY
 		END CLOSE cur deallocate cur	
 		
 		-- PORTES
-		insert into [CAMPOSYB].DBO.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,VISTA,EWNOPORT)
+		insert into '+@CAMPOS+'.DBO.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,VISTA,EWNOPORT)
 		values(@EJER,@EMPRESA,@codigo,@letra,0,@NoCobrarPortes)
 
 		-- actualizar cabecera del pedido

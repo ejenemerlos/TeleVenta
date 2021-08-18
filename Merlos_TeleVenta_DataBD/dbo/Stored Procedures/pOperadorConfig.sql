@@ -83,10 +83,14 @@ BEGIN TRY
 					, @vendedores varchar(max)
 
 		-- -- montar where gestores
+		declare @elAnd char(5) = ''
+		declare @cnt int = 0
 		declare cur CURSOR for select valor from [TeleVentaFiltros] where id=@idTV and tipo='Gestor'
 		OPEN cur FETCH NEXT FROM cur into @valor
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				set @gestores = CONCAT(@gestores, ' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')
+				if @cnt>0 set @elAnd=' and '
+				set @gestores = CONCAT(@gestores, @elAnd, ' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')
+				set @cnt = @cnt+1
 			FETCH NEXT FROM cur INTO @valor END 
 		CLOSE cur deallocate cur
 		if @gestores is null set @gestores='' 

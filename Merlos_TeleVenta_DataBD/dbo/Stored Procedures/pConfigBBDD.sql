@@ -52,7 +52,7 @@ BEGIN TRY
 
 			--select 'Creando funciones...' as JAVASCRIPT
 			if @accion='Funciones'  or @accion='todo' BEGIN
-				EXECUTE @result = [dbo].[01_CrearFunciones]
+				EXECUTE @result = [dbo].[04_CrearFunciones]
 				if @result<>-1 BEGIN
 					print 'Error al generar las FUNCIONES SQL!' 
 					return 0

@@ -90,7 +90,7 @@
     <Build Include="dbo\Stored Procedures\pOperadorConfig.sql" />
     <Build Include="dbo\Stored Procedures\pObjetoDatos.sql" />
     <Build Include="dbo\Stored Procedures\01_CrearVistas.sql" />
-    <Build Include="dbo\Stored Procedures\01_CrearFunciones.sql" />
+    <Build Include="dbo\Stored Procedures\04_CrearFunciones.sql" />
     <Build Include="dbo\Tables\Configuracion.sql" />
     <Build Include="dbo\Tables\Configuracion_SQL.sql" />
     <Build Include="dbo\Tables\AlbaranVentaFirmas.sql" />

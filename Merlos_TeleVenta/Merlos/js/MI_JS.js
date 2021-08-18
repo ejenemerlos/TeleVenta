@@ -153,6 +153,15 @@ function soloNums(elID, elValor) { $('#' + elID).val(elValor.replace(/[^0-9]/, '
 
 function capitalizar(word) { return word[0].toUpperCase() + word.slice(1); }
 
+function ScrollBarWidth(){
+	var $outer = $('<div>').css({visibility: 'hidden', width: 100, overflow: 'scroll'}).appendTo('body'),
+		widthWithScroll = $('<div>').css({width: '100%'}).appendTo($outer).outerWidth();
+	$outer.remove();
+	return 100 - widthWithScroll;
+};
+			
+			
+
 function paginador(mm) {
     if (mm) { paginadorRegistros += 100; } else { paginadorRegistros -= 100; }
     if (paginadorRegistros < 0) { paginadorRegistros = 0; }
