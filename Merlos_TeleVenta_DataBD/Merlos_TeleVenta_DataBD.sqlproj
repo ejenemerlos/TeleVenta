@@ -116,6 +116,7 @@
     <Build Include="dbo\Tables\llamadasOD.sql" />
     <Build Include="dbo\Tables\inci_CliArt.sql" />
     <Build Include="dbo\Tables\inciCliPed.sql" />
+    <Build Include="dbo\Tables\Configuracion_ADI.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

@@ -523,9 +523,9 @@ BEGIN TRY
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
 		
-		-- PORTES
-		insert into '+@CAMPOS+'.DBO.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,VISTA,EWNOPORT)
-		values(@EJER,@EMPRESA,@codigo,@letra,0,@NoCobrarPortes)
+		-- PORTES		
+		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
+		values(@EJER,@EMPRESA,@codigo,@letra,''EWNOPORT'',@NoCobrarPortes)
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
