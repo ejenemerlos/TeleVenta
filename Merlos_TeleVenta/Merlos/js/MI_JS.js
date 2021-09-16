@@ -72,7 +72,7 @@ var icoRecargaAzul20 = "<div class='img20 icoRecargaAzul'></div>";
 var icoAspa = "<div class='img16 icoAspa'></div>";
 var BtnDesI = "./Merlos/images/BtnDesI.png";
 var BtnDesO = "./Merlos/images/BtnDesO.png";
-
+var icoCarga20 = "<img src='./Merlos/images/icoCarga.png' class='rotarR' width='20'>";
 
 /*
 	*************************
@@ -1044,4 +1044,18 @@ function verDetallePedidoCliente(idpedido, empresa, letra, pedido, i){
 			if(!dentroDelDiv){cerrarAVT();}
 		}else{ alert("Error SP: pPedidoDetalle!!!"+JSON.stringify(ret)); }
 	},false);	
+}
+
+function asignarGestor(modo,gestor,n){
+	if(modo){
+		var CodCliente = $("#spanClienteCodigo").text(); 
+		$("#btnrAsignarGestor").hide(); $("#btnAsignarGestorAV").html(icoCargando16+" asignando...").show(); 
+		$("flx-module[modulename='usuariosTV']").stop().slideUp();
+		var parametros = '{"modo":"'+modo+'","cliente":"'+CodCliente+'","gestor":"'+gestor+'","nGestor":"'+n+'",'+paramStd+'}';
+		flexygo.nav.execProcess('pClienteDatos','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+			if(ret){
+				flexygo.nav.openPage('view','Cliente','CODIGO=\''+CodCliente+'\'','{\'CODIGO\':\''+CodCliente+'\'}','current',false,$(this));
+			}else{ alert("Error SP: pClienteDatos!!!"+JSON.stringify(ret)); }
+		},false);
+	}else{ $("flx-module[modulename='usuariosTV']").css("margin-top","-180px").stop().slideDown(); }		
 }

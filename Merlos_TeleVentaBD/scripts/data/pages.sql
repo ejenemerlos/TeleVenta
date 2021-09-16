@@ -467,6 +467,7 @@ function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+mo
 	var elDV = "dvLlamadas";
 	var contenido = "";
 	var parametros = ''{"modo":"''+modo+''","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","usuariosTV":''+UsuariosTV+'',''+paramStd+''}''; 	
+	console.log("pLlamadas - parametros:\n"+parametros);
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
@@ -1156,14 +1157,18 @@ function PedidoEliminarLinea(cd){
 	pedidoVerDetalle();
 }
 
+
+var terminandoLlamada=false;
 function terminarLlamada(){console.log("terminarLlamada()");
-	if(ClienteCodigo===""){ alert("No hay un cliente activo!"); return; }
+	if(terminandoLlamada){ return; }
+	terminandoLlamada=true;
+	if(ClienteCodigo===""){ alert("No hay un cliente activo!"); terminandoLlamada=false; return; }
 	var contacto = (' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpDataContacto").val())).split(" - ")[0];
 	if(PedidoDetalle.length>0 && PedidoGenerado===""){
 		var fff = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaEntrega").val());
 		if(fff!==""){
-			if(!existeFecha(fff)){ alert("Ups! Parece que la fecha no es correcta!"); return; }
-			if(!validarFechaMayorActual(fff)){ alert("La fecha debe ser posterior a hoy!"); return; }
+			if(!existeFecha(fff)){ alert("Ups! Parece que la fecha no es correcta!"); terminandoLlamada=false; return; }
+			if(!validarFechaMayorActual(fff)){ alert("La fecha debe ser posterior a hoy!"); terminandoLlamada=false; return; }
 		}
 		abrirVelo(icoCargando16 + " generando el pedido..."); 
 		var lasLineas = (limpiarCadena(PedidoDetalle)).replace(/}{/g,"},{").replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");
@@ -1214,7 +1219,7 @@ function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef
 			+ "<span class=''MIbotonGreen'' onclick=''terminarLlamadaDef(\""+pedido+"\",true)''>Terminar la llamada</span>"
 			+ "&nbsp;&nbsp;&nbsp;<span class=''MIbotonRed'' onclick=''cerrarVelo()''>cancelar</span>"
 		);
-		return;
+		terminandoLlamada=false; return;
 	}
 	var incidenciasSinPedido = "";
 	if(PedidoGenerado==="" && PedidoDetalle===""){
@@ -1243,6 +1248,7 @@ function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef
 					
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
+			terminandoLlamada=false;
 			if(ctvll==="llamadasDelCliente"){ flexygo.nav.openPage(''list'',''Clientes'',''(BAJA=0)'',null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); ' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show(); }
 			else{ inicioTeleVenta(); }			
 		}else{ alert("Error SP: pLlamadas!!!"+JSON.stringify(ret)); }

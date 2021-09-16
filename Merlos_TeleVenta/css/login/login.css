@@ -57,7 +57,7 @@ a {
 }
 
 .logo {
-    background-image: 0;
+    background-image: url('../../Merlos/images/logo.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center top;

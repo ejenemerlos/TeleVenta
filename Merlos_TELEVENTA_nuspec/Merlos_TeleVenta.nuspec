@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
     <id>Merlos_TeleVenta</id>
-    <version>2.1.3.2</version>
+    <version>2.1.3.4</version>
     <title>Merlos TeleVenta Eurowin</title>
     <authors>Merlos</authors>
     <owners>Merlos Infor, S.L.</owners>

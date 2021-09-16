@@ -133,7 +133,7 @@ BEGIN TRY
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLon ON mLon.CODIGO=C.CODIGO and mLon.FICHERO=''CLIENTES'' and mLon.CAMPO=''LGT''
 	LEFT JOIN clientes_adi ca on ca.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
 	LEFT JOIN ObservacionesInternas o on o.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
-	WHERE LEFT(C.CODIGO,3)=''430''
+	WHERE LEFT(C.CODIGO,2)=''43''
 	'
 	exec(@Sentencia)
 	select  'vClientes'

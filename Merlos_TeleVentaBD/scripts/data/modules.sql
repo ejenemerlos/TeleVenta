@@ -237,6 +237,46 @@ function cargarDatosCliente(){
 			</td>
 		</tr>
 	</table>
+	<br><br>
+	
+	<div class="esq10" style="background:#E1E3E7;">
+		<div class="tCnfT">Configuración Email principal de la aplicación</div>
+		<div style="padding:20px;">
+			<table id="tbConfigEmail">
+				<tr>
+					<td>
+						Cuenta<br><input type="text" class="esq05" id="configEmailCuenta">
+					</td>
+					<td>
+						Servidor SMTP<br><input type="text" class="esq05" id="configEmailSMTP">
+					</td>
+					<td>
+						Puerto<br><input type="text" class="esq05" id="configEmailPuerto">
+					</td>					
+					<td>
+						usuario<br><input type="text" class="esq05" id="configEmailUsuario">
+					</td>
+					<td>
+						Contraseña<br><input type="password" class="esq05" id="configEmailPswrd">
+					</td>
+					<td>
+						<br><span style="cursor:pointer;"><img src="./Merlos/images/BtnDesO.png" id="imgConfigEmailSSL" class="OpcionIO"> SSL</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align:center;">
+						<br>
+						<span class="MIboton esq05" style="padding:10px;" onclick="flexygo.nav.openPage(''edit'',''sysMail_Template'',''Name=\''confirm\'''',''null'',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this))">Plantilla</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail(''probarConfiguracion'')">probar configuración</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail()">guardar</span>
+					</td>
+				</tr>				
+			</table>
+		</div>
+		<br>
+	</div>
 </div>
 
 <div id="dvBBDD" class="esq10 configSeccion inv" style="margin-top:10px; padding:20px; background:rgb(240,240,240);">
@@ -259,6 +299,8 @@ function cargarDatosCliente(){
 		<span class="MIbotonGreen esq05" style="padding:10px;" onclick="configurarElPortal_Click()">Configurar el Portal</span>
 	</div>
 </div>
+<br><br>
+
 
 
 <script>	
@@ -276,6 +318,15 @@ function cargarDatosCliente(){
 			var container = ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+elementosDIV[i]);
 			if (!container.is(e.target) && container.has(e.target).length === 0) { ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+elementosDIV[i]).stop().slideUp(); }
 		}
+	});
+	
+	' + convert(nvarchar(max),NCHAR(36)) + N'(".OpcionIO").off().on("click",function(){
+		var v = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).attr("id");
+		var nombre = v.split("img")[1];
+		
+		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesO); }
+		if(nombre==="ConfigEmailSSL"){}
+		else{ ConfiguracionDelPortal(''actualizar'',nombre,eval(window["Conf"+nombre])); }		
 	});
 	
 	// Comprobar que exista una configuración de BBDD de Datos
@@ -448,6 +499,16 @@ function cargarDatosCliente(){
 				else{window["Conf"+js.IO[i].nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
+			// Configuración de Email
+			for(var i in js.ConfigEmail){					
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailCuenta").val(js.ConfigEmail[i].Cuenta);
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailSMTP").val(js.ConfigEmail[i].ServidorSMTP);
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPuerto").val(js.ConfigEmail[i].Puerto);
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailUsuario").val(js.ConfigEmail[i].Usuario);
+				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPswrd").val(js.ConfigEmail[i].Password); 
+				if(js.ConfigEmail[i].SSL===true){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesI.png"); }
+				else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesO.png"); }
+			}
 			cerrarVelo();
 			GblLimpiarLaCache();
 		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
@@ -517,20 +578,72 @@ function cargarDatosCliente(){
 			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
 	}
-
-	
-	' + convert(nvarchar(max),NCHAR(36)) + N'(".OpcionIO").off().on("click",function(){
-		var v = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).attr("id");
-		var nombre = v.split("img")[1];
-		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesO); }
-		ConfiguracionDelPortal(''actualizar'',nombre,eval(window["Conf"+nombre]));
-	});
 	
 	function ConfiguracionDelPortal(modo,nombre,valor){
 		var parametros = ''{"modo":"actualizar","nombre":"''+nombre+''","valor":"''+valor+''"}'';
 		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
 			cargarConfiguracion(); 
 		}else{ alert(''Error S.P. pConfiguracion -actualizar !!!\n''+ret); } }, false);
+	}
+	
+	function configurarCtaEmail(modo,lanzar){
+		var configEmailCuenta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailCuenta").val());
+		var configEmailSMTP = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailSMTP").val());
+		var configEmailPuerto = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPuerto").val());
+		var configEmailUsuario = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailUsuario").val());
+		var configEmailPswrd = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPswrd").val());
+		var configEmailSSL = 0;
+		if(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailSSL").attr("src")==="./MI_PCli_EW/images/OI_GreenSage.png"){ configEmailSSL=1; }
+		
+		if(configEmailCuenta==="" || configEmailSMTP==="" || configEmailPuerto==="" || configEmailUsuario==="" || configEmailPswrd===""){ 
+			alert("Faltan datos por especificar en la cuenta de correo!"); 
+			return; 
+		}
+		
+		if(!modo){ 
+			abrirVelo(icoCarga20+" Actualizando los datos..."); 
+			setTimeout(()=>{
+				var parametros = ''{"modo":"configEmail","configEmailCuenta":"''+configEmailCuenta+''","configEmailSMTP":"''+configEmailSMTP+''"''
+								+'',"configEmailPuerto":"''+configEmailPuerto+''","configEmailUsuario":"''+configEmailUsuario+''","configEmailPswrd":"''+configEmailPswrd+''"''
+								+'',"configEmailSSL":"''+configEmailSSL+''"}'';   /**/ console.log(parametros);
+				flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{key:''modo'',value:limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
+				 /**/ console.log(ret.JSCode);
+					if(ret.JSCode==="configEmail_OK"){ 
+						abrirVelo(icoCarga20+" modificando la configuración...",true);
+						setTimeout(()=>{
+							var parametros = ''{"modo":"ConfigEmailPrincipal"}'';
+							flexygo.nav.execProcess(''MerlosDLL'',''sysJob'','''',null,[{key:''Parametros'',value:limpiarCadena(parametros)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
+								/**/ console.log(JSON.stringify(ret));
+								abrirVelo(icoCarga20+" reiniciando la aplicación...",true);
+								setTimeout(()=>{limpiarLaCache(); location.reload();},500);		
+							}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
+						},500);						
+					}else{ alert("Ups! Ha ocurrido un error al actualizar los datos!"); }
+				}else{ alert("Error SP pConfiguracion - configEmail!\n"+JSON.stringify(ret)); }},false);
+			},500);
+		}else if(modo==="probarConfiguracion"){ 
+			if(!lanzar){
+				abrirVelo("introduce una dirección de correo para enviar la prueba"
+				+"<br><input type=''text'' id=''inpEmailDir''>"
+				+"<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' "
+				+"onclick=''configurarCtaEmail(\"probarConfiguracion\",true)''>lanzar prueba</span>"
+				+"&nbsp;&nbsp;&nbsp;<span class=''MIboton esq05'' style=''padding:10px;'' "
+				+"onclick=''cerrarVelo()''>cancelar</span>"); 
+			}else{
+				var parametros = ''{"modo":"probarConfiguracion","configEmailCuenta":"''+configEmailCuenta+''","configEmailSMTP":"''+configEmailSMTP+''"''
+									+'',"configEmailPuerto":"''+configEmailPuerto+''","configEmailUsuario":"''+configEmailUsuario+''","configEmailPswrd":"''+configEmailPswrd+''"''
+									+'',"configEmailSSL":"''+configEmailSSL+''","inpEmailDir":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpEmailDir").val())+''"}''; 
+				abrirVelo(icoCarga20+" probando la configuración de correo..."); 
+				setTimeout(()=>{					
+					flexygo.nav.execProcess(''MerlosDLL'',''sysJob'','''',null,[{key:''Parametros'',value:limpiarCadena(parametros)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
+						if(ret.SuccessMessage==="probarConfiguracion_OK"){ 
+							abrirVelo("Prueba de email correcta!<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' onclick=''cerrarVelo()''>aceptar</span>"); 
+						}else{abrirVelo("Falló la prueba de email<br>Verifica los datos de configuración,<br>el email destino o prueba de nuevo más tarde."
+										+"<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' onclick=''cerrarVelo()''>aceptar</span>");}
+					}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
+				},500);		
+			}
+		}		
 	}
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'Contactos',N'flx-sqllist',N'project',N'Contactos',N'CLIENTE=''{{CODIGO}}''',N'Contactos',N'Contactos',N'default',1,0,1,0,N'select * from vContactos where CLIENTE=''{{CODIGO}}''',N'<div id="dvContactosBotonera" style="padding:10px;">

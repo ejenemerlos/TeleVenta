@@ -8,13 +8,17 @@ BEGIN TRY
 
 	declare @clientes int = (select count(distinct cliente) from TeleVentaDetalle where id=@IdTeleVenta)
 	declare @llamadas int = (select count(cliente) from TeleVentaDetalle where id=@IdTeleVenta and idpedido is not null)
-	declare @pedidos int = (select count(pedido) from TeleVentaDetalle where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA')
-	declare @sumaPedidos numeric(20,2) = (select SUM(IMPORTE) from vPedidos_Detalle
-										  where IdPedido in (select idpedido collate Modern_Spanish_CI_AI 
-																from TeleVentaDetalle 
-																where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA'
-															 ) 
-										  )
+	declare @pedidos int = (select count(pedido) from TeleVentaDetalle where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA' and pedido<>'Sin Pedido!')
+	declare @sumaPedidos numeric(20,2) = 
+	(
+		select SUM(IMPORTEIVA) from vPedidos_Detalle
+		where IdPedido 
+		in (
+			select idpedido collate Modern_Spanish_CI_AI 
+			from TeleVentaDetalle 
+			where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA' and pedido<>'Sin Pedido!'
+			) 
+	)
 
 	
 	--  devolución de filtros

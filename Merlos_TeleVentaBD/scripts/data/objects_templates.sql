@@ -181,19 +181,6 @@ USING (VALUES
 		},false);
 	}
 	
-	function asignarGestor(modo,gestor,n){ 
-		if(modo){
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#btnrAsignarGestor").hide(); ' + convert(nvarchar(max),NCHAR(36)) + N'("#btnAsignarGestorAV").html(icoCargando16+" asignando...").show(); 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''usuariosTV'']").stop().slideUp();
-			var parametros = ''{"modo":"''+modo+''","cliente":"{{CODIGO}}","gestor":"''+gestor+''","nGestor":"''+n+''",''+paramStd+''}'';
-			flexygo.nav.execProcess(''pClienteDatos'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-				if(ret){
-					flexygo.nav.openPage(''view'',''Cliente'',''CODIGO=\''{{CODIGO}}\'''',''{\''CODIGO\'':\''{{CODIGO}}\''}'',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));
-				}else{ alert("Error SP: pClienteDatos!!!"+JSON.stringify(ret)); }
-			},false);
-		}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''usuariosTV'']").css("margin-top","-180px").stop().slideDown(); }		
-	}
-	
 	function cargarGestoresCliente(gestoresDelCliente){
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#dvGestoresCliente").html("");
 		var contenido = "";
@@ -232,7 +219,7 @@ USING (VALUES
     <th>E-mail</th>
     <th>Dirección</th>
   </tr>',N'</table>',NULL,NULL,1,0,1,1)
- ,(N'gestorDefaultList',N'gestor',N'list',N'gestor Default List',N'  <tr>
+ ,(N'gestorDefaultList',N'gestor',N'list',N'gestor Default List',N'  <tr onclick="flexygo.nav.openPage(''view'',''gestor'',''codigo=\''{{CODIGO}}\'''','''',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));">
     <td>{{codigo}}</td>
     <td>{{nombre}}</td>
     <td>{{apellidos}}</td>

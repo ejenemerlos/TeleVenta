@@ -68,6 +68,46 @@
 			</td>
 		</tr>
 	</table>
+	<br><br>
+	
+	<div class="esq10" style="background:#E1E3E7;">
+		<div class="tCnfT">Configuración Email principal de la aplicación</div>
+		<div style="padding:20px;">
+			<table id="tbConfigEmail">
+				<tr>
+					<td>
+						Cuenta<br><input type="text" class="esq05" id="configEmailCuenta">
+					</td>
+					<td>
+						Servidor SMTP<br><input type="text" class="esq05" id="configEmailSMTP">
+					</td>
+					<td>
+						Puerto<br><input type="text" class="esq05" id="configEmailPuerto">
+					</td>					
+					<td>
+						usuario<br><input type="text" class="esq05" id="configEmailUsuario">
+					</td>
+					<td>
+						Contraseña<br><input type="password" class="esq05" id="configEmailPswrd">
+					</td>
+					<td>
+						<br><span style="cursor:pointer;"><img src="./Merlos/images/BtnDesO.png" id="imgConfigEmailSSL" class="OpcionIO"> SSL</span>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="6" style="text-align:center;">
+						<br>
+						<span class="MIboton esq05" style="padding:10px;" onclick="flexygo.nav.openPage('edit','sysMail_Template','Name=\'confirm\'','null','current',false,$(this))">Plantilla</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail('probarConfiguracion')">probar configuración</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail()">guardar</span>
+					</td>
+				</tr>				
+			</table>
+		</div>
+		<br>
+	</div>
 </div>
 
 <div id="dvBBDD" class="esq10 configSeccion inv" style="margin-top:10px; padding:20px; background:rgb(240,240,240);">
@@ -90,6 +130,8 @@
 		<span class="MIbotonGreen esq05" style="padding:10px;" onclick="configurarElPortal_Click()">Configurar el Portal</span>
 	</div>
 </div>
+<br><br>
+
 
 
 <script>	
@@ -107,6 +149,15 @@
 			var container = $("#"+elementosDIV[i]);
 			if (!container.is(e.target) && container.has(e.target).length === 0) { $("#"+elementosDIV[i]).stop().slideUp(); }
 		}
+	});
+	
+	$(".OpcionIO").off().on("click",function(){
+		var v = $(this).attr("id");
+		var nombre = v.split("img")[1];
+		
+		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; $("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; $("#"+v).attr("src",BtnDesO); }
+		if(nombre==="ConfigEmailSSL"){}
+		else{ ConfiguracionDelPortal('actualizar',nombre,eval(window["Conf"+nombre])); }		
 	});
 	
 	// Comprobar que exista una configuración de BBDD de Datos
@@ -279,6 +330,16 @@
 				else{window["Conf"+js.IO[i].nombre]=1; $("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
+			// Configuración de Email
+			for(var i in js.ConfigEmail){					
+				$("#configEmailCuenta").val(js.ConfigEmail[i].Cuenta);
+				$("#configEmailSMTP").val(js.ConfigEmail[i].ServidorSMTP);
+				$("#configEmailPuerto").val(js.ConfigEmail[i].Puerto);
+				$("#configEmailUsuario").val(js.ConfigEmail[i].Usuario);
+				$("#configEmailPswrd").val(js.ConfigEmail[i].Password); 
+				if(js.ConfigEmail[i].SSL===true){ $("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesI.png"); }
+				else{ $("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesO.png"); }
+			}
 			cerrarVelo();
 			GblLimpiarLaCache();
 		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
@@ -348,19 +409,71 @@
 			setTimeout(function(){ $("#spanAsignacionTarifaAviso").fadeOut(); },2000);
 		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
 	}
-
-	
-	$(".OpcionIO").off().on("click",function(){
-		var v = $(this).attr("id");
-		var nombre = v.split("img")[1];
-		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; $("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; $("#"+v).attr("src",BtnDesO); }
-		ConfiguracionDelPortal('actualizar',nombre,eval(window["Conf"+nombre]));
-	});
 	
 	function ConfiguracionDelPortal(modo,nombre,valor){
 		var parametros = '{"modo":"actualizar","nombre":"'+nombre+'","valor":"'+valor+'"}';
 		flexygo.nav.execProcess('pConfiguracion','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){
 			cargarConfiguracion(); 
 		}else{ alert('Error S.P. pConfiguracion -actualizar !!!\n'+ret); } }, false);
+	}
+	
+	function configurarCtaEmail(modo,lanzar){
+		var configEmailCuenta = $.trim($("#configEmailCuenta").val());
+		var configEmailSMTP = $.trim($("#configEmailSMTP").val());
+		var configEmailPuerto = $.trim($("#configEmailPuerto").val());
+		var configEmailUsuario = $.trim($("#configEmailUsuario").val());
+		var configEmailPswrd = $.trim($("#configEmailPswrd").val());
+		var configEmailSSL = 0;
+		if($("#configEmailSSL").attr("src")==="./MI_PCli_EW/images/OI_GreenSage.png"){ configEmailSSL=1; }
+		
+		if(configEmailCuenta==="" || configEmailSMTP==="" || configEmailPuerto==="" || configEmailUsuario==="" || configEmailPswrd===""){ 
+			alert("Faltan datos por especificar en la cuenta de correo!"); 
+			return; 
+		}
+		
+		if(!modo){ 
+			abrirVelo(icoCarga20+" Actualizando los datos..."); 
+			setTimeout(()=>{
+				var parametros = '{"modo":"configEmail","configEmailCuenta":"'+configEmailCuenta+'","configEmailSMTP":"'+configEmailSMTP+'"'
+								+',"configEmailPuerto":"'+configEmailPuerto+'","configEmailUsuario":"'+configEmailUsuario+'","configEmailPswrd":"'+configEmailPswrd+'"'
+								+',"configEmailSSL":"'+configEmailSSL+'"}';   /**/ console.log(parametros);
+				flexygo.nav.execProcess('pConfiguracion','',null,null,[{key:'modo',value:limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
+				 /**/ console.log(ret.JSCode);
+					if(ret.JSCode==="configEmail_OK"){ 
+						abrirVelo(icoCarga20+" modificando la configuración...",true);
+						setTimeout(()=>{
+							var parametros = '{"modo":"ConfigEmailPrincipal"}';
+							flexygo.nav.execProcess('MerlosDLL','sysJob','',null,[{key:'Parametros',value:limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){ 
+								/**/ console.log(JSON.stringify(ret));
+								abrirVelo(icoCarga20+" reiniciando la aplicación...",true);
+								setTimeout(()=>{limpiarLaCache(); location.reload();},500);		
+							}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
+						},500);						
+					}else{ alert("Ups! Ha ocurrido un error al actualizar los datos!"); }
+				}else{ alert("Error SP pConfiguracion - configEmail!\n"+JSON.stringify(ret)); }},false);
+			},500);
+		}else if(modo==="probarConfiguracion"){ 
+			if(!lanzar){
+				abrirVelo("introduce una dirección de correo para enviar la prueba"
+				+"<br><input type='text' id='inpEmailDir'>"
+				+"<br><br><br><span class='MIboton esq05' style='padding:10px;' "
+				+"onclick='configurarCtaEmail(\"probarConfiguracion\",true)'>lanzar prueba</span>"
+				+"&nbsp;&nbsp;&nbsp;<span class='MIboton esq05' style='padding:10px;' "
+				+"onclick='cerrarVelo()'>cancelar</span>"); 
+			}else{
+				var parametros = '{"modo":"probarConfiguracion","configEmailCuenta":"'+configEmailCuenta+'","configEmailSMTP":"'+configEmailSMTP+'"'
+									+',"configEmailPuerto":"'+configEmailPuerto+'","configEmailUsuario":"'+configEmailUsuario+'","configEmailPswrd":"'+configEmailPswrd+'"'
+									+',"configEmailSSL":"'+configEmailSSL+'","inpEmailDir":"'+$.trim($("#inpEmailDir").val())+'"}'; 
+				abrirVelo(icoCarga20+" probando la configuración de correo..."); 
+				setTimeout(()=>{					
+					flexygo.nav.execProcess('MerlosDLL','sysJob','',null,[{key:'Parametros',value:limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){ 
+						if(ret.SuccessMessage==="probarConfiguracion_OK"){ 
+							abrirVelo("Prueba de email correcta!<br><br><br><span class='MIboton esq05' style='padding:10px;' onclick='cerrarVelo()'>aceptar</span>"); 
+						}else{abrirVelo("Falló la prueba de email<br>Verifica los datos de configuración,<br>el email destino o prueba de nuevo más tarde."
+										+"<br><br><br><span class='MIboton esq05' style='padding:10px;' onclick='cerrarVelo()'>aceptar</span>");}
+					}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
+				},500);		
+			}
+		}		
 	}
 </script>

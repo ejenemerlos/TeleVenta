@@ -1,6 +1,6 @@
 ﻿ GO
 
- BEGIN TRAN
+BEGIN TRAN
 
 EXEC sp_MSforeachtable 'ALTER TABLE ? NOCHECK CONSTRAINT all'
 

@@ -175,19 +175,6 @@
 		},false);
 	}
 	
-	function asignarGestor(modo,gestor,n){ 
-		if(modo){
-			$("#btnrAsignarGestor").hide(); $("#btnAsignarGestorAV").html(icoCargando16+" asignando...").show(); 
-			$("flx-module[modulename='usuariosTV']").stop().slideUp();
-			var parametros = '{"modo":"'+modo+'","cliente":"{{CODIGO}}","gestor":"'+gestor+'","nGestor":"'+n+'",'+paramStd+'}';
-			flexygo.nav.execProcess('pClienteDatos','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-				if(ret){
-					flexygo.nav.openPage('view','Cliente','CODIGO=\'{{CODIGO}}\'','{\'CODIGO\':\'{{CODIGO}}\'}','current',false,$(this));
-				}else{ alert("Error SP: pClienteDatos!!!"+JSON.stringify(ret)); }
-			},false);
-		}else{ $("flx-module[modulename='usuariosTV']").css("margin-top","-180px").stop().slideDown(); }		
-	}
-	
 	function cargarGestoresCliente(gestoresDelCliente){
 		$("#dvGestoresCliente").html("");
 		var contenido = "";
