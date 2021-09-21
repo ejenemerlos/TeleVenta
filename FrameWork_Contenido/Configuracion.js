@@ -337,8 +337,8 @@
 				$("#configEmailPuerto").val(js.ConfigEmail[i].Puerto);
 				$("#configEmailUsuario").val(js.ConfigEmail[i].Usuario);
 				$("#configEmailPswrd").val(js.ConfigEmail[i].Password); 
-				if(js.ConfigEmail[i].SSL===true){ $("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesI.png"); }
-				else{ $("#imgConfigEmailSSL").attr("src","./Merlos/images/BtnDesO.png"); }
+				if(js.ConfigEmail[i].SSL===true){ $("#imgConfigEmailSSL").attr("src",BtnDesI); }
+				else{ $("#imgConfigEmailSSL").attr("src",BtnDesO); }
 			}
 			cerrarVelo();
 			GblLimpiarLaCache();
@@ -424,7 +424,7 @@
 		var configEmailUsuario = $.trim($("#configEmailUsuario").val());
 		var configEmailPswrd = $.trim($("#configEmailPswrd").val());
 		var configEmailSSL = 0;
-		if($("#configEmailSSL").attr("src")==="./MI_PCli_EW/images/OI_GreenSage.png"){ configEmailSSL=1; }
+		if($("#imgConfigEmailSSL").attr("src")===BtnDesI){ configEmailSSL=1; }
 		
 		if(configEmailCuenta==="" || configEmailSMTP==="" || configEmailPuerto==="" || configEmailUsuario==="" || configEmailPswrd===""){ 
 			alert("Faltan datos por especificar en la cuenta de correo!"); 
@@ -436,17 +436,15 @@
 			setTimeout(()=>{
 				var parametros = '{"modo":"configEmail","configEmailCuenta":"'+configEmailCuenta+'","configEmailSMTP":"'+configEmailSMTP+'"'
 								+',"configEmailPuerto":"'+configEmailPuerto+'","configEmailUsuario":"'+configEmailUsuario+'","configEmailPswrd":"'+configEmailPswrd+'"'
-								+',"configEmailSSL":"'+configEmailSSL+'"}';   /**/ console.log(parametros);
-				flexygo.nav.execProcess('pConfiguracion','',null,null,[{key:'modo',value:limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
-				 /**/ console.log(ret.JSCode);
+								+',"configEmailSSL":"'+configEmailSSL+'"}'; 
+				flexygo.nav.execProcess('pConfiguracion','',null,null,[{key:'parametros',value:limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
 					if(ret.JSCode==="configEmail_OK"){ 
-						abrirVelo(icoCarga20+" modificando la configuración...",true);
+						abrirVelo(icoCarga20+" modificando la configuración...",500,true);
 						setTimeout(()=>{
 							var parametros = '{"modo":"ConfigEmailPrincipal"}';
 							flexygo.nav.execProcess('MerlosDLL','sysJob','',null,[{key:'Parametros',value:limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){ 
-								/**/ console.log(JSON.stringify(ret));
-								abrirVelo(icoCarga20+" reiniciando la aplicación...",true);
-								setTimeout(()=>{limpiarLaCache(); location.reload();},500);		
+								abrirVelo(icoCarga20+" reiniciando la aplicación...",500,true);
+								setTimeout(()=>{GblLimpiarLaCache(); location.reload();},500);		
 							}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
 						},500);						
 					}else{ alert("Ups! Ha ocurrido un error al actualizar los datos!"); }

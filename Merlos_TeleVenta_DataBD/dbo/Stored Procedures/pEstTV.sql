@@ -11,13 +11,9 @@ BEGIN TRY
 	declare @pedidos int = (select count(pedido) from TeleVentaDetalle where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA' and pedido<>'Sin Pedido!')
 	declare @sumaPedidos numeric(20,2) = 
 	(
-		select SUM(IMPORTEIVA) from vPedidos_Detalle
-		where IdPedido 
-		in (
-			select idpedido collate Modern_Spanish_CI_AI 
-			from TeleVentaDetalle 
-			where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA' and pedido<>'Sin Pedido!'
-			) 
+		select SUM(vpd.TOTALDOC) from vPedidos vpd
+		inner join TeleVentaDetalle tvd on tvd.idpedido collate SQL_Latin1_General_CP1_CI_AS=vpd.IDPEDIDO
+				and tvd.id=@IdTeleVenta and tvd.pedido is not null and tvd.pedido<>'INCIDENCIA' and tvd.pedido<>'Sin Pedido!'
 	)
 
 	

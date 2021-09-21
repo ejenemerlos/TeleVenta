@@ -4,7 +4,8 @@ BEGIN TRY
 
 MERGE INTO [Processes] AS Target
 USING (VALUES
-  (N'pAppTeleVenta',0,N'product',NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,N'AppTeleVenta',0,0,1)
+  (N'MerlosDLL',1,N'product',NULL,N'MerlosDLL',NULL,NULL,NULL,N'~/Merlos/dll/MerlosDLL.dll',N'MerlosDLL.Merlos',N'Proceso',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
+ ,(N'pAppTeleVenta',0,N'product',NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,N'AppTeleVenta',0,0,1)
  ,(N'pArticulos',0,N'product',NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
  ,(N'pArticulosBuscar',0,N'product',NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
  ,(N'pArticulosCliente',0,N'product',NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)

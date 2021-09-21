@@ -1151,7 +1151,7 @@ function terminarLlamada(){console.log("terminarLlamada()");
 					+	'<Property Name="IDPEDIDO" Value="'+PedidoActivo+'"/>'
 					+	'<Property Name="EMPRESA" Value="'+flexygo.context.CodigoEmpresa+'"/>'
 					+	'<Property Name="CLIENTE" Value="'+ClienteCodigo+'"/>'
-					+	'<Property Name="SERIE" Value="'+SERIE+'"/>'
+					+	'<Property Name="SERIE" Value="'+$("#dvSerieTV").text()+'"/>'
 					+	'<Property Name="CONTACTO" Value="'+contacto+'"/>'
 					+	'<Property Name="INCICLI" Value="'+$.trim(($("#inciCliente").val()).split(" - ")[0])+'"/>'
 					+	'<Property Name="INCICLIDescrip" Value="'+$.trim(($("#inciCliente").val()).split(" - ")[1])+'"/>'
@@ -1161,6 +1161,7 @@ function terminarLlamada(){console.log("terminarLlamada()");
 					+	"<Property Name='NoCobrarPortes' Value='"+PedidoNoCobrarPortes+"'/>"
 					+	"<Property Name='OBSERVACIO' Value='"+limpiarCadena($.trim($("#taObservacionesDelPedido").val()))+"'/>"
 					+'</Row>';
+					console.log("Values: "+Values);
 		flexygo.nav.execProcess('pPedido_Nuevo','Pedido',null,null
 		,[{key:'Values',value:Values}, {key:'ContextVars',value:ContextVars},{key:'RetValues',value:RetValues}],'modal640x480',false,$(this),function(ret){
 			if(ret && !ret.JSCode.includes("'Error pedidoNuevo !!!")){
@@ -1215,7 +1216,7 @@ function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef
 	} 
 	var parametros = '{"modo":"terminar","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'"'
 					+',"incidenciaCliente":"'+incidenciaCliente+'","incidenciaClienteDescrip":"'+incidenciaClienteDescrip+'","observaciones":"'+observaciones+'"'
-					+',"pedido":"'+pedido+'","empresa":"'+CodigoEmpresa+'","serie":"'+SERIE+'"'+incidenciasSinPedido+','+paramStd+'}';
+					+',"pedido":"'+pedido+'","empresa":"'+CodigoEmpresa+'","serie":"'+$("#dvSerieTV").text()+'"'+incidenciasSinPedido+','+paramStd+'}';
 					
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 

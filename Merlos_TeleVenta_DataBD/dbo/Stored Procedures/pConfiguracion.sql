@@ -33,6 +33,19 @@ BEGIN TRY
 		else update Configuracion set valor=@valor where nombre=@nombre
 	END
 
+	if @modo = 'configEmail' begin
+		begin try
+			update Configuracion_Email set
+					Cuenta = isnull((select JSON_VALUE(@parametros,'$.configEmailCuenta')),'')
+				, ServidorSMTP = isnull((select JSON_VALUE(@parametros,'$.configEmailSMTP')),'')
+				, Puerto = isnull((select JSON_VALUE(@parametros,'$.configEmailPuerto')),'')
+				, [SSL] = cast(isnull((select JSON_VALUE(@parametros,'$.configEmailSSL')),'0') as bit)
+				, Usuario = isnull((select JSON_VALUE(@parametros,'$.configEmailUsuario')),'')
+				, [Password] = isnull((select JSON_VALUE(@parametros,'$.configEmailPswrd')),'')
+			select 'configEmail_OK' as JAVASCRIPT
+		end try begin catch select 'configEmail_KO' as JAVASCRIPT return -1 END CATCH
+	end
+
 
 	-- devolver configuración
 	set @MesesConsumo = (select MesesConsumo from Configuracion_SQL)
@@ -40,6 +53,8 @@ BEGIN TRY
 	set @TVTarifa = (select isnull(TarifaMinima,'') from Configuracion_SQL)
 
 	declare @IO varchar(max) = isnull((select nombre,valor from Configuracion for JSON AUTO,INCLUDE_NULL_VALUES),'[]')
+
+	declare @ConfigEmail varchar(max) = isnull((select * from Configuracion_Email for JSON AUTO,INCLUDE_NULL_VALUES),'[]')
 
 	set @respuesta = '{'
 					+	'"ConfSQL":['
@@ -50,6 +65,7 @@ BEGIN TRY
 					+				'}'
 					+			   ']'
 					+	',"IO":' + @IO
+					+	',"ConfigEmail":' + @ConfigEmail
 					+'}'
 
 	select @respuesta as JAVASCRIPT

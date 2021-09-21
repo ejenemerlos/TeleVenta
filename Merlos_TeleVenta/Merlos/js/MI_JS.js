@@ -32,6 +32,7 @@ var ClienteOferta = false;
 var PedidoNoCobrarPortes = 0;
 var ConfNoCobrarPortes = 0;
 var ConfMostrarStockVirtual = 0;
+var ConfConfigEmailSSL = 0;
 var TARIFA = "";
 var ObservacionesDelPedido = "";
 var ObservacionesInternas = "";
@@ -74,6 +75,7 @@ var BtnDesI = "./Merlos/images/BtnDesI.png";
 var BtnDesO = "./Merlos/images/BtnDesO.png";
 var icoCarga20 = "<img src='./Merlos/images/icoCarga.png' class='rotarR' width='20'>";
 
+
 /*
 	*************************
 		    Funciones
@@ -92,11 +94,13 @@ function GblCacheAutoClick(){
 	if(botonYes.is(":visible")){ botonYes.click(); }else{ setTimeout(GblCacheAutoClick,500); }
 }
 
-function abrirVelo(contenido, ancho) {
-    if(ancho===null || !ancho || ancho===""){ ancho=500; }
-    $("#dvVelo").remove();
-    $("body").prepend("<div id='dvVelo' class='inv'><div id='dvVeloContenido' class='C' style='width:" + ancho + "px;'>" + contenido + "</div></div>");
-    $("#dvVelo").stop().fadeIn();
+function abrirVelo(contenido, ancho, mantener) {
+    if (ancho === null || !ancho || ancho === "") { ancho = 500; }
+    if (!mantener) {
+        $("#dvVelo").remove();
+        $("body").prepend("<div id='dvVelo' class='inv'><div id='dvVeloContenido' class='C' style='width:" + ancho + "px;'>" + contenido + "</div></div>");
+        $("#dvVelo").stop().fadeIn();
+    } else { $("#dvVeloContenido").html(contenido); }
 }
 function abrirAVT(contenido, ancho) {
     if(!ancho){ ancho=500; }

@@ -6178,6 +6178,7 @@
     <Content Include="js\plugins\wc-polyfills\custom-elements.min.js" />
     <Content Include="js\tests\utils.tests.js" />
     <Content Include="Merlos\css\MI_CSS.css" />
+    <Content Include="Merlos\dll\MerlosDLL.dll" />
     <Content Include="Merlos\images\anyadir.png" />
     <Content Include="Merlos\images\aspaI.png" />
     <Content Include="Merlos\images\aspaO.png" />
