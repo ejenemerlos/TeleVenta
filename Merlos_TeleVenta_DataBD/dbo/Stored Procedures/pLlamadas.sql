@@ -104,11 +104,16 @@ BEGIN TRY
 			values (@IdTeleVenta,@usuario,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
 		END
 		
+		-- Obtener importe del pedido
+		declare @importePedido numeric(15,6)=(select totaldoc from vpedidos 
+										where ltrim(rtrim(numero))=ltrim(rtrim(@pedido)) and LETRA=@serie and CLIENTE=@cliente
+												and EMPRESA=@empresa)
+
 		if exists (select * from [TeleVentaDetalle] where id=@IdTeleVenta and cliente=@cliente and completado=1) BEGIN
-			insert into [TeleVentaDetalle] (id,cliente,idpedido,pedido,serie,completado)
-			values (@IdTeleVenta,@cliente,@idpedido,@pedido,@serie,1)
+			insert into [TeleVentaDetalle] (id,cliente,idpedido,pedido,importe,serie,completado)
+			values (@IdTeleVenta,@cliente,@idpedido,@pedido,@importePedido,@serie,1)
 		END ELSE BEGIN
-			update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, serie=@serie, completado=1
+			update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, importe=@importePedido, serie=@serie, completado=1
 			where id=@IdTeleVenta and cliente=@cliente
 		END
 
@@ -146,8 +151,10 @@ BEGIN TRY
 		declare @llamadas int = (select count(completado) from TeleVentaDetalle where id=@IdTeleVenta and completado=1)
 		declare @pedidos  int = (select count(idpedido) from TeleVentaDetalle where id=@IdTeleVenta and idpedido is not null 
 								and idpedido<>'')
-		declare @importe numeric(15,6) = (select sum(coalesce(totaldoc,0)) from vPedidos 
-						where IDPEDIDO collate Modern_Spanish_CI_AI in (select IDPEDIDO from TeleVentaDetalle where id=@IdTeleVenta))
+		declare @importe numeric(15,6) = (
+			select sum(coalesce(dpv.totaldoc,0)) from vPedidos dpv
+			inner join TeleVentaDetalle dtv on dtv.idpedido collate SQL_Latin1_General_CP1_CI_AS=dpv.IDPEDIDO
+			where dtv.id collate SQL_Latin1_General_CP1_CI_AS=@IdTeleVenta)
 
 		update TeleVentaCab set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, importe=@importe where id=@IdTeleVenta
 	END
@@ -156,23 +163,23 @@ BEGIN TRY
 		if @rol='Admins' or @rol='AdminPortal' or @rol='VerTodosLosClientes'
 			select isnull(
 				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-					, clientes, llamadas, pedidos, importe
+					, clientes, llamadas, pedidos, t.importe
 					from [TeleVentaCab] t
 					inner join TeleVentaDetalle d on d.id=t.id
 					left join vPedidos p on p.idpedido=d.idpedido collate database_default
-					group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, importe
+					group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
 					order by cast(t.fecha as date) desc 
 				for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		else 
 			select isnull(
 				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-					, clientes, llamadas, pedidos, importe
+					, clientes, llamadas, pedidos, t.importe
 				from [TeleVentaCab] t
 				inner join TeleVentaDetalle d on d.id=t.id
 				left join vPedidos p on p.idpedido=d.idpedido collate database_default
 				where t.usuario=@usuario 
-				group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, importe
+				group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
 				order by cast(t.fecha as date) desc 
 				for JSON AUTO)
 			,'[]') as JAVASCRIPT
@@ -208,12 +215,8 @@ BEGIN TRY
 	--	retornar llamadas (cargarLlamadas)
 		select isnull((select td.*
 		, cli.NOMBRE
-		, (
-			select top 1 FECHA 
-			from vpedidos 
-			where CLIENTE=CLI.CODIGO
-			order by sqlFecha desc
-		) as ultimoPedido
+		, (	select top 1 convert(char(10),FECHA,105) from [vPedidos_Cabecera] 
+			where CLIENTE=CLI.CODIGO order by sqlFecha desc ) as ultimoPedido
 		from TeleVentaDetalle td 
 		left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=td.cliente
 		where td.id=@IdTeleVenta

@@ -773,7 +773,7 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 						
 						if(modo){ 
 							stockVirtual = parseInt(art[i].StockVirtual); if(isNaN(stockVirtual)){stockVirtual="";}
-							elPeso = $.trim(art[i].PESO); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
+							elPeso = $.trim(art[i].PesoArticulo); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
 							elPedUniCaja = $.trim(art[i].UNICAJA); 
 							if(elPedUniCaja==="" || elPedUniCaja===null){ elPedUniCaja="0"; }	
 							if(parseFloat(elPedUniCaja)>0){ }else{ CajasIO="readonly disabled"; }

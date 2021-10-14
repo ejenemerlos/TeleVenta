@@ -351,6 +351,31 @@ BEGIN TRY
 
 
 
+
+	-- Vista vPedidos_Cabecera
+	IF EXISTS (select * FROM sys.views where name = 'vPedidos_Cabecera')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 	
+	set @Sentencia = @AlterCreate+'  VIEW [dbo].[vPedidos_Cabecera]
+	AS 
+	SELECT   cast('''' as varchar(50)) as MODO
+			, CONCAT('''+@EJERCICIOAnt+''',CAV.empresa,replace(CAV.LETRA,space(1),''0''),replace(LEFT(CAV.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO	
+			, CAV.LETRA + CAV.NUMERO as PEDIDO , CAV.NUMERO as numero, CAV.LETRA, CAV.FECHA, CAV.FECHA as sqlFecha
+			, CAV.CLIENTE
+
+	FROM '+@GESTIONAnt+'.dbo.c_pedive CAV
+	
+	union
+	
+	SELECT   cast('''' as varchar(50)) as MODO
+			, CONCAT('''+@EJERCICIO+''',CAV.empresa,replace(CAV.LETRA,space(1),''0''),replace(LEFT(CAV.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO	
+			, CAV.LETRA + CAV.NUMERO as PEDIDO , CAV.NUMERO as numero, CAV.LETRA, CAV.FECHA, CAV.FECHA as sqlFecha
+			, CAV.CLIENTE
+
+	FROM '+@GESTION+'.dbo.c_pedive CAV
+	'
+	exec(@Sentencia)
+	select  'vPedidos'
+
+
 	
 
 

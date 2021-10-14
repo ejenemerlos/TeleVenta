@@ -802,7 +802,7 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 						
 						if(modo){ 
 							stockVirtual = parseInt(art[i].StockVirtual); if(isNaN(stockVirtual)){stockVirtual="";}
-							elPeso = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(art[i].PESO); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
+							elPeso = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(art[i].PesoArticulo); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
 							elPedUniCaja = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(art[i].UNICAJA); 
 							if(elPedUniCaja==="" || elPedUniCaja===null){ elPedUniCaja="0"; }	
 							if(parseFloat(elPedUniCaja)>0){ }else{ CajasIO="readonly disabled"; }

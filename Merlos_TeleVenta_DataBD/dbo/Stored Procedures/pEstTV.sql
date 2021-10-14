@@ -6,15 +6,13 @@ BEGIN TRY
 			,@FechaTeleVenta varchar(50) = (select JSON_VALUE(@parametros,'$.FechaTeleVenta'))
 			,@usuario varchar(50) = (select JSON_VALUE(@parametros,'$.paramStd[0].currentReference'))
 
-	declare @clientes int = (select count(distinct cliente) from TeleVentaDetalle where id=@IdTeleVenta)
-	declare @llamadas int = (select count(cliente) from TeleVentaDetalle where id=@IdTeleVenta and idpedido is not null)
-	declare @pedidos int = (select count(pedido) from TeleVentaDetalle where id=@IdTeleVenta and pedido is not null and pedido<>'INCIDENCIA' and pedido<>'Sin Pedido!')
-	declare @sumaPedidos numeric(20,2) = 
-	(
-		select SUM(vpd.TOTALDOC) from vPedidos vpd
-		inner join TeleVentaDetalle tvd on tvd.idpedido collate SQL_Latin1_General_CP1_CI_AS=vpd.IDPEDIDO
-				and tvd.id=@IdTeleVenta and tvd.pedido is not null and tvd.pedido<>'INCIDENCIA' and tvd.pedido<>'Sin Pedido!'
-	)
+	declare @clientes int
+	declare @llamadas int
+	declare @pedidos int
+	declare @sumaPedidos numeric(20,2)
+
+	select @clientes=clientes, @llamadas=llamadas, @pedidos=pedidos, @sumaPedidos=importe 
+	from TeleVentaCab where id=@IdTeleVenta
 
 	
 	--  devolución de filtros
