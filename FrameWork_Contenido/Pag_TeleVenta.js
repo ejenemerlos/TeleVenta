@@ -765,15 +765,14 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 						var UdsIO = "";
 						var PesoIO = "";
 						var elPedUniCaja ="0"; 
-						var elPeso = $.trim(art[i].peso); if(elPeso==="" || elPeso===null){ elPeso="0"; }				
+						var elPeso = $.trim(art[i].PesoArticulo); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
 						var elPedUniCajaValor = elPedUniCaja; if(elPedUniCajaValor==="0"){ elPedUniCajaValor=""; }
 						var elPesoValor = elPeso; if(elPesoValor==="0"){ elPesoValor=""; }
 						var eOnClick = "";						
 						var	stockVirtual = parseInt(art[i].StockVirtual); 
 						
 						if(modo){ 
-							stockVirtual = parseInt(art[i].StockVirtual); if(isNaN(stockVirtual)){stockVirtual="";}
-							elPeso = $.trim(art[i].PesoArticulo); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
+							stockVirtual = parseInt(art[i].StockVirtual); if(isNaN(stockVirtual)){stockVirtual="";}							
 							elPedUniCaja = $.trim(art[i].UNICAJA); 
 							if(elPedUniCaja==="" || elPedUniCaja===null){ elPedUniCaja="0"; }	
 							if(parseFloat(elPedUniCaja)>0){ }else{ CajasIO="readonly disabled"; }
@@ -816,7 +815,7 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 									+"		onfocusout='if(celdaValor!==this.value){calcCUP(\"peso\",\"tbArtDispTR"+i+"\","+elPedUniCaja+","+elPeso+",true);}' "
 									+"		onclick='$(this).select(); cargarPrecio("+i+",this.id); event.stopPropagation();' "+PesoIO+">"
 									+"	</td>";
-						if(modo){ contenido +="<td id='tarifaTD"+i+"' class='C' style='width:5%;'>"+parseFloat(art[i].PVP).toFixed(2)+"</td>"; }
+						if(modo){ contenido +="<td id='tarifaTD"+i+"' class='C' style='width:5%;'></td>"; }
 						else{ contenido +="<td id='tarifaTD"+i+"' class='C' style='width:5%;'>"+(art[i].pvp).toFixed(2)+"</td>"; }
 						contenido += "	<td id='precioTD"+i+"' class='C' style='width:5%;'>"
 							//		+"		<span class='flx-icon icon-sincronize-1 rotarR' style='font-size:12px; color:green;'></span>"
