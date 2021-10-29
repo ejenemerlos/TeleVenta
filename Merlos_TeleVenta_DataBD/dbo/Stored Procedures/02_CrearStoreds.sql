@@ -446,7 +446,7 @@ BEGIN TRY
 	-- ==================================================================================================================================
 	-- Insertamos las lineas del pedido	
 
-		set @LINEAS = ''{"datos":[''+replace(replace(@LINEAS,''_openLL_'',''{''),''_closeLL_'',''}'')+'']}''
+		set @LINEAS = ''{"datos":''+replace(replace(@LINEAS,''_openLL_'',''{''),''_closeLL_'',''}'')+''}''
 		
 		declare @valor varchar(max)
 		declare cur CURSOR for select [value] from openjson(@LINEAS,''$.datos'')
@@ -635,16 +635,31 @@ BEGIN TRY
 
 	IF @peso is null set @peso=0
 ' set  @Sentencia = @Sentencia + '
+	
+	-- Coste Residuo
+	declare @CosteResiduo numeric(15,6)=0.00
+		,	@PVERDE bit = 0
+		,	@P_TAN  int = 0
+		,	@P_IMPORTE DECIMAL(16,4)
+
+	select @PVERDE=pVERDE, @P_TAN=P_TAN, @P_IMPORTE=P_IMPORTE from '+@GESTION+'.dbo.articulo where CODIGO=@ARTICULO
+
+	if	@PVERDE=1 and @P_TAN=2 BEGIN
+		if @peso>0 set @CosteResiduo = @peso * @P_IMPORTE
+		else set @CosteResiduo = @UNIDADES * @P_IMPORTE
+	END
+
 
 	--------------------------------------------------------------------------------------------------------------
 	--	Insertar Registro	
 
-	INSERT INTO '+@GESTION+'.[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
+	INSERT INTO [2021TG].[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
 				, importe, tipo_iva, coste, cliente, precioiva, importeiva, cajas, familia, preciodiv, importediv, peso, letra
-				, impdiviva, prediviva, RECARG)
+				, impdiviva, prediviva, RECARG, PVERDE)
 	VALUES (@UserName,@Emp,@NUMERO,@linia,@ARTICULO,@DESCRIP,@UNIDADES, @PRECIO, @DTO1,@DTO2,@IMPORTE
 				,@TIPO_IVA,@coste,@CLIENTE,@precio_iva,@importeiva,@cajas,@familia,@PRECIO,@IMPORTE,@peso,@letra
-				, 0, 0, @recargo)
+				, 0, 0, @recargo, @CosteResiduo)
+	--------------------------------------------------------------------------------------------------------------
 
 	-- camposAD
 	IF OBJECT_ID('''+@CAMPOS+'.dbo.D_PEDIVEEW'') IS NOT NULL BEGIN
@@ -1227,7 +1242,7 @@ BEGIN TRY
 	WITH VENTAS (FECHA, CLIENTE, ARTICULO, DEFINICION, CAJAS, UDS, PESO, /*PVP,*/ UNICAJA, PesoArticulo)
 	AS
 	(
-		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, DAV.DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO,*/PVP.PVP
+		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, DAV.DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO,/*PVP.PVP
 		,*/ ART.UNICAJA, ART.PESO as PesoArticulo
 		FROM [''+@gestion+''].DBO.C_ALBVEN CAV 
 		INNER JOIN [''+@gestion+''].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
@@ -1346,6 +1361,68 @@ END CATCH
 '
 exec(@Sentencia)
 select  'pOfertas'
+
+
+
+
+--Procedimiento pArticulos
+IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pArticulos' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+set @Sentencia = @AlterCreate + ' PROCEDURE [dbo].[pArticulos]	@parametros varchar(max)
+AS
+BEGIN TRY	
+	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,''$.modo'')),'''')
+		,	@articulo varchar(50) = isnull((select JSON_VALUE(@parametros,''$.articulo'')),'''')
+		,	@desde varchar(5) = isnull((select JSON_VALUE(@parametros,''$.desde'')),''0'')
+
+	declare @sentencia varchar(max) = ''''
+	declare @respuesta varchar(max) = ''''
+
+	if @modo=''buscar'' BEGIN
+		set @sentencia = CONCAT(''
+			select (
+				select (select count(CODIGO) from vArticulos where CODIGO like ''''%'',@articulo,''%'''' 
+																or NOMBRE like ''''%'',@articulo,''%'''' ) as registros
+				, * 
+				from vArticulos 
+				where CODIGO like ''''%'',@articulo,''%'''' or NOMBRE like ''''%'',@articulo,''%'''' 
+				ORDER BY  NOMBRE  ASC 
+				OFFSET '',@desde,'' ROWS FETCH NEXT 100 ROWS ONLY  FOR JSON AUTO
+			) as JAVASCRIPT
+		'')
+		exec(@sentencia)
+	END
+
+	if @modo=''residuo'' BEGIN
+		set @respuesta = (select codigo, PVERDE, P_TAN, P_IMPORTE
+							from '+@GESTION+'.dbo.articulo  
+							where CODIGO=@articulo
+							for JSON AUTO, INCLUDE_NULL_VALUES)
+		
+		select isnull(@respuesta,''[]'') as JAVASCRIPT
+	END
+
+	if @modo=''bebidasAzucaradas'' BEGIN
+		set @respuesta = (select ltrim(rtrim(esc.COMPONENTE)) as COMPONENTE, esc.PVP, esc.UNIDADES 
+							,art.codigo, art.PVERDE, art.P_TAN, art.P_IMPORTE
+							from '+@GESTION+'.dbo.articulo art 
+							left join '+@GESTION+'.dbo.escandal esc on art.CODIGO=esc.ARTICULO
+							where art.CODIGO=@articulo
+							for JSON AUTO, INCLUDE_NULL_VALUES)
+		
+		select isnull(@respuesta,''[]'') as JAVASCRIPT
+	END
+	
+	RETURN -1
+END TRY
+BEGIN CATCH	
+	DECLARE @CatchError NVARCHAR(MAX)
+	SET @CatchError=ERROR_MESSAGE()+char(13)+ERROR_NUMBER()+char(13)+ERROR_PROCEDURE()+char(13)+@@PROCID+char(13)+ERROR_LINE()
+	RAISERROR(@CatchError,12,1)
+	RETURN 0
+END CATCH
+'
+exec(@Sentencia)
+select  'pArticulos'
 
 
 

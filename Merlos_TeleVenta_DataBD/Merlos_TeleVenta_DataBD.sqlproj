@@ -81,7 +81,6 @@
     <Build Include="dbo\Stored Procedures\pClientesADI.sql" />
     <Build Include="dbo\Stored Procedures\pClienteDatos.sql" />
     <Build Include="dbo\Stored Procedures\pUltimosPedidos.sql" />
-    <Build Include="dbo\Stored Procedures\pArticulos.sql" />
     <Build Include="dbo\Stored Procedures\pArticulosBuscar.sql" />
     <Build Include="dbo\Stored Procedures\pLlamadas.sql" />
     <Build Include="dbo\Stored Procedures\pSeries.sql" />

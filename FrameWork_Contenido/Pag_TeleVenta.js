@@ -23,7 +23,7 @@ setTimeout(function(){
 function inicioTeleVenta(){ console.log("inicioTeleVenta()");
 	cerrarVelo();
 	PedidoGenerado="";	
-	PedidoDetalle = "";	
+	PedidoDetalle = [];	
 	$("#btnPedido").text("Pedido");
 	$(".moduloTV, #btnConfiguracion").stop().fadeIn();
 	$(".moduloPedido").hide();
@@ -129,7 +129,7 @@ function pedidoTV(){ console.log("pedidoTV()");
 				if(js.length>0){ $("#btnClienteOfertas").addClass("fadeIO"); }else{ $("#btnClienteOfertas").removeClass("fadeIO"); }
 		}else{ alert("Error SP: pOfertas - ofertasDelCliente!!!\n"+JSON.stringify(ret)); }}, false);
 		
-		PedidoDetalle=""; $("#dvPedidoDetalle").html(""); // por si se ha terminado una llamada sin crear pedido.
+		PedidoDetalle=[]; $("#dvPedidoDetalle").html(""); // por si se ha terminado una llamada sin crear pedido.
 	}else{
 		$("#btnPedido").text("Pedido");
 		$(".moduloTV, #btnConfiguracion").stop().fadeIn();
@@ -682,7 +682,7 @@ function verPedidoDetalle(idpedido,pedido,i){console.log("verPedidoDetalle("+idp
 var PedidoActivo = "";
 var PedidoActivoNum = "";
 var PedidoModo = "crear";
-var PedidoDetalle = "";
+var PedidoDetalle = [];
 var dvIncidenciasCLI = "";
 var dvIncidenciasART = "";
 
@@ -1049,35 +1049,78 @@ function pedidoAnyadirDetalle(){
 		 var cajas = parseFloat($(this).find(".trBscCajas").text()); 
 		 var StockVirtual = parseFloat($(this).find(".tdBscStockVirtual").text()); 
 		 var maxPed = parseFloat($(this).find(".tdBscMaxPed").text());		
-		 var peso = parseFloat($(this).find(".inpPesoSol").val());			if(isNaN(peso)){ peso=0; }	
-		 var precio = parseFloat($(this).find(".inpPrecioSol").val());		if(isNaN(precio)){ precio=0; }	
-		 var dto = parseFloat($(this).find(".inpDtoSol").val());			if(isNaN(dto)){ dto=0; }	
-		 var importe = parseFloat($(this).find(".inpImporteSol").text());	if(isNaN(importe)){ importe=0; }	
+		 var peso = parseFloat($(this).find(".inpPesoSol").val());					if(isNaN(peso)){ peso=0; }	
+		 var precio = parseFloat($(this).find(".inpPrecioSol").val());				if(isNaN(precio)){ precio=0; }	
+		 var dto = parseFloat($(this).find(".inpDtoSol").val());					if(isNaN(dto)){ dto=0; }	
+		 var importe = parseFloat($(this).find(".inpImporteSol").text());			if(isNaN(importe)){ importe=0; }	
+		 var CosteResiduo = parseFloat($(this).find(".inpCosteResiduo").text());	if(isNaN(CosteResiduo)){ CosteResiduo=0; }	
 		 var incidencia = ($(this).find(".trInciArt").val()).split(" - ")[0];
 		 var incidenciaDescrip = ($(this).find(".trInciArt").val()).split(" - ")[1];
 		 var observacion = $(this).find(".trObservaArt").val();
 
 		if(parseFloat(cjs)>0 || parseFloat(can)>0 || parseFloat(peso)>0){	
-			// añadimos la linea
-			PedidoDetalle += '{"codigo":"'+cod+'","unidades":"'+can+'","peso":"'+peso+'","precio":"'+precio+'","dto":"'+dto+'","importe":"'+importe+'"'
-			+',"artUnicaja":"'+cajas+'","incidencia":"'+incidencia+'","incidenciaDescrip":"'+incidenciaDescrip+'","observacion":"'+observacion+'"}';
+			// comprobar Coste Residuo
+			(function(){
+				var parametros = '{"modo":"residuo","articulo":"'+cod+'"}';
+				flexygo.nav.execProcess('pArticulos','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){
+					var residuo = JSON.parse(ret.JSCode);
+					var pImporte = parseFloat(residuo[0].P_IMPORTE);
+					if(residuo[0].PVERDE && parseInt(residuo[0].P_TAN)===2){
+						if(parseFloat(peso)>0){ CosteResiduo = parseFloat(pImporte) * parseFloat(peso); }
+						else{ CosteResiduo = parseFloat(pImporte) * parseFloat(can); }
+					}
+					
+					PedidoDetalle.push('{"codigo":"'+cod+'","unidades":"'+can+'","peso":"'+peso+'","precio":"'+precio+'","dto":"'+dto+'"'
+					+',"importe":"'+importe+'","CosteResiduo":"'+CosteResiduo+'","CosteResiduoArt":"'+cod+'","artUnicaja":"'+cajas+'"'
+					+',"incidencia":"'+incidencia+'","incidenciaDescrip":"'+incidenciaDescrip+'","observacion":"'+observacion+'"}');
+					
+					// comprobar Impuesto Bebidas Azucaradas
+					var param = '{"modo":"bebidasAzucaradas","articulo":"'+cod+'"}';
+					(function(){
+						flexygo.nav.execProcess('pArticulos','',null,null,[{'key':'parametros','value':limpiarCadena(param)}],'current',false,$(this),function(r){if(r){
+							var esc = JSON.parse(r.JSCode);
+							if(esc.length>0){
+								for(var x=0; x<esc.length; x++){
+									var escComponente = esc[x].COMPONENTE;
+									if(escComponente===null){continue;}
+									var escUds = parseFloat(can) * parseFloat(esc[x].UNIDADES);
+									var escPrecio = parseFloat(esc[x].PVP)
+									var escImporte = escUds * escPrecio;
+									var pImporte = parseFloat(esc[x].P_IMPORTE)
+									var CosteResiduo = 0;
+									if(esc[x].PVERDE && parseInt(esc[x].P_TAN)===2){
+										if(parseFloat(peso)>0){ CosteResiduo = parseFloat(pImporte) * parseFloat(peso); }
+										else{ CosteResiduo = parseFloat(pImporte) * parseFloat(can); }
+									}
+									PedidoDetalle.push('{"codigo":"'+escComponente+'","unidades":"'+escUds+'","peso":"'+peso+'"'
+									+',"precio":"'+escPrecio+'","dto":"'+dto+'","importe":"'+escImporte+'"'
+									+',"CosteResiduo":"'+CosteResiduo+'","CosteResiduoArt":"'+cod+'","artUnicaja":"'+cajas+'","incidencia":"'+incidencia+'"'
+									+',"incidenciaDescrip":"'+incidenciaDescrip+'","observacion":"'+observacion+'"}');	
+								}
+								pedidoVerDetalle();
+							}							
+						}else{ alert("Error! - pArticulos - impuestos: "+JSON.stringify(r)); } },false);
+					})();
+										
+					if(PedidoDetalle.length<1){ alert("No se han seleccionado cantidades del listado!"); }
+					else{ pedidoVerDetalle(); }
+					$(".inpCajasSol,.inpCantSol,.inpPesoSol,.inpP").val("");
+					$(".inpImporteSol").html("");
+				} else { alert('Error SP pArticulos - residuos!'+JSON.stringify(ret)); }}, false);
+			})();
 		}		
-	});	
-	// tratamos los resultados
-	if(PedidoDetalle.length<1){ alert("No se han seleccionado cantidades del listado!"); }
-	else{ pedidoVerDetalle(); }
-	$(".inpCajasSol,.inpCantSol,.inpPesoSol,.inpP").val("");
-	$(".inpImporteSol").html("");
+	});		
 }
 
 function ultimoArticulo_Click(art){console.log("ultimoArticulo_Click("+art+")");/* $("#inpBuscarArticuloDisponible").val(art); buscarArticuloDisponible(window.event.keyCode=13);*/ }
 
-function pedidoVerDetalle(){	console.log("pedidoVerDetalle()");
+function pedidoVerDetalle(){
 	if(PedidoDetalle.length>0){
+		var CosteResiduoArticulos = [];
 		var elTotal = 0.00;
 		var contenido =  "<br><table id='tbPedidoDetalle' class='tbStd'>"
 					  +  "	<tr>"
-					  +  "	<th colspan='7' style='vertical-align:middle; background:#CCC;'>Líneas del Pedido</th>"
+					  +  "	<th colspan='8' style='vertical-align:middle; background:#CCC;'>Líneas del Pedido</th>"
 					  +  "	</tr>"
 					  +  "	<tr>"
 					  +  "		<th style='width:50px;'></th>"
@@ -1086,15 +1129,19 @@ function pedidoVerDetalle(){	console.log("pedidoVerDetalle()");
 					  +  "		<th class='taC' style='width:80px;'>peso</th>"
 					  +  "		<th class='taC' style='width:80px;'>precio</th>"
 					  +  "		<th class='taC' style='width:80px;'>dto</th>"
+					  +  "		<th class='taC' style='width:80px;'>C.Residuo</th>"
 					  +  "		<th class='taC' style='width:100px;'>importe</th>"
 					  +  "	</tr>";
-		var js = JSON.parse("["+PedidoDetalle.replace(/}{/g,"},{")+"]");
+		var js = JSON.parse("["+PedidoDetalle+"]");
 		for(var i in js){
 			var importe = parseInt(js[i].unidades) * parseFloat(js[i].precio);
 			if(parseFloat(js[i].peso)>0){ importe = parseFloat(js[i].peso) * parseFloat(js[i].precio) }
 			var dto = (importe * parseFloat(js[i].dto) )/100;
-			importe = importe - dto;
-			elTotal += importe;
+			importe = importe - dto;			
+			var CosteResiduo = parseFloat(js[i].CosteResiduo);
+			if(isNaN(CosteResiduo)){CosteResiduo=0;}
+			elTotal += importe + CosteResiduo;
+
 			var peso = parseFloat(js[i].peso).toFixed(2);
 			var precio = parseFloat(js[i].precio).toFixed(2);
 			var dto1 = parseFloat(js[i].dto).toFixed(2);
@@ -1109,19 +1156,20 @@ function pedidoVerDetalle(){	console.log("pedidoVerDetalle()");
 					  +  "		<td class='taR'>"+peso+"</td>"
 					  +  "		<td class='taR'>"+precio+" &euro;</td>"
 					  +  "		<td class='taR'>"+dto1+"</td>"
+					  +  "		<td class='taR' id='CosteResiduo_"+js[i].codigo+"'>"+parseFloat(CosteResiduo).toFixed(3)+"</td>"
 					  +  "		<td class='taR'>"+importe.toFixed(2)+" &euro;</td>"
 					  +  "	</tr>";
 		}
-		contenido 	  += "<tr><th colspan='2'></th><th colspan='4'>TOTAL PEDIDO</th><th class='taR'>"+elTotal.toFixed(2)+"</th></tr></table>"
+		contenido 	  += "<tr><th colspan='2'></th><th colspan='5'>TOTAL PEDIDO</th><th class='taR'>"+elTotal.toFixed(2)+"</th></tr></table>"
 		$("#dvPedidoDetalle").html(contenido);
 	}else{$("#dvPedidoDetalle").html("<div style='padding:10px; color:red;'>Sin Lineas para el pedido!</div>");}
 }
 
 function PedidoEliminarLinea(cd){
-	var js = JSON.parse("["+PedidoDetalle.replace(/}{/g,"},{")+"]");
-	var nuevoP = "";
+	var js = JSON.parse("["+PedidoDetalle+"]");
+	var nuevoP = [];
 	for(var i in js){
-		if(js[i].codigo!==cd){ nuevoP += '{"codigo":"'+js[i].codigo+'","unidades":"'+js[i].unidades+'","peso":"'+js[i].peso+'","precio":"'+js[i].precio+'","dto":"'+js[i].dto+'","importe":"'+js[i].importe+'"}'; }
+		if(js[i].codigo!==cd){ nuevoP.push('{"codigo":"'+js[i].codigo+'","unidades":"'+js[i].unidades+'","peso":"'+js[i].peso+'","precio":"'+js[i].precio+'","dto":"'+js[i].dto+'","importe":"'+js[i].importe+'"}'); }
 	}
 	PedidoDetalle = nuevoP;
 	pedidoVerDetalle();
@@ -1134,14 +1182,14 @@ function terminarLlamada(){console.log("terminarLlamada()");
 	terminandoLlamada=true;
 	if(ClienteCodigo===""){ alert("No hay un cliente activo!"); terminandoLlamada=false; return; }
 	var contacto = ($.trim($("#inpDataContacto").val())).split(" - ")[0];
-	if(PedidoDetalle.length>0 && PedidoGenerado===""){
+	if(PedidoDetalle.length>0 && PedidoGenerado===""){ console.log("PedidoDetalle:"+JSON.stringify(PedidoDetalle));
 		var fff = $.trim($("#inpFechaEntrega").val());
 		if(fff!==""){
 			if(!existeFecha(fff)){ alert("Ups! Parece que la fecha no es correcta!"); terminandoLlamada=false; return; }
 			if(!validarFechaMayorActual(fff)){ alert("La fecha debe ser posterior a hoy!"); terminandoLlamada=false; return; }
 		}
 		abrirVelo(icoCargando16 + " generando el pedido..."); 
-		var lasLineas = (limpiarCadena(PedidoDetalle)).replace(/}{/g,"},{").replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");
+		var lasLineas = (JSON.stringify(PedidoDetalle)).replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");console.log("lasLineas:"+lasLineas);
 		var Values = '<Row rowId="elRowDelObjetoPedido" ObjectName="Pedido">'
 					+	'<Property Name="MODO" Value="Pedido"/>'
 					+	'<Property Name="IdTeleVenta" Value="'+IdTeleVenta+'"/>'
@@ -1175,7 +1223,7 @@ function terminarLlamada(){console.log("terminarLlamada()");
 		 },false);
 	}else{ terminarLlamadaDef(); }
 }
-function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef("+pedido+","+confirmacion+")");
+function terminarLlamadaDef(pedido,confirmacion){
 	var incidenciaCliente = $.trim($("#inciCliente").val()).split(" - ")[0];
 	var incidenciaClienteDescrip = $.trim($("#inciCliente").val()).split(" - ")[1];
 	var observaciones = $.trim($("#taObservacionesDelPedido").val());
@@ -1193,7 +1241,7 @@ function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef
 		terminandoLlamada=false; return;
 	}
 	var incidenciasSinPedido = "";
-	if(PedidoGenerado==="" && PedidoDetalle===""){
+	if(PedidoGenerado==="" && PedidoDetalle.length===0){
 		var articulo = "";
 		var inciArt  = "";
 		var obsArt   = "";
@@ -1216,7 +1264,7 @@ function terminarLlamadaDef(pedido,confirmacion){console.log("terminarLlamadaDef
 	var parametros = '{"modo":"terminar","cliente":"'+ClienteCodigo+'","IdTeleVenta":"'+IdTeleVenta+'","FechaTeleVenta":"'+FechaTeleVenta+'","nombreTV":"'+NombreTeleVenta+'"'
 					+',"incidenciaCliente":"'+incidenciaCliente+'","incidenciaClienteDescrip":"'+incidenciaClienteDescrip+'","observaciones":"'+observaciones+'"'
 					+',"pedido":"'+pedido+'","empresa":"'+CodigoEmpresa+'","serie":"'+$("#dvSerieTV").text()+'"'+incidenciasSinPedido+','+paramStd+'}';
-					
+	console.log("pLlamadas - parametros: "+parametros);			
 	flexygo.nav.execProcess('pLlamadas','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
 		if(ret){ 
 			terminandoLlamada=false;
