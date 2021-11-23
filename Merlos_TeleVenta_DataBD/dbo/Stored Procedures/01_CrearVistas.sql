@@ -82,10 +82,11 @@ BEGIN TRY
 	AS
 	SELECT C.CODIGO, 
 	cast(C.CODIGO as varchar(50)) as ''Código Cliente'', 
-	RTRIM(C.NOMBRE) collate database_default AS NOMBRE , C.NOMBRE2 AS RCOMERCIAL,
-	C.CIF, cast(RTRIM(C.DIRECCION) as varchar(40))  collate Modern_Spanish_CI_AI  AS DIRECCION, C.CODPOST AS CP, 
-	C.POBLACION  collate Modern_Spanish_CI_AI  AS POBLACION,
-	C.PROVINCIA  collate Modern_Spanish_CI_AI  as provincia, ISNULL(PAIS.NOMBRE,'''') AS PAIS, 
+	RTRIM(replace(C.NOMBRE,''"'',''-'')) collate database_default AS NOMBRE 
+	, replace(C.NOMBRE2,''"'',''-'') AS RCOMERCIAL,
+	C.CIF, cast(RTRIM(replace(C.DIRECCION,''"'',''-'')) as varchar(40))  collate Modern_Spanish_CI_AI  AS DIRECCION, C.CODPOST AS CP, 
+	replace(C.POBLACION,''"'',''-'')  collate Modern_Spanish_CI_AI  AS POBLACION,
+	replace(C.PROVINCIA,''"'',''-'')  collate Modern_Spanish_CI_AI  as provincia, replace(ISNULL(PAIS.NOMBRE,''''),''"'',''-'') AS PAIS, 
 	cast(C.EMAIL as varchar(255)) as EMAIL, 
 	cast(C.EMAIL_F as varchar(255)) as EMAIL_F, 
 	COALESCE(tc.TELEFONO, SPACE(15))
@@ -243,8 +244,8 @@ BEGIN TRY
 					, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
 					, ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),'''') AS OBSERVACIO
 					, env.DIRECCION as nDireccion, ven.nombre as nVendedor
-					, cli.nombre collate Modern_Spanish_CI_AI as nCliente
-					, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
+					, replace(cli.nombre,''"'',''-'') collate Modern_Spanish_CI_AI as nCliente
+					, cast(replace(cli.nombre,''"'',''-'') as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
 					, cli.RUTA
 					, env.CODPOS+'' ''+env.POBLACION as Ciudad, env.PROVINCIA as Provincia
 					, DAV.PRESUP as presupuesto, '''+@EJERCICIOAnt+''' + CAV.empresa + CAV.letra + DAV.PRESUP as idpresuven
@@ -256,6 +257,10 @@ BEGIN TRY
 					, PCN.Contacto as contacto, CON.Persona  as nContacto
 					, ser.nombre as laSerie		
 					, CPA.FAMILIA as EWFAMILIA, FAM.NOMBRE as FAMILIA
+					, sum(isnull(cav.TOTALPED,0.00)) as TOTALPED
+					, case when sum(cav.TOTALPED)>0 then 
+						replace(replace(replace(convert(varchar, cast(sum(isnull(cav.TOTALPED,0)) as money),1),''.'',''_''),'','',''.''),''_'','','') +'' €''
+						else '''' end as TOTALPEDformato
 					, sum(isnull(cav.TOTALDOC,0.00)) as TOTALDOC
 					, case when sum(cav.TOTALDOC)>0 then 
 						replace(replace(replace(convert(varchar, cast(sum(isnull(cav.TOTALDOC,0)) as money),1),''.'',''_''),'','',''.''),''_'','','') +'' €''
@@ -281,8 +286,7 @@ BEGIN TRY
 						, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI, CAV.CLIENTE	
 						, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
 						, env.DIRECCION, ven.nombre, CAST(CAV.OBSERVACIO AS VARCHAR(max))
-						, cli.nombre collate Modern_Spanish_CI_AI
-						, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI
+						, cli.NOMBRE
 						, cli.RUTA, env.CODPOS, env.POBLACION, env.PROVINCIA, DAV.PRESUP, TRASPASADO, FINALIZADO, CANCELADO, PCN.Contacto
 						, CON.Persona, ser.nombre, CPA.FAMILIA, FAM.NOMBRE
 				
@@ -303,8 +307,8 @@ BEGIN TRY
 			, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
 			, ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),'''') AS OBSERVACIO
 			, env.DIRECCION as nDireccion, ven.nombre as nVendedor
-			, cli.nombre collate Modern_Spanish_CI_AI as nCliente
-			, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
+			, replace(cli.nombre,''"'',''-'') collate Modern_Spanish_CI_AI as nCliente
+			, cast(replace(cli.nombre,''"'',''-'') as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
 			, cli.RUTA
 			, env.CODPOS+'' ''+env.POBLACION as Ciudad, env.PROVINCIA as Provincia
 			, DAV.PRESUP as presupuesto, '''+@EJERCICIO+''' + CAV.empresa + CAV.letra + DAV.PRESUP as idpresuven
@@ -316,6 +320,10 @@ BEGIN TRY
 			, PCN.Contacto as contacto, CON.Persona  as nContacto
 			, ser.nombre as laSerie		
 			, CPA.FAMILIA as EWFAMILIA, FAM.NOMBRE as FAMILIA
+			, sum(isnull(cav.TOTALPED,0.00)) as TOTALPED
+			, case when sum(cav.TOTALPED)>0 then 
+				replace(replace(replace(convert(varchar, cast(sum(isnull(cav.TOTALPED,0)) as money),1),''.'',''_''),'','',''.''),''_'','','') +'' €''
+				else '''' end as TOTALPEDformato
 			, sum(isnull(cav.TOTALDOC,0.00)) as TOTALDOC
 			, case when sum(cav.TOTALDOC)>0 then 
 				replace(replace(replace(convert(varchar, cast(sum(isnull(cav.TOTALDOC,0)) as money),1),''.'',''_''),'','',''.''),''_'','','') +'' €''
@@ -341,8 +349,7 @@ BEGIN TRY
 			, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI, CAV.CLIENTE	
 			, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
 			, env.DIRECCION, ven.nombre, CAST(CAV.OBSERVACIO AS VARCHAR(max))
-			, cli.nombre collate Modern_Spanish_CI_AI
-			, cast(cli.nombre as varchar(100)) collate Modern_Spanish_CI_AI
+			, cli.NOMBRE
 			, cli.RUTA, env.CODPOS, env.POBLACION, env.PROVINCIA, DAV.PRESUP, TRASPASADO, FINALIZADO, CANCELADO, PCN.Contacto
 			, CON.Persona, ser.nombre, CPA.FAMILIA, FAM.NOMBRE
 	'
@@ -548,7 +555,7 @@ BEGIN TRY
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vArticulosCompradores]
 	as
-	select	a.ARTICULO, a.COMPRADOR, b.CODIGO, b.NOMBRE 
+	select	a.ARTICULO, a.COMPRADOR, b.CODIGO, replace(b.NOMBRE,''"'',''-'') as NOMBRE 
 	from '+@GESTION+'.[DBO].art_comp a
 	inner join '+@GESTION+'.[DBO].comprado b on b.CODIGO=a.COMPRADOR
 	'
@@ -582,7 +589,7 @@ BEGIN TRY
 	'+@AlterCreate+' VIEW [dbo].[vContactos]
 	AS
 	SELECT CAST(CC.CLIENTE AS VARCHAR)+Replace(str(CAST(CC.LINEA AS VARCHAR),4),space(1),''0'') COLLATE Modern_Spanish_CI_AI AS IDCONTACTO, 
-	CC.CLIENTE, COALESCE(CLI.NOMBRE, SPACE(80)) AS N_CLIENTE, CC.LINEA, CC.PERSONA, CC.CARGO, CC.EMAIL, CC.TELEFONO, CC.ORDEN
+	CC.CLIENTE, COALESCE(replace(CLI.NOMBRE,''"'',''-''), SPACE(80)) AS N_CLIENTE, CC.LINEA, CC.PERSONA, CC.CARGO, CC.EMAIL, CC.TELEFONO, CC.ORDEN
 	FROM '+@GESTION+'.DBO.CONT_CLI CC
 	LEFT JOIN '+@GESTION+'.dbo.CLIENTES CLI ON CLI.CODIGO = CC.CLIENTE
 	WHERE (CC.PERSONA <>'''' OR CC.EMAIL <> '''') AND LEFT(CC.CLIENTE,3)=''430''
@@ -802,7 +809,7 @@ BEGIN TRY
 						case when max(ca.clifinal)='''' then max(ca.cliente) else max(ca.clifinal) end as cliente, '''+@EJERCICIOAnt+''' as ejer, ca.factura as numfra, cast(max(ca.fecha_fac) as smalldatetime) AS sqlFecha, cONVERT(VARCHAR(10),max(ca.fecha_fac),103) AS FECHA,
 						case when sum(ca.TOTALDOC)>0 then replace(replace(replace(convert(varchar,cast(sum(ca.TOTALDOC) as money),1), ''.'', ''_''), '','', ''.''),''_'','','')+'' €'' else '''' end AS TOTALf, 
 						convert(bit,min(convert(int, pr.pagado))) as pagado,
-						max(cl.nombre) as nCliente, max(ca.VENDEDOR) as vendedor, max(cl.RUTA) as ruta, max(cl.DIRECCION) as Direccion, max(cl.CODPOST)  COLLATE Modern_Spanish_CI_AI + '' '' + max(cl.POBLACION) COLLATE Modern_Spanish_CI_AI as Ciudad, max(cl.PROVINCIA) as Provincia, '''' as TXTPAGADO,
+						max(replace(cl.nombre,''"'',''-'')) as nCliente, max(ca.VENDEDOR) as vendedor, max(cl.RUTA) as ruta, max(cl.DIRECCION) as Direccion, max(cl.CODPOST)  COLLATE Modern_Spanish_CI_AI + '' '' + max(cl.POBLACION) COLLATE Modern_Spanish_CI_AI as Ciudad, max(cl.PROVINCIA) as Provincia, '''' as TXTPAGADO,
 						sum(ca.TOTALDOC) AS IMPORTE
 						from '+@GESTIONAnt+'.dbo.c_albven ca
 						inner join '+@GESTIONAnt+'.dbo.clientes cl on cl.codigo=ca.cliente
@@ -892,7 +899,7 @@ BEGIN TRY
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vMarcas]
 	as
-	SELECT CODIGO, NOMBRE, DESCUEN, TCP, MARGEN, FOTO from '+@GESTION+'.[dbo].marcas
+	SELECT CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, DESCUEN, TCP, MARGEN, FOTO from '+@GESTION+'.[dbo].marcas
 	' 
 	exec(@Sentencia)
 	select  'vMarcas'
@@ -906,7 +913,7 @@ BEGIN TRY
 	set @Sentencia = '
 	'+@AlterCreate+' VIEW [dbo].[vMedidas]
 	as
-	select codigo, nombre from '+@GESTION+'.[dbo].medidas
+	select codigo, replace(nombre,''"'',''-'') as nombre from '+@GESTION+'.[dbo].medidas
 	' 
 	exec(@Sentencia)
 	select  'vMedidas'
@@ -1128,7 +1135,7 @@ BEGIN TRY
 		, isnull(a.[completado],0) as completado
 		, case when a.completado=1 then ''COMPLETADO'' else ''PENDIENTE'' end as nCompletado 
 
-		, cli.NOMBRE
+		, replace(cli.NOMBRE,''"'',''-'') as NOMBRE
 
 	from clientes_adi adi
 	left join llamadas a on adi.cliente=a.cliente and a.fecha=cast(getdate() as date)
@@ -1311,16 +1318,15 @@ BEGIN TRY
 
 	
 	
-	/*
-	-- Vista NombreVista
-	IF EXISTS (select * FROM sys.views where name = 'NombreVista')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-	set @Sentencia = @AlterCreate+' VIEW [dbo].[NombreVista] as 	
-		
-	'
-	exec(@Sentencia)
-	select  'NombreVista'
-	*/
-	
+	-- Vista vVacacionesClientes
+	IF EXISTS (select * FROM sys.views where name = 'vVacacionesClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	EXEC( @AlterCreate+' view vVacacionesClientes
+	as
+	select * from '+@GESTION+'.dbo.vaca_cli
+	')
+	select  'vVacacionesClientes'
+
+
 
 	RETURN -1
 END TRY

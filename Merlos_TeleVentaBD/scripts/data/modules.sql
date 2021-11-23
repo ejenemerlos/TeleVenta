@@ -752,24 +752,20 @@ function guardarContacto(io){
 <div id="dvLlamadasTeleVenta" class="mi-module"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_OpcionesLlamada',N'flx-html',N'project',NULL,NULL,N'TV_OpcionesLlamada',N'TV_OpcionesLlamada',N'none',1,1,1,0,NULL,NULL,N'<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
-	<table id="tbOpciones">
-		<tr>
-			<th>
-				<div id="dvEstTV" class="vaM" style="font:16px arial; color:#333333;" ></div>
-				<div id="dvFiltrosTV" class="vaM" style="margin-top:8px;font:16px arial; color:#333333;" ></div>
-			</th>
-			<th>
-				<div id="dvSerieTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;"></div>
-			</th>
-			<th><div id="dvFechaTV" class="FR vaM" style="margin:-3px 40px 0 0; font:bold 32px arial; color:#FFF;" ></div></th>
-			<th>
-				<div id="btnTerminar" class="MIbotonW FR vaM inv" style="margin-top:-5px;" onclick=''terminarLlamada()''>Terminar Llamada</div>
-				<div id="btnPedido" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''pedidoTV()''>Pedido</div>
-				<div id="btnClientes" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''cargarClientes()''>Clientes</div>
-				<div id="btnConfiguracion" class="MIbotonW FR vaM inv" style="margin:-5px 10px 0 0;" onclick=''configurarTeleVenta()''>Configuración</div>
-			</th>
-		</tr>
-	</table>
+	<div id="tbOpciones" style="overflow:hidden;">
+		<div id="dvFechaTV" class="esq10" style="float:left; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9;"></div>
+		<div id="dvSerieTV" class="esq10" style="float:left; margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
+		<div style="float:right; display:flex; align-items:center; justify-content:flex-end; gap:5px;">
+			<div id="btnTerminar" class="MIbotonW FR vaM inv" onclick=''terminarLlamada()'' style="white-space:nowrap;">Terminar Llamada</div>
+			<div id="btnPedido" class="MIbotonW FR vaM inv" onclick=''pedidoTV()''>Pedido</div>
+			<div id="btnClientes" class="MIbotonW FR vaM inv" onclick=''cargarClientes()''>Clientes</div>
+			<div id="btnConfiguracion" class="MIbotonW FR vaM inv" onclick=''configurarTeleVenta()''>Configuración</div>
+		</div>
+	</div>
+	<div style="margin-top:10px;">
+		<div id="dvEstTV" class="vaM" style="padding:0;white-space:nowrap; font:bold 16px arial; color:#FFF;" ></div>
+		<div id="dvFiltrosTV" class="vaM" style="padding:0;margin-top:8px;font:14px arial; color:#666;" ></div>
+	</div>
 </div>
 
 <div id="dvConfiguracionTeleVenta" class="mi-module">
@@ -814,9 +810,12 @@ function guardarContacto(io){
 
 
 <script>
-' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(FechaTeleVenta);
-' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>'');
-' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(FechaTeleVenta);
+if(FechaTeleVenta!==""){
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(FechaTeleVenta);
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(FechaTeleVenta).show();
+}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").hide(); }
+' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img20 icoDownC" style="vertical-align:middle;" onclick="seriesTV()"></span>'');
+
 ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos((' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).split(" ")[0]); event.stopPropagation(); });
 
 function cargarTbConfigOperador(modo,comprobar){
@@ -839,10 +838,10 @@ function cargarTbConfigOperador(modo,comprobar){
 			 + '',''+window["opGestor"]+'',''+window["opRuta"]+'',''+window["opVendedor"]+'',''+window["opSerie"]+'',''+window["opMarca"]+''''
 			 +'',''+window["opFamilia"]+'',''+window["opSubfamilia"]+'','' + paramStd + ''}'';
 	}
-
+console.log(elJS);
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess(''pOperadorConfig'','''',null,null,[{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-        if (ret) {
+		if (ret) {
 			if(ret.JSCode==="nombreTV_Existe!"){ alert("El nombre ya existe en la base de datos!"); return; }
 			
             var js = JSON.parse(limpiarCadena(ret.JSCode));   
@@ -964,7 +963,7 @@ function seriesTV(){
 
 function asignarSerieGlobal(laSerie){
 	SERIE = laSerie;
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img16 icoDownC" onclick="seriesTV()"></span>'');
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img20 icoDownC" style="vertical-align:middle;" onclick="seriesTV()"></span>'');
 	cerrarVelo();
 }
 

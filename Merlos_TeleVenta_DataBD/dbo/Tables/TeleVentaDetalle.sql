@@ -4,6 +4,7 @@
 	[horario] [varchar](20) NULL,
 	[idpedido] [varchar](50) NULL,
 	[pedido] [varchar](50) NULL,
+	[subtotal] NUMERIC(15, 6) NULL DEFAULT 0,
 	[importe] NUMERIC(15, 6) NULL DEFAULT 0,
 	[serie] [varchar](2) NULL,
 	[completado] [int] NULL,

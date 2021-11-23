@@ -21,6 +21,8 @@ BEGIN TRY
 			, @usuario varchar(20)		  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentReference')),'')
 			, @rol varchar(50)			  = isnull((select JSON_VALUE(@parametros,'$.paramStd[0].currentRole')),'')
 
+	declare @GESTION char(6) = (select GESTION from Configuracion_SQL)
+
 	if @modo='llamarMasTardeCliente' begin
 		update TeleVentaDetalle set horario=@horario where id=@IdTeleVenta and cliente=@cliente
 		return -1
@@ -105,17 +107,21 @@ BEGIN TRY
 		END
 		
 		-- Obtener importe del pedido
-		declare @importePedido numeric(15,6)=(select totaldoc from vpedidos 
-										where ltrim(rtrim(numero))=ltrim(rtrim(@pedido)) and LETRA=@serie and CLIENTE=@cliente
-												and EMPRESA=@empresa)
+		EXEC('
+				declare @totalped numeric(15,6), @totaldoc numeric(15,6)
+				select @totalped=TOTALPED , @totaldoc=TOTALDOC 
+				from ['+@GESTION+'].dbo.c_pedive 
+				where concat(EMPRESA,ltrim(rtrim(NUMERO)),LETRA)=concat('''+@empresa+''','''+@pedido+''','''+@serie+''')
 
-		if exists (select * from [TeleVentaDetalle] where id=@IdTeleVenta and cliente=@cliente and completado=1) BEGIN
-			insert into [TeleVentaDetalle] (id,cliente,idpedido,pedido,importe,serie,completado)
-			values (@IdTeleVenta,@cliente,@idpedido,@pedido,@importePedido,@serie,1)
-		END ELSE BEGIN
-			update [TeleVentaDetalle] set idpedido=@idpedido, pedido=@pedido, importe=@importePedido, serie=@serie, completado=1
-			where id=@IdTeleVenta and cliente=@cliente
-		END
+				if exists (select * from [TeleVentaDetalle] where id='''+@IdTeleVenta+''' and cliente='''+@cliente+''' and completado=1) BEGIN
+					insert into [TeleVentaDetalle] (id,cliente,idpedido,pedido,subtotal,importe,serie,completado)
+					values ('''+@IdTeleVenta+''','''+@cliente+''','''+@idpedido+''','''+@pedido+''',@totalped,@totaldoc,'''+@serie+''',1)
+				END ELSE BEGIN
+					update [TeleVentaDetalle] 
+					set idpedido='''+@idpedido+''', pedido='''+@pedido+''', subtotal=@totalped, importe=@totaldoc, serie='''+@serie+''', completado=1
+					where id='''+@IdTeleVenta+''' and cliente='''+@cliente+'''
+				END
+		')
 
 		-- si hay incidencias de artículos sin hacer pedido
 		if exists (select * from openjson(@parametros,'$.inciSinPed')) BEGIN
@@ -146,17 +152,25 @@ BEGIN TRY
 			END CLOSE cur deallocate cur
 		END
 
-		-- actualizar tabla TeleVentaCab
-		declare @clientes int = (select count(distinct cliente) from TeleVentaDetalle where id=@IdTeleVenta)
-		declare @llamadas int = (select count(completado) from TeleVentaDetalle where id=@IdTeleVenta and completado=1)
-		declare @pedidos  int = (select count(idpedido) from TeleVentaDetalle where id=@IdTeleVenta and idpedido is not null 
-								and idpedido<>'')
-		declare @importe numeric(15,6) = (
-			select sum(coalesce(dpv.totaldoc,0)) from vPedidos dpv
-			inner join TeleVentaDetalle dtv on dtv.idpedido collate SQL_Latin1_General_CP1_CI_AS=dpv.IDPEDIDO
-			where dtv.id collate SQL_Latin1_General_CP1_CI_AS=@IdTeleVenta)
+		-- actualizar tabla TeleVentaCab		
+		EXEC('
+				declare @clientes int = (select count(distinct cliente) from TeleVentaDetalle where id='''+@IdTeleVenta+''')
+				declare @llamadas int = (select count(completado) from TeleVentaDetalle where id='''+@IdTeleVenta+''' and completado=1)
+				declare @pedidos  int = (select count(idpedido) from TeleVentaDetalle 
+										 where id='''+@IdTeleVenta+''' and idpedido is not null and idpedido<>'''')
+				declare @totalped numeric(15,6), @totaldoc numeric(15,6)
 
-		update TeleVentaCab set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, importe=@importe where id=@IdTeleVenta
+				select @totalped=sum(a.TOTALPED), @totaldoc=sum(a.TOTALDOC)
+				from ['+@GESTION+'].dbo.c_pedive a
+				inner join TeleVentaDetalle b 
+					on concat(ltrim(rtrim(b.pedido)),b.serie) collate SQL_Latin1_General_CP1_CI_AS=concat(ltrim(rtrim(a.NUMERO)),a.LETRA)
+					and b.id='''+@IdTeleVenta+''' 
+					and a.EMPRESA='''+@empresa+''' 
+
+				update TeleVentaCab 
+				set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, subtotal=@totalped, importe=@totaldoc 
+				where id='''+@IdTeleVenta+''' 
+		')
 	END
 
 	if @modo='listaGlobal' begin

@@ -1,1 +1,1 @@
-dotnet nuget push Merlos_TeleVenta.2.1.4.2.nupkg -k oy2ph7wq2uszv2o6h37qkhaddpurhqye3dgu7kiy4pkzru -s https://api.nuget.org/v3/index.json --timeout 600
+dotnet nuget push Merlos_TeleVenta.3.0.0.3.nupkg -k oy2ph7wq2uszv2o6h37qkhaddpurhqye3dgu7kiy4pkzru -s https://api.nuget.org/v3/index.json --timeout 600

@@ -117,6 +117,7 @@
     <Build Include="dbo\Tables\inciCliPed.sql" />
     <Build Include="dbo\Tables\Configuracion_ADI.sql" />
     <Build Include="dbo\Tables\Configuracion_Email.sql" />
+    <Build Include="dbo\Stored Procedures\pMerlos.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

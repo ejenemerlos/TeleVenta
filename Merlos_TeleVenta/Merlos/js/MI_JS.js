@@ -50,7 +50,8 @@ var calendarioInput = "";
 var paginadorRegistros = 0;
 var paginadorResultados = 0;
 
-var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG", "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']"];
+var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG"
+    , "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']",".dvTemp"];
 
 $(document).click(function (e) {
     for (var i in ElementosClickOff) {
@@ -141,6 +142,14 @@ function buscarEnTabla(elInput, laTabla) {
         var en = "";
         $(this).find("td").each(function () { en += $(this).text().toLowerCase(); }); 
         if (en.indexOf(buscar) !== -1) { $(this).removeClass("inv"); } else { $(this).addClass("inv"); }
+    });
+}
+
+function buscarEnCampos(elInput, elDiv) {
+    var buscar = $.trim($("#" + elInput).val()).toLowerCase();
+    $("#" + elDiv).find("div").each(function () {
+        var contenido = $.trim($(this).attr("data-buscar")).toLowerCase();
+        if (contenido.indexOf(buscar) !== -1) { $(this).removeClass("inv"); } else { $(this).addClass("inv"); }
     });
 }
 

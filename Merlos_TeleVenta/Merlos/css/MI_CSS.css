@@ -322,7 +322,7 @@ flx-nav[mode=nav] li > .active {
 .dvTemp {
     z-index: 100;
     position: absolute;
-    width: 300px;
+    min-width: 300px;
     max-height: 200px;
     padding: 10px;
     box-sizing: border-box;
@@ -964,6 +964,34 @@ table {
         background: #E0F2F7 !important;
         cursor: pointer;
         color: #666;
+    }
+
+#tbClienteDatosMin {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+    #tbClienteDatosMin th {
+        background: 0;
+        font:12px arial;
+        color:#666;
+    }
+    #tbClienteDatosMin td {
+        background: #EDEFF3;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+        #tbClienteDatosMin td:hover, #tbClienteDatosMin input:hover {
+            cursor: pointer;
+            background: #68CDF9;
+        }
+    #tbClienteDatosMin input {
+        border: 0;
+        border-bottom: #666;
+        padding: 0;
+        box-sizing: border-box;
+        background: 0;
+        outline: none;
     }
 
 .tbStdC {

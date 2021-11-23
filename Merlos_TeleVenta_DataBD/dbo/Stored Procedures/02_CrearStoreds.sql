@@ -348,7 +348,6 @@ BEGIN TRY
 	SET @UserName			= @ContextVars.value(''(/Row/Property[@Name=''''currentUserFullName'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @currentReference	= @ContextVars.value(''(/Row/Property[@Name=''''currentReference'''']/@Value)[1]''	, ''varchar(50)'')
 	
-	set @ENV_CLI = @CONTACTO
 	if @ENV_CLI is null or @ENV_CLI='''' 
 	set @ENV_CLI = isnull((select ISNULL(LINEA,0) from vContactos where CLIENTE=@CLIENTE and LINEA=0),0)
 
@@ -523,9 +522,20 @@ BEGIN TRY
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
 		
-		-- PORTES		
+		-- PORTES -- (DISTECO)	
+		/*
 		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
 		values(@EJER,@EMPRESA,@codigo,@letra,''EWNOPORT'',@NoCobrarPortes)
+		if exists(
+			select * from '+@CAMPOS+'.dbo.c_pediveew
+			where CONCAT(EJERCICIO,EMPRESA,ltrim(rtrim(NUMERO)),LETRA)=CONCAT(@EJER,@EMPRESA,ltrim(rtrim(@codigo)),@letra)
+		)
+			update '+@CAMPOS+'.dbo.c_pediveew set EWNOPORT=@NoCobrarPortes 
+			where CONCAT(EJERCICIO,EMPRESA,ltrim(rtrim(NUMERO)),LETRA)=CONCAT(@EJER,@EMPRESA,ltrim(rtrim(@codigo)),@letra)
+		else
+			insert into '+@CAMPOS+'.dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWNOPORT)
+			values (@EJER,@EMPRESA,@codigo,@letra,@NoCobrarPortes)
+		*/
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
@@ -653,7 +663,7 @@ BEGIN TRY
 	--------------------------------------------------------------------------------------------------------------
 	--	Insertar Registro	
 
-	INSERT INTO [2021TG].[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
+	INSERT INTO '+@GESTION+'.[DBO].d_pedive (usuario, empresa, numero,  linia, articulo, definicion, unidades, precio, dto1, dto2
 				, importe, tipo_iva, coste, cliente, precioiva, importeiva, cajas, familia, preciodiv, importediv, peso, letra
 				, impdiviva, prediviva, RECARG, PVERDE)
 	VALUES (@UserName,@Emp,@NUMERO,@linia,@ARTICULO,@DESCRIP,@UNIDADES, @PRECIO, @DTO1,@DTO2,@IMPORTE
@@ -1428,15 +1438,82 @@ select  'pArticulos'
 
 
 
-/*
---Procedimiento pActividades
-IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pActividades' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-set @Sentencia = @AlterCreate + '
+IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pClientesDirecciones' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+EXEC(@AlterCreate+' PROCEDURE [dbo].[pClientesDirecciones] @parametros varchar(max)
+AS
+SET NOCOUNT ON
+BEGIN TRY	
+	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,''$.modo'')),'''')
+		,	@cliente varchar(50) = isnull((select JSON_VALUE(@parametros,''$.cliente'')),'''')
+		
+	declare @datos varchar(max) = ''''
+		,	@error varchar(max) = ''''
 
-'
-exec(@Sentencia)
-select  'pActividades'
-*/
+	if @modo=''dameDirecciones'' BEGIN
+		set @datos = ( select * from vDirecciones where CLIENTE=@cliente for JSON AUTO,INCLUDE_NULL_VALUES )
+	END
+
+	select (CONCAT(''{"error":"'',@error,''","datos":'',@datos,''}'')) as JAVASCRIPT
+
+	RETURN -1
+END TRY
+BEGIN CATCH	
+	DECLARE @CatchError NVARCHAR(MAX)
+	SET @CatchError=ERROR_MESSAGE()+char(13)+ERROR_NUMBER()+char(13)+ERROR_PROCEDURE()+char(13)+@@PROCID+char(13)+ERROR_LINE()
+	select CONCAT(''{"error":"SP: pClientesDirecciones - modo: ''+@modo+''","datos":"'',@CatchError,''"}'') as JAVASCRIPT
+	RAISERROR(@CatchError,12,1)
+	RETURN -1
+END CATCH
+')
+select  'pClientesDirecciones'
+
+
+
+
+IF EXISTS ( SELECT * FROM sysobjects WHERE name = N'pClientesDirecciones' and type = 'P' ) set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+EXEC(@AlterCreate+' PROCEDURE [dbo].[pClientesBasic]	  @usuario varchar(50)=''''
+										, @rol varchar(50)=''''
+AS
+BEGIN TRY
+	declare @respuesta varchar(max) = ''''
+
+	if @rol=''MI_User_RUTA'' BEGIN
+		set @respuesta = (
+			select	CODIGO as codigo, ltrim(rtrim(replace(NOMBRE,''"'',''''))) as nombre
+				,	ltrim(rtrim(replace(RCOMERCIAL,''"'',''''))) as nComercial
+				,	ltrim(rtrim(CIF)) as CIF
+				,	ltrim(rtrim(TELEFONO)) as TELEFONO
+			from vClientes 
+			where RUTA=@usuario 
+			order by NOMBRE asc 
+			for JSON path,root(''clientes'') 
+		)
+	END
+	ELSE BEGIN
+		set @respuesta = (
+			select	CODIGO as codigo, ltrim(rtrim(replace(NOMBRE,''"'',''''))) as nombre
+				,	ltrim(rtrim(replace(RCOMERCIAL,''"'',''''))) as nComercial
+				,	ltrim(rtrim(CIF)) as CIF
+				,	ltrim(rtrim(TELEFONO)) as TELEFONO
+			from vClientes 
+			order by NOMBRE asc 
+			for JSON path,root(''clientes'')
+		)
+	END
+	
+	select isnull(@respuesta,''[]'') AS JAVASCRIPT
+
+	RETURN -1
+END TRY
+
+BEGIN CATCH	
+	DECLARE @CatchError NVARCHAR(MAX)
+	SET @CatchError=ERROR_MESSAGE()+char(13)+ERROR_NUMBER()+char(13)+ERROR_PROCEDURE()+char(13)+@@PROCID+char(13)+ERROR_LINE()
+	RAISERROR(@CatchError,12,1)
+	RETURN 0
+END CATCH
+')
+select  'pClientesDirecciones'
 
 
 

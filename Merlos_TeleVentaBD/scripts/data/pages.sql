@@ -49,7 +49,7 @@ setTimeout(function(){
 	}else{cargarTeleVentaLlamadas("listaGlobal");}
 },1000);
 
-function inicioTeleVenta(){ console.log("inicioTeleVenta()");
+function inicioTeleVenta(){
 	cerrarVelo();
 	PedidoGenerado="";	
 	PedidoDetalle = [];	
@@ -59,7 +59,7 @@ function inicioTeleVenta(){ console.log("inicioTeleVenta()");
 	recargarTVLlamadas();
 }
 
-function recargarTVLlamadas(tf){ console.log("recargarTVLlamadas()");
+function recargarTVLlamadas(tf){
 	if(tf){ 
 		cargarTbConfigOperador("recargar",false);
 	}else{
@@ -69,7 +69,7 @@ function recargarTVLlamadas(tf){ console.log("recargarTVLlamadas()");
 	}
 }
 
-function configurarTeleVenta(tf){console.log("configurarTeleVenta()");
+function configurarTeleVenta(tf){
 	if(' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfiguracionTeleVenta").is(":visible") || tf){
 		FechaTeleVenta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val());
 		NombreTeleVenta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());
@@ -92,7 +92,7 @@ function configurarTeleVenta(tf){console.log("configurarTeleVenta()");
 	}
 }
 
-function estTV(){console.log("estTV()");
+function estTV(){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvEstTV").html(icoCargando16+" cargando datos...");
 	var contenido = "";
 	var parametros = ''{"modo":"estadisticas","IdTeleVenta":"''+IdTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
@@ -121,25 +121,48 @@ function estTV(){console.log("estTV()");
 	},false);
 }
 
-function asignarMesesConsumo(){console.log("asignarMesesConsumo()");
+function asignarMesesConsumo(){
 	flexygo.nav.execProcess(''pConfiguracion'','''',null,null, 
 	[{''Key'':''modo'',''Value'':''MesesConsumo''},{''Key'':''valor'',''Value'':' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val()}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){ 
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeIn(); MesesConsumo = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val(); setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeOut(); },2000);
 	}else{ alert(''Error S.P. pConfiguracion!!!\n''+ret); } }, false);
 }
 
-function cargarConfiguracionTV(elCallBack){console.log("cargarConfiguracionTV()");
+function cargarConfiguracionTV(elCallBack){
 	var parametros = ''{"modo":"lista"}'';
 	flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
 		var js = JSON.parse(limpiarCadena(ret.JSCode));
 		// Interruptores
 		for(var i in js.IO){if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; }else{window["Conf"+js.IO[i].nombre]=1; }}
 		if(ConfNoCobrarPortes===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
+		// Comprobar si el cliente tiene varias direcciones
+		var direcciones = ''{"sp":"pClientesDirecciones","modo":"dameDirecciones","cliente":"''+ClienteCodigo+''"}'';
+		flexygo.nav.execProcess(''pMerlos'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(direcciones)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
+			   console.log("pClientesDirecciones - ret.JSCode:\n"+ret.JSCode);
+			   var contenido = "";
+			   var dir = JSON.parse(limpiarCadena(ret.JSCode)); console.log("dir.error: "+dir.error);
+			   if(dir.error===""){
+				   ' + convert(nvarchar(max),NCHAR(36)) + N'("#tdDirEntrega").html(dir.datos[0].DIRECCION);
+				   ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpDirEntrega").val(dir.datos[0].LINEA);
+				   if(dir.datos.length>1){
+					   ' + convert(nvarchar(max),NCHAR(36)) + N'("#thDirEntrega").addClass("fadeIO").addClass("modifDir").css("color","green");
+					   ' + convert(nvarchar(max),NCHAR(36)) + N'("#tdDirEntrega").css("background","#C6FFC5");
+					   for(var d in dir.datos){
+						   var direccion = dir.datos[d];
+							contenido += "<div class=''dvSub'' onclick=''asignarDireccionEntrega(\""+direccion.DIRECCION+"\",\""+direccion.LINEA+"\")''>"+direccion.DIRECCION+"</div>";
+					   }
+				   }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#thDirEntrega").removeClass("fadeIO").removeClass("modifDir").css("color","#666"); ' + convert(nvarchar(max),NCHAR(36)) + N'("#tdDirEntrega").css("background","#EDEFF3"); }
+			   }else{
+				   contenido = "Error! - pClientesDirecciones!";
+			   }
+			   ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvCliDir").html(contenido);			   
+		} else { alert(''Error SP pClientesDirecciones - dameDirecciones!''+JSON.stringify(ret)); }}, false);
+		// elCallBack
 		if(elCallBack){ elCallBack(); }
 	}else{ alert("Error SP: cargarConfiguracionTV - pConfiguracion - lista!!!\n"+JSON.stringify(ret)); }}, false);
 }
 
-function pedidoTV(){ console.log("pedidoTV()");
+function pedidoTV(){
 	if(new Date(fechaCambiaFormato(FechaTeleVenta)) < new Date(fechaCambiaFormato(fechaCorta()))){ alert("No se pueden crear pedidos de días anteriores!"); return; }
 
 	if(ClienteCodigo===""){ alert("Debes seleccionar un cliente!"); return; }
@@ -153,7 +176,7 @@ function pedidoTV(){ console.log("pedidoTV()");
 		// comprobar si tiene Ofertas
 		var parametros = ''{"modo":"ofertasDelCliente","cliente":"''+ClienteCodigo+''","fecha":"''+FechaTeleVenta+''",''+paramStd+''}'';
 		flexygo.nav.execProcess(''pOfertas'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-			if(ret){ console.log("pOfertas ret: "+limpiarCadena(ret.JSCode));
+			if(ret){
 				var js = JSON.parse(limpiarCadena(ret.JSCode));
 				if(js.length>0){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#btnClienteOfertas").addClass("fadeIO"); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#btnClienteOfertas").removeClass("fadeIO"); }
 		}else{ alert("Error SP: pOfertas - ofertasDelCliente!!!\n"+JSON.stringify(ret)); }}, false);
@@ -168,7 +191,7 @@ function pedidoTV(){ console.log("pedidoTV()");
 	if(PedidoNoCobrarPortes===1){ PedidoNoPortes(); };
 }
 
-function cargarSubDatos(objeto,cliente,id,pos){console.log("cargarSubDatos("+objeto+","+cliente+","+id+","+pos+")");
+function cargarSubDatos(objeto,cliente,id,pos){
 	var y = (' + convert(nvarchar(max),NCHAR(36)) + N'("#"+id).offset()).top;
 	var x = (' + convert(nvarchar(max),NCHAR(36)) + N'("#"+id).offset()).left;	
 	var contenido = "";
@@ -203,7 +226,7 @@ function cargarSubDatos(objeto,cliente,id,pos){console.log("cargarSubDatos("+obj
 	}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosTemp").remove(); alert(''Error S.P. pSeries!\n''+JSON.stringify(ret)); } }, false);
 }
 
-function asignarObjetoDatos(id,txt){console.log("asignarObjetoDatos("+id+","+txt+")");
+function asignarObjetoDatos(id,txt){
 	if(Left(id,16)==="inpIncidenciaSol"){ 
 		var idN = id.split("inpIncidenciaSol")[1];
 		id="inpIncidenciaSolINP"+idN;
@@ -233,13 +256,13 @@ function asignarObjetoDatos(id,txt){console.log("asignarObjetoDatos("+id+","+txt
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosTemp").fadeOut(); 
 }
 
-function desasignarCliArt(objeto,cliente,id,pos){console.log("desasignarCliArt("+objeto+","+cliente+","+id+","+pos+")");
+function desasignarCliArt(objeto,cliente,id,pos){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolINP"+id.split("inpIncidenciaSol")[1]).val("");
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolImg"+id.split("inpIncidenciaSol")[1]).attr("src","./Merlos/images/inciGris.png");
 	cargarSubDatos(objeto,cliente,id,pos);
 }
 
-function ClienteLlamarOtroDia(){console.log("ClienteLlamarOtroDia()");
+function ClienteLlamarOtroDia(){
 	var nuevaLlamada = formatSqlFechaHora(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpClienteOD").val()));
 	abrirVelo(icoCargando16 + " agendando llamada...");
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inciCliente").val("OD - Llamar otro día");
@@ -256,7 +279,7 @@ function ClienteLlamarOtroDia(){console.log("ClienteLlamarOtroDia()");
 var elVendedor = "";
 var datosDelCliente = "";
 	
-function cargarTeleVentaCliente(CliCod){console.log("cargarTeleVentaCliente("+CliCod+")");
+function cargarTeleVentaCliente(CliCod){
 	abrirIcoCarga();
 	ClienteCodigo=CliCod;
 	var parametros = ''{"cliente":"''+ClienteCodigo+''","FechaTeleVenta":"''+FechaTeleVenta+''"}'';
@@ -294,7 +317,8 @@ function cargarTeleVentaCliente(CliCod){console.log("cargarTeleVentaCliente("+Cl
 				var fe = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[0].FechaEntrega);
 				if((fe.split("-")[0]).length===4){ fe = fe.substr(8,2)+"-"+fe.substr(5,2)+"-"+fe.substr(0,4); }
 				
-				datosDelCliente = "<div style=''background:#fff;''>"
+				datosDelCliente = ""
+								+ "<div style=''background:#fff;''>"
 								+ "		<table class=''tbStdC''>"
 								+ "			<tr>"
 								+ "				<td style=''width:400px;''>"
@@ -312,15 +336,20 @@ function cargarTeleVentaCliente(CliCod){console.log("cargarTeleVentaCliente("+Cl
 								+ "					</div>"
 								+ "				</td>"
 								+ "				<td style=''width:400px; vertical-align:top; padding-top:10px;''>"
-								+ "					<table class=''tbStdC''>"
+								+ "					<table id=''tbClienteDatosMin''>"
 								+ "						<tr>"
-								+ "							<td class=''vaM pl20'' style=''width:180px;''>Contacto</td>"
+								+ "							<th class=''vaM pl20'' style=''width:180px;''>Contacto</th>"
 								+ "							<td>"
 								+ "								<input type=''text'' id=''inpDataContacto'' style=''text-align:left; color:#333;'' "
 								+ "								onclick=''cargarSubDatos(\"contactos\",\""+ClienteCodigo+"\",this.id,0);event.stopPropagation();''>"
 								+ "							</td>"
+								+ "						<tr>"			
+								+ " 						<th id=''thDirEntrega'' class=''vaM pl20''>Dir. Entrega</th>"
+								+ "							<div id=''dvCliDir'' class=''dvTemp''></div><input type=''text'' id=''inpDirEntrega'' style=''display:none;'' />"
+								+ "							<td id=''tdDirEntrega'' style=''background:#EDEFF3; overflow:hidden;'' onclick=''verDireccionesDelCliente(); event.stopPropagation();''></td>"
+								+ "						</tr>"	
 								+ "						<tr>"
-								+ "							<td class=''vaM pl20''>Fecha Entrega</td>"
+								+ "							<th class=''vaM pl20''>Fecha Entrega</th>"
 								+ "							<td>"
 								+ "								<input type=''text'' id=''inpFechaEntrega'' style=''text-align:center; color:#333;'' "
 								+ "								onkeyup=''calendarioEJGkeyUp(this.id,this.value)'' "
@@ -329,12 +358,12 @@ function cargarTeleVentaCliente(CliCod){console.log("cargarTeleVentaCliente("+Cl
 								+ "							</td>"
 								+ "						</tr>"
 								+ "						<tr>"
-								+ "							<td class=''vaM pl20''>Incidencia Cliente</td>"
+								+ "							<th class=''vaM pl20''>Incidencia Cliente</th>"
 								+ "							<td>"
 								+ "								<input type=''text'' id=''inciCliente''"
 								+ "								onclick=''cargarSubDatos(\"inciCli\",\""+ClienteCodigo+"\",this.id,0);event.stopPropagation();'' >"
 								+ "							</td>"
-								+ "						</tr>"	
+								+ "						</tr>"									
 								+ "					</table>"
 								+ "				</td>"
 								+ "				<td class=''vaT pl20'' style=''padding-top:7px;''>"
@@ -357,11 +386,11 @@ function cargarTeleVentaCliente(CliCod){console.log("cargarTeleVentaCliente("+Cl
 	},false);
 }
 
-function abrirModuloRiesgo(cliente){console.log("abrirModuloRiesgo("+cliente+")");
+function abrirModuloRiesgo(cliente){
 	flexygo.nav.openPage(''list'',''RecibosPendientes'',''CLIENTE=\''''+ClienteCodigo+''\'''',''{\''CLIENTE\'':\''''+ClienteCodigo+''\''}'',''popup'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); 
 }
 
-function PedidoObservaciones(){console.log("PedidoObservaciones()");
+function PedidoObservaciones(){
 	if(' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").text()==="del Pedido"){
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").html("Internas&nbsp;&nbsp;<div class=''img20 icoGuardar'' "
 										+"onclick=''ObservacionesInternas_Click(); event.stopPropagation();''></div>"); 
@@ -369,7 +398,7 @@ function PedidoObservaciones(){console.log("PedidoObservaciones()");
 	}else{' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").text("del Pedido"); ' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val(ObservacionesDelPedido); }
 }
 
-function ObservacionesInternas_Click(tf){console.log("ObservacionesInternas_Click("+tf+")");
+function ObservacionesInternas_Click(tf){
 	ObservacionesInternas = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val());
 	if(tf){ ObservacionesInternas = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObsInt").val()); }
 	var parametros = ''{"modo":"ObservacionesInternas","cliente":"''+ClienteCodigo+''","observaciones":"''+ObservacionesInternas+''",''+paramStd+''}''; 	
@@ -384,7 +413,7 @@ function verFichaDeCliente(){
 	flexygo.nav.openPage(''view'',''Cliente'',''CODIGO=\''''+ClienteCodigo+''\'''',''{\''CODIGO\'':\''''+ClienteCodigo+''\''}'',''popup'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); 
 }
 
-function ofertasDelCliente(){console.log("ofertasDelCliente()");
+function ofertasDelCliente(){
 	var parametros = ''{"modo":"ofertasDelCliente","cliente":"''+ClienteCodigo+''","fecha":"''+FechaTeleVenta+''",''+paramStd+''}'';
 	flexygo.nav.execProcess(''pOfertas'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
@@ -424,7 +453,7 @@ function ofertasDelCliente(){console.log("ofertasDelCliente()");
 	},false);
 }
 
-function ofertaArticuloBuscar(articulo){console.log("ofertaArticuloBuscar("+articulo+")");
+function ofertaArticuloBuscar(articulo){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val(articulo);
 	buscarArticuloDisponible(window.event.keyCode=13);
 	cerrarVelo();
@@ -461,13 +490,12 @@ function verTodosLosTelfs(){
 
 
 /*  TV_Llamadas  **************************************************************************************************************** */
-function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+modo+")");
+function cargarTeleVentaLlamadas(modo){
 	abrirIcoCarga();
 	ctvll = modo;
 	var elDV = "dvLlamadas";
 	var contenido = "";
 	var parametros = ''{"modo":"''+modo+''","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","usuariosTV":''+UsuariosTV+'',''+paramStd+''}''; 	
-	console.log("pLlamadas - parametros:\n"+parametros);
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
 			if(ret.JSCode===""){ contenido = "No se han obtenido resultados!"; }				
@@ -510,6 +538,7 @@ function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+mo
 									+"		<th style=''text-align:center;''>Llamadas</th>"
 									+"		<th style=''text-align:center;''>Pedidos</th>"
 									+"		<th style=''text-align:center;''>Importe</th>"
+									+"		<th style=''text-align:center;''>Total</th>"
 									+"	</tr>";
 					}
 					
@@ -545,6 +574,8 @@ function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+mo
 									  +"</tr>";
 						}
 						if(modo==="listaGlobal"){
+							var elSubTotal = parseFloat(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].subtotal)).toFixed(2);
+							if(isNaN(elSubTotal)){ elSubTotal=""; }else{ elSubTotal += " &euro;"; }
 							var elImporte = parseFloat(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].importe)).toFixed(2);
 							if(isNaN(elImporte)){ elImporte=""; }else{ elImporte += " &euro;"; }
 							contenido += "<tr onclick=''tbLlamadasGlobal_Sel(\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].id)+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].fecha)+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nombreTV)+"\")''>"
@@ -554,6 +585,7 @@ function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+mo
 									  +"	<td style=''text-align:right;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].clientes)+"</td>"
 									  +"	<td style=''text-align:right;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].llamadas)+"</td>"
 									  +"	<td style=''text-align:right;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].pedidos)+"</td>"
+									  +"	<td style=''text-align:right;''>"+elSubTotal+"</td>"
 									  +"	<td style=''text-align:right;''>"+elImporte+"</td>"
 									  +"</tr>";
 							elDV = "dvLlamadasTeleVenta";
@@ -569,7 +601,7 @@ function cargarTeleVentaLlamadas(modo){console.log("cargarTeleVentaLlamadas("+mo
 	},false);
 }
 
-function tbLlamadasGlobal_Sel(id,fecha,nombre){ console.log("tbLlamadasGlobal_Sel("+id+","+fecha+","+nombre+")");
+function tbLlamadasGlobal_Sel(id,fecha,nombre){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(fecha);
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val(nombre);
 	IdTeleVenta = id;
@@ -577,6 +609,7 @@ function tbLlamadasGlobal_Sel(id,fecha,nombre){ console.log("tbLlamadasGlobal_Se
 	NombreTeleVenta = nombre;
 	cargarTbConfigOperador("cargar");
 	configurarTeleVenta();
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").show();
 }
 
 function asignarserieconfig(){
@@ -587,12 +620,12 @@ function asignarserieconfig(){
 	}else{ alert("Error SP: pConfiguracion!!!\n"+JSON.stringify(ret)); }}, false);
 }
 
-function TV_SelecionarCliente(cliente){ console.log("TV_SelecionarCliente("+cliente+")");
+function TV_SelecionarCliente(cliente){
 	cargarTeleVentaCliente(cliente);
 	cargarTeleVentaUltimosPedidos(cliente);
 }
 
-function inpDatos_Click(id){console.log("inpDatos_Click("+id+")");
+function inpDatos_Click(id){
 	' + convert(nvarchar(max),NCHAR(36)) + N'(".dvListaDatos").stop().fadeOut();
 	var elInp = id.split("LLB")[1];
 	var contenido = "";
@@ -622,7 +655,7 @@ function inpDatos_Click(id){console.log("inpDatos_Click("+id+")");
 
 /*  TV_UltimosPedidos  *********************************************************************************************************** */
 
-function cargarTeleVentaUltimosPedidos(ClienteCodigo){ console.log("cargarTeleVentaUltimosPedidos("+ClienteCodigo+")");
+function cargarTeleVentaUltimosPedidos(ClienteCodigo){
 	var parametros = ''{"cliente":"''+ClienteCodigo+''",''+paramStd+''}'';
 	flexygo.nav.execProcess(''pUltimosPedidos'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){			
@@ -636,6 +669,7 @@ function cargarTeleVentaUltimosPedidos(ClienteCodigo){ console.log("cargarTeleVe
 						+   "	<th class=''C'' style=''width:100px;''>Estado</th>"
 						+   "	<th class=''L''>Observaciones</th>"
 						+   "	<th class=''C'' style=''width:200px;''>Importe</th>"
+						+   "	<th class=''C'' style=''width:200px;''>Total</th>"
 						+   "</tr>";
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			if(js.length>0){
@@ -648,6 +682,7 @@ function cargarTeleVentaUltimosPedidos(ClienteCodigo){ console.log("cargarTeleVe
 							  +"	<td class=''C''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].RUTA)+"</td>"
 							  +"	<td class=''C''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].ESTADO)+"</td>"
 							  +"	<td class=''L'' style=''overflow:hidden;''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].OBSERVACIO)+"</td>"
+							  +"	<td class=''R''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].TOTALPEDformato)+"</td>"
 							  +"	<td class=''R''>"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].TOTALDOCformato)+"</td>"
 							  +"</tr>"
 				}
@@ -658,7 +693,7 @@ function cargarTeleVentaUltimosPedidos(ClienteCodigo){ console.log("cargarTeleVe
 	},false);
 }
 
-function verPedidoDetalle(idpedido,pedido,i){console.log("verPedidoDetalle("+idpedido+","+pedido+","+i+")");
+function verPedidoDetalle(idpedido,pedido,i){
 	if(ArticuloClienteBuscando){return;}
 	ArticuloClienteBuscando=true;
 	dentroDelDiv=true;
@@ -789,6 +824,8 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 								 +  "</tr>";
 					' + convert(nvarchar(max),NCHAR(36)) + N'("#tbPersEP_ArticulosCab").html(contenidoCab);
 					
+					var valorPeso = "";
+					
 					for(var i in art){	
 						var CajasIO = "";
 						var UdsIO = "";
@@ -810,7 +847,9 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 						}else{
 							elPedUniCaja = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(art[i].UNICAJA); 
 							if(parseFloat(elPedUniCaja)>0){ }else{ CajasIO="readonly disabled"; }
+							elPeso = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(art[i].peso); if(elPeso==="" || elPeso===null){ elPeso="0"; }	
 							if(parseFloat(elPeso)>0){ }else{ PesoIO="readonly disabled"; }	
+							valorPeso= " value=''"+parseFloat(elPeso).toFixed(3)+"'' "; 
 						}						
 						
 						contenido 	+= "<tr id=''tbArtDispTR"+i+"'' class=''trBsc'' data-json=''{\"articulo\":\""+art[i].CODIGO+"\"}''"
@@ -838,7 +877,7 @@ function cargarArticulosDisponibles(modo){console.log("cargarArticulosDisponible
 									+"		onclick=''' + convert(nvarchar(max),NCHAR(36)) + N'(this).select(); cargarPrecio("+i+",this.id); event.stopPropagation();'' "+UdsIO+">"
 									+"	</td>"
 									+"	<td class=''C'' style=''width:5%;''>"
-									+"		<input type=''text'' id=''inp_peso_"+i+"'' class=''inpPesoSol C'' "
+									+"		<input type=''text'' id=''inp_peso_"+i+"'' class=''inpPesoSol C'' "+valorPeso+" "
 									+"		onkeyup=''' + convert(nvarchar(max),NCHAR(36)) + N'(this).css(\"color\",\"#000\"); calcCUP(\"peso\",\"tbArtDispTR"+i+"\","+elPedUniCaja+","+elPeso+",false);'' "
 									+"		onfocus=''celdaValor=this.value'' "
 									+"		onfocusout=''if(celdaValor!==this.value){calcCUP(\"peso\",\"tbArtDispTR"+i+"\","+elPedUniCaja+","+elPeso+",true);}'' "
@@ -911,9 +950,8 @@ function cargarPrecio(i,inp){
 		+'',"FechaTeleVenta":"''+FechaTeleVenta+''"''
 		+'','' + paramStd
 	+''}'';
-	console.log("pPreciosTabla parametros: "+parametros);
 	flexygo.nav.execProcess(''pPreciosTabla'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-	if(ret){console.log("pPreciosTabla ret:\n"+limpiarCadena(ret.JSCode));
+	if(ret){
 		try{										
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			var PT = js[0].precioTarifa; if(isNaN(PT) || PT===""){ PT=0.00; }
@@ -937,9 +975,9 @@ function cargarPrecio(i,inp){
  },false);
 }
 
-function tfArtSel(i){ console.log("tfArtSel("+i+")"); tfArticuloSeleccionadoI=i; tfArticuloSeleccionado=' + convert(nvarchar(max),NCHAR(36)) + N'("#tbArtDispTR"+i).attr("data-art"); }
+function tfArtSel(i){ tfArticuloSeleccionadoI=i; tfArticuloSeleccionado=' + convert(nvarchar(max),NCHAR(36)) + N'("#tbArtDispTR"+i).attr("data-art"); }
 
-function mostrarTarifaArticulo(){console.log("mostrarTarifaArticulo()");
+function mostrarTarifaArticulo(){
 	if(tfArticuloSeleccionado===""){ return; }
 	abrirVelo(icoCargando16+" buscando el artículo "+tfArticuloSeleccionado+" en las distintas tarifas...");
 	var parametros = ''{"modo":"verArticuloTarifas","articulo":"''+tfArticuloSeleccionado+''"}'';
@@ -970,9 +1008,9 @@ function mostrarTarifaArticulo(){console.log("mostrarTarifaArticulo()");
 	 },false);
 }
 
-function establecerPvpTarifa(pvp){ console.log("establecerPvpTarifa("+pvp+")"); ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbArtDispTR"+tfArticuloSeleccionadoI).find(".inpPrecioSol").val(parseFloat(pvp).toFixed(2)); cerrarVelo(); }
+function establecerPvpTarifa(pvp){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#tbArtDispTR"+tfArticuloSeleccionadoI).find(".inpPrecioSol").val(parseFloat(pvp).toFixed(2)); cerrarVelo(); }
 
-function articuloCliente(trid,articulo){console.log("articuloCliente("+trid+","+articulo+")");
+function articuloCliente(trid,articulo){
 	if(ArticuloClienteBuscando){ return; }
 	ArticuloClienteBuscando = true;
 	dentroDelDiv=true;
@@ -990,7 +1028,6 @@ function articuloCliente(trid,articulo){console.log("articuloCliente("+trid+","+
 					+"		<th class=''C''>Importe</th>"
 					+"	</tr>";  
 	var parametros = ''{"modo":"UltimasVentasArticulo","registros":''+paginadorRegistros+'',"buscar":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val())+''","articulo":"''+articulo+''","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","fechaTV":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''",''+paramStd+''}'';
-	console.log("pArticulosCliente - UltimasVentasArticulo - parametros:\n"+parametros);
 	flexygo.nav.execProcess(''pArticulosCliente'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
 			var js = JSON.parse(limpiarCadena(ret.JSCode)); 
@@ -1016,7 +1053,7 @@ function articuloCliente(trid,articulo){console.log("articuloCliente("+trid+","+
 	 },false);
 }
 
-function calcCUP(modo,i,unicaja,unipeso,uniprecio,elENTER){ console.log("calcCUP("+modo+","+i+","+unicaja+","+unipeso+","+uniprecio+","+elENTER+")");
+function calcCUP(modo,i,unicaja,unipeso,uniprecio,elENTER){ 
 	var elTR = "#"+i;
 	var cajas = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpCajasSol").val();		if(isNaN(cajas)){ cajas=0; }
 	var uds = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpCantSol").val();		if(isNaN(uds)){ uds=0; }
@@ -1036,7 +1073,7 @@ function calcCUP(modo,i,unicaja,unipeso,uniprecio,elENTER){ console.log("calcCUP
 	calcularImporte(i);
 }
 
-function calcularImporte(i){console.log("calcularImporte("+i+")");
+function calcularImporte(i){
 	var elTR = "#"+i;
 	var uds = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpCantSol").val();		if(isNaN(uds)){ uds=0; }
 	var peso = ' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpPesoSol").val();		if(isNaN(peso)){ peso=0; }
@@ -1049,7 +1086,7 @@ function calcularImporte(i){console.log("calcularImporte("+i+")");
 	' + convert(nvarchar(max),NCHAR(36)) + N'(elTR).find(".inpImporteSol").html(importe.toFixed(2)+"&euro;");
 }
 
-function buscarArticuloDisponible(){console.log("buscarArticuloDisponible()");
+function buscarArticuloDisponible(){
 	if(ClienteCodigo===""){ alert("No hay un cliente seleccionado!"); return; }
 	if(event.keyCode===13){
 		var buscarArticulo = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val());
@@ -1087,7 +1124,7 @@ function pedidoAnyadirDetalle(){
 		 var incidenciaDescrip = (' + convert(nvarchar(max),NCHAR(36)) + N'(this).find(".trInciArt").val()).split(" - ")[1];
 		 var observacion = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).find(".trObservaArt").val();
 
-		if(parseFloat(cjs)>0 || parseFloat(can)>0 || parseFloat(peso)>0){	
+		if(parseFloat(cjs)>0 || parseFloat(can)>0){	
 			// comprobar Coste Residuo
 			(function(){
 				var parametros = ''{"modo":"residuo","articulo":"''+cod+''"}'';
@@ -1116,11 +1153,7 @@ function pedidoAnyadirDetalle(){
 									var escPrecio = parseFloat(esc[x].PVP)
 									var escImporte = escUds * escPrecio;
 									var pImporte = parseFloat(esc[x].P_IMPORTE)
-									var CosteResiduo = 0;
-									if(esc[x].PVERDE && parseInt(esc[x].P_TAN)===2){
-										if(parseFloat(peso)>0){ CosteResiduo = parseFloat(pImporte) * parseFloat(peso); }
-										else{ CosteResiduo = parseFloat(pImporte) * parseFloat(can); }
-									}
+									
 									PedidoDetalle.push(''{"codigo":"''+escComponente+''","unidades":"''+escUds+''","peso":"''+peso+''"''
 									+'',"precio":"''+escPrecio+''","dto":"''+dto+''","importe":"''+escImporte+''"''
 									+'',"CosteResiduo":"''+CosteResiduo+''","CosteResiduoArt":"''+cod+''","artUnicaja":"''+cajas+''","incidencia":"''+incidencia+''"''
@@ -1141,7 +1174,7 @@ function pedidoAnyadirDetalle(){
 	});		
 }
 
-function ultimoArticulo_Click(art){console.log("ultimoArticulo_Click("+art+")");/* ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val(art); buscarArticuloDisponible(window.event.keyCode=13);*/ }
+function ultimoArticulo_Click(art){/* ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpBuscarArticuloDisponible").val(art); buscarArticuloDisponible(window.event.keyCode=13);*/ }
 
 function pedidoVerDetalle(){
 	if(PedidoDetalle.length>0){
@@ -1175,13 +1208,16 @@ function pedidoVerDetalle(){
 			var precio = parseFloat(js[i].precio).toFixed(2);
 			var dto1 = parseFloat(js[i].dto).toFixed(2);
 			
+			var lasUds = js[i].unidades;
+			if(isNaN(lasUds)){ lasUds = ""; }
+			
 			contenido += "	<tr>"
 					  +  "		<td class=''taC''>"
 					  +  "			<img src=''./Merlos/images/cerrarRed.png'' class=''curP'' width=''20'' "
 					  +  "			onclick=''PedidoEliminarLinea(\""+js[i].codigo+"\")''>"
 					  +  "		</td>"
 					  +  "		<td>"+js[i].codigo+"</td>"
-					  +  "		<td class=''taR''>"+js[i].unidades+"</td>"
+					  +  "		<td class=''taR''>"+lasUds+"</td>"
 					  +  "		<td class=''taR''>"+peso+"</td>"
 					  +  "		<td class=''taR''>"+precio+" &euro;</td>"
 					  +  "		<td class=''taR''>"+dto1+"</td>"
@@ -1206,19 +1242,19 @@ function PedidoEliminarLinea(cd){
 
 
 var terminandoLlamada=false;
-function terminarLlamada(){console.log("terminarLlamada()");
+function terminarLlamada(){
 	if(terminandoLlamada){ return; }
 	terminandoLlamada=true;
 	if(ClienteCodigo===""){ alert("No hay un cliente activo!"); terminandoLlamada=false; return; }
 	var contacto = (' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpDataContacto").val())).split(" - ")[0];
-	if(PedidoDetalle.length>0 && PedidoGenerado===""){ console.log("PedidoDetalle:"+JSON.stringify(PedidoDetalle));
+	if(PedidoDetalle.length>0 && PedidoGenerado===""){ 
 		var fff = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaEntrega").val());
 		if(fff!==""){
 			if(!existeFecha(fff)){ alert("Ups! Parece que la fecha no es correcta!"); terminandoLlamada=false; return; }
 			if(!validarFechaMayorActual(fff)){ alert("La fecha debe ser posterior a hoy!"); terminandoLlamada=false; return; }
 		}
 		abrirVelo(icoCargando16 + " generando el pedido..."); 
-		var lasLineas = (JSON.stringify(PedidoDetalle)).replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");console.log("lasLineas:"+lasLineas);
+		var lasLineas = (JSON.stringify(PedidoDetalle)).replace(/{/g,"_openLL_").replace(/}/g,"_closeLL_");
 		var Values = ''<Row rowId="elRowDelObjetoPedido" ObjectName="Pedido">''
 					+	''<Property Name="MODO" Value="Pedido"/>''
 					+	''<Property Name="IdTeleVenta" Value="''+IdTeleVenta+''"/>''
@@ -1227,6 +1263,7 @@ function terminarLlamada(){console.log("terminarLlamada()");
 					+	''<Property Name="IDPEDIDO" Value="''+PedidoActivo+''"/>''
 					+	''<Property Name="EMPRESA" Value="''+flexygo.context.CodigoEmpresa+''"/>''
 					+	''<Property Name="CLIENTE" Value="''+ClienteCodigo+''"/>''
+					+	''<Property Name="ENV_CLI" Value="''+' + convert(nvarchar(max),NCHAR(36)) + N'("#inpDirEntrega").val()+''"/>''
 					+	''<Property Name="SERIE" Value="''+' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").text()+''"/>''
 					+	''<Property Name="CONTACTO" Value="''+contacto+''"/>''
 					+	''<Property Name="INCICLI" Value="''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim((' + convert(nvarchar(max),NCHAR(36)) + N'("#inciCliente").val()).split(" - ")[0])+''"/>''
@@ -1237,7 +1274,6 @@ function terminarLlamada(){console.log("terminarLlamada()");
 					+	"<Property Name=''NoCobrarPortes'' Value=''"+PedidoNoCobrarPortes+"''/>"
 					+	"<Property Name=''OBSERVACIO'' Value=''"+limpiarCadena(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val()))+"''/>"
 					+''</Row>'';
-					console.log("Values: "+Values);
 		flexygo.nav.execProcess(''pPedido_Nuevo'',''Pedido'',null,null
 		,[{key:''Values'',value:Values}, {key:''ContextVars'',value:ContextVars},{key:''RetValues'',value:RetValues}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 			if(ret && !ret.JSCode.includes("''Error pedidoNuevo !!!")){
@@ -1293,7 +1329,6 @@ function terminarLlamadaDef(pedido,confirmacion){
 	var parametros = ''{"modo":"terminar","cliente":"''+ClienteCodigo+''","IdTeleVenta":"''+IdTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''","nombreTV":"''+NombreTeleVenta+''"''
 					+'',"incidenciaCliente":"''+incidenciaCliente+''","incidenciaClienteDescrip":"''+incidenciaClienteDescrip+''","observaciones":"''+observaciones+''"''
 					+'',"pedido":"''+pedido+''","empresa":"''+CodigoEmpresa+''","serie":"''+' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").text()+''"''+incidenciasSinPedido+'',''+paramStd+''}'';
-	console.log("pLlamadas - parametros: "+parametros);			
 	flexygo.nav.execProcess(''pLlamadas'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){ 
 			terminandoLlamada=false;
@@ -1303,7 +1338,7 @@ function terminarLlamadaDef(pedido,confirmacion){
 	},false);
 }
 
-function cargarIncidencias(modo){console.log("cargarIncidencias("+modo+")");
+function cargarIncidencias(modo){
 	abrirVelo(icoCargando16+" obteniendo incidencias...");
 	var parametros = ''{"modo":"''+modo+''",''+paramStd+''}'';
 	flexygo.nav.execProcess(''pIncidencias'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
@@ -1321,7 +1356,7 @@ function cargarIncidencias(modo){console.log("cargarIncidencias("+modo+")");
 	},false);
 }
 
-function incidencia(modo,id){console.log("incidencia("+modo+","+id+")");
+function incidencia(modo,id){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvIncidenciasTemp").remove();
 	if(modo==="obs"){
 		var uds = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#tbArtDispTR"+id.split("inpObservaSol")[1]).find(".inpCantSol").val());
@@ -1344,7 +1379,7 @@ function incidencia(modo,id){console.log("incidencia("+modo+","+id+")");
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvIncidenciasTemp").offset({top:y,left:x}).stop().fadeIn();
 }
 
-function asignarIncidencia(dis,inci){console.log("asignarIncidencia("+dis+","+inci+")");
+function asignarIncidencia(dis,inci){
 	if(dis==="inciCliente"){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inciCliente").val(inci); }
 	else{
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#inpIncidenciaSolImg"+dis.split("inpIncidenciaSol")[1]).attr("src","./Merlos/images/inciRed.png");
@@ -1353,7 +1388,7 @@ function asignarIncidencia(dis,inci){console.log("asignarIncidencia("+dis+","+in
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvIncidenciasTemp").remove();	
 }
 
-function observacionesArticulo(id){ console.log("observacionesArticulo("+id+")");
+function observacionesArticulo(id){
 	var ind = id.split("inpObservaSol")[1];
 	var ta = ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvIncidenciasTemp textarea").val();
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpObservaSolImg"+ind).attr("src","./Merlos/images/ojoRed.png");
@@ -1362,7 +1397,7 @@ function observacionesArticulo(id){ console.log("observacionesArticulo("+id+")")
 }
 
 /*  TV_LlamadasTV  **************************************************************************************************************** */
-function cargarIncidencias(modo){console.log("cargarIncidencias("+modo+")");
+function cargarIncidencias(modo){
 	var parametros = ''{"modo":"''+modo+''",''+paramStd+''}'';
 	flexygo.nav.execProcess(''pIncidencias'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if(ret){
@@ -1381,12 +1416,12 @@ function cargarIncidencias(modo){console.log("cargarIncidencias("+modo+")");
 
 
 
-function anyadirCliente(){console.log("anyadirCliente()");
+function anyadirCliente(){
 	if(new Date(fechaCambiaFormato(FechaTeleVenta)) < new Date(fechaCambiaFormato(fechaCorta()))){ alert("No se pueden asignar clientes a registros de días anteriores!"); return; }
 	var contenidoDvLlamadas = ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvLlamadas").html();
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvLlamadas").html("<div>"
 						+ "	<div>Añadir Cliente al listado actual</div>"
-						+ "	<input type=''text'' id=''inpAnyadirCli'' placeholder=''buscar...'' onkeyup=''buscarEn(this.id,\"dvAnyadirCli\")''>"
+						+ "	<input type=''text'' id=''inpAnyadirCli'' placeholder=''buscar...'' onkeyup=''buscarEnCampos(this.id,\"dvAnyadirCli\")''>"
 						+ "	<div id=''dvAnyadirCli'' style=''height:250px; overflow:hidden; overflow-y:auto;''><div class=''taC vaM''>"+icoCargando16+" cargando clientes...</div></div>"
 						+ "</div>");
 	flexygo.nav.execProcess(''pClientesBasic'','''',null,null,[{''key'':''usuario'',''value'':currentReference},{''key'':''rol'',''value'':currentRole}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
@@ -1395,7 +1430,8 @@ function anyadirCliente(){console.log("anyadirCliente()");
 			var js = JSON.parse(limpiarCadena(ret.JSCode));
 			if(js.clientes.length>0){
 				for(var i in js.clientes){ 
-					contenido += "<div class=''dvSub'' onclick=''dvAnyadirCli_Click(\""+js.clientes[i].codigo+"\")''>"+js.clientes[i].codigo+" - "+js.clientes[i].nombre+"</div>";
+					contenido += "<div class=''dvSub'' data-buscar=''"+js.clientes[i].codigo+" "+js.clientes[i].nombre+" "+js.clientes[i].nComercial+" "+js.clientes[i].CIF+" "+js.clientes[i].TELEFONO+"'' "
+							  +  "onclick=''dvAnyadirCli_Click(\""+js.clientes[i].codigo+"\")''>"+js.clientes[i].codigo+" - "+js.clientes[i].nombre+"</div>";
 				}
 			}else{ contenido = "<div style=''text-align:center; color:red;''>Sin resultados!</div>";}
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvAnyadirCli").html(contenido)
@@ -1403,7 +1439,7 @@ function anyadirCliente(){console.log("anyadirCliente()");
 	},false);
 }
 
-function dvAnyadirCli_Click(cliente){console.log("dvAnyadirCli_Click("+cliente+")");
+function dvAnyadirCli_Click(cliente){
 	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvLlamadas").html("<div class=''taC vaM''>"+icoCargando16+" añadiendo el cliente "+cliente+" al listado...</div>");
 	var parametros = ''{"modo":"anyadirCliente","IdTeleVenta":"''+IdTeleVenta+''","nombreTV":"''+NombreTeleVenta+''","FechaTeleVenta":"''+FechaTeleVenta+''"''
 					+'',"cliente":"''+cliente+''",''+paramStd+''}'';
@@ -1413,6 +1449,19 @@ function dvAnyadirCli_Click(cliente){console.log("dvAnyadirCli_Click("+cliente+"
 			recargarTVLlamadas();
 		}else{ alert("Error SP: pLlamadas - dvAnyadirCli_Click!!!"+JSON.stringify(ret)); }
 	},false);
+}
+
+function verDireccionesDelCliente(){
+	if(!' + convert(nvarchar(max),NCHAR(36)) + N'("#thDirEntrega").hasClass("modifDir")){return;}
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvCliDir").stop().slideDown();
+}
+
+function asignarDireccionEntrega(direccion,linea){
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#tdDirEntrega").text(direccion);
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpDirEntrega").val(linea);
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#thDirEntrega").removeClass("fadeIO");
+	' + convert(nvarchar(max),NCHAR(36)) + N'("#tdDirEntrega").css("background","#C5FFF7");
+	' + convert(nvarchar(max),NCHAR(36)) + N'(document).click();
 }
 ',1,NULL,0,0,0,NULL,0,1)
  ,(N'Vendedor',N'generic',NULL,N'webdefault',N'default',N'Vendedor',N'noicon',N'Vendedor',NULL,NULL,0,NULL,0,0,0,NULL,0,1)

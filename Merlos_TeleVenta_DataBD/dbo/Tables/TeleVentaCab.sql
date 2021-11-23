@@ -6,6 +6,7 @@
 	[clientes] [int] NULL,
 	[llamadas] [int] NULL,
 	[pedidos] [int] NULL,
+	[subtotal] [numeric](15, 6) NULL,
 	[importe] [numeric](15, 6) NULL,
 	[FechaInsertUpdate] [datetime] NULL
 ) ON [PRIMARY]

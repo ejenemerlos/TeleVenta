@@ -124,6 +124,20 @@ BEGIN TRY
 				left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
 				where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
 				and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
+				and a.cliente not in (
+					select CLIENTE collate SQL_Latin1_General_CP1_CI_AS from VacacionesClientes
+					where (
+							cast((CONCAT(substring('''+@fecha+''',4,2), substring('''+@fecha+''',1,2))) as bigint)
+							>=
+							cast((concat(substring(INICIO,4,2),substring(INICIO,1,2))) as bigint)
+						  )
+						  and
+						  (
+							cast((CONCAT(substring('''+@fecha+''',4,2), substring('''+@fecha+''',1,2))) as bigint)
+							<=
+							cast((concat(substring(FINAL,4,2),substring(FINAL,1,2))) as bigint)
+						  )
+			    )
 		')
 
 		-- comrpobar [Llamar otro día] y añadir al televenta si coinciden las fechas

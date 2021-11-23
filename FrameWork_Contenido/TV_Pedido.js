@@ -4,7 +4,7 @@
 		&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>
 	</span>
 </div>
-<div id="dvDatosDelClienteMin"></div>
+<div id="dvDatosDelClienteMin" style="position:relative;"></div>
 <div id="dvPedido" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
 	<span id="spanBotoneraPag" class="vaM">
 		<span style="font:14px arial; color:#4985D6;">Buscar artículo</span>
