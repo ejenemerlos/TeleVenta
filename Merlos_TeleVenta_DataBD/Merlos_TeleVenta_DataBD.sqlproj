@@ -129,7 +129,6 @@
     <PreDeploy Include="scripts\Script.PreDeployment1.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="scripts\data\merlos_PreDeployment_1.sql" />
     <None Include="scripts\data\DatosDeTablas.sql" />
   </ItemGroup>
 </Project>

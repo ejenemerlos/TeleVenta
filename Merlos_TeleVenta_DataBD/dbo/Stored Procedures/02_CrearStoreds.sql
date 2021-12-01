@@ -1416,7 +1416,7 @@ BEGIN TRY
 							,art.codigo, art.PVERDE, art.P_TAN, art.P_IMPORTE
 							from '+@GESTION+'.dbo.articulo art 
 							left join '+@GESTION+'.dbo.escandal esc on art.CODIGO=esc.ARTICULO
-							where art.CODIGO=@articulo
+							where art.CODIGO=@articulo and art.DESGLOSE<>0
 							for JSON AUTO, INCLUDE_NULL_VALUES)
 		
 		select isnull(@respuesta,''[]'') as JAVASCRIPT

@@ -6,6 +6,8 @@ BEGIN TRY
 			, @fecha varchar(10)	= (select JSON_VALUE(@elJS,'$.fecha'))
 			, @rol varchar(20)		= (select JSON_VALUE(@elJS,'$.paramStd[0].currentRole'))
 			, @usuario varchar(20)	= (select JSON_VALUE(@elJS,'$.paramStd[0].currentReference'))
+
+	declare @fechaMesDia char(4) = CONCAT(substring(@fecha,4,2), substring(@fecha,1,2))
 	
 	if @fecha is null or @fecha='' set @fecha='PENDIENTE'
 
@@ -121,11 +123,11 @@ BEGIN TRY
 		exec ('insert into [TeleVentaDetalle] (id,cliente,horario)
 				select '''+@idTV+''' as id, a.cliente, a.hora_'+@nDia+' as horario
 				from clientes_adi a
-				left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
+				inner join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
 				where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
 				and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
 				and a.cliente not in (
-					select CLIENTE collate SQL_Latin1_General_CP1_CI_AS from VacacionesClientes
+					select CLIENTE collate SQL_Latin1_General_CP1_CI_AS from vVacacionesClientes
 					where (
 							cast((CONCAT(substring('''+@fecha+''',4,2), substring('''+@fecha+''',1,2))) as bigint)
 							>=
@@ -140,7 +142,7 @@ BEGIN TRY
 			    )
 		')
 
-		-- comrpobar [Llamar otro día] y añadir al televenta si coinciden las fechas
+		-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
 		insert into [TeleVentaDetalle] (id,cliente,horario)
 			select @idTV as id
 				,  cliente

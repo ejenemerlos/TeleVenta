@@ -253,8 +253,8 @@ var datosDelCliente = "";
 function cargarTeleVentaCliente(CliCod){
 	abrirIcoCarga();
 	ClienteCodigo=CliCod;
-	var parametros = '{"cliente":"'+ClienteCodigo+'","FechaTeleVenta":"'+FechaTeleVenta+'"}';
-	flexygo.nav.execProcess('pClienteDatos','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
+	var parametros = '{"cliente":"'+ClienteCodigo+'","FechaTeleVenta":"'+FechaTeleVenta+'"}'; console.log("parametros:\n"+parametros);
+	flexygo.nav.execProcess('pClienteDatos','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){ console.log("limpiarCadena(ret.JSCode):\n"+limpiarCadena(ret.JSCode));
 		if(ret){
 			if(ret.JSCode===""){ return; }
 			var contenido = "";

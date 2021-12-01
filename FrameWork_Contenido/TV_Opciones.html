@@ -85,7 +85,7 @@ function cargarTbConfigOperador(modo,comprobar){
 			 + ','+window["opGestor"]+','+window["opRuta"]+','+window["opVendedor"]+','+window["opSerie"]+','+window["opMarca"]+''
 			 +','+window["opFamilia"]+','+window["opSubfamilia"]+',' + paramStd + '}';
 	}
-console.log(elJS);
+
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess('pOperadorConfig','',null,null,[{'Key':'elJS','Value':limpiarCadena(elJS)}],'modal640x480',false,$(this),function(ret){
 		if (ret) {
