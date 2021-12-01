@@ -522,6 +522,7 @@ BEGIN TRY
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
 		
+
 		-- PORTES -- (DISTECO)	
 		/*
 		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
@@ -535,6 +536,20 @@ BEGIN TRY
 		else
 			insert into '+@CAMPOS+'.dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWNOPORT)
 			values (@EJER,@EMPRESA,@codigo,@letra,@NoCobrarPortes)
+		
+
+		-- VERIFICAR PEDIDO	 -- (DISTECO)		
+		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
+		values(@EJER,@EMPRESA,@codigo,@letra,''EWVERIFI'',@VerificarPedido)
+		if exists(
+			select * from '+@CAMPOS+'.dbo.c_pediveew
+			where CONCAT(EJERCICIO,EMPRESA,ltrim(rtrim(NUMERO)),LETRA)=CONCAT(@EJER,@EMPRESA,ltrim(rtrim(@codigo)),@letra)
+		)
+			update '+@CAMPOS+'.dbo.c_pediveew set EWVERIFI=@VerificarPedido
+			where CONCAT(EJERCICIO,EMPRESA,ltrim(rtrim(NUMERO)),LETRA)=CONCAT(@EJER,@EMPRESA,ltrim(rtrim(@codigo)),@letra)
+		else
+			insert into '+@CAMPOS+'.dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWVERIFI)
+			values (@EJER,@EMPRESA,@codigo,@letra,@VerificarPedido)
 		*/
 
 		-- actualizar cabecera del pedido

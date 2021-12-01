@@ -30,6 +30,7 @@ var fechaAnterior = "";
 var autoNombreTV = false;
 var ClienteOferta = false;
 var PedidoNoCobrarPortes = 0;
+var VerificarPedido = 0;
 var ConfNoCobrarPortes = 0;
 var ConfMostrarStockVirtual = 0;
 var ConfConfigEmailSSL = 0;

@@ -233,6 +233,8 @@ function cargarDatosCliente(){
 			<td>
 				<img src="./Merlos/images/BtnDesO.png" id="imgNoCobrarPortes" class="OpcionIO"> No Cobrar Portes
 				&nbsp;&nbsp;&nbsp;
+				<img src="./Merlos/images/BtnDesO.png" id="imgVerificarPedido" class="OpcionIO"> Verificar Pedidos
+				&nbsp;&nbsp;&nbsp;
 				<img src="./Merlos/images/BtnDesO.png" id="imgMostrarStockVirtual" class="OpcionIO"> Mostrar Stock Virtual
 			</td>
 		</tr>
@@ -499,6 +501,7 @@ function cargarDatosCliente(){
 				else{window["Conf"+js.IO[i].nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
+			if(ConfVerificarPedido===1 || window["ConfVerificarPedido"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").hide(); }
 			// Configuración de Email
 			for(var i in js.ConfigEmail){					
 				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailCuenta").val(js.ConfigEmail[i].Cuenta);
@@ -969,12 +972,20 @@ function asignarSerieGlobal(laSerie){
 
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_Pedido',N'flx-html',N'project',NULL,NULL,N'TV_Pedido',N'TV_Pedido',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedido
-	<span id="spNoCobrarPortes" class="flR">
+	<span class="flR">
+		<span id="spNoCobrarPortes">
 		<img src="" id="imgPedidoNoCobrarPortes" style="width:30px; cursor:pointer;" onclick="PedidoNoPortes()">
-		&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>
-	</span>
+			&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>		
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span id="spVerificarPedido">
+			<img src="" id="imgVerificarPedido" style="width:30px; cursor:pointer;" onclick="PedidoVerificar()">
+			&nbsp;<span style="font:14px arial; color:#333;">Verificar Pedido</span>		
+		</span>	
+		&nbsp;&nbsp;&nbsp;
+	</span>	
 </div>
-<div id="dvDatosDelClienteMin"></div>
+<div id="dvDatosDelClienteMin" style="position:relative;"></div>
 <div id="dvPedido" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;">
 	<span id="spanBotoneraPag" class="vaM">
 		<span style="font:14px arial; color:#4985D6;">Buscar artículo</span>
@@ -1010,10 +1021,16 @@ function asignarSerieGlobal(laSerie){
 
 <script>	
 	if(PedidoNoCobrarPortes===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
+	if(VerificarPedido===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesI); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesO); }
 	
 	function PedidoNoPortes(){
 		if(PedidoNoCobrarPortes===1){ PedidoNoCobrarPortes=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesO); }
 		else{ PedidoNoCobrarPortes=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgPedidoNoCobrarPortes").attr("src",BtnDesI); }
+	}
+
+	function PedidoVerificar(){
+		if(VerificarPedido===1){ VerificarPedido=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesO); }
+		else{ VerificarPedido=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesI); }
 	}
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
  ,(N'TV_Recibos_Pendientes',N'flx-objectlist',N'project',N'RecibosPendientes',N'CLIENTE=''{{CODIGO}}''',N'TV_Recibos_Pendientes',N'Recibos Pendientes',N'default',1,0,1,0,NULL,NULL,N'{{Fecha de vencimiento}}',NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''TV_Recibos_Pendientes''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',N'syspager-listboth',20,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)

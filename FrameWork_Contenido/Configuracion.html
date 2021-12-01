@@ -17,7 +17,7 @@
 <div id="dvConfiguracion" class="esq10 configSeccion inv" style="padding:20px; background:rgb(240,240,240);">
 	<div id="dvNombreEmpresa" style="text-align:center; font:bold 16px arial; color:#323f4b;">Ejercicio {{Ejercicio}} - Empresa: {{NombreEmpresa}}</div>
 	<br>
-	<div class="tCnfT">ConfiguraciÛn de la aplicaciÛn</div>
+	<div class="tCnfT">Configuraci√≥n de la aplicaci√≥n</div>
 	<table id="tbConfiguracion">
 		<tr>
 			<th style="width:25%;">Reconfigurar el Portal</th>
@@ -35,7 +35,7 @@
 				&nbsp;<div class="icoMenos img20" onclick="masmenos(false,'inpMesesConsumo',1,12)"></div>
 				&nbsp;<div class="icoMas img20" onclick="masmenos(true,'inpMesesConsumo',1,12)"></div>
 				&nbsp;&nbsp;<span class="MIbotonGreen esq05" onclick="asignarMesesConsumo()">asignar</span>
-				<span id="spanAsignacionAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaciÛn correcta!</span>
+				<span id="spanAsignacionAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaci√≥n correcta!</span>
 			</td>
 		</tr>
 			<th>Serie Pedidos</th>
@@ -43,16 +43,16 @@
 				&nbsp;&nbsp;
 				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click('Serie'); event.stopPropagation();" readonly>
 				<div id="dvSerieListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaciÛn correcta!</span>
+				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaci√≥n correcta!</span>
 			</td>
 		</tr>		
 		<tr>
-			<th>Tarifa mÌnima</th>
+			<th>Tarifa m√≠nima</th>
 			<td>
 				&nbsp;&nbsp;
 				<input type="text" id="inpTarifaMinima" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click('TarifaMinima'); event.stopPropagation();" readonly>
 				<div id="dvTarifaMinimaListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionTarifaMinimaAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaciÛn correcta!</span>
+				<span id="spanAsignacionTarifaMinimaAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignaci√≥n correcta!</span>
 			</td>
 		</tr>
 		<tr>
@@ -64,6 +64,8 @@
 			<td>
 				<img src="./Merlos/images/BtnDesO.png" id="imgNoCobrarPortes" class="OpcionIO"> No Cobrar Portes
 				&nbsp;&nbsp;&nbsp;
+				<img src="./Merlos/images/BtnDesO.png" id="imgVerificarPedido" class="OpcionIO"> Verificar Pedidos
+				&nbsp;&nbsp;&nbsp;
 				<img src="./Merlos/images/BtnDesO.png" id="imgMostrarStockVirtual" class="OpcionIO"> Mostrar Stock Virtual
 			</td>
 		</tr>
@@ -71,7 +73,7 @@
 	<br><br>
 	
 	<div class="esq10" style="background:#E1E3E7;">
-		<div class="tCnfT">ConfiguraciÛn Email principal de la aplicaciÛn</div>
+		<div class="tCnfT">Configuraci√≥n Email principal de la aplicaci√≥n</div>
 		<div style="padding:20px;">
 			<table id="tbConfigEmail">
 				<tr>
@@ -88,7 +90,7 @@
 						usuario<br><input type="text" class="esq05" id="configEmailUsuario">
 					</td>
 					<td>
-						ContraseÒa<br><input type="password" class="esq05" id="configEmailPswrd">
+						Contrase√±a<br><input type="password" class="esq05" id="configEmailPswrd">
 					</td>
 					<td>
 						<br><span style="cursor:pointer;"><img src="./Merlos/images/BtnDesO.png" id="imgConfigEmailSSL" class="OpcionIO"> SSL</span>
@@ -99,7 +101,7 @@
 						<br>
 						<span class="MIboton esq05" style="padding:10px;" onclick="flexygo.nav.openPage('edit','sysMail_Template','Name=\'confirm\'','null','current',false,$(this))">Plantilla</span>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail('probarConfiguracion')">probar configuraciÛn</span>
+						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail('probarConfiguracion')">probar configuraci√≥n</span>
 						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail()">guardar</span>
 					</td>
@@ -111,7 +113,7 @@
 </div>
 
 <div id="dvBBDD" class="esq10 configSeccion inv" style="margin-top:10px; padding:20px; background:rgb(240,240,240);">
-	<div class="tCnfT">ConfiguraciÛn Bases de Datos</div>
+	<div class="tCnfT">Configuraci√≥n Bases de Datos</div>
 	<div id="dvBBDD01" class="C">
 		<br>
 		Selecciona la base de datos de comunes <select id="selComun" class="esq05" style="padding:5px;" onchange="cargarEmpresas()"></select> 
@@ -125,7 +127,7 @@
 								<option>3</option>
 								<option>4</option>
 								<option>5</option>
-							</select> aÒos atr·s
+							</select> a√±os atr√°s
 		<br><br><br>
 		<span class="MIbotonGreen esq05" style="padding:10px;" onclick="configurarElPortal_Click()">Configurar el Portal</span>
 	</div>
@@ -160,7 +162,7 @@
 		else{ ConfiguracionDelPortal('actualizar',nombre,eval(window["Conf"+nombre])); }		
 	});
 	
-	// Comprobar que exista una configuraciÛn de BBDD de Datos
+	// Comprobar que exista una configuraci√≥n de BBDD de Datos
 	flexygo.nav.execProcess('pConfigPrimeraBBDD','',null,null, [{'Key':'modo','Value':'verificar'}], 'modal640x480', false, $(this), function(ret){ 
 		if(ret){
 			if(ret.JSCode.trim()!==""){
@@ -273,7 +275,7 @@
 			var version = parseInt(ret.JSCode.split(".")[2]);
 			if(parseInt(version)>=7502){ lanzarConfiguracion(true); }
 			else{ 
-				alert("Esta versiÛn de Eurowin\n"
+				alert("Esta versi√≥n de Eurowin\n"
 					 +"no es compatible con este producto!"); 
 			}
 		}else{ alert('Error S.P. pVersiones!!!\n'+ret); } }, false);
@@ -291,9 +293,9 @@
 	}
 	
 	function reconfigurar_Click(){
-		veloContenido =  "Se eliminar· la base de datos actual"
-						+"<br>y se pedir·n de nuevo los datos"
-						+"<br>de configuraciÛn."
+		veloContenido =  "Se eliminar√° la base de datos actual"
+						+"<br>y se pedir√°n de nuevo los datos"
+						+"<br>de configuraci√≥n."
 						+"<br><br><br>"
 						+"<span class='MIbotonOrange' onclick='reconfigurarElPortal()'>reconfigurar</span>"
 						+"&nbsp;&nbsp;&nbsp;<span class='MIbotonRed' onclick='cerrarVelo()'>cancelar</span>";
@@ -330,7 +332,8 @@
 				else{window["Conf"+js.IO[i].nombre]=1; $("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
 			}
 			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
-			// ConfiguraciÛn de Email
+			if(ConfVerificarPedido===1 || window["ConfVerificarPedido"]===1){ $("#spVerificarPedido").show(); }else{ $("#spVerificarPedido").hide(); }
+			// Configuraci√≥n de Email
 			for(var i in js.ConfigEmail){					
 				$("#configEmailCuenta").val(js.ConfigEmail[i].Cuenta);
 				$("#configEmailSMTP").val(js.ConfigEmail[i].ServidorSMTP);
@@ -439,11 +442,11 @@
 								+',"configEmailSSL":"'+configEmailSSL+'"}'; 
 				flexygo.nav.execProcess('pConfiguracion','',null,null,[{key:'parametros',value:limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){if(ret){ 
 					if(ret.JSCode==="configEmail_OK"){ 
-						abrirVelo(icoCarga20+" modificando la configuraciÛn...",500,true);
+						abrirVelo(icoCarga20+" modificando la configuraci√≥n...",500,true);
 						setTimeout(()=>{
 							var parametros = '{"modo":"ConfigEmailPrincipal"}';
 							flexygo.nav.execProcess('MerlosDLL','sysJob','',null,[{key:'Parametros',value:limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){ 
-								abrirVelo(icoCarga20+" reiniciando la aplicaciÛn...",500,true);
+								abrirVelo(icoCarga20+" reiniciando la aplicaci√≥n...",500,true);
 								setTimeout(()=>{GblLimpiarLaCache(); location.reload();},500);		
 							}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
 						},500);						
@@ -452,7 +455,7 @@
 			},500);
 		}else if(modo==="probarConfiguracion"){ 
 			if(!lanzar){
-				abrirVelo("introduce una direcciÛn de correo para enviar la prueba"
+				abrirVelo("introduce una direcci√≥n de correo para enviar la prueba"
 				+"<br><input type='text' id='inpEmailDir'>"
 				+"<br><br><br><span class='MIboton esq05' style='padding:10px;' "
 				+"onclick='configurarCtaEmail(\"probarConfiguracion\",true)'>lanzar prueba</span>"
@@ -462,12 +465,12 @@
 				var parametros = '{"modo":"probarConfiguracion","configEmailCuenta":"'+configEmailCuenta+'","configEmailSMTP":"'+configEmailSMTP+'"'
 									+',"configEmailPuerto":"'+configEmailPuerto+'","configEmailUsuario":"'+configEmailUsuario+'","configEmailPswrd":"'+configEmailPswrd+'"'
 									+',"configEmailSSL":"'+configEmailSSL+'","inpEmailDir":"'+$.trim($("#inpEmailDir").val())+'"}'; 
-				abrirVelo(icoCarga20+" probando la configuraciÛn de correo..."); 
+				abrirVelo(icoCarga20+" probando la configuraci√≥n de correo..."); 
 				setTimeout(()=>{					
 					flexygo.nav.execProcess('MerlosDLL','sysJob','',null,[{key:'Parametros',value:limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){ 
 						if(ret.SuccessMessage==="probarConfiguracion_OK"){ 
 							abrirVelo("Prueba de email correcta!<br><br><br><span class='MIboton esq05' style='padding:10px;' onclick='cerrarVelo()'>aceptar</span>"); 
-						}else{abrirVelo("FallÛ la prueba de email<br>Verifica los datos de configuraciÛn,<br>el email destino o prueba de nuevo m·s tarde."
+						}else{abrirVelo("Fall√≥ la prueba de email<br>Verifica los datos de configuraci√≥n,<br>el email destino o prueba de nuevo m√°s tarde."
 										+"<br><br><br><span class='MIboton esq05' style='padding:10px;' onclick='cerrarVelo()'>aceptar</span>");}
 					}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
 				},500);		

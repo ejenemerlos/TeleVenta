@@ -135,6 +135,7 @@ function cargarConfiguracionTV(elCallBack){
 		// Interruptores
 		for(var i in js.IO){if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; }else{window["Conf"+js.IO[i].nombre]=1; }}
 		if(ConfNoCobrarPortes===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
+		if(ConfVerificarPedido===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").hide(); }
 		// Comprobar si el cliente tiene varias direcciones
 		var direcciones = ''{"sp":"pClientesDirecciones","modo":"dameDirecciones","cliente":"''+ClienteCodigo+''"}'';
 		flexygo.nav.execProcess(''pMerlos'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(direcciones)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
@@ -282,8 +283,8 @@ var datosDelCliente = "";
 function cargarTeleVentaCliente(CliCod){
 	abrirIcoCarga();
 	ClienteCodigo=CliCod;
-	var parametros = ''{"cliente":"''+ClienteCodigo+''","FechaTeleVenta":"''+FechaTeleVenta+''"}'';
-	flexygo.nav.execProcess(''pClienteDatos'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
+	var parametros = ''{"cliente":"''+ClienteCodigo+''","FechaTeleVenta":"''+FechaTeleVenta+''"}''; console.log("parametros:\n"+parametros);
+	flexygo.nav.execProcess(''pClienteDatos'','''',null,null,[{''key'':''parametros'',''value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){ console.log("limpiarCadena(ret.JSCode):\n"+limpiarCadena(ret.JSCode));
 		if(ret){
 			if(ret.JSCode===""){ return; }
 			var contenido = "";
@@ -1272,6 +1273,7 @@ function terminarLlamada(){
 					+	''<Property Name="VENDEDOR" Value="''+elVendedor+''"/>''
 					+	"<Property Name=''LINEAS'' Value=''"+lasLineas+"''/>"
 					+	"<Property Name=''NoCobrarPortes'' Value=''"+PedidoNoCobrarPortes+"''/>"
+					+	"<Property Name=''VerificarPedido'' Value=''"+VerificarPedido+"''/>"
 					+	"<Property Name=''OBSERVACIO'' Value=''"+limpiarCadena(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val()))+"''/>"
 					+''</Row>'';
 		flexygo.nav.execProcess(''pPedido_Nuevo'',''Pedido'',null,null

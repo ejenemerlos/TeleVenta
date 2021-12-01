@@ -106,6 +106,7 @@ function cargarConfiguracionTV(elCallBack){
 		// Interruptores
 		for(var i in js.IO){if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; }else{window["Conf"+js.IO[i].nombre]=1; }}
 		if(ConfNoCobrarPortes===1){ $("#spNoCobrarPortes").show(); }else{ $("#spNoCobrarPortes").hide(); }
+		if(ConfVerificarPedido===1){ $("#spVerificarPedido").show(); }else{ $("#spVerificarPedido").hide(); }
 		// Comprobar si el cliente tiene varias direcciones
 		var direcciones = '{"sp":"pClientesDirecciones","modo":"dameDirecciones","cliente":"'+ClienteCodigo+'"}';
 		flexygo.nav.execProcess('pMerlos','',null,null,[{'Key':'parametros','Value':limpiarCadena(direcciones)}],'current',false,$(this),function(ret){if(ret){
@@ -1243,6 +1244,7 @@ function terminarLlamada(){
 					+	'<Property Name="VENDEDOR" Value="'+elVendedor+'"/>'
 					+	"<Property Name='LINEAS' Value='"+lasLineas+"'/>"
 					+	"<Property Name='NoCobrarPortes' Value='"+PedidoNoCobrarPortes+"'/>"
+					+	"<Property Name='VerificarPedido' Value='"+VerificarPedido+"'/>"
 					+	"<Property Name='OBSERVACIO' Value='"+limpiarCadena($.trim($("#taObservacionesDelPedido").val()))+"'/>"
 					+'</Row>';
 		flexygo.nav.execProcess('pPedido_Nuevo','Pedido',null,null
