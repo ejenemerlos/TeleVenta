@@ -29,6 +29,13 @@ function comprobarModuloRecibosPendientes(){
  ,(N'Supervisor',N'generic',NULL,N'webdefault',N'default',N'Supervisor',N'noicon',N'Supervisor',NULL,NULL,0,NULL,0,0,0,NULL,0,1)
  ,(N'TeleVenta',N'generic',N'Cliente',NULL,N'MI_1_2_1',N'TeleVenta',N'noicon',N'Pantalla de Tele Venta',NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").hide();
 
+// Comprobar Ejercicio en Curso ----------------------------------------------------------------------------------------------------------------------------
+var parametros = ''{"sp":"pConfiguracion","modo":"ComprobarEjercicio"}'';
+flexygo.nav.execProcess(''pMerlos'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
+	if(ret.JSCode!==""){ console.log("Se ha actualizado el portal al ejercicio "+ret.JSCode); }
+}else{ alert(''Error S.P. pConfiguracion - ComprobarEjercicio!!!\n''+JSON.stringify(ret)); } }, false);
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 var ClienteCodigo = "";
 var ctvll = "";
 var PedidoGenerado = ""; 

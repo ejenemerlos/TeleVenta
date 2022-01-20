@@ -145,6 +145,7 @@
 			if($(this).attr("src")==="./Merlos/images/icoCheck_I.png"){ tipo=$(this).attr("alt"); }			
 		}); 
 		js = '{"cliente":"{{CODIGO}}","dias":['+js.replace(/}{/g,"},{")+'],"tipo":"'+tipo+'","periodo":'+periodo+'}'; 
+		console.log("js:\n"+js);
 		if(parar){ return; }
 		$("#btnGuardar").hide(); $("#btnGuardarAV").html(icoCargando16+" guardando...").fadeIn();
 		flexygo.nav.execProcess('pClientesADI','',null,null,[{'key':'modo','value':'editar'},{'key':'elJS','value':js}],'modal640x480',false,$(this),function(ret){

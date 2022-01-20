@@ -134,7 +134,7 @@ BEGIN TRY
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLon ON mLon.CODIGO=C.CODIGO and mLon.FICHERO=''CLIENTES'' and mLon.CAMPO=''LGT''
 	LEFT JOIN clientes_adi ca on ca.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
 	LEFT JOIN ObservacionesInternas o on o.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
-	WHERE LEFT(C.CODIGO,2)=''43''
+	WHERE LEFT(C.CODIGO,2)=''43'' and C.FECHA_BAJ is null
 	'
 	exec(@Sentencia)
 	select  'vClientes'
@@ -536,6 +536,7 @@ BEGIN TRY
 	left join vStock st on st.ARTICULO=art.CODIGO
 	left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
 	and pvp.tarifa collate Modern_Spanish_CS_AI=(select TarifaMinima from Configuracion_SQL)
+	where art.BAJA=0
 	group by art.CODIGO, art.NOMBRE
 			, art.FAMILIA, art.MARCA, art.MINIMO
 			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET

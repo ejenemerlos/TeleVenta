@@ -293,6 +293,7 @@ BEGIN TRY
 			, @OBSERVACIO varchar(8000)
 			, @LINEAS varchar(max)
 			, @NoCobrarPortes char(1)
+			, @VerificarPedido char(1)
 			, @UserLogin  varchar(50)
 			, @UserID	  varchar(50)=''''
 			, @UserName	  varchar(50)=''''
@@ -342,6 +343,7 @@ BEGIN TRY
 	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @LINEAS		= @Values.value(''(/Row/Property[@Name=''''LINEAS'''']/@Value)[1]''	, ''varchar(max)'')
 	SET @NoCobrarPortes	= @Values.value(''(/Row/Property[@Name=''''NoCobrarPortes'''']/@Value)[1]''	, ''char(1)'')
+	SET @VerificarPedido	= @Values.value(''(/Row/Property[@Name=''''VerificarPedido'''']/@Value)[1]''	, ''char(1)'')
 
 	SET @UserLogin			= @ContextVars.value(''(/Row/Property[@Name=''''currentUserLogin'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @UserID				= @ContextVars.value(''(/Row/Property[@Name=''''currentUserId'''']/@Value)[1]''		, ''varchar(50)'')
@@ -523,8 +525,7 @@ BEGIN TRY
 		END CLOSE cur deallocate cur	
 		
 
-		-- PORTES -- (DISTECO)	
-		/*
+		-- PORTES -- (DISTECO)
 		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
 		values(@EJER,@EMPRESA,@codigo,@letra,''EWNOPORT'',@NoCobrarPortes)
 		if exists(
@@ -550,7 +551,6 @@ BEGIN TRY
 		else
 			insert into '+@CAMPOS+'.dbo.c_pediveew (EJERCICIO,EMPRESA,NUMERO,LETRA,EWVERIFI)
 			values (@EJER,@EMPRESA,@codigo,@letra,@VerificarPedido)
-		*/
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO

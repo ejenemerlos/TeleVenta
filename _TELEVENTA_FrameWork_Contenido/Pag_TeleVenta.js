@@ -1,5 +1,12 @@
 $("#mainNav").hide();
 
+// Comprobar Ejercicio en Curso ----------------------------------------------------------------------------------------------------------------------------
+var parametros = '{"sp":"pConfiguracion","modo":"ComprobarEjercicio"}';
+flexygo.nav.execProcess('pMerlos','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'current',false,$(this),function(ret){if(ret){
+	if(ret.JSCode!==""){ console.log("Se ha actualizado el portal al ejercicio "+ret.JSCode); }
+}else{ alert('Error S.P. pConfiguracion - ComprobarEjercicio!!!\n'+JSON.stringify(ret)); } }, false);
+// ----------------------------------------------------------------------------------------------------------------------------------------------------------
+
 var ClienteCodigo = "";
 var ctvll = "";
 var PedidoGenerado = ""; 

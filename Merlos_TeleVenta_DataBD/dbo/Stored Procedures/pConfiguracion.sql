@@ -6,17 +6,41 @@ BEGIN TRY
 		,	@nombre varchar(50) = isnull((select JSON_VALUE(@parametros,'$.nombre')),'')
 		,	@valor varchar(50) = isnull((select JSON_VALUE(@parametros,'$.valor')),'')
 
+	declare @GESTION char(6), @COMUN char(8)
+	select  @GESTION=GESTION, @COMUN=COMUN from Configuracion_SQL
+
+	declare @respuesta varchar(max) = ''
+		,	@datos nvarchar(max)=''	
+		,	@MesesConsumo int = 1
+		,	@TVSerie varchar(50)=''
+		,	@TVTarifa varchar(50)=''
+
+	if @modo='ComprobarEjercicio' and @GESTION<>'' BEGIN
+		declare @laRuta char(6)
+		declare @tbRuta table (RUTA char(6))
+		insert  @tbRuta exec('select RUTA from ['+@COMUN+'].dbo.ejercici where PREDET=1')
+		select  @laRuta=RUTA from @tbRuta 
+		delete  @tbRuta
+		if @GESTION<>@laRuta BEGIN
+			update Configuracion_SQL set EJERCICIO=LEFT(@laRuta,4), GESTION=@laRuta
+			EXEC [dbo].[01_CrearVistas]
+			EXEC [dbo].[02_CrearStoreds]
+			EXEC [dbo].[04_CrearFunciones]
+			set @respuesta=@laRuta
+		END
+		select @respuesta as JAVASCRIPT
+		return -1
+	END
+
+
 	--	RECONFIGURAR - eliminamos datos de la aplicación
 		if @modo='reconfigurar' BEGIN
 			TRUNCATE TABLE Configuracion_SQL
 			return -1
 		END
 
-	declare   @datos nvarchar(max)=''	
-			, @respuesta varchar(max) = ''
-			, @MesesConsumo int = 1
-			, @TVSerie varchar(50)=''
-			, @TVTarifa varchar(50)=''
+
+	
 
 	if @modo = 'MesesConsumo' begin
 		update config_telev set consumo=@valor
