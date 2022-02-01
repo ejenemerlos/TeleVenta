@@ -427,9 +427,9 @@ BEGIN TRY
 	declare @divisa char(3) = isnull((select isnull(MONEDA,'''') from '+@COMUN+'.dbo.paises where CODIGO=@pais),0)
 
 	INSERT INTO '+@GESTION+'.[DBO].c_pedive ( usuario, empresa, numero, fecha, cliente, env_cli, entrega, vendedor, ruta, pronto, iva_inc, divisa
-										, cambio, fpag, letra, hora, almacen,observacio ) 
+										, cambio, fpag, letra, hora, almacen,observacio, IMPRESO, COMMS ) 
 	VALUES ( @UserLogin, @EMPRESA, @codigo, cast(@FECHA as smalldatetime), @CLIENTE, @env_cli, @ENTREGA, @Vendedor, @ruta, @PRONTO, 0, @divisa, 1
-			, @fpag, @letra, getdate(), @almacen, @OBSERVACIO )
+			, @fpag, @letra, getdate(), @almacen, @OBSERVACIO, @VerificarPedido, @VerificarPedido)
 			
 	SET @IDPEDIDO = CONCAT(@EJER,@EMPRESA,@letra,@codigo)
 	declare @IDP varchar(50) 
