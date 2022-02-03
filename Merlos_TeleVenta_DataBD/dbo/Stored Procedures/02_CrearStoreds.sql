@@ -401,6 +401,7 @@ BEGIN TRY
 	SELECT @fpag=fpag, @PRONTO=pronto, @ruta=ruta FROM '+@GESTION+'.[dbo].clientes WHERE codigo = @CLIENTE
 
 	SET @almacen = (SELECT almacen FROM '+@GESTION+'.dbo.empresa WHERE codigo = @EMPRESA)
+	if @almacen is null or @almacen='''' set @almacen=''00''
 
 	SET @estado_aux = (SELECT estado FROM '+@COMUN+'.dbo.OPCEMP WHERE tipo_opc = 9003 AND empresa=@EMPRESA)
 

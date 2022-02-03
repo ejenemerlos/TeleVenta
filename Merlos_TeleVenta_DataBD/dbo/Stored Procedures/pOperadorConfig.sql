@@ -90,7 +90,7 @@ BEGIN TRY
 		declare cur CURSOR for select valor from [TeleVentaFiltros] where id=@idTV and tipo='Gestor'
 		OPEN cur FETCH NEXT FROM cur into @valor
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				if @cnt>0 set @elAnd=' and '
+				if @cnt>0 set @elAnd=' or '
 				set @gestores = CONCAT(@gestores, @elAnd, ' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')
 				set @cnt = @cnt+1
 			FETCH NEXT FROM cur INTO @valor END 
@@ -120,7 +120,7 @@ BEGIN TRY
 
 		set @nDia = replace(replace( lower(DATENAME(dw,@fecha)),'á','a' ),'é','e' )
 	
-		exec ('insert into [TeleVentaDetalle] (id,cliente,horario)
+		declare @sql varchar(max) = 'insert into [TeleVentaDetalle] (id,cliente,horario)
 				select '''+@idTV+''' as id, a.cliente, a.hora_'+@nDia+' as horario
 				from clientes_adi a
 				inner join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
@@ -140,16 +140,22 @@ BEGIN TRY
 							cast((concat(substring(FINAL,4,2),substring(FINAL,1,2))) as bigint)
 						  )
 			    )
-		')
+		'
+		insert into aaa (datos) values ('principal: '+@sql)
+		EXEC(@sql)
 
 		-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
+		set @sql = '
 		insert into [TeleVentaDetalle] (id,cliente,horario)
-			select @idTV as id
+			select '''+@idTV+''' as id
 				,  cliente
-				,  substring(cast(fechaHora as varchar),13,5)+' - '+substring(cast(fechaHora as varchar),13,5) as horario
+				,  substring(cast(fechaHora as varchar),13,5)+'' - ''+substring(cast(fechaHora as varchar),13,5) as horario
 			from llamadasOD
-			where convert(varchar(10),fechaHora,105)=@fecha and insertada=0
-		update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)=@fecha
+			where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(@gestores,'a.','')+' and insertada=0 
+		update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(@gestores,'a.','')+'
+		'
+		insert into aaa (datos) values ('llamar otro dia: '+@sql)
+		EXEC(@sql)
 	END
 
 	set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
