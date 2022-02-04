@@ -1252,7 +1252,7 @@ function terminarLlamada(){
 					+	"<Property Name='LINEAS' Value='"+lasLineas+"'/>"
 					+	"<Property Name='NoCobrarPortes' Value='"+PedidoNoCobrarPortes+"'/>"
 					+	"<Property Name='VerificarPedido' Value='"+VerificarPedido+"'/>"
-					+	"<Property Name='OBSERVACIO' Value='"+limpiarCadena($.trim($("#taObservacionesDelPedido").val()))+"'/>"
+					+	"<Property Name='OBSERVACIO' Value='"+$.trim($("#taObservacionesDelPedido").val())+"'/>"
 					+'</Row>';
 		flexygo.nav.execProcess('pPedido_Nuevo','Pedido',null,null
 		,[{key:'Values',value:Values}, {key:'ContextVars',value:ContextVars},{key:'RetValues',value:RetValues}],'modal640x480',false,$(this),function(ret){

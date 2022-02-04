@@ -340,7 +340,7 @@ BEGIN TRY
 	SET @INCICLI	= @Values.value(''(/Row/Property[@Name=''''INCICLI'''']/@Value)[1]''	, ''varchar(50)'')
 	SET @VENDEDOR	= @Values.value(''(/Row/Property[@Name=''''VENDEDOR'''']/@Value)[1]''	, ''varchar(20)'')
 	SET @FAMILIA	= @Values.value(''(/Row/Property[@Name=''''FAMILIA'''']/@Value)[1]''	, ''varchar(50)'')
-	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(50)'')
+	SET @OBSERVACIO	= @Values.value(''(/Row/Property[@Name=''''OBSERVACIO'''']/@Value)[1]''	, ''varchar(8000)'')
 	SET @LINEAS		= @Values.value(''(/Row/Property[@Name=''''LINEAS'''']/@Value)[1]''	, ''varchar(max)'')
 	SET @NoCobrarPortes	= @Values.value(''(/Row/Property[@Name=''''NoCobrarPortes'''']/@Value)[1]''	, ''char(1)'')
 	SET @VerificarPedido	= @Values.value(''(/Row/Property[@Name=''''VerificarPedido'''']/@Value)[1]''	, ''char(1)'')
