@@ -525,7 +525,7 @@ BEGIN TRY
 			FETCH NEXT FROM cur INTO @valor
 		END CLOSE cur deallocate cur	
 		
-
+		/*
 		-- PORTES -- (DISTECO)
 		insert into Configuracion_ADI (EJER,EMPRESA,NUMERO,LETRA,CAMPO,VALOR)
 		values(@EJER,@EMPRESA,@codigo,@letra,''EWNOPORT'',@NoCobrarPortes)
@@ -555,7 +555,7 @@ BEGIN TRY
 
 		-- actualizar cabecera del pedido
 		EXEC [pPedido_ActualizarCabecera] @IDPEDIDO
-
+		*/
 	COMMIT TRANSACTION pedidoNuevo
 	SELECT ''{"IdPedido":"''+@IDPEDIDO+''","Ejercicio":"''+@EJER+''","Empresa":"''+@EMPRESA+''","Letra":"''+@letra+''","Codigo":"''+ltrim(rtrim(@codigo))+''"}'' as JAVASCRIPT
 	RETURN -1  
@@ -1069,6 +1069,9 @@ BEGIN TRY
 
 		insert into '+@GESTION+'.dbo.cont_cli (CLIENTE, PERSONA, CARGO, EMAIL, LINEA, ORDEN, VISTA, TELEFONO)
 		values (@cliente, @persona, @cargo, @email, @linea, 0, 1, @telefono)
+
+		INSERT INTO '+@GESTION+'.dbo.contlf_cli (cliente, linea, predet, persona, cargo, telefono, observa, email, lincontcli, lintelfcli, tipo) 
+		VALUES (@cliente, @linea, 0, @persona, '''', @TELEFONO, '''', @email, @linea, @linea, 1)
 	END
 
 	RETURN -1
