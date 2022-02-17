@@ -101,10 +101,11 @@ BEGIN TRY
 		begin set @incidenciaClienteDescrip='Sin Pedido!' end
 		if @pedido='undefined' begin set @pedido=@incidenciaClienteDescrip set @serie='' set @idpedido='' end
 
+		-- Incidencias
 		if (@incidenciaCliente is not null and @incidenciaCliente<>'') or (@observaciones is not null and @observaciones<>'') begin
 			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,observaciones) 
 			values (@IdTeleVenta,@usuario,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
-		END
+		END		
 		
 		-- Obtener importe del pedido
 		EXEC('
@@ -171,6 +172,9 @@ BEGIN TRY
 				set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, subtotal=@totalped, importe=@totaldoc 
 				where id='''+@IdTeleVenta+''' 
 		')
+
+		-- Incidencias - limpieza
+		delete [TELEVENTA].[dbo].[TeleVentaIncidencias]  where incidencia='' and observaciones=''
 	END
 
 	if @modo='listaGlobal' begin

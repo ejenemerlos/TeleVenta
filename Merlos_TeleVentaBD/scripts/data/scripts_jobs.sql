@@ -4,7 +4,7 @@ BEGIN TRY
 
 MERGE INTO [Scripts_Jobs] AS Target
 USING (VALUES
-  (N'MERLOSCsj-db29-4fc7-be2c-ab69fb5e0621',N'MI_ControlVersion',N'Regenera el contenido de la base de datos de DATOS. Vistas, procedimientos, etc.','2022-01-20T11:52:00',N'P',N' declare    @EJERCICIO varchar(4) = (select EJERCICIO from Configuracion_SQL)
+  (N'MERLOSCsj-db29-4fc7-be2c-ab69fb5e0621',N'MI_ControlVersion',N'Regenera el contenido de la base de datos de DATOS. Vistas, procedimientos, etc.','2022-02-15T09:11:00',N'S',N' declare    @EJERCICIO varchar(4) = (select EJERCICIO from Configuracion_SQL)
 				            , @GESTION varchar(6) = (select GESTION from Configuracion_SQL)
 				            , @LETRA char(2) = (select LETRA from Configuracion_SQL)
 				            , @COMUN varchar(8) = (select COMUN from Configuracion_SQL)
@@ -13,7 +13,7 @@ USING (VALUES
                 if @EJERCICIO<>'''' and @GESTION<>'''' and @LETRA<>'''' and @COMUN<>''''  BEGIN
 		                exec pConfigBBDD   ''reconfigurar'',''todo'',@EJERCICIO, @GESTION, @LETRA, @COMUN, @CAMPOS
                 END
-            ',N'DataConnectionString',1,'2022-01-20T11:52:00','2022-01-20T11:52:00',NULL,1)
+            ',N'DataConnectionString',1,'2022-02-17T13:04:00','2022-02-17T13:04:00',NULL,1)
 ) AS Source ([ScriptId],[Descrip],[Notes],[CreationDate],[State],[Script],[ConnStringId],[ExecuteOrder],[StartDate],[EndDate],[ErrorMessage],[OriginId])
 ON (Target.[ScriptId] = Source.[ScriptId])
 WHEN MATCHED AND (
