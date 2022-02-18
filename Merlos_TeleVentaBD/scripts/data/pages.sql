@@ -194,6 +194,7 @@ function pedidoTV(){
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#btnPedido").text("Pedido");
 		' + convert(nvarchar(max),NCHAR(36)) + N'(".moduloTV, #btnConfiguracion").stop().fadeIn();
 		' + convert(nvarchar(max),NCHAR(36)) + N'(".moduloPedido").hide();
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#taObsInt").val(ObservacionesInternas);
 	}
 	
 	if(PedidoNoCobrarPortes===1){ PedidoNoPortes(); };
@@ -314,7 +315,7 @@ function cargarTeleVentaCliente(CliCod){
 					+"  <tr><th colspan=''4''>Observaciones del Cliente</th></tr>"
 					+"  <tr><td colspan=''4''><textarea style=''width:100%; height:50px;'' disabled>"+js[0].OBSERVACIO+"</textarea></td></tr>"
 					+"  <tr><th colspan=''4''>Observaciones Internas"
-					+"		&nbsp;<div class=''img20 icoGuardar'' onclick=''ObservacionesInternas_Click(true);''></div>"
+					+"		&nbsp;&nbsp;&nbsp;<span id=''ObsIntAV'' style=''font:bold 14px arial; color:#00a504; display:none;''>Autoguardado - OK</span>"
 					+"	</th></tr>"
 					+"  <tr><td colspan=''4''><textarea id=''taObsInt'' style=''width:100%; height:50px; font:14px arial;''>"+ObservacionesInternas+"</textarea></td></tr>"
 					+"</table>";					
@@ -375,8 +376,7 @@ function cargarTeleVentaCliente(CliCod){
 								+ "					</table>"
 								+ "				</td>"
 								+ "				<td class=''vaT pl20'' style=''padding-top:7px;''>"
-								+ "					Observaciones <span id=''spObservacionesPedInt'' class=''curP'' style=''font:bold 14px arial; color:#16C79A;''"
-								+ "					onclick=''PedidoObservaciones()''>del Pedido</span>"
+								+ "					Observaciones <span id=''spObservacionesPedInt'' class=''curP'' style=''font:bold 14px arial; color:#00a504;'' onclick=''PedidoObservaciones()''>del Pedido</span>"
 								+ "					<br>"
 								+ "					<textarea id=''taObservacionesDelPedido'' style=''width:98%;height:80px;padding:5px;box-sizing:border-box;''>"+ObservacionesDelPedido+"</textarea>"
 								+ "				</td>"
@@ -388,10 +388,29 @@ function cargarTeleVentaCliente(CliCod){
 								+ "</div>";				
 			}else{ contenido = "No se han obtenido resultados!"; }
 			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvDatosDelCliente").html(contenido);
+			' + convert(nvarchar(max),NCHAR(36)) + N'("#taObsInt").off().on("blur",()=>{ ObservacionesInternas_Blur(); });
 			elVendedor = js[0].VENDEDOR;
 			cerrarVelo();			
 		}else{ alert("Error SP: pClientesADI!"+JSON.stringify(ret)); }
 	},false);
+}
+
+function ObservacionesInternas_Blur(){
+	var ObservacionesInternas_ta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObsInt").val());
+	if(ObservacionesInternas_ta!==ObservacionesInternas){
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#ObsIntAV").fadeIn();
+		ObservacionesInternas_Click(true);
+		setTimeout(()=>{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#ObsIntAV").fadeOut(); },1000);
+	}
+}
+
+function taObservacionesDelPedido_Blur(){
+	var ObservacionesInternas_ta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val());
+	if(ObservacionesInternas_ta!==ObservacionesInternas){
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedidoAV").fadeIn();
+		ObservacionesInternas_Click();
+		setTimeout(()=>{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedidoAV").fadeOut(); },1000);
+	}
 }
 
 function abrirModuloRiesgo(cliente){
@@ -400,10 +419,10 @@ function abrirModuloRiesgo(cliente){
 
 function PedidoObservaciones(){
 	if(' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").text()==="del Pedido"){
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").html("Internas&nbsp;&nbsp;<div class=''img20 icoGuardar'' "
-										+"onclick=''ObservacionesInternas_Click(); event.stopPropagation();''></div>"); 
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").html("Internas&nbsp;&nbsp;&nbsp;<span id=''taObservacionesDelPedidoAV'' style=''font:bold 14px arial; color:#00a504; display:none;''>Autoguardado - OK</span>"); 
 		' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val(ObservacionesInternas); 
-	}else{' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").text("del Pedido"); ' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val(ObservacionesDelPedido); }
+		' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").off().on("blur",()=>{ taObservacionesDelPedido_Blur(); });
+	}else{' + convert(nvarchar(max),NCHAR(36)) + N'("#spObservacionesPedInt").text("del Pedido"); ' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val(ObservacionesDelPedido); ' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").off()}
 }
 
 function ObservacionesInternas_Click(tf){
@@ -411,8 +430,7 @@ function ObservacionesInternas_Click(tf){
 	if(tf){ ObservacionesInternas = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObsInt").val()); }
 	var parametros = ''{"modo":"ObservacionesInternas","cliente":"''+ClienteCodigo+''","observaciones":"''+ObservacionesInternas+''",''+paramStd+''}''; 	
 	flexygo.nav.execProcess(''pClienteDatos'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if(ret){ alert("Observaciones Internas guardadas con éxito!"); }
-		else{ alert("Error pClienteDatos!\n"+JSON.stringify(ret)); }
+		if(!ret){ alert("Error pClienteDatos!\n"+JSON.stringify(ret)); }
 	 },false);
 }
  
@@ -1281,7 +1299,7 @@ function terminarLlamada(){
 					+	"<Property Name=''LINEAS'' Value=''"+lasLineas+"''/>"
 					+	"<Property Name=''NoCobrarPortes'' Value=''"+PedidoNoCobrarPortes+"''/>"
 					+	"<Property Name=''VerificarPedido'' Value=''"+VerificarPedido+"''/>"
-					+	"<Property Name=''OBSERVACIO'' Value=''"+limpiarCadena(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val()))+"''/>"
+					+	"<Property Name=''OBSERVACIO'' Value=''"+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#taObservacionesDelPedido").val())+"''/>"
 					+''</Row>'';
 		flexygo.nav.execProcess(''pPedido_Nuevo'',''Pedido'',null,null
 		,[{key:''Values'',value:Values}, {key:''ContextVars'',value:ContextVars},{key:''RetValues'',value:RetValues}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){

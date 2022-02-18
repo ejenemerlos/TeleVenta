@@ -165,6 +165,7 @@ function pedidoTV(){
 		$("#btnPedido").text("Pedido");
 		$(".moduloTV, #btnConfiguracion").stop().fadeIn();
 		$(".moduloPedido").hide();
+		$("#taObsInt").val(ObservacionesInternas);
 	}
 	
 	if(PedidoNoCobrarPortes===1){ PedidoNoPortes(); };
@@ -285,7 +286,7 @@ function cargarTeleVentaCliente(CliCod){
 					+"  <tr><th colspan='4'>Observaciones del Cliente</th></tr>"
 					+"  <tr><td colspan='4'><textarea style='width:100%; height:50px;' disabled>"+js[0].OBSERVACIO+"</textarea></td></tr>"
 					+"  <tr><th colspan='4'>Observaciones Internas"
-					+"		&nbsp;<div class='img20 icoGuardar' onclick='ObservacionesInternas_Click(true);'></div>"
+					+"		&nbsp;&nbsp;&nbsp;<span id='ObsIntAV' style='font:bold 14px arial; color:#00a504; display:none;'>Autoguardado - OK</span>"
 					+"	</th></tr>"
 					+"  <tr><td colspan='4'><textarea id='taObsInt' style='width:100%; height:50px; font:14px arial;'>"+ObservacionesInternas+"</textarea></td></tr>"
 					+"</table>";					
@@ -346,8 +347,7 @@ function cargarTeleVentaCliente(CliCod){
 								+ "					</table>"
 								+ "				</td>"
 								+ "				<td class='vaT pl20' style='padding-top:7px;'>"
-								+ "					Observaciones <span id='spObservacionesPedInt' class='curP' style='font:bold 14px arial; color:#16C79A;'"
-								+ "					onclick='PedidoObservaciones()'>del Pedido</span>"
+								+ "					Observaciones <span id='spObservacionesPedInt' class='curP' style='font:bold 14px arial; color:#00a504;' onclick='PedidoObservaciones()'>del Pedido</span>"
 								+ "					<br>"
 								+ "					<textarea id='taObservacionesDelPedido' style='width:98%;height:80px;padding:5px;box-sizing:border-box;'>"+ObservacionesDelPedido+"</textarea>"
 								+ "				</td>"
@@ -359,10 +359,29 @@ function cargarTeleVentaCliente(CliCod){
 								+ "</div>";				
 			}else{ contenido = "No se han obtenido resultados!"; }
 			$("#dvDatosDelCliente").html(contenido);
+			$("#taObsInt").off().on("blur",()=>{ ObservacionesInternas_Blur(); });
 			elVendedor = js[0].VENDEDOR;
 			cerrarVelo();			
 		}else{ alert("Error SP: pClientesADI!"+JSON.stringify(ret)); }
 	},false);
+}
+
+function ObservacionesInternas_Blur(){
+	var ObservacionesInternas_ta = $.trim($("#taObsInt").val());
+	if(ObservacionesInternas_ta!==ObservacionesInternas){
+		$("#ObsIntAV").fadeIn();
+		ObservacionesInternas_Click(true);
+		setTimeout(()=>{ $("#ObsIntAV").fadeOut(); },1000);
+	}
+}
+
+function taObservacionesDelPedido_Blur(){
+	var ObservacionesInternas_ta = $.trim($("#taObservacionesDelPedido").val());
+	if(ObservacionesInternas_ta!==ObservacionesInternas){
+		$("#taObservacionesDelPedidoAV").fadeIn();
+		ObservacionesInternas_Click();
+		setTimeout(()=>{ $("#taObservacionesDelPedidoAV").fadeOut(); },1000);
+	}
 }
 
 function abrirModuloRiesgo(cliente){
@@ -371,10 +390,10 @@ function abrirModuloRiesgo(cliente){
 
 function PedidoObservaciones(){
 	if($("#spObservacionesPedInt").text()==="del Pedido"){
-		$("#spObservacionesPedInt").html("Internas&nbsp;&nbsp;<div class='img20 icoGuardar' "
-										+"onclick='ObservacionesInternas_Click(); event.stopPropagation();'></div>"); 
+		$("#spObservacionesPedInt").html("Internas&nbsp;&nbsp;&nbsp;<span id='taObservacionesDelPedidoAV' style='font:bold 14px arial; color:#00a504; display:none;'>Autoguardado - OK</span>"); 
 		$("#taObservacionesDelPedido").val(ObservacionesInternas); 
-	}else{$("#spObservacionesPedInt").text("del Pedido"); $("#taObservacionesDelPedido").val(ObservacionesDelPedido); }
+		$("#taObservacionesDelPedido").off().on("blur",()=>{ taObservacionesDelPedido_Blur(); });
+	}else{$("#spObservacionesPedInt").text("del Pedido"); $("#taObservacionesDelPedido").val(ObservacionesDelPedido); $("#taObservacionesDelPedido").off()}
 }
 
 function ObservacionesInternas_Click(tf){
@@ -382,8 +401,7 @@ function ObservacionesInternas_Click(tf){
 	if(tf){ ObservacionesInternas = $.trim($("#taObsInt").val()); }
 	var parametros = '{"modo":"ObservacionesInternas","cliente":"'+ClienteCodigo+'","observaciones":"'+ObservacionesInternas+'",'+paramStd+'}'; 	
 	flexygo.nav.execProcess('pClienteDatos','',null,null,[{'Key':'parametros','Value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){ alert("Observaciones Internas guardadas con éxito!"); }
-		else{ alert("Error pClienteDatos!\n"+JSON.stringify(ret)); }
+		if(!ret){ alert("Error pClienteDatos!\n"+JSON.stringify(ret)); }
 	 },false);
 }
  

@@ -147,7 +147,6 @@ BEGIN TRY
 							  )
 					)
 			'
-			insert into aaa (datos) values ('principal: '+@sql) --  select * from aaa
 			EXEC(@sql)
 
 
@@ -170,7 +169,6 @@ BEGIN TRY
 				select top 1 @UltimoPedidoCli=cast(FORMAT(isnull(sqlFecha,'01-01-1900'),'yyyyMMdd') as bigint) from vPedidos where CLIENTE=@cli order by sqlFecha desc
 				if @UltimoPedidoCli > @fComparar BEGIN 
 					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
-					insert into aaa (datos) values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimoPedidoCli: ',@UltimoPedidoCli,' - @fComparar: ',@fComparar)) 
 				END	
 				FETCH NEXT FROM elCursor INTO @cli, @tipo_llama
 			END	CLOSE elCursor deallocate elCursor

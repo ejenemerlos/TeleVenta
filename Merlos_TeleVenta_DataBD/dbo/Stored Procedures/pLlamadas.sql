@@ -174,7 +174,7 @@ BEGIN TRY
 		')
 
 		-- Incidencias - limpieza
-		delete [TELEVENTA].[dbo].[TeleVentaIncidencias]  where incidencia='' and observaciones=''
+		delete [TeleVentaIncidencias]  where incidencia='' and observaciones=''
 	END
 
 	if @modo='listaGlobal' begin
