@@ -237,7 +237,7 @@ BEGIN TRY
 				set @Sentencia = @Sentencia +'
 				SELECT   cast('''' as varchar(50)) as MODO
 					, CONCAT('''+@EJERCICIOAnt+''',CAV.empresa,replace(CAV.LETRA,space(1),''0''),replace(LEFT(CAV.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO	
-					, '''+@EJERCICIOAnt+''' as EJER , CAV.EMPRESA  collate Modern_Spanish_CI_AI as EMPRESA, convert(varchar(10), CAV.ENTREGA, 103) as ENTREGA
+					, '''+@EJERCICIOAnt+''' collate Modern_Spanish_CI_AI as EJER , CAV.EMPRESA  collate Modern_Spanish_CI_AI as EMPRESA, convert(varchar(10), CAV.ENTREGA, 103) as ENTREGA
 					, CAV.LETRA + CAV.NUMERO as PEDIDO , CAV.NUMERO as numero, CAV.LETRA, CAV.FECHA as sqlFecha
 					, convert(varchar(10), CAV.FECHA, 103) as FECHA
 					, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI as DIRECCION, CAV.CLIENTE as codCliente 			

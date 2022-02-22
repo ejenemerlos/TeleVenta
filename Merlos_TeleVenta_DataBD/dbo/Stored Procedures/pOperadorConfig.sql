@@ -147,6 +147,7 @@ BEGIN TRY
 							  )
 					)
 			'
+			insert into aaa (datos) values ('principal: '+@sql) --  select * from aaa
 			EXEC(@sql)
 
 
@@ -160,16 +161,34 @@ BEGIN TRY
 
 			declare @cli varchar(50), @tipo_llama int
 			OPEN elCursor FETCH NEXT FROM elCursor INTO @cli, @tipo_llama
-			WHILE (@@FETCH_STATUS=0) BEGIN
-				declare @fComparar bigint
-				if @tipo_llama=3 set @fComparar=cast(FORMAT(dateadd(day,-14,cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint)
-				if @tipo_llama=4 set @fComparar=cast(FORMAT(dateadd(month,-1,cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint)
-				if @tipo_llama=5 set @fComparar=cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint)
-				declare @UltimoPedidoCli bigint 
-				select top 1 @UltimoPedidoCli=cast(FORMAT(isnull(sqlFecha,'01-01-1900'),'yyyyMMdd') as bigint) from vPedidos where CLIENTE=@cli order by sqlFecha desc
-				if @UltimoPedidoCli > @fComparar BEGIN 
+			WHILE (@@FETCH_STATUS=0) BEGIN				
+				declare @UltimaLlamada varchar(10)				
+				select top 1 @UltimaLlamada=convert(varchar(10),FechaInsertUpdate,105)
+				from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc
+				
+				if (
+					-- quincenal
+					@tipo_llama=3 and   (
+											DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, getdate()) 
+											or DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, getdate())-1)
+										)
+					
+					-- mensual
+					or (@tipo_llama=4 and MONTH(@UltimaLlamada)=MONTH(getdate()))
+					
+					-- cada n días
+					or (@tipo_llama=5 and (
+											cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint))
+											>
+											(select top 1 cast(FORMAT(isnull(cast(FechaInsertUpdate as smalldatetime),'01-01-1900'),'yyyyMMdd') as bigint) 
+											from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc)
+										)												
+				BEGIN 
 					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
+					insert into aaa (datos) 
+					values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha,' - @IdTeleVenta: ',@idTV)) 
 				END	
+				
 				FETCH NEXT FROM elCursor INTO @cli, @tipo_llama
 			END	CLOSE elCursor deallocate elCursor
 
