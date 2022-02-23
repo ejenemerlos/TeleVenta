@@ -181,7 +181,7 @@ BEGIN TRY
 					-- que se haya hecho un pedido en la última llamada
 					) and @IdPedidoTV <> ''
 				BEGIN 
-					--delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
+					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
 					insert into aaa (datos) 
 					values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha
 							,' - @IdTeleVenta: ',@idTV,' - @IdPedidoTV: <<',@IdPedidoTV,'>>')
