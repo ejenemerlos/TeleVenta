@@ -154,42 +154,41 @@ BEGIN TRY
 			-- Eliminar registros que no tocan (quincenales, mensuales a cada n días)																						
 			declare @fechaBIG bigint = cast(FORMAT(cast(@fecha as smalldatetime),'yyyyMMdd') as bigint)	
 			declare elCursor CURSOR for
-				select a.cliente, b.tipo_llama
+				select a.cliente, isnull(a.idpedido,''), b.tipo_llama
 				from TeleVentaDetalle a
 				inner join clientes_adi b on a.cliente collate SQL_Latin1_General_CP1_CI_AS=b.cliente and b.tipo_llama in (3,4,5)
 				where a.id=@IdTV
 
-			declare @cli varchar(50), @tipo_llama int
-			OPEN elCursor FETCH NEXT FROM elCursor INTO @cli, @tipo_llama
+			declare @cli varchar(50), @tipo_llama int, @IdPedidoTV varchar(50)
+			OPEN elCursor FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
 			WHILE (@@FETCH_STATUS=0) BEGIN				
 				declare @UltimaLlamada varchar(10)				
 				select top 1 @UltimaLlamada=convert(varchar(10),FechaInsertUpdate,105)
 				from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc
 				
-				if (
-					-- quincenal
-					@tipo_llama=3 and   (
-											DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, getdate()) 
-											or DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, getdate())-1)
-										)
+				if (	-- quincenal
+						(@tipo_llama=3 and (DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fecha) or DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fecha)-1))															
+						-- mensual
+						or (@tipo_llama=4 and MONTH(@UltimaLlamada)=MONTH(@fecha))
 					
-					-- mensual
-					or (@tipo_llama=4 and MONTH(@UltimaLlamada)=MONTH(getdate()))
-					
-					-- cada n días
-					or (@tipo_llama=5 and (
-											cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint))
-											>
-											(select top 1 cast(FORMAT(isnull(cast(FechaInsertUpdate as smalldatetime),'01-01-1900'),'yyyyMMdd') as bigint) 
-											from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc)
-										)												
+						-- cada n días
+						or (
+							@tipo_llama=5 and (cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint))
+							= 
+							(select top 1 cast(FORMAT(isnull(cast(FechaInsertUpdate as smalldatetime),'01-01-1900'),'yyyyMMdd') as bigint) 
+							from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc)
+						)
+					-- que se haya hecho un pedido en la última llamada
+					) and @IdPedidoTV <> ''
 				BEGIN 
-					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
+					--delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
 					insert into aaa (datos) 
-					values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha,' - @IdTeleVenta: ',@idTV)) 
+					values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha
+							,' - @IdTeleVenta: ',@idTV,' - @IdPedidoTV: <<',@IdPedidoTV,'>>')
+					) 
 				END	
 				
-				FETCH NEXT FROM elCursor INTO @cli, @tipo_llama
+				FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
 			END	CLOSE elCursor deallocate elCursor
 
 
