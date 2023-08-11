@@ -14,6 +14,22 @@ $(function () {
             flexygo.msg.generic(e.detailIdentity, null, e.masterIdentity, null, e.type);
         }
     });
+    flexygo.events.on(this, 'push', 'notify', function (e) {
+        switch (e.masterIdentity) {
+            case 'UpdateLocalStorage': {
+                flexygo.storage.local.remove(e.sender.Key);
+                flexygo.storage.local.add(e.sender.Key, JSON.parse(e.sender.Value));
+                break;
+            }
+            case 'DeleteLocalStorage': {
+                flexygo.storage.local.remove(e.sender.Key);
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    });
     window.addEventListener("dragenter", function (e) {
         e.preventDefault();
     }, false);
@@ -88,7 +104,53 @@ function initPage() {
             }
         });
     }
-    hist = getUrlObject();
+    if (flexygo.utils.isTactilModeActive()) {
+        $('html').addClass("tactilMode");
+    }
+    $('#flx-goUpArrow')[0].title = flexygo.localization.translate('navigation.scrolltop');
+    if (flexygo.utils.isSizeMobile()) {
+        window.addEventListener('scroll', function (e) {
+            if ($(window).scrollTop() > flexygo.utils.scroll.minheight && flexygo.utils.scroll.minheight >= 0) {
+                $('#flx-goUpArrow').addClass("flx-showBottom");
+            }
+            else {
+                $('#flx-goUpArrow').removeClass("flx-showBottom");
+            }
+        });
+    }
+    else {
+        $('div#mainContent').scroll(function () {
+            if ($('div#mainContent')[0].scrollTop > flexygo.utils.scroll.minheight && flexygo.utils.scroll.minheight >= 0) {
+                $('#flx-goUpArrow').addClass("flx-showBottom");
+            }
+            else {
+                $('#flx-goUpArrow').removeClass("flx-showBottom");
+            }
+        });
+    }
+    $('#flx-goUpArrow').click(function () {
+        flexygo.utils.scrollTo(0);
+    });
+    let oldIcon, newIcon;
+    if (flexygo.utils.isFullScreenActive()) {
+        oldIcon = "icon-expand-4";
+        newIcon = "icon-collapse";
+    }
+    else {
+        oldIcon = "icon-collapse";
+        newIcon = "icon-expand-4";
+    }
+    $('#mainMenu li[title="Toggle full screen"] i').removeClass(oldIcon);
+    $('#mainMenu li[title="Toggle full screen"] i').addClass(newIcon);
+    let param = flexygo.utils.querystring.getParamValue(document.location.href, 'u');
+    if (param) {
+        let dataObj = flexygo.history.Base64.decode(param);
+        hist = JSON.parse(dataObj);
+        window.history.replaceState(hist, null, flexygo.utils.resolveUrl('~/Index') + '#' + param);
+    }
+    else {
+        hist = getUrlObject();
+    }
     if (hist) {
         if (typeof hist.hideNavbar !== 'undefined' && hist.hideNavbar === true) {
             $('#mainNav').hide().attr('minimized', 'True');
@@ -108,7 +170,7 @@ function initPage() {
 */
 function resizeMain() {
     if (!flexygo.utils.isSizeMobile()) {
-        $('#mainBlock').css('min-height', (!($('body.header-follows').length > 0 || $('body.header-overflow').length > 0)) ? $(window).height() - $('header:first').height() + 'px' : '100%');
+        $('#mainBlock').css('min-height', (!($('body.header-follows').length > 0 || $('body.header-overflow').length > 0)) ? $(window).height() - $('header:first').outerHeight() + 'px' : '100%');
     }
 }
 /**
@@ -119,6 +181,12 @@ function resizeMain() {
 function loadPage(hist) {
     if (hist) {
         flexygo.history.go(hist);
+        if (hist.successMessage) {
+            flexygo.msg.success(hist.successMessage);
+        }
+        if (hist.errorMessage) {
+            flexygo.msg.error(hist.errorMessage);
+        }
     }
     else {
         flexygo.nav.goHome(true);

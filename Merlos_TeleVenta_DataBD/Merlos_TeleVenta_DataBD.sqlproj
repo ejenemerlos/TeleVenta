@@ -67,7 +67,6 @@
   <ItemGroup>
     <Build Include="dbo\Stored Procedures\sp_generate_merge.sql" />
     <Build Include="dbo\Functions\funPrintError.sql" />
-    <Build Include="dbo\Stored Procedures\02_CrearStoreds.sql" />
     <Build Include="dbo\Stored Procedures\pBDEW.sql" />
     <Build Include="dbo\Stored Procedures\pComunes.sql" />
     <Build Include="dbo\Stored Procedures\pConfigBBDD.sql" />
@@ -118,6 +117,30 @@
     <Build Include="dbo\Tables\Configuracion_ADI.sql" />
     <Build Include="dbo\Tables\Configuracion_Email.sql" />
     <Build Include="dbo\Stored Procedures\pMerlos.sql" />
+    <Build Include="dbo\Tables\Merlos_Log.sql" />
+    <Build Include="dbo\Stored Procedures\pCalculosPV.sql" />
+    <Build Include="dbo\Stored Procedures\pMerlos_LOG.sql" />
+    <Build Include="dbo\Tables\EnUso.sql" />
+    <Build Include="dbo\Stored Procedures\pDameNumPedido.sql" />
+    <Build Include="dbo\Tables\TeleVentaListados.sql" />
+    <Build Include="dbo\Stored Procedures\pEnUso.sql" />
+    <Build Include="dbo\Tables\Temp_Pedido_Cabecera.sql" />
+    <Build Include="dbo\Tables\Temp_Pedido_Detalle.sql" />
+    <Build Include="dbo\Stored Procedures\pPedido_Linea.sql" />
+    <Build Include="dbo\Stored Procedures\pCalcularImp.sql" />
+    <Build Include="dbo\Stored Procedures\pPedido_Nuevo_Lineas.sql" />
+    <Build Include="dbo\Stored Procedures\pPedidoControl.sql" />
+    <Build Include="dbo\Stored Procedures\pLlamadas_llamarMasTardeCliente.sql" />
+    <Build Include="dbo\Stored Procedures\pClientes.sql" />
+    <Build Include="dbo\Stored Procedures\pDamePrecio.sql" />
+    <Build Include="dbo\Stored Procedures\pFamilias.sql" />
+    <Build Include="dbo\Stored Procedures\pPedido_Nuevo.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulo.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulos.sql" />
+    <Build Include="dbo\Stored Procedures\pArticulosCliente.sql" />
+    <Build Include="dbo\Stored Procedures\pClientesDirecciones.sql" />
+    <Build Include="dbo\Stored Procedures\pOfertas.sql" />
+    <Build Include="dbo\Tables\familia_user.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="scripts\Script.PostDeployment.sql" />

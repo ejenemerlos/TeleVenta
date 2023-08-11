@@ -1,0 +1,95 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+flxCrystal
+</name>
+</assembly>
+<members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.CRYSTAL">
+ <summary>
+ crystal
+ </summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.WORD">
+ <summary>
+  WORD
+ </summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.EXCEL">
+ <summary>
+  EXCEL
+ </summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.EXCELR">
+ <summary>
+  EXCEL RECORDS
+ </summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.EXCELW">
+ <summary>
+  EXCEL WORKBOOK
+ </summary>
+</member>
+<member name="F:FLEXYGO.Reporting.eReportModes.PDF">
+ <summary>
+  PDF
+ </summary>
+</member>
+<member name="M:FLEXYGO.Reporting.CrystalReportModes.getReportMode(System.String)">
+ <summary>
+ Gets the report mode.
+ </summary>
+ <param name="mode">The mode.</param>
+ <returns>eReportModes.</returns>
+</member>
+<member name="T:FLEXYGO.Reporting.CrystalReportDocument">
+ <summary>
+ Class CrystalReportDocument.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Reporting.CrystalReportDocument.#ctor(System.String,System.String,FLEXYGO.Reporting.eReportModes,System.Collections.Generic.List{FLEXYGO.Utilities.General.KeyValuePairs},System.String,System.String,System.String,System.Boolean,System.Collections.ArrayList,System.Boolean)">
+ <summary>
+ Constructor for new crystal Report document object.
+ </summary>
+ <param name="ReportPath">Relative file of rpt file.</param>
+ <param name="ConnString">The database connection string  for the report.</param>
+ <param name="ReportMode">Word,Excel or PDF one oh the <see cref="T:FLEXYGO.Reporting.eReportModes"/> modes</param>
+ <param name="ReportParams">Key value pairs of report params</param>
+ <param name="ObjectTableName">If report is filtered using object or collection, the ientity tablename.</param>
+ <param name="ObjSQLFilter">If report is filtered using object or collection, the additional where (in sql format).</param>
+ <param name="ReportSelectionFormula">Record selection formula in crystal reports format.</param>
+ <exception cref="T:System.Exception">
+ Error loading report  ex.Message
+ or
+ </exception>
+</member>
+<member name="M:FLEXYGO.Reporting.CrystalReportDocument.Dispose">
+ <summary>
+ Disposes this instance.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Reporting.CrystalReportDocument.ProcessStringParams(System.String@)">
+ <summary>
+ Transforms string sql parameters into  the sql sentence.
+ </summary>
+ <param name="SqlSentence">The SqlSentence sentence.</param>
+</member>
+</members>
+</doc>

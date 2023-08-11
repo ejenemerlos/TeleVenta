@@ -40,11 +40,14 @@ declare namespace flexygo.ui.wc {
         removeKeys: boolean;
         page: number;
         pageSize: number;
+        pageSizeDefault: number;
         pagesButtons: number;
         maxRows: number;
         maxPages: number;
         moduleName: string;
         groups: flexygo.api.TemplateGroupCollection;
+        groupList: flexygo.api.TemplateGroupCollection;
+        userDefinedGroups: boolean;
         sortColumn: string;
         sortAsc: boolean;
         orderObj: flexygo.api.list.PropertyOrder[];
@@ -53,6 +56,7 @@ declare namespace flexygo.ui.wc {
         presetId: string;
         presetText: string;
         presetIcon: string;
+        removePreset: string;
         templatetype: string;
         tEmpty: string;
         tModuleClass: string;
@@ -62,6 +66,7 @@ declare namespace flexygo.ui.wc {
         viewList: {
             [name: string]: string;
         };
+        defaults: any;
         canDelete: boolean;
         canInsert: boolean;
         canUpdate: boolean;
@@ -87,6 +92,10 @@ declare namespace flexygo.ui.wc {
         refreshing: number;
         presets: {
             [key: string]: flexygo.api.PresetSettings;
+        };
+        TemplateToolbarCollection: any;
+        currentViewers: {
+            [name: string]: string;
         };
         /**
        * Fires when element is attached to DOM
@@ -120,6 +129,12 @@ declare namespace flexygo.ui.wc {
         init(): void;
         setDefaultOrder(): void;
         saveDefaultOrder(): void;
+        setDefaultGroup(): void;
+        saveDefaultGroup(): void;
+        hasGroup(groupField: any): boolean;
+        toggleGroup(groupField: any): void;
+        addGroup(groupField: any): void;
+        removeGroup(groupField: any): void;
         onEntityChanged(e: flexygo.events.FlexygoEvent): void;
         setPreset(presetName: string, presetText: string, presetIcon: string): void;
         changePresetText(): void;
@@ -188,6 +203,13 @@ declare namespace flexygo.ui.wc {
         * @param {flexygo.events.FlexygoEvent} e
         */
         onPropertyChanged(e: flexygo.events.FlexygoEvent): void;
+        /**
+        * Validate property
+        * @method validateSQLProperty
+        * @param {string} propertyName
+        * @param {Properties}  flexygo.api.edit.KeyValuePair[]
+        */
+        validateSQLProperty(propertyName: string, Properties: flexygo.api.edit.KeyValuePair[]): void;
         addLock(): void;
         removeLock(): void;
         loadingDependencies: number;
@@ -203,7 +225,7 @@ declare namespace flexygo.ui.wc {
        * @method sort
        * @param  {api.list.PropertyOrder[]} orderInfo
        */
-        sortByObj(orderInfo: api.list.PropertyOrder[]): void;
+        sortByObj(orderInfo: api.list.PropertyOrder[], groupsInfo: flexygo.api.TemplateGroupCollection): void;
         /**
         * Sort based on column in asc or desc mode.
         * @method sort
@@ -222,7 +244,7 @@ declare namespace flexygo.ui.wc {
         * @method refreshPager
         */
         refreshPager(): void;
-        private addButtons(btns, pageNum);
+        private addButtons;
         /**
        * Moves to next page.
        * @method nextPage
@@ -254,6 +276,7 @@ declare namespace flexygo.ui.wc {
        * @method savePageValueHistory
        */
         savePageValueHistory(): void;
+        savePresetValueHistory(): void;
         /**
         * Load searcher
         * @method loadSearcher
@@ -294,7 +317,7 @@ declare namespace flexygo.ui.wc {
        * @param {string} str
        * @return {string}
        */
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         _getButton(btn: flexygo.api.ToolbarButton, objectname: string, objectwhere: string, objectdefaults: string): JQuery;
         _getTemplateButton(json: any, typeId: string, IconClass: string, Text: string, TargetId: string): string;
         /**
@@ -315,7 +338,9 @@ declare namespace flexygo.ui.wc {
         * @return {string}
         */
         getModuleFullId(): string;
+        setFocus(me: JQuery, listItem: flexygo.ui.wc.FlxListElement, e: JQueryEventObject): void;
     }
     function clearRow(list: JQuery, btn: JQuery): void;
     function saveRow(objectName: string, objectWhere: string, list: JQuery, btn: JQuery, msg?: boolean): void;
 }
+declare let ev: any;

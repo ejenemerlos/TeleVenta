@@ -28,10 +28,12 @@ var flexygo;
                     this.orderObj = null;
                     this.removeKeys = false;
                     this.activeFilter = null;
+                    this.userDefinedGroups = false;
                     this.searcher = null;
                     this.filters = null;
                     this.buttons = null;
                     this.groups = null;
+                    this.groupList = null;
                     this.viewId = null;
                     this.presetId = null;
                     this.presetText = null;
@@ -60,7 +62,7 @@ var flexygo;
                 * Monitor the list of observed attribute for changes.
                 * @property observedAttributes
                 */
-                static get observedAttributes() {
+                observedAttributes() {
                     return ['modulename'];
                 }
                 attributeChangedCallback(attrName, oldVal, newVal) {
@@ -98,6 +100,7 @@ var flexygo;
                 initGrid(initMode) {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     this.page = 0;
                     let mode = me.attr('mode');
                     if (!mode || mode == '') {
@@ -141,6 +144,9 @@ var flexygo;
                             if (initMode && parentModule && wcModule) {
                                 if (response.Buttons) {
                                     wcModule.setButtons(response.Buttons, response.ObjectName, response.ObjectWhere);
+                                }
+                                else {
+                                    wcModule.setButtons(null, response.ObjectName, response.ObjectWhere);
                                 }
                                 wcModule.setObjectDescrip(response.Title);
                             }
@@ -244,9 +250,10 @@ var flexygo;
                 * @method sort
                 * @param  {api.list.PropertyOrder[]} orderInfo
                 */
-                sortByObj(orderInfo) {
+                sortByObj(orderInfo, groupsInfo) {
                     this.sortColumn = null;
                     this.orderObj = orderInfo;
+                    this.groups = groupsInfo;
                     this.refresh();
                 }
                 sort(columnItem, property, ascMode) {
@@ -470,7 +477,7 @@ var flexygo;
                     tbody.append(tr);
                     return tbody.html();
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 refreshPager() {

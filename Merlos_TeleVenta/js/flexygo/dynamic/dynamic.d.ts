@@ -4,11 +4,15 @@ declare namespace flexygo.utils {
     var deepLinking: boolean;
     var GoogleDeveloperKey: string;
     var GoogleAppId: string;
+    var ExportLimit: number;
 }
 declare namespace flexygo.utils.size {
     var s: number;
     var m: number;
     var l: number;
+}
+declare namespace flexygo.utils.scroll {
+    var minheight: number;
 }
 declare namespace flexygo.colors {
     var success: string;

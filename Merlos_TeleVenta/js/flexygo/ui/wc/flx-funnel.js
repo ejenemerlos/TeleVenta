@@ -27,19 +27,13 @@ var flexygo;
                     this.connected = false;
                 }
                 /**
-                * Array of observed attributes. REQUIRED
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['ObjectName', 'ObjectWhere', 'additionalwhere', ''];
-                }
-                /**
                 * Init the webcomponent. REQUIRED.
                 * @method init
                 */
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     me.append('<div id="funnel"></div>');
                     let params = {
                         ObjectName: me.attr('ObjectName'),
@@ -63,7 +57,9 @@ var flexygo;
                 refresh() {
                     if ($(this).attr('manualInit') != 'true') {
                         let chart = new D3Funnel('#funnel');
+                        chart["container"] = $(this).find('#funnel')[0];
                         chart.destroy();
+                        $(this).find('#funnel')[0].remove();
                         this.init();
                     }
                 }
@@ -73,6 +69,7 @@ var flexygo;
                 */
                 render() {
                     let chart = new D3Funnel('#funnel');
+                    chart["container"] = $(this).find('#funnel')[0];
                     let me = this;
                     let defaultOptions = { bottomWidth: 1 / 3, bottomPinch: 1, inverted: false, animate: 0, curveEnabled: true, curveHeight: 20, totalCount: null, dynamicHeight: true, dynamicSlope: false, barOverlay: false, fillType: 'solid', minHeight: 25, highlight: false, labelEnabled: true, fontFamily: null, fontSize: '14px', fill: '#fff', labelFormat: '{l}\n{f}', tooltipEnabled: false, tooltipFormat: '{l}\n{f}' };
                     if (me.defaultOptions && me.defaultOptions != '') {
@@ -178,6 +175,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+            * Array of observed attributes. REQUIRED
+            * @property observedAttributes {Array}
+            */
+            FlxFunnelElement.observedAttributes = ['ObjectName', 'ObjectWhere', 'additionalwhere', ''];
             wc.FlxFunnelElement = FlxFunnelElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

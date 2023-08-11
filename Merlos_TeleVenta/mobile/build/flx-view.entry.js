@@ -1,22 +1,21 @@
-import { r as registerInstance, j as h, k as getElement } from './index-76f52202.js';
-import './ionic-global-693c5dc1.js';
-import { u as util, C as ConftokenProvider, s as sql, m as msg } from './messages-50a67881.js';
-import { j as jquery } from './jquery-4ed57fb2.js';
-import './utils-67a6e57b.js';
-import './index-023098c3.js';
-import './helpers-d94a0dba.js';
-import './animation-625503e5.js';
-import './index-20a23da0.js';
-import './ios.transition-267ba16c.js';
-import './md.transition-15ebc2b8.js';
-import './cubic-bezier-92995175.js';
-import './index-1da44cf3.js';
-import './index-53f14fc6.js';
-import './hardware-back-button-c2d005b0.js';
-import './index-725f2a8a.js';
-import './overlays-39d86a31.js';
-import { n as nav } from './navigation-c87efa5b.js';
-import { p as parser } from './parser-90867b5f.js';
+import { r as registerInstance, j as h, k as getElement } from './index-86ac49ff.js';
+import './ionic-global-0f98fe97.js';
+import './webapi-c55d139d.js';
+import { i as flxSync, u as util, C as ConftokenProvider, s as sql, m as msg, n as nav } from './conftoken-5bf7991f.js';
+import { j as jquery } from './jquery-5df58adb.js';
+import './utils-16079bfd.js';
+import './helpers-719f4c54.js';
+import './animation-10ea33c3.js';
+import './index-7173f7a2.js';
+import './ios.transition-95375ac9.js';
+import './md.transition-6d74e584.js';
+import './cubic-bezier-93f47170.js';
+import './index-7fe827c3.js';
+import './index-b40d441b.js';
+import './hardware-back-button-aacf3d12.js';
+import './index-50651ccc.js';
+import './overlays-5302658e.js';
+import { p as parser } from './parser-6f9bc4c3.js';
 
 const flxViewCss = "";
 
@@ -25,7 +24,12 @@ const FlxView = class {
         registerInstance(this, hostRef);
         this.modal = false;
     }
+    componentDidLoad() {
+        jquery('#loadingSpinnerModule').css('visibility', 'hidden');
+        flxSync.checkSendErrors();
+    }
     componentWillLoad() {
+        jquery('#loadingSpinnerModule').css('visibility', 'visible');
         this.object = (this.object) ? decodeURIComponent(this.object) : null;
         this.pageName = (this.pageName) ? decodeURIComponent(this.pageName) : null;
         this.filter = (this.filter) ? decodeURIComponent(this.filter) : null;
@@ -37,7 +41,11 @@ const FlxView = class {
         });
         jquery(window).off('popstate.view.' + this.pageName).on('popstate.view.' + this.pageName, () => {
             if (document.location.href.toLowerCase().indexOf('/view/') > 0) {
-                this.loadData();
+                this.loadData().then(() => {
+                    if (this.page && this.page.JSAfterLoad) {
+                        util.execDynamicCode(this.page.JSAfterLoad);
+                    }
+                });
             }
         });
     }
@@ -118,7 +126,7 @@ const FlxView = class {
     }
     render() {
         return [
-            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, (this.modal ? null : h("ion-menu-button", { color: "outstanding" }))), h("ion-buttons", { slot: "end" }, h("ion-button", { color: "outstanding", onClick: () => { nav.goBack(this.me); } }, h("ion-icon", { slot: "icon-only", name: "arrow-undo-outline" }))), h("ion-title", null, h("span", { id: "menuTitle" }, this.title)))),
+            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, (this.modal ? null : h("ion-menu-button", { color: "outstanding" })), (this.modal ? null : h("ion-icon", { name: "alert-circle", color: "danger", class: "stack sendError flx-hide" }))), h("ion-buttons", { slot: "end" }, h("ion-button", { color: "outstanding", onClick: () => { nav.goBack(this.me); } }, h("ion-icon", { slot: "icon-only", name: "arrow-undo-outline" }))), h("ion-title", null, h("span", { id: "menuTitle" }, this.title)))),
             h("ion-header", { innerHTML: this.header }),
             h("ion-content", null, h("ion-refresher", { slot: "fixed", id: "refresher", onIonRefresh: (ev) => { this.refresh(ev); } }, h("ion-refresher-content", null)), h("div", { id: "mainBody", innerHTML: this.body })),
             h("ion-footer", { innerHTML: this.footer })

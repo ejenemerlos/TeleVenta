@@ -17,11 +17,14 @@ declare namespace flexygo.ui.wc {
         connected: boolean;
         template: string;
         objectname: string;
+        filter: string;
+        searchId: string;
         reportname: string;
         processname: string;
         propertyname: string;
         constringItems: any;
         cusControlsItems: any;
+        propItems: any[];
         mode: string;
         constructor();
         /**
@@ -53,30 +56,37 @@ declare namespace flexygo.ui.wc {
       * RefrLoads connstrings for combo.
       * @method loadConnStrings
       */
-        private loadConnStrings();
+        private loadConnStrings;
         /**
       * RefrLoads CusControls for combo.
       * @method loadCusControls
       */
-        private loadCusControls();
+        private loadCusControls;
         /**
         * RefrLoads tabs.
         * @method loadTabs
         */
-        private loadTabs();
+        private loadTabs;
+        /**
+       * RefrLoads tabs.
+       * @method loadFilterTabs
+       */
+        private loadFilterTabs;
         /**
        * Saves dependencies.
        * @method save
        */
         save(): void;
-        private loadProps();
-        private processDependency(dep);
+        private loadProps;
+        private unactivePropClick;
+        private processDependency;
         /**
         * Gets template.
         * @method getTemplate
         * @returns string
         */
         getTemplate(): string;
+        getFilterTemplate(): string;
         /**
       * Gets connection string items as string.
       * @method getConnStringItems
@@ -84,5 +94,6 @@ declare namespace flexygo.ui.wc {
       */
         getConnStringItems(): string;
         getCusControls(): string;
+        deleteDependency(dep: any): void;
     }
 }

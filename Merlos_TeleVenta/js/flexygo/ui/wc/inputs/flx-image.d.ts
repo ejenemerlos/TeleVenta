@@ -22,6 +22,7 @@ declare namespace flexygo.ui.wc {
         moduleName: string;
         TypeMode: string;
         fileName: string;
+        name: string;
         /**
         * Control Mode
         * @property type {string}
@@ -70,6 +71,7 @@ declare namespace flexygo.ui.wc {
         openDialog(): void;
         getRoundedCanvas(sourceCanvas: any): HTMLCanvasElement;
         getFileName(url: any): string;
+        getName(url: any, mode: any): string;
         isJSON(str: any): boolean;
         /**
         * Trigger Dependencies.

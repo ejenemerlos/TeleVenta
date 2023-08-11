@@ -374,12 +374,36 @@
     }
 }
 
-main:not(.ui-dialog-content) flx-documentmanager, .flx-documentmanager {
-    .dtc-pry-container {
-        min-height: 140px;
-        max-height: 600px;
-        padding-bottom: 20px;
+.dtc-pry-container {
+    position: relative;
+    z-index: 0;
+
+    .background-elements {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        top: 50%;
+        width: 100%;
+        text-align: center;
+        font-size: 1.5em;
+        opacity: 0.4;
+        transition: all 0.15s ease-in-out 0s;
+        z-index: -100;
     }
+}
+
+.dtc-filter-container {
+    position: relative;
+    margin-top: 15px;
+    transition: all 500ms;
+
+    .search, input {
+        width: 100%;
+    }
+}
+
+main:not(.ui-dialog-content) flx-documentmanager, .flx-documentmanager {
+
     @media (min-width: dbSize(small)) AND (max-width: dbSize(large)) {
         .dtc-container {
             flex-wrap: wrap;
@@ -409,5 +433,11 @@ main:not(.ui-dialog-content) flx-documentmanager, .flx-documentmanager {
             min-width: 160px !important;
             padding: 10px !important;
         }
+    }
+}
+
+@media (min-width: dbSize(medium)) {
+    flx-module.fullscreen flx-documentmanager .dtc-pry-container, flx-module.fullscreen .flx-documentmanager .dtc-pry-container {
+        max-height: 80vh;
     }
 }

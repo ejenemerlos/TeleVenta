@@ -26,6 +26,8 @@ var flexygo;
                     this.property = null;
                     this.options = null;
                     this.value = null;
+                    this.tactilModeAvailable = false;
+                    this.firefoxNav = false;
                 }
                 /**
                 * Fires when element is attached to DOM
@@ -33,7 +35,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     let isFilter = false;
                     this.type = element.attr('type') || 'text';
                     /*Comment remove type cause gridstack fires this two times and element types in mobile forms was always text
@@ -232,13 +233,7 @@ var flexygo;
                     if (Value && Value !== '') {
                         this.setValue(Value);
                     }
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'disabled', 'requiredmessage', 'mask', 'style', 'class', 'decimalplaces', 'minvalue', 'maxvalue', 'maxvaluemessage', 'minvaluemessage', 'regexp', 'regexptext', 'validatormessage', 'placeholder', 'iconclass', 'helpid', 'allownewfunction', 'allownewobject', 'hide', 'tag'];
+                    this.connected = true;
                 }
                 /**
                 * Fires when the attribute value of the element is changed.
@@ -291,7 +286,8 @@ var flexygo;
                         else {
                             this.options.Locked = false;
                         }
-                        element.find('input').prop('disabled', this.options.Locked);
+                        //element.find('input').prop('disabled', this.options.Locked);
+                        this.refresh();
                     }
                     if (attrName.toLowerCase() === 'requiredmessage' && newVal && newVal !== '') {
                         if (!this.options) {
@@ -318,14 +314,16 @@ var flexygo;
                             this.refresh();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
+                            //if(newVal!=''){ Comentado para que funcione dependencia de visibilidad en el móvil
                             element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            element.attr('Class', this.options.CssClass);
+                            //}
                             this.refresh();
                         }
                     }
@@ -452,7 +450,13 @@ var flexygo;
                         let editCtl = me.closest('flx-view')[0];
                         iconsRight = $('<div class="input-group-btn" />');
                         let icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', (e) => {
-                            flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
+                            if (this.options.ObjModeLink == 'Other') {
+                                flexygo.nav.openPageName(this.options.PageNameLink, editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink, true);
+                            }
+                            else {
+                                flexygo.nav.openPage(this.options.ObjModeLink, editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
+                            }
+                            //flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
                         });
                         iconsRight.append(icon1);
                     }
@@ -469,6 +473,12 @@ var flexygo;
                         if (this.options && !this.options.PlaceHolder) {
                             this.options.PlaceHolder = 'http://...';
                         }
+                    }
+                    else if (this.type.toLowerCase() === 'tel') {
+                        this.setPhoneNumber();
+                    }
+                    else if (this.type.toLowerCase() === 'email') {
+                        this.setMail();
                     }
                     if (iconsRight) {
                         control.append(iconsRight);
@@ -492,17 +502,25 @@ var flexygo;
                     let iconsRight = this.getIconButtons();
                     let control = $('<div>');
                     let input;
-                    if (this.type === 'date' && this.options.PlaceHolder !== '') {
+                    this.firefoxNav = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+                    if ((flexygo.utils.isTactilModeActive() || this.firefoxNav) && (this.type === 'datetime-local' || this.type === 'date' || this.type === 'time') && $(`<div class='date' id='dtpicker'><input class="hidden" type='text'/></div>`).datetimepicker) {
+                        input = $(`<input type="${this.type}" class="form-control" />`);
+                        this.tactilModeAvailable = true;
+                    }
+                    else if (this.type === 'date' && this.options.PlaceHolder !== '') {
                         input = $('<input type="text" onfocus="(this.type=\'date\')" class="form-control" />');
                     }
                     else if (this.type === 'cron' || this.type === 'ident' || this.type === 'map') {
                         input = $('<input type="text" class="form-control" />');
                     }
-                    else if (this.options && this.options.MaxNumOfChars && this.options.MaxNumOfChars > 0) {
+                    else if (this.options && this.options.MaxNumOfChars && this.options.MaxNumOfChars > 0 && this.type !== 'date' && this.type !== 'datetime-local') {
                         input = $('<input type="' + this.type + '" class="form-control"  maxLength="' + this.options.MaxNumOfChars + '"/>');
                     }
                     else {
                         input = $('<input type="' + this.type + '" class="form-control" />');
+                    }
+                    if (me.attr("disablescroll") === 'true') {
+                        input.on('wheel', (e) => { $(e.target).trigger('blur'); });
                     }
                     input.on('blur', (e) => { me.trigger('blur'); });
                     if (this.type === 'ident') {
@@ -539,11 +557,20 @@ var flexygo;
                         control.addClass("input-group");
                     }
                     me.html(control);
+                    if (this.type === 'cron') {
+                        me.append(`<label id="${this.property}-error" class="txt-danger" for="${this.property}"></label>`);
+                    }
                     if (this.type.toLowerCase() === 'url') {
                         this.setUrlLink();
                         if (this.options && !this.options.PlaceHolder) {
                             this.options.PlaceHolder = 'http://...';
                         }
+                    }
+                    else if (this.type.toLowerCase() === 'tel') {
+                        this.setPhoneNumber();
+                    }
+                    else if (this.type.toLowerCase() === 'email') {
+                        this.setMail();
                     }
                     this.setOptions();
                 }
@@ -556,6 +583,40 @@ var flexygo;
                     btnURLlink = $('<button class="btn btn-default" type="button"><i class="fa fa-external-link" /></button>').appendTo($('<div class="input-group-btn"/>').appendTo(control));
                     btnURLlink.off('click').on('click', () => {
                         window.open(this.getValue());
+                    });
+                }
+                setPhoneNumber() {
+                    let me = $(this);
+                    let control = me.find('div').addClass('input-group');
+                    let btnPhone;
+                    btnPhone = $('<button class="btn btn-default" type="button"><i class="fa fa-phone" /><a href="tel:' + this.getValue + '"></a></button>').appendTo($('<div class="input-group-btn"/>').appendTo(control));
+                    btnPhone.off('click').on('click', () => {
+                        let phone = me.attr('value');
+                        if (phone != null && phone != '') {
+                            window.location.href = 'tel:' + phone;
+                        }
+                        else {
+                            flexygo.msg.warning(flexygo.localization.translate('text.nophone'));
+                        }
+                    });
+                }
+                setMail() {
+                    let me = $(this);
+                    let control = me.find('div').addClass('input-group');
+                    let btnMail;
+                    btnMail = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-email1" /></button>').appendTo($('<div class="input-group-btn"/>').appendTo(control));
+                    btnMail.off('click').on('click', () => {
+                        let email = me.attr('value');
+                        let mailto_link = 'mailto:' + email;
+                        if (email != null && email != '') {
+                            window = window.open(mailto_link, 'emailWindow');
+                            if (window && !window.closed) {
+                                window.close();
+                            }
+                        }
+                        else {
+                            flexygo.msg.warning(flexygo.localization.translate('text.nomail'));
+                        }
                     });
                 }
                 getIconButtons() {
@@ -592,7 +653,13 @@ var flexygo;
                     }
                     if (this.options && this.options.ObjNameLink && this.options.ObjWhereLink) {
                         icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', (e) => {
-                            flexygo.nav.openPage('view', parseEdit(this.options.ObjNameLink, editCtl, this), parseEdit(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
+                            if (this.options.ObjModeLink == 'Other') {
+                                flexygo.nav.openPageName(this.options.PageNameLink, editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink, true);
+                            }
+                            else {
+                                flexygo.nav.openPage(this.options.ObjModeLink, editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
+                            }
+                            //flexygo.nav.openPage('view', parseEdit(this.options.ObjNameLink, editCtl, this), parseEdit(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
                         });
                         ret.append(icon1);
                     }
@@ -650,9 +717,27 @@ var flexygo;
                 showCronGenerator(itm) {
                     let input = $(this).find('input');
                     itm.popover('show');
-                    var htmlContent = '<div class="cronExpression inline" onclick="" ></div><div class="icon-margin-left btn-group"><button class="acpt btn btn-default" onclick=""><i class="flx-icon icon-checked"></i></button><button class="cncl btn btn-default" onclick=""><i class="flx-icon icon-remove"></i></button></div>';
+                    var htmlContent = '<div class="cronExpression inline" onclick="" ></div><div class="cronButtons icon-margin-left btn-group"><button class="acpt btn btn-default" onclick=""><i class="flx-icon icon-checked"></i></button><button class="cncl btn btn-default" onclick=""><i class="flx-icon icon-remove"></i></button></div>';
                     itm.data("bs.popover").options.content = htmlContent;
                     itm.data("bs.popover").options.html = true;
+                    let me = $(this);
+                    let winWidth, dialogLeft, navWidth;
+                    if (!me.closest('div.ui-dialog').length) {
+                        winWidth = $(window).width();
+                        dialogLeft = 0;
+                        navWidth = $('#mainNav').width();
+                    }
+                    else {
+                        winWidth = me.closest('div.ui-dialog').width();
+                        dialogLeft = me.closest('div.ui-dialog').offset().left;
+                        navWidth = 0;
+                    }
+                    if (parseInt((input.offset().left - dialogLeft + input.outerWidth() / 2 - navWidth / 2).toFixed()) > parseInt((winWidth / 2).toFixed())) {
+                        itm.data("bs.popover").options.placement = 'left';
+                    }
+                    else {
+                        itm.data("bs.popover").options.placement = 'right';
+                    }
                     itm.popover("show");
                     itm.parent().find('.popover-content').on('click', function (ev) { ev.stopPropagation(); ev.preventDefault(); });
                     itm.parent().find('.cronExpression').jqCron({
@@ -669,6 +754,7 @@ var flexygo;
                     });
                     itm.parent().find('button.acpt').on('click', function (ev) {
                         input.val(itm.parent().find('.cronExpression').data('jqCron').getCron());
+                        input.trigger('blur');
                         itm.popover("destroy");
                         ev.stopPropagation();
                         ev.preventDefault();
@@ -679,6 +765,9 @@ var flexygo;
                     let histObj = new flexygo.nav.FlexygoHistory();
                     histObj.targetid = 'modal1024x800';
                     let modal = flexygo.targets.createContainer(histObj, true, null, true);
+                    if (!modal) {
+                        return;
+                    }
                     modal.empty();
                     modal.closest('.ui-dialog').find('.ui-dialog-title').html(flexygo.localization.translate('text.map'));
                     modal.addClass('nopadding');
@@ -769,6 +858,9 @@ var flexygo;
                     }
                     if (this.options && this.options.Locked) {
                         input.prop('disabled', this.options.Locked);
+                        if (me.attr('disabled') !== 'disabled') {
+                            me.attr('disabled', 'disabled');
+                        }
                     }
                     if (this.options && this.options.PlaceHolder) {
                         input.attr('PlaceHolder', this.options.PlaceHolder);
@@ -791,8 +883,97 @@ var flexygo;
                             $(this).val('');
                         });
                     }
-                    if (this.options && (this.options.CauseRefresh || this.options.SQLValidator != null)) {
-                        if (this.type === 'time' || this.type === 'date' || this.type === 'datetime-local') {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && (this.options.CauseRefresh || this.options.SQLValidator != null)) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
+                        if (this.tactilModeAvailable) {
+                            input.on('click', () => {
+                                //Sets old value
+                                me.attr('old', this.getValue());
+                                //Hides other posible opened datePickers
+                                if ($('#dtpicker').length > 0) {
+                                    $('#dtpicker')[0].remove();
+                                }
+                                //DateTimePicker creation
+                                let datetimePicker = $(`<div class='date' id='dtpicker'><input class="hidden" type='text'/></div>`);
+                                if (flexygo.utils.isTactilModeActive() || !this.firefoxNav)
+                                    datetimePicker.append('<div class="def-flx-backdrop" ng-if="showForm"></div>');
+                                me.find(' > div').css('position', 'relative');
+                                me.find(' > div').append(datetimePicker);
+                                datetimePicker.datetimepicker();
+                                datetimePicker.data("DateTimePicker").options({
+                                    format: (this.type === 'datetime-local' ? 'YYYY/MM/DD[T]HH:mm' : (this.type === 'date' ? 'YYYY/MM/DD' : 'HH:mm')),
+                                    showClose: true,
+                                    locale: flexygo.profiles.culture,
+                                    showClear: true,
+                                    keepOpen: true,
+                                    date: this.getValue(),
+                                    toolbarPlacement: 'bottom'
+                                });
+                                //Show DateTimePicker
+                                datetimePicker.data("DateTimePicker").show();
+                                //Added the detection of when the user clicks outside of the picker to close it
+                                $(document).off('click.datepicker').on('click.datepicker', (e) => {
+                                    if (input.is(e.target) || input.has(e.target).length > 0)
+                                        return;
+                                    let picker = $('.bootstrap-datetimepicker-widget');
+                                    if (!picker.is(e.target) && picker.has(e.target).length === 0) {
+                                        datetimePicker[0].remove();
+                                        $(document).off('click.datepicker');
+                                    }
+                                });
+                                //Setting custom css to make input adapt to the screen (only for tactil mode)
+                                if (flexygo.utils.isTactilModeActive() || !this.firefoxNav) {
+                                    let dtp = datetimePicker.find('> div.bootstrap-datetimepicker-widget');
+                                    dtp.css('position', 'fixed');
+                                    dtp.css('top', '50%');
+                                    dtp.css('left', '50%');
+                                    dtp.css('width', '50%');
+                                    dtp.css('margin-top', -dtp.height() / 2);
+                                    dtp.css('margin-left', -dtp.width() / 2);
+                                    dtp.css('height', dtp.find('> ul').height() + 20);
+                                }
+                                //Clear button click event is overwritten to change the real value
+                                datetimePicker.find('.glyphicon.glyphicon-trash').on('click', () => {
+                                    datetimePicker.data("DateTimePicker").hide();
+                                    this.setValue('');
+                                });
+                                //On hide event
+                                datetimePicker.on('dp.hide', (e) => {
+                                    //Set value
+                                    let date = e.date;
+                                    let stringValue;
+                                    if (this.type === 'time') {
+                                        stringValue = (e.date.hour() < 10 ? '0' : '') + e.date.hour() + ":" + (e.date.minutes() < 10 ? '0' : '') + e.date.minutes();
+                                    }
+                                    else {
+                                        stringValue = e.date.year() + "/" + (e.date.month() + 1) + "/" + e.date.date() + " " + e.date.hour() + ":" + e.date.minutes();
+                                    }
+                                    this.setValue(stringValue);
+                                    //Call onChange event
+                                    if (this.getValue() != me.attr('old')) {
+                                        let ev = {
+                                            class: "property",
+                                            type: "changed",
+                                            sender: this,
+                                            masterIdentity: this.property
+                                        };
+                                        if (this.type === 'date') {
+                                            if (this.getValue() == null || (this.getValue().getFullYear() >= 1900 && this.getValue().getFullYear() <= 2079)) {
+                                                flexygo.events.trigger(ev, me);
+                                            }
+                                        }
+                                        else {
+                                            flexygo.events.trigger(ev, me);
+                                        }
+                                    }
+                                    datetimePicker[0].remove();
+                                });
+                                if (this.firefoxNav) {
+                                    setTimeout(() => { me.find('> div > input').trigger('blur'); }, 20);
+                                }
+                            });
+                        }
+                        else if (this.type === 'time' || this.type === 'date' || this.type === 'datetime-local') {
                             input.on('focus', (e) => {
                                 me.attr('old', this.getValue());
                             });
@@ -806,26 +987,62 @@ var flexygo;
                                     };
                                     if (this.type === 'date') {
                                         if (this.getValue() == null || (this.getValue().getFullYear() >= 1900 && this.getValue().getFullYear() <= 2079)) {
-                                            flexygo.events.trigger(ev);
+                                            flexygo.events.trigger(ev, me);
                                         }
                                     }
                                     else {
-                                        flexygo.events.trigger(ev);
+                                        flexygo.events.trigger(ev, me);
                                     }
                                 }
                             });
                         }
                         else {
                             input.on('change', (e) => {
+                                if (this.options && this.options.ControlType == 'decimal' && this.getValue()) {
+                                    let oldValue = input[0].value;
+                                    input.val('');
+                                    input.val(parseFloat(oldValue));
+                                }
                                 let ev = {
                                     class: "property",
                                     type: "changed",
                                     sender: this,
                                     masterIdentity: this.property
                                 };
-                                flexygo.events.trigger(ev);
+                                flexygo.events.trigger(ev, me);
+                                if ($(this).find('input.error').length > 0) {
+                                    $(this).find('> div').addClass('has-error');
+                                    $(this).find('> div > label').addClass('has-error txt-danger');
+                                }
                             });
                         }
+                    }
+                    if (this.type === 'cron') {
+                        input.on('blur', (e) => {
+                            if (!input.val()) {
+                                return;
+                            }
+                            var proc = new flexygo.Process('CheckCronExpression');
+                            let paramsDefaults = [];
+                            let jsonValue = {};
+                            jsonValue["Key"] = 'cronExpression';
+                            jsonValue["Value"] = input.val();
+                            paramsDefaults.push(jsonValue);
+                            proc.run(paramsDefaults, (ret) => {
+                                let flxText = $(input).parents('flx-text');
+                                if (ret.Data.Result) {
+                                    flxText.find('label').html('');
+                                    flxText.find('div').removeClass('has-error');
+                                    flxText.find('div').addClass('has-success');
+                                }
+                                else {
+                                    flxText.find('div').addClass('has-error');
+                                    flxText.find('div').removeClass('has-success');
+                                    flxText.find('label').html(ret.Data.Error);
+                                    flxText.find('label').show();
+                                }
+                            });
+                        });
                     }
                     if (this.options && this.options.DecimalPlaces && this.options.DecimalPlaces.toString() !== '' && (this.options.DecimalPlaces > 0)) {
                         let step = '0.';
@@ -889,6 +1106,8 @@ var flexygo;
                             if (typeof value == 'object') {
                                 value = moment.utc(value).format('HH:mm:ss');
                             }
+                            if (value)
+                                value = value.trim();
                         }
                         if (this.type === 'number' && $.isNumeric(value) && this.options && this.options.DecimalPlaces && this.options.DecimalPlaces.toString() !== '' && (this.options.DecimalPlaces > 0)) {
                             value = parseFloat(value).toFixed(this.options.DecimalPlaces);
@@ -900,14 +1119,39 @@ var flexygo;
                 setValueView(value) {
                     this.value = value;
                     let input = $(this).find('label');
+                    let regExp = /[&<>"'`=\/]/mi;
                     if (this.type === 'number' && $.isNumeric(value) && this.options && this.options.DecimalPlaces && this.options.DecimalPlaces.toString() !== '' && (this.options.DecimalPlaces > 0) && value !== null) {
-                        value = parseFloat(value).toFixed(this.options.DecimalPlaces);
+                        if (this.options.ControlType.toLowerCase() === 'decimal') {
+                            if (flexygo.profiles.culture.toLowerCase() == 'es-es') {
+                                value = parseFloat(value).toLocaleString('ca-ES', { minimumFractionDigits: this.options.DecimalPlaces, maximumFractionDigits: this.options.DecimalPlaces });
+                            }
+                            else {
+                                value = parseFloat(value).toLocaleString(flexygo.profiles.culture, { minimumFractionDigits: this.options.DecimalPlaces, maximumFractionDigits: this.options.DecimalPlaces });
+                            }
+                        }
+                        else {
+                            if (flexygo.profiles.culture.toLowerCase() == 'es-es') {
+                                value = parseInt(value).toLocaleString('ca-ES');
+                            }
+                            else {
+                                value = parseInt(value).toLocaleString(flexygo.profiles.culture);
+                            }
+                        }
+                        input.attr('title', value);
                     }
                     else if (this.type === 'date' && value !== null) {
                         value = moment.utc(value).locale(flexygo.profiles.culture).format('L');
+                        input.attr('title', value);
                     }
                     else if (this.type === 'datetime-local' && value !== null) {
                         value = moment.utc(value).locale(flexygo.profiles.culture).format('L LT');
+                        input.attr('title', value);
+                    }
+                    else if (this.type === 'text' && value !== null) {
+                        input.attr('title', value);
+                        if (regExp.test(value)) {
+                            value = flexygo.string.escapeHTML(value);
+                        }
                     }
                     input.html(value);
                 }
@@ -941,6 +1185,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxTextElement.observedAttributes = ['type', 'property', 'required', 'disabled', 'requiredmessage', 'mask', 'style', 'class', 'decimalplaces', 'minvalue', 'maxvalue', 'maxvaluemessage', 'minvaluemessage', 'regexp', 'regexptext', 'validatormessage', 'placeholder', 'iconclass', 'helpid', 'allownewfunction', 'allownewobject', 'hide', 'tag'];
             wc.FlxTextElement = FlxTextElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

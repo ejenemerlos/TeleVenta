@@ -14,6 +14,26 @@ where ConnStringId='DataConnectionString'
 
 
 
+-- Versión
+if not exists (select * from [ContextVars] where VarName='TeleVentaVersion') BEGIN
+    INSERT INTO [dbo].[ContextVars]
+           ([VarName]
+           ,[VarSQL]
+           ,[Order]
+           ,[ConnStringId]
+           ,[OriginId])
+     VALUES
+           ('TeleVentaVersion'
+           ,'SELECT SettingValue FROM Settings where SettingName=''AutoUpdateLastVersion'''
+           ,0
+           ,'ConfConnectionString'
+           ,1)
+END
+GO
+
+
+
+
 -- sysUser
 update Objects_Properties set Label='Usuario' where ObjectName='sysUser' and PropertyName='separator2'
 update Objects_Properties set PositionY=1 , PositionX=6 , Hide=1 where ObjectName='sysUser' and PropertyName='Avatar'

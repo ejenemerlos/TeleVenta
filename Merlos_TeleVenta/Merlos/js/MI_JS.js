@@ -6,10 +6,10 @@
 var currentRole = flexygo.context.currentRole;
 var currentRoleId = flexygo.context.currentRoleId;
 var currentReference = flexygo.context.currentReference;
+var currentSubreference = flexygo.context.currentSubreference;
 var currentUserLogin = flexygo.context.currentUserLogin;
 var currentUserId = flexygo.context.currentUserId;
 var currentUserFullName = flexygo.context.currentUserFullName;
-var currentSubreference = flexygo.context.currentSubreference;
 var EWtrabajaPeso = flexygo.context.EWtrabajaPeso;
 var UsuariosTV = flexygo.context.usuariosTV;
 var CodigoEmpresa = flexygo.context.CodigoEmpresa;
@@ -41,7 +41,7 @@ var ObservacionesInternas = "";
 var tfArticuloSeleccionado = "";
 var tfArticuloSeleccionadoI = 0;
 
-var paramStd = '"paramStd":[{"currentRole":"' + currentRole + '","currentReference":"' + currentReference + '"}]';
+var paramStd = '"paramStd":[{"currentRole":"' + currentRole + '","currentRoleId":"' + currentRoleId + '","currentReference":"' + currentReference + '","currentSubreference":"' + currentSubreference + '","currentUserLogin":"' + currentUserLogin + '","currentUserId":"' + currentUserId + '","currentUserFullName":"' + currentUserFullName + '"}]';
 
 var nomMes = ["", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMPRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 var numMes = ["", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
@@ -53,13 +53,15 @@ var paginadorRegistros = 0;
 var paginadorResultados = 0;
 
 var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG"
-    , "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']",".dvTemp"];
+    , "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']", ".dvTemp", "#dvListadoGestores"];
 
-$(document).click(function (e) {
+$(document).click(function (e) { 
     for (var i in ElementosClickOff) {
         var container = $(ElementosClickOff[i]);
         if (!container.is(e.target) && container.has(e.target).length === 0) { $(ElementosClickOff[i]).fadeOut(); }
     }
+
+    if (e.target.id === 'dvVelo' && $("#tbPedidosError").is(":visible")) { cerrarVelo(); }
 });
 
 
@@ -97,8 +99,10 @@ function GblCacheAutoClick(){
 	if(botonYes.is(":visible")){ botonYes.click(); }else{ setTimeout(GblCacheAutoClick,500); }
 }
 
-function abrirVelo(contenido, ancho, mantener) {
+function abrirVelo(contenido, ancho, mantener, aceptar) {
     if (ancho === null || !ancho || ancho === "") { ancho = 500; }
+    if(ancho==="todo"){ ancho = document.body.clientWidth - 40; }
+    if (aceptar) { contenido += "<br><br><br><span class='MIbotonGreen' onclick='cerrarVelo()'>aceptar</span><br>";  }
     if (!mantener) {
         $("#dvVelo").remove();
         $("body").prepend("<div id='dvVelo' class='inv'><div id='dvVeloContenido' class='C' style='width:" + ancho + "px;'>" + contenido + "</div></div>");
@@ -107,9 +111,10 @@ function abrirVelo(contenido, ancho, mantener) {
 }
 function abrirAVT(contenido, ancho) {
     if(!ancho){ ancho=500; }
+    if(ancho==="todo"){ ancho = document.body.clientWidth - 40; }
     $("#dvAVT").remove();
     $("body").prepend("<div id='dvAVT' style='z-index:10; position:fixed; width:100%; height:1px; top:50px;'><div class='sombra C' style='width:" + ancho + "px; margin:auto; background:#FFF;padding:10px;'>" + contenido + "</div></div>");
-    $("#dvAVT").stop().fadeIn();
+    if (!$("#dvAVT").is("visible")) { $("#dvAVT").fadeIn(); }
 }
 function abrirIcoCarga() {
     $("#dvVelo").remove();
@@ -185,7 +190,7 @@ function paginador(mm) {
 function repintarZebra(tb, color) {
     var bg = color;
     $("#" + tb).find("tr").each(function () {
-        if (bg === color) { bg = ""; } else { bg = color; }
+        if (bg === color) { bg = ""; } else { bg = color;PedidoNoCobrarPortes }
         $(this).css("background", bg);
     });
 }
@@ -197,6 +202,10 @@ function resetFrm(frm) {
     }
 }
 
+function IsNull(dato,valor) {
+    if (dato === null || dato === undefined || dato === "null" || dato === "undefined") { return valor; }
+    else { return dato; }
+}
 
 
 /* 
@@ -304,6 +313,12 @@ function fechaDeManyana(formato = "dma", simbolo = "-") {
 function fechaCambiaFormato(fecha) {
     var separador = "/"; if (fecha.includes("-")) { separador = "-"; }
     return fecha.split(separador)[2] + separador + fecha.split(separador)[1] + separador + fecha.split(separador)[0];
+}
+
+function fechaFormato(fecha) {
+    var separador = "/"; if (fecha.includes("-")) { separador = "-"; }
+    if (Left(fecha,4).includes(separador)) { return fecha; }
+    else { return fecha.split(separador)[2] + separador + fecha.split(separador)[1] + separador + fecha.split(separador)[0]; }
 }
 
 function fechaConDia() {
@@ -579,7 +594,7 @@ function mostrarRelojEJG(inpId, inicioYfinal) {
     var posCurX = event.clientX;
     var posCurY = event.clientY;
     if ($("#veloRelojEJG").is(":visible")) { $("#veloRelojEJG").remove(); }
-    $("body").prepend("<div id='veloRelojEJG' style='z-index:2; position:absolute; left:" + (posCurX - 50) + "px; top:" + (posCurY - 100) + "px;'>" + elRelojEJG + "</div>");
+    $("body").prepend("<div id='veloRelojEJG' style='z-index:999999; position:absolute; left:" + (posCurX - 50) + "px; top:" + (posCurY - 100) + "px;'>" + elRelojEJG + "</div>");
     if (inicioYfinal) { $("#horaDesde, #horaHasta").show(); }
 
     $(".imgRelojEJGdh").off().on("click", function () {
@@ -693,7 +708,10 @@ function esJSON(str) {
 
 // Limpiar Cadena
 function limpiarCadena(cadena) {
-    return cadena.replace(/\r/g, "<br>").replace(/\n/g, "<br>").replace(/\t/g, "").replace(/\b/g, "").replace(/\f/g, "").replace(/\\/g, "");
+    return cadena.replace(/\n/g, "<br>").replace(/\t/g, "").replace(/\b/g, "").replace(/\f/g, "").replace(/\\/g, "");
+}
+function recompCadena(cadena) {
+    return cadena.replace(/<br>/g, "\n").replace(/<br \/>/g, "\n");
 }
 
 

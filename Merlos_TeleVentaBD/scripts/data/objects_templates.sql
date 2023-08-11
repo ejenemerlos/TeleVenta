@@ -199,7 +199,7 @@ USING (VALUES
 	if(gestoresDelCliente.length>0){ cargarGestoresCliente(gestoresDelCliente); }
 	
 	cargarTablasDeLlamadas();
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,0,0,1,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,1,1)
  ,(N'ClienteDefaultList',N'Cliente',N'list',N'Cliente Default List',N'  <tr onclick="flexygo.nav.openPage(''view'',''Cliente'',''CODIGO=\''{{CODIGO}}\'''',''{\''CODIGO\'':\''{{CODIGO}}\''}'',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));">
    
     <td class="C {{horarioAsignado|switch:[1:inv]}}"></td>
@@ -218,7 +218,7 @@ USING (VALUES
     <th>Teléfono</th>
     <th>E-mail</th>
     <th>Dirección</th>
-  </tr>',N'</table>',NULL,NULL,1,0,1,1)
+  </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
  ,(N'gestorDefaultList',N'gestor',N'list',N'gestor Default List',N'  <tr onclick="flexygo.nav.openPage(''view'',''gestor'',''codigo=\''{{CODIGO}}\'''','''',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));">
     <td>{{codigo}}</td>
     <td>{{nombre}}</td>
@@ -228,7 +228,7 @@ USING (VALUES
     <th>Código</th>
     <th>Nombre</th>
     <th>Apellidos</th>
-  </tr>',N'</table>',NULL,NULL,1,0,1,1)
+  </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
  ,(N'gestores',N'gestor',N'list',N'gestores',N'<tr onclick="asignarGestor(''asignarGestor'',''{{codigo}}'',''{{nombre}} {{apellidos}}'')">
     <td>{{codigo}}</td>
     <td>{{nombre}}</td>
@@ -238,25 +238,34 @@ USING (VALUES
     <th>Código</th>
     <th>Nombre</th>
     <th>Apellidos</th>
-  </tr>',N'</table>',NULL,NULL,0,0,1,1)
- ,(N'inciARTDefaultList',N'inciART',N'list',N'inciART Default List',N'<tr>
-  <td>{{laFecha}}</td>
-  <td>({{gestor}}) {{nGestor}}</td>
-  <td>({{articulo}}) {{nArticulo}}</td>
-  <td>{{incidencia}} - {{nIncidencia}}</td>
-  <td>({{cliente}}) {{nCliente}}</td>
-  <td>{{pedido}}</td>
-  <td>{{observaciones}}</td>
-</tr>',NULL,NULL,N'<table id="tbInciCLI" class="tbStd">
-  	<tr>
-  		<th>Fecha</th>
-  		<th>Gestor</th>
-  		<th>Artículo</th>
-  		<th>Incidencia</th>
-  		<th>Cliente</th>
-  		<th>Pedido</th>
-  		<th>Observaciones</th>
-	</tr>',N'</table>',NULL,NULL,1,0,1,1)
+  </tr>',N'</table>',NULL,NULL,0,0,0,1,1)
+ ,(N'inciARTDefaultList',N'inciART',N'list',N'inciART Default List',N'    <tr>
+        <td>{{laFecha}}</td>
+        <td>{{gestor}}</td>
+        <td>{{articulo}}</td>
+        <td>{{nArticulo}}</td>
+        <td>{{nIncidencia}}</td>
+        <td>{{nIncidencia}}</td>
+        <td>{{cliente}}</td>
+        <td>{{nCliente}}</td>
+        <td>{{LETRA}}</td>
+        <td>{{pedido}}</td>
+        <td>{{observaciones}}</td>
+    </tr>',NULL,NULL,N'<table id="tbInciCLI" class="tbStd">
+    <tr>
+        <th>Fecha</th>
+        <th>Gestor</th>
+        <th>Código</th>
+        <th>Artículo</th>
+        <th>Incidencia</th>
+        <th>Descripción</th>
+        <th>Cliente</th>
+        <th>Nombre</th>
+        <th>Serie</th>
+        <th>Pedido</th>
+        <th>Observaciones</th>
+    </tr>',N'</table>
+<span></span>',NULL,NULL,1,0,0,1,1)
  ,(N'inciCLIDefaultList',N'inciCLI',N'list',N'inciCLI Default List',N'<tr>
   <td>{{laFecha}}</td>
   <td>({{gestor}}) {{nGestor}}</td>
@@ -272,7 +281,8 @@ USING (VALUES
   		<th>Cliente</th>
   		<th>Pedido</th>
   		<th>Observaciones</th>
-	</tr>',N'</table>',NULL,NULL,1,0,1,1)
+	</tr>',N'</table>
+<span></span>',NULL,NULL,1,0,0,1,1)
  ,(N'PedidosPlantilla01',N'Pedido',N'list',N'Listado de Pedidos',N'<tr>
 <td>{{LETRA}}</td>
 <td onmouseover="verDetallePedidoCliente(''{{IDPEDIDO}}'',''{{EMPRESA}}'',''{{LETRA}}'',''{{numero}}'')"
@@ -285,7 +295,7 @@ USING (VALUES
 <th>Número</th>
 <th>Fecha</th>
 <th class=''taC''>Importe</th>
-</tr>',N'</table>',NULL,NULL,0,0,1,1)
+</tr>',N'</table>',NULL,NULL,0,0,0,1,1)
  ,(N'RecibosPendienteDefaultList',N'RecibosPendiente',N'list',N'RecibosPendiente Default List',N'<tr>
    	<td class="{{currentRole|Switch:[Cliente:inv]}}">{{nCliente}}</td>
     <td class="C">{{ORDEN}}</td>
@@ -320,7 +330,7 @@ USING (VALUES
   });
   ' + convert(nvarchar(max),NCHAR(36)) + N'("#recibosTdCantidadTotal").html(recibosCantidad);
   ' + convert(nvarchar(max),NCHAR(36)) + N'("#recibosTdImporteTotal").html(RecibosImporteTotal.toFixed(2)+" &euro;");
-</script>',NULL,NULL,1,0,1,1)
+</script>',NULL,NULL,1,0,0,1,1)
  ,(N'usuariosTV',N'sysUser',N'list',N'usuariosTV',N'<tr onclick="asignarGestor(''asignarGestor'',''{{Reference}}'',''{{Name}} {{SurName}}'',''{{UserName}}'')">
   <td>{{Name}}</td>
   <td>{{SurName}}</td>
@@ -332,8 +342,8 @@ USING (VALUES
   <th>Apellidos</th>
   <th>Usuario</th>
   <th>Código</th>
-</tr>',N'</table>',NULL,NULL,0,0,1,1)
-) AS Source ([TemplateId],[ObjectName],[TypeId],[Descrip],[Body],[ViewName],[WhereSentence],[Header],[Footer],[Empty],[ModuleClass],[IsDefault],[Offline],[Active],[OriginId])
+</tr>',N'</table>',NULL,NULL,0,0,0,1,1)
+) AS Source ([TemplateId],[ObjectName],[TypeId],[Descrip],[Body],[ViewName],[WhereSentence],[Header],[Footer],[Empty],[ModuleClass],[IsDefault],[Offline],[UserDefinedGroups],[Active],[OriginId])
 ON (Target.[TemplateId] = Source.[TemplateId])
 WHEN MATCHED AND (
 	NULLIF(Source.[ObjectName], Target.[ObjectName]) IS NOT NULL OR NULLIF(Target.[ObjectName], Source.[ObjectName]) IS NOT NULL OR 
@@ -348,6 +358,7 @@ WHEN MATCHED AND (
 	NULLIF(Source.[ModuleClass], Target.[ModuleClass]) IS NOT NULL OR NULLIF(Target.[ModuleClass], Source.[ModuleClass]) IS NOT NULL OR 
 	NULLIF(Source.[IsDefault], Target.[IsDefault]) IS NOT NULL OR NULLIF(Target.[IsDefault], Source.[IsDefault]) IS NOT NULL OR 
 	NULLIF(Source.[Offline], Target.[Offline]) IS NOT NULL OR NULLIF(Target.[Offline], Source.[Offline]) IS NOT NULL OR 
+	NULLIF(Source.[UserDefinedGroups], Target.[UserDefinedGroups]) IS NOT NULL OR NULLIF(Target.[UserDefinedGroups], Source.[UserDefinedGroups]) IS NOT NULL OR 
 	NULLIF(Source.[Active], Target.[Active]) IS NOT NULL OR NULLIF(Target.[Active], Source.[Active]) IS NOT NULL OR 
 	NULLIF(Source.[OriginId], Target.[OriginId]) IS NOT NULL OR NULLIF(Target.[OriginId], Source.[OriginId]) IS NOT NULL) THEN
  UPDATE SET
@@ -363,11 +374,12 @@ WHEN MATCHED AND (
   [ModuleClass] = Source.[ModuleClass], 
   [IsDefault] = Source.[IsDefault], 
   [Offline] = Source.[Offline], 
+  [UserDefinedGroups] = Source.[UserDefinedGroups], 
   [Active] = Source.[Active], 
   [OriginId] = Source.[OriginId]
 WHEN NOT MATCHED BY TARGET THEN
- INSERT([TemplateId],[ObjectName],[TypeId],[Descrip],[Body],[ViewName],[WhereSentence],[Header],[Footer],[Empty],[ModuleClass],[IsDefault],[Offline],[Active],[OriginId])
- VALUES(Source.[TemplateId],Source.[ObjectName],Source.[TypeId],Source.[Descrip],Source.[Body],Source.[ViewName],Source.[WhereSentence],Source.[Header],Source.[Footer],Source.[Empty],Source.[ModuleClass],Source.[IsDefault],Source.[Offline],Source.[Active],Source.[OriginId])
+ INSERT([TemplateId],[ObjectName],[TypeId],[Descrip],[Body],[ViewName],[WhereSentence],[Header],[Footer],[Empty],[ModuleClass],[IsDefault],[Offline],[UserDefinedGroups],[Active],[OriginId])
+ VALUES(Source.[TemplateId],Source.[ObjectName],Source.[TypeId],Source.[Descrip],Source.[Body],Source.[ViewName],Source.[WhereSentence],Source.[Header],Source.[Footer],Source.[Empty],Source.[ModuleClass],Source.[IsDefault],Source.[Offline],Source.[UserDefinedGroups],Source.[Active],Source.[OriginId])
 WHEN NOT MATCHED BY SOURCE AND TARGET.OriginId = 1 THEN 
  DELETE
 ;

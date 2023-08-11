@@ -12,6 +12,7 @@ USING (VALUES
 ',0,N'DataConnectionString',1)
  ,(N'MesesConsumo',N'select top 1 MesesConsumo from Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'NombreEmpresa',N'select top 1 NOMBRE_EMPRESA FROM Configuracion_SQL',0,N'DataConnectionString',1)
+ ,(N'TeleVentaVersion',N'SELECT SettingValue FROM Settings where SettingName=''AutoUpdateLastVersion''',0,N'ConfConnectionString',1)
  ,(N'TVSerie',N'select top 1 TVSerie from Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'usuariosTV',N'select RoleId, Email, UserName, Reference, Name, SurName from AspNetUsers for JSON AUTO',0,N'ConfConnectionString',1)
 ) AS Source ([VarName],[VarSQL],[Order],[ConnStringId],[OriginId])

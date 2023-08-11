@@ -7,6 +7,15 @@ declare namespace flexygo.nav {
     class ModuleFilterHistory {
         [moduleName: string]: FilterHistoryValue;
     }
+    class PresetHistoryValue {
+        presetId: string;
+        presetName: string;
+        presetText: string;
+        presetIcon: string;
+    }
+    class ModulePresetHistory {
+        [moduleName: string]: PresetHistoryValue;
+    }
     class FlexygoHistory {
         targetid: string;
         navigateFun?: string;
@@ -27,6 +36,9 @@ declare namespace flexygo.nav {
         icon?: string;
         description?: string;
         filtersValues?: ModuleFilterHistory;
+        presetsValues?: ModulePresetHistory;
+        successMessage?: string;
+        errorMessage?: string;
     }
     /**
      * Opens the default object page
@@ -41,7 +53,7 @@ declare namespace flexygo.nav {
      * @param {boolean} isClone -
      * @param {flexygo.nav.FlexygoHistory} previousHist - Previous page history
     */
-    function openPage(pagetypeid: string, objectname: string, objectwhere: string, defaults: any, targetid: string, excludeHist?: boolean, triggerElement?: JQuery, isClone?: boolean, previousHist?: flexygo.nav.FlexygoHistory): void;
+    function openPage(pagetypeid: string, objectname: string, objectwhere: string, defaults: any, targetid: string, excludeHist?: boolean, triggerElement?: JQuery, isClone?: boolean, previousHist?: flexygo.nav.FlexygoHistory, presets?: string): void;
     /**
     * Navigate to default page
     * @method goHome
@@ -61,7 +73,7 @@ declare namespace flexygo.nav {
      * @param {boolean} isClone -
     * @param {flexygo.nav.FlexygoHistory} previousHist - Previous page history
     */
-    function openPageName(pagename: string, objectname: string, objectwhere: string, defaults: string, targetid: string, excludeHist: boolean, triggerElement?: JQuery, isClone?: boolean, previousHist?: flexygo.nav.FlexygoHistory): void;
+    function openPageName(pagename: string, objectname: string, objectwhere: string, defaults: string, targetid: string, excludeHist: boolean, triggerElement?: JQuery, isClone?: boolean, previousHist?: flexygo.nav.FlexygoHistory, presets?: string): void;
     /**
     * Executes a process, opening its param page if required
     * @method execProcess
@@ -76,8 +88,8 @@ declare namespace flexygo.nav {
     * @param {function} callBack - callback to be called after execute
     * @param {boolean} showprogress - false to hide progress indicator
    */
-    function execProcess(processname: string, objectname: string, objectwhere: string, defaults: any, processparams: any, targetid: string, excludeHist: boolean, triggerElement: JQuery, callBack?: any, showProgress?: boolean): void;
-    function openPageReturn(pageConf: flexygo.api.pages.Page, objectname: string, objectwhere: string, defaults: any, pageContainer: JQuery, reportname: string, processname?: string, isClone?: boolean, reportwhere?: string): void;
+    function execProcess(processname: string, objectname: string, objectwhere: string, defaults: any, processparams: any, targetid: string, excludeHist: boolean, triggerElement: JQuery, callBack?: any, showProgress?: boolean, originalProcess?: flexygo.Process): void;
+    function openPageReturn(pageConf: flexygo.api.pages.Page, objectname: string, objectwhere: string, defaults: any, pageContainer: JQuery, reportname: string, processname?: string, isClone?: boolean, reportwhere?: string, presets?: string): void;
     /**
    * Opens the parameter process page
    * @method openProcessParams
@@ -143,7 +155,7 @@ declare namespace flexygo.nav {
      * @param {boolean} excludeHist - True to not store in history
      * @param {JQuery} triggerElement - Relative element to open the page
     */
-    function viewReport(reportname: string, reportwhere: string, objectname: string, objectwhere: string, defaults: any, params: any, targetid: string, excludeHist: boolean): void;
+    function viewReport(reportname: string, reportwhere: string, objectname: string, objectwhere: string, defaults: any, params: any, targetid: string, excludeHist: boolean, hasParams?: boolean): void;
     /**
      * Opens an URL
      * @method openURL
@@ -180,7 +192,7 @@ declare namespace flexygo.nav {
     * @param {string} filter - Object or collection filter
     * @param {string} targetid - Target to open the window
    */
-    function openPrintPage(objectName: string, objectWhere: string, templateId: string, targetid: string, filter?: string): void;
+    function openPrintPage(objectName: string, objectWhere: string, templateId: string, targetid: string, filter?: string, descrip?: boolean): void;
     /**
    * Gets help content
    * @method GetHelpContent
@@ -215,4 +227,38 @@ declare namespace flexygo.nav {
     function toggleNavBar(): void;
     function hideNavBar(): void;
     function toggleFlxnav(menuNav: JQuery): void;
+}
+declare namespace flexygo.nav.external {
+    /**
+    * Navigate to default page
+    * @method goHome
+    * @param {string} appname - External app project name
+    * @param {string} targetid - Target to open the window
+    */
+    function goHome(appname: string, targetid: string): void;
+    /**
+     * Opens the default object page
+     * @method openPage
+     * @param {string} appname - External app project name
+     * @param {string} pagetypeid - Type of the page
+     * @param {string} objectname - Name of the collection or entity
+     * @param {string} objectwhere - Where of the collection or entity
+     * @param {string} defaults - Defaults to be added to the page
+     * @param {string} targetid - Target to open the window
+     * @param {JQuery} triggerElement - Relative element to open the page
+    */
+    function openPage(appname: string, pagetypeid: string, objectname: string, objectwhere: string, defaults: any, targetid: string, triggerElement?: JQuery): void;
+    /**
+     * Opens a page by its name
+     * @method openPageName
+     * @param {string} pagename - Identifier of the page
+     * @param {string} appname - External app project name
+     * @param {string} objectname - Name of the collection or entity
+     * @param {string} objectwhere - Where of the collection or entity
+     * @param {string} defaults - Defaults to be added to the page
+     * @param {string} targetid - Target to open the window
+     * @param {JQuery} triggerElement - Relative element to open the page
+    */
+    function openPageName(appname: string, pagename: string, objectname: string, objectwhere: string, defaults: string, targetid: string, triggerElement?: JQuery): void;
+    function externalTarget(appname: string, objectPage: FlexygoHistory): void;
 }

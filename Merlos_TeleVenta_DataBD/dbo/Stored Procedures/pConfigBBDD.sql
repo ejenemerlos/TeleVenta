@@ -1,7 +1,7 @@
 ﻿CREATE PROCEDURE [dbo].[pConfigBBDD]   
 (
-	  @modo varchar(50)
-	, @accion varchar(50)	 = ''
+	  @modo		 varchar(50)
+	, @accion	 varchar(50) = ''
 	, @ejercicio varchar(50) = ''
 	, @gestion	 varchar(50) = ''
 	, @letra	 varchar(50) = ''
@@ -51,7 +51,7 @@ BEGIN TRY
 			END
 
 			--select 'Creando funciones...' as JAVASCRIPT
-			if @accion='Funciones'  or @accion='todo' BEGIN
+			if @accion='Funciones' or @accion='todo' BEGIN
 				EXECUTE @result = [dbo].[04_CrearFunciones]
 				if @result<>-1 BEGIN
 					print 'Error al generar las FUNCIONES SQL!' 
@@ -59,27 +59,18 @@ BEGIN TRY
 				END
 			END
 
-			--select 'Creando procedimientos...' as JAVASCRIPT
-			if @accion='SP'  or @accion='todo' BEGIN
-				EXECUTE @result = [dbo].[02_CrearStoreds]
-				if @result<>-1 BEGIN
-					print 'Error al generar los Procedimientos SQL!' 
-					return 0
-				END
-			END
-
 		RETURN -1
 	END
-
-	set @ejercicio = (select EJERCICIO from Configuracion_SQL)
-	set @gestion   = (select GESTION from Configuracion_SQL)
-	set @letra     = (select LETRA from Configuracion_SQL)
-	set @comun     = (select COMUN   from Configuracion_SQL)
-	set @campos    = (select CAMPOS  from Configuracion_SQL)
-	set @empresa   = (select EMPRESA  from Configuracion_SQL)
-	set @nEmpresa  = (select NOMBRE_EMPRESA  from Configuracion_SQL)
-	set @numEjer   = (select ANYS  from Configuracion_SQL)
 	
+	select	@ejercicio=EJERCICIO,
+			@gestion=GESTION,
+			@letra=LETRA,
+			@comun=COMUN,
+			@campos=CAMPOS,
+			@empresa=EMPRESA,
+			@nEmpresa=NOMBRE_EMPRESA,
+			@numEjer=ANYS
+	from Configuracion_SQL
 
 	set @respuesta = N'{"configBBDD":[{'
 					+	'"ejercicio":"'+ISNULL(@ejercicio,'')+'",'

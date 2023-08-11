@@ -17,7 +17,10 @@ declare namespace flexygo.obj {
         objectWhere: string;
         data: flexygo.api.BasicPropertyCollection;
         warningMessage: string;
+        successMessage: string;
         jsCode: string;
+        lastProcessName: string;
+        lastAfterProcessName: string;
         /**
         * Init entity and recive the values.
         * @method read
@@ -29,26 +32,26 @@ declare namespace flexygo.obj {
          * @method insert
          * @return {boolean} - Success or fail.
         */
-        insert(): boolean;
+        insert(lastProcessName?: string, lastAfterProcessName?: string): boolean;
         /**
          * Save changes in the database.
          * @method update
          * @return {boolean} - Success or fail.
         */
-        update(): boolean;
+        update(lastProcessName?: string, lastAfterProcessName?: string): boolean;
         /**
          * Delete current object.
          * @method delete
          * @return {boolean} - Success or fail.
         */
-        delete(): boolean;
+        delete(lastProcessName?: string, lastAfterProcessName?: string): boolean;
         /**
          * Get the processes related to current object.
          * @method processes
         * @param {string} options - leave empty for all processes. reports for only reports, processes for only processes and relations only for relations
          * @return {flexygo.api.entity.GetProcessesResponse} - Related processes
         */
-        processes(options?: string): flexygo.api.entity.GetProcessesResponse;
+        processes(options?: string, defaults?: string): flexygo.api.entity.GetProcessesResponse;
         /**
         * Get the system configuration related to current object.
         * @method getConfig

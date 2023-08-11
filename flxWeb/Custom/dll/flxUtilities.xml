@@ -6,6 +6,22 @@ flxUtilities
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
 <member name="T:FLEXYGO.Utilities.General.BaseCollection">
  <summary>
  Class BaseCollection.
@@ -140,7 +156,7 @@ flxUtilities
  Class URL.
  </summary>
 </member>
-<member name="M:FLEXYGO.Utilities.General.URL.GeObjecttUrlByType(FLEXYGO.Utilities.General.URL.PageType,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Utilities.General.URL.GeObjecttUrlByType(FLEXYGO.Utilities.General.URL.PageType,System.String,System.String,System.String,System.String,System.String)">
  <summary>
  Generate an object url by page type
  </summary>
@@ -172,6 +188,27 @@ flxUtilities
  <param name="replace">The replace string.</param>
  <param name="matchWholeWord">if set to <c>true</c> [match whole word].</param>
  <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Utilities.General.Util.LogError(System.String,System.String)">
+ <summary>
+ Add msg to windows event log.
+ </summary>
+ <param name="msg">The message </param>
+ <param name="source">Event log source</param>
+</member>
+<member name="M:FLEXYGO.Utilities.General.Util.LogWarning(System.String,System.String)">
+ <summary>
+ Add msg to windows event log.
+ </summary>
+ <param name="msg">The message </param>
+ <param name="source">Event log source</param>
+</member>
+<member name="M:FLEXYGO.Utilities.General.Util.LogInformation(System.String,System.String)">
+ <summary>
+ Add msg to windows event log.
+ </summary>
+ <param name="msg">The message </param>
+ <param name="source">Event log source</param>
 </member>
 <member name="M:FLEXYGO.Utilities.General.Util.LogEvent(System.String,System.Diagnostics.EventLogEntryType,System.String)">
  <summary>
@@ -307,6 +344,14 @@ flxUtilities
  <param name="ex">The ex.</param>
  <returns>System.String.</returns>
 </member>
+<member name="M:FLEXYGO.Utilities.General.Util.DataSetToExcel(System.String,System.Data.DataSet)">
+ <summary>
+ DataSetToExcel
+ </summary>
+ <param name="Path">Path Excel.</param>
+ <param name="ds">Excel DataSet.</param>
+ <returns>Boolean.</returns>
+</member>
 <member name="T:FLEXYGO.Utilities.General.StringEnum">
  <summary>
  Helper class for working with 'extended' enums using <see cref="T:FLEXYGO.Utilities.General.StringValueAttribute"/> attributes.
@@ -428,7 +473,7 @@ flxUtilities
  <param name="aDate">A date.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.ParseSQLValue(System.Object,System.String)">
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.ParseSQLValue(System.Object,System.String,System.Boolean)">
  <summary>
  Converts a .Net Object to a SQL object.
  </summary>
@@ -582,7 +627,7 @@ flxUtilities
  <param name="aEscapeQuotes">if set to <c>true</c> the escape quotes.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Type,System.Object,System.Byte,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Type,System.Object,System.Byte,System.Boolean,System.Boolean,System.String)">
  <summary>
  Formats the field depending on its TypeCode
  </summary>
@@ -592,7 +637,7 @@ flxUtilities
  <param name="aEscapeQuotes">if set to <c>true</c> the escape quotes.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Data.SqlDbType,System.Object,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Data.SqlDbType,System.Object,System.Boolean,System.Boolean,System.String)">
  <summary>
  Formats the field depending on its SqlDbType
  </summary>
@@ -601,7 +646,7 @@ flxUtilities
  <param name="aEscapeQuotes">if set to <c>true</c> the escape quotes.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Data.DbType,System.Object,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.Data.DbType,System.Object,System.Boolean,System.Boolean,System.String)">
  <summary>
  Formats the field.
  </summary>
@@ -611,7 +656,7 @@ flxUtilities
  <param name="Nvarchar">if set to <c>true</c> [nvarchar].</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.TypeCode,System.Object,System.Byte,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatField(System.TypeCode,System.Object,System.Byte,System.Boolean,System.Boolean,System.String)">
  <summary>
  Formats the field depending on its TypeCode
  </summary>
@@ -619,6 +664,14 @@ flxUtilities
  <param name="aValue">A value.</param>
  <param name="aDBType">Type of a database.</param>
  <param name="aEscapeQuotes">if set to <c>true</c> the escape quotes.</param>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.FormatFieldCrystal(System.TypeCode,System.Object)">
+ <summary>
+ Formats the field depending on its TypeCode
+ </summary>
+ <param name="aTypeCode">A type code.</param>
+ <param name="aValue">A value.</param>
  <returns>System.String.</returns>
 </member>
 <member name="M:FLEXYGO.Utilities.SQL.SQLUtilities.AddTableToWhere(System.String,FLEXYGO.Utilities.SQL.eWhereType)">
@@ -801,332 +854,10 @@ flxUtilities
  Security
  </summary>
 </member>
-<member name="F:FLEXYGO.Reporting.eReportModes.CRYSTAL">
- <summary>
- crystal
- </summary>
-</member>
-<member name="F:FLEXYGO.Reporting.eReportModes.WORD">
- <summary>
-  WORD
- </summary>
-</member>
-<member name="F:FLEXYGO.Reporting.eReportModes.EXCEL">
- <summary>
-  EXCEL
- </summary>
-</member>
-<member name="F:FLEXYGO.Reporting.eReportModes.PDF">
- <summary>
-  PDF
- </summary>
-</member>
-<member name="M:FLEXYGO.Reporting.CrystalReportModes.getReportMode(System.String)">
- <summary>
- Gets the report mode.
- </summary>
- <param name="mode">The mode.</param>
- <returns>eReportModes.</returns>
-</member>
-<member name="T:FLEXYGO.Reporting.CrystalReportDocument">
- <summary>
- Class CrystalReportDocument.
- </summary>
-</member>
-<member name="M:FLEXYGO.Reporting.CrystalReportDocument.#ctor(System.String,System.String,FLEXYGO.Reporting.eReportModes,System.Collections.Generic.List{FLEXYGO.Utilities.General.KeyValuePairs},System.String,System.String,System.String)">
- <summary>
- Constructor for new crystal Report document object.
- </summary>
- <param name="ReportPath">Relative file of rpt file.</param>
- <param name="ConnString">The database connection string  for the report.</param>
- <param name="ReportMode">Word,Excel or PDF one oh the <see cref="T:FLEXYGO.Reporting.eReportModes"/> modes</param>
- <param name="ReportParams">Key value pairs of report params</param>
- <param name="ObjectTableName">If report is filtered using object or collection, the ientity tablename.</param>
- <param name="ObjSQLFilter">If report is filtered using object or collection, the additional where (in sql format).</param>
- <param name="ReportSelectionFormula">Record selection formula in crystal reports format.</param>
- <exception cref="T:System.Exception">
- Error loading report  ex.Message
- or
- </exception>
-</member>
-<member name="M:FLEXYGO.Reporting.CrystalReportDocument.Dispose">
- <summary>
- Disposes this instance.
- </summary>
-</member>
-<member name="M:FLEXYGO.Reporting.CrystalReportDocument.ProcessStringParams(System.String@)">
- <summary>
- Transforms string sql parameters into  the sql sentence.
- </summary>
- <param name="SqlSentence">The SqlSentence sentence.</param>
-</member>
-<member name="T:FLEXYGO.ExcelExport">
- <summary>
- Class ExcelExport.
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.TEMP_EXCEL_FILE_NAME">
- <summary>
- The temporary excel file name
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.DEFAULT_TEMP_EXCEL_SHEET_NAME">
- <summary>
- The default temporary excel sheet name
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.DEFAULT_XSL_FILE">
- <summary>
- The default XSL file
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.DEFAULT_DISPLAY_COLUMN_HEADER">
- <summary>
- The default display column header
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.DEFAULT_EXCEL_INDEX">
- <summary>
- The default excel index
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.m_strTempFolderName">
- <summary>
- The temporary folder name
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.m_strTemplateFolderName">
- <summary>
- The template folder name
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.m_strXSLStyleSheetFolderName">
- <summary>
- The XSL style sheet folder name
- </summary>
-</member>
-<member name="F:FLEXYGO.ExcelExport.objExcel">
- <summary>
- The  excel object
- </summary>
-</member>
-<member name="P:FLEXYGO.ExcelExport.TempFolder">
- <summary>
- Gets or sets the temporary folder.
- </summary>
- <value>The temporary folder.</value>
-</member>
-<member name="P:FLEXYGO.ExcelExport.TemplateFolder">
- <summary>
- Gets or sets the template temporary folder.
- </summary>
- <value>The temporary folder.</value>
-</member>
-<member name="P:FLEXYGO.ExcelExport.XSLStyleSheetFolder">
- <summary>
- Gets or sets the XSL style sheet folder.
- </summary>
- <value>The XSL style sheet folder.</value>
-</member>
-<member name="M:FLEXYGO.ExcelExport.#ctor">
- <summary>
- Initializes a new instance of the <see cref="T:FLEXYGO.ExcelExport"/> class.
- </summary>
-</member>
-<member name="M:FLEXYGO.ExcelExport.CreateXSL(System.Data.DataTable,System.Boolean)">
- <summary>
- Creates the XSL.
- </summary>
- <param name="dtTable">The dt table.</param>
- <param name="blnDisplayColumnHeader">if set to <c>true</c> [BLN display column header].</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformDataTableToExcel(System.Data.DataTable,System.Boolean)">
- <summary>
- Transforms the data table to excel.
- </summary>
- <param name="dtTable">The dt table.</param>
- <param name="blnDisplayColumnHeader">if set to <c>true</c> [BLN display column header].</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformDataTableToExcel(System.Data.DataTable,System.Boolean,System.String)">
- <summary>
- Transforms the data table to excel.
- </summary>
- <param name="dtTable">The dt table.</param>
- <param name="blnDisplayColumnHeader">if set to <c>true</c> [BLN display column header].</param>
- <param name="FileName">File name without extension</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformDataTableToExcel(System.Data.DataTable,System.String)">
- <summary>
- Transforms the data table to excel.
- </summary>
- <param name="dtTable">The dt table.</param>
- <param name="strXSLFile">The string XSL file.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformDataTableToExcel(System.Data.DataTable)">
- <summary>
- Transforms the data table to excel.
- </summary>
- <param name="dtTable">The dt table.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformDataTableToExcel(System.Data.DataTable,System.Boolean,System.String,System.String)">
- <summary>
- Transforms the data table to excel.
- </summary>
- <param name="dtTable">The dt table.</param>
- <param name="blnDisplayColumnHeader">if set to <c>true</c> [BLN display column header].</param>
- <param name="strXSLFile">The string XSL file.</param>
- <param name="Filename">Filename without extension</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.TransformXMLDocumentToExcel(System.Xml.XmlDocument,System.String)">
- <summary>
- Transforms the XML document to excel.
- </summary>
- <param name="XMLDoc">The XML document.</param>
- <param name="strXSLFullFilePath">The string XSL full file path.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.AddExcelSheetToExcelTemplate(System.String,System.String)">
- <summary>
- Adds the excel sheet to excel template.
- </summary>
- <param name="strExcelFile">The string excel file.</param>
- <param name="strExcelTemplate">The string excel template.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.AddExcelSheetToExcelTemplate(System.String,System.String,System.String)">
- <summary>
- Adds the excel sheet to excel template.
- </summary>
- <param name="strExcelFile">The string excel file.</param>
- <param name="strExcelTemplate">The string excel template.</param>
- <param name="strExcelSheetName">Name of the string excel sheet.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.AddExcelSheetToExcelTemplate(System.String,System.String,System.Int32)">
- <summary>
- Adds the excel sheet to excel template.
- </summary>
- <param name="strExcelFile">The string excel file.</param>
- <param name="strExcelTemplate">The string excel template.</param>
- <param name="intIndexOfExcelSheetToBeCopied">The int index of excel sheet to be copied.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.AddExcelSheetToExcelTemplate(System.String,System.String,System.Int32,System.String)">
- <summary>
- Adds the excel sheet to excel template.
- </summary>
- <param name="strExcelFile">The string excel file.</param>
- <param name="strExcelTemplate">The string excel template.</param>
- <param name="intIndexOfExcelSheetToBeCopied">The int index of excel sheet to be copied.</param>
- <param name="strExcelSheetName">Name of the string excel sheet.</param>
- <returns>System.String.</returns>
-</member>
-<member name="M:FLEXYGO.ExcelExport.SendExcelToClient(System.String)">
- <summary>
- Sends the excel to client.
- </summary>
- <param name="strExcelFile">The string excel file.</param>
-</member>
-<member name="M:FLEXYGO.ExcelExport.CleanUpTemporaryFiles">
- <summary>
- Cleans up temporary files.
- </summary>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
-  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
-</summary>
-</member>
 <member name="T:FLEXYGO.Web.Utilities">
  <summary>
  Class Utilities.
  </summary>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.DisplayErrorMessage(System.Web.UI.Page,System.String,System.String)">
- <summary>
- Displays an error message on a given Page using flexygo.msg.error script.
- </summary>
- <param name="aPage">a page.</param>
- <param name="key">The key.</param>
- <param name="Message">The message.</param>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.DisplayWarningMessage(System.Web.UI.Page,System.String,System.String,System.String)">
- <summary>
- Displays a warning message on a given Page using flexygo.msg.error script.
- </summary>
- <param name="aPage">a page.</param>
- <param name="key">The key.</param>
- <param name="Message">The message.</param>
- <param name="Title">The title.</param>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.DisplayConfirmMessage(System.Web.UI.Page,System.String,System.String)">
- <summary>
- Displays a confirm message on a given page using flexygo.msg.confirm script.
- </summary>
- <param name="aPage">a page.</param>
- <param name="key">The key.</param>
- <param name="Message">The message.</param>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.RedirectToAfter(System.Web.UI.Page,System.String,System.String,System.String)">
- <summary>
- Redirects to a given path after n miliseconds.
- </summary>
- <param name="aPage">a page.</param>
- <param name="key">The key.</param>
- <param name="Path">The path.</param>
- <param name="MilliSec">The number of milliseconds</param>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.GetBrowserInfo">
- <summary>
- Determines Browser Name and version.
- </summary>
- <returns>String with browser name and version</returns>
-</member>
-<member name="T:FLEXYGO.Web.Utilities.BrowserInfo">
- <summary>
- Class BrowserInfo.
- </summary>
-</member>
-<member name="P:FLEXYGO.Web.Utilities.BrowserInfo.Name">
- <summary>
- Gets or sets the name.
- </summary>
- <value>The name.</value>
-</member>
-<member name="P:FLEXYGO.Web.Utilities.BrowserInfo.Version">
- <summary>
- Gets or sets the version.
- </summary>
- <value>The version.</value>
-</member>
-<member name="P:FLEXYGO.Web.Utilities.BrowserInfo.IP">
- <summary>
- Gets or sets the ip.
- </summary>
- <value>The ip.</value>
-</member>
-<member name="M:FLEXYGO.Web.Utilities.isMobile">
- <summary>
- Determines whether the call is made form a mobile environment.
- </summary>
- <returns><c>true</c> if this instance is mobile; otherwise, <c>false</c>.</returns>
 </member>
 <member name="M:FLEXYGO.Web.Utilities.GetEncodedQueryParams(System.String)">
  <summary>

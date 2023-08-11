@@ -36,9 +36,6 @@ var flexygo;
                         }
                     }
                 }
-                static get observedAttributes() {
-                    return ['modulename', 'mode'];
-                }
                 attributeChangedCallback(attrName, oldVal, newVal) {
                     if (!this.connected) {
                         return;
@@ -64,6 +61,7 @@ var flexygo;
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     if (this.moduleName) {
                         let params = {
                             ObjectName: me.attr('ObjectName'),
@@ -97,7 +95,7 @@ var flexygo;
                 render() {
                     $(this).html(this.data);
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 startLoading() {
@@ -111,6 +109,7 @@ var flexygo;
                     }
                 }
             }
+            FlxObjectRelationsElement.observedAttributes = ['modulename', 'mode'];
             wc.FlxObjectRelationsElement = FlxObjectRelationsElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

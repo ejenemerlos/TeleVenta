@@ -80,7 +80,7 @@ declare namespace flexygo.ui.wc {
         * @param {string} str
         * @return {string}
         */
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         /**
         * Start loading.
         * @method startLoading
@@ -91,5 +91,15 @@ declare namespace flexygo.ui.wc {
         * @method stopLoading
         */
         stopLoading(): void;
+        /**
+       * Set initial zoom to view all content of orgchart.
+       * @method setInitialZoom
+       */
+        setInitialZoom(): void;
+        /**
+       * Drag scroll.
+       * @method dragScroll
+       */
+        dragScroll(): void;
     }
 }

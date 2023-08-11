@@ -51,7 +51,7 @@ var flexygo;
                                 if ((jKey.startsWith("'") && jKey.endsWith("'")) || (jKey.startsWith('"') && jKey.endsWith('"'))) {
                                     fParams[j] = jKey.slice(1, -1);
                                 }
-                                else if ((json && (typeof json[jKey] != 'undefined') && (json[jKey] != null)) || (contextVars && (typeof contextVars[jKey] != 'undefined') && (contextVars[jKey] != null)) || jKey === 'json' || jKey === 'template' || jKey === 'contextfunctions') {
+                                else if ((json && (typeof json[jKey] != 'undefined') && (json[jKey] != null)) || (contextVars && (typeof contextVars[jKey] != 'undefined') && (contextVars[jKey] != null)) || jKey === 'json' || jKey === 'template' || jKey === 'contextfunctions' || jKey === 'this') {
                                     let value;
                                     if (json && (typeof json[jKey] != 'undefined') && (json[jKey] != null)) {
                                         value = flexygo.utils.parser.getValue(json[jKey]);
@@ -62,7 +62,7 @@ var flexygo;
                                     else if (jKey === 'template') {
                                         value = template;
                                     }
-                                    else if (jKey === 'contextfunctions') {
+                                    else if (jKey === 'contextfunctions' || jKey === 'this') {
                                         value = contextFunctions;
                                     }
                                     else {
@@ -90,12 +90,12 @@ var flexygo;
                             let jKeyUp;
                             let propFormat;
                             if (auxMarker.toLowerCase().startsWith("flxpath") && auxMarker.split('|').length >= 3) {
-                                jKeyUp = auxMarker.split('|').slice(0, 3).join('|');
-                                propFormat = auxMarker.split('|').slice(3).join('|');
+                                jKeyUp = auxMarker.split('|').slice(0, 3).join('|').trim();
+                                propFormat = auxMarker.split('|').slice(3).join('|').trim();
                             }
                             else {
-                                jKeyUp = auxMarker.split('|')[0];
-                                propFormat = auxMarker.split('|')[1];
+                                jKeyUp = auxMarker.split('|')[0].trim();
+                                propFormat = auxMarker.split('|')[1].trim();
                             }
                             jKey = jKeyUp.toLowerCase();
                             if ((json && typeof json[jKey] != 'undefined') || (contextVars && typeof contextVars[jKey] != 'undefined') || (contextFunctions && typeof contextFunctions[jKeyUp] != 'undefined') || (jKey == 'currentdatetime') || (jKey == 'currentdate')) {
@@ -117,10 +117,10 @@ var flexygo;
                                 let typeF = propFormat.toLowerCase();
                                 let strFormat = '';
                                 if (typeF.indexOf(':') != -1) {
-                                    typeF = propFormat.substring(propFormat.indexOf(':'), 0).toLowerCase();
-                                    strFormat = propFormat.substring(propFormat.indexOf(':') + 1);
+                                    typeF = propFormat.substring(propFormat.indexOf(':'), 0).toLowerCase().trim();
+                                    strFormat = propFormat.substring(propFormat.indexOf(':') + 1).trim();
                                 }
-                                if (typeF == 'date') {
+                                if (typeF == 'date') { /*{{datevalue|date:LLL}*/
                                     if (strFormat == '') {
                                         strFormat = defDateFormat;
                                     }
@@ -146,7 +146,7 @@ var flexygo;
                                         }
                                     }
                                 }
-                                else if (typeF == 'fromnow') {
+                                else if (typeF == 'fromnow') { /*{{datevalue|fromnow:LLL}*/
                                     if (rValue && rValue != '' && moment.utc(rValue).isValid()) {
                                         if (AddTimeZone) {
                                             rValue = moment(rValue).locale(flexygo.profiles.culture).fromNow();
@@ -156,7 +156,7 @@ var flexygo;
                                         }
                                     }
                                 }
-                                else if (typeF == 'tonow') {
+                                else if (typeF == 'tonow') { /*{{datevalue|tonow:LLL}*/
                                     if (rValue && rValue != '' && moment.utc(rValue).isValid()) {
                                         if (AddTimeZone) {
                                             rValue = moment(rValue).locale(flexygo.profiles.culture).toNow();
@@ -166,7 +166,7 @@ var flexygo;
                                         }
                                     }
                                 }
-                                else if (typeF == 'decimal') {
+                                else if (typeF == 'decimal') { /*{{value|decimal:3}*/
                                     if (rValue && rValue != '' && $.isNumeric(rValue)) {
                                         if (strFormat && strFormat != '') {
                                             if (flexygo.profiles.culture.toLowerCase() == 'es-es') {
@@ -186,12 +186,12 @@ var flexygo;
                                         }
                                     }
                                 }
-                                else if (typeF == 'url') {
+                                else if (typeF == 'url') { /*{{RelativeFilepath|url}*/
                                     if (rValue && rValue != '') {
                                         rValue = flexygo.utils.resolveUrl(rValue);
                                     }
                                 }
-                                else if (typeF == 'switch') {
+                                else if (typeF == 'switch') { /*{{value|switch:[true:icon-check,false:icon-noncheck,null:icon-cancel,else:]}*/
                                     let found = false;
                                     if (rValue == null) {
                                         rValue = 'null';
@@ -201,10 +201,16 @@ var flexygo;
                                     valuesTemp = valuesTemp.substring(1, valuesTemp.length - 1);
                                     valuesTemp = valuesTemp.split(',');
                                     let values = new Object();
+                                    var lastKey;
                                     for (let z = 0; z < valuesTemp.length; z++) {
-                                        let arrKey = valuesTemp[z].split(':')[0].toString().trim();
-                                        let arrValue = valuesTemp[z].split(':')[1].toString().trim();
-                                        values[arrKey] = arrValue;
+                                        if (valuesTemp[z].includes(':')) {
+                                            let arrKey = lastKey = valuesTemp[z].split(':')[0].toString().trim();
+                                            let arrValue = valuesTemp[z].split(':')[1].toString().trim();
+                                            values[arrKey] = arrValue;
+                                        }
+                                        else {
+                                            values[lastKey] = values[lastKey] + ',' + valuesTemp[z];
+                                        }
                                     }
                                     for (let switchvalue in values) {
                                         if (switchvalue.toLowerCase() == rValue.toString().toLowerCase()) {
@@ -220,7 +226,7 @@ var flexygo;
                                         }
                                     }
                                 }
-                                else if (typeF == 'string') {
+                                else if (typeF == 'string') { /*{{str|string:lower}*/ /*{{str|string:upper}*/ /*{{str|string:255}*/
                                     if (rValue && rValue != '') {
                                         rValue = flexygo.string.HTMLtoText(rValue);
                                         if (strFormat.toLowerCase() == 'lower') {
@@ -238,16 +244,16 @@ var flexygo;
                                         rValue = '';
                                     }
                                 }
-                                else if (typeF == 'isnull') {
+                                else if (typeF == 'isnull') { /*{{str|isnull:value}*/
                                     let arrFormat = strFormat.split(',');
                                     if (rValue == null || rValue === '' || rValue == 'null') {
                                         rValue = arrFormat[0];
                                     }
                                     else if (arrFormat.length > 1) {
-                                        rValue = arrFormat[1];
+                                        rValue = strFormat.substring(strFormat.indexOf(',') + 1);
                                     }
                                 }
-                                else if (typeF == 'bool') {
+                                else if (typeF == 'bool') { /*{{value|bool:'true value','false 0 empty or null value'}*/
                                     let arrFormat = strFormat.split(',');
                                     if (typeof rValue == 'undefined' || rValue == null || !rValue || rValue == '' || rValue == '0' || rValue.toString().toLowerCase() == 'false' || rValue.toString().toLowerCase() == 'null') {
                                         if (arrFormat.length > 1) {
@@ -274,6 +280,20 @@ var flexygo;
                                 }
                                 else if (typeF == 'sql') {
                                     rValue = escapeSqltring(rValue);
+                                }
+                                else if (typeF == 'qr') {
+                                    if (strFormat && !isNaN(strFormat) && !isNaN(parseFloat(strFormat))) {
+                                        rValue = flexygo.utils.generateQR(rValue, parseFloat(strFormat));
+                                    }
+                                    else {
+                                        rValue = flexygo.utils.generateQR(rValue);
+                                    }
+                                }
+                            }
+                            else if (jKey == 'toolbar') {
+                                let module = $(contextFunctions).closest('flx-module')[0];
+                                if (contextFunctions.TemplateToolbarCollection && contextFunctions.TemplateToolbarCollection[propFormat]) {
+                                    rValue = module.getTemplateToolbar(contextFunctions.TemplateToolbarCollection[propFormat].Toolbar, json._objectname, json._objectwhere);
                                 }
                             }
                             else {

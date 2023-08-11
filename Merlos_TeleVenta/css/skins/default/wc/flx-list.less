@@ -42,8 +42,14 @@ flx-filter .filter-control {
 }
 
 flx-filter .filter-check {
-    padding-top: 4px;
+    padding-top: 8px;
     vertical-align: middle;
+}
+
+flx-filter flx-multicombo, flx-filter flx-dbcombo {
+    ul {
+        z-index: 99;
+    }
 }
 
 flx-list table.flxRszTbl, .flx-list table {
@@ -59,6 +65,7 @@ flx-list table.flxRszTbl, .flx-list table {
     display: block;
     margin: 0px;
     display: table;
+    overflow:hidden;
    // padding-bottom: 10px;
 }
 
@@ -113,16 +120,16 @@ flx-list .flxRszTbl th i, .flx-list th i {
     cursor: pointer;
 }
 
-flx-list .btn-group {
+flx-list :not(div.btn-toolbar) .btn-group {
     white-space: nowrap;
 }
 
-flx-list .btn-group .btn {
+flx-list :not(div.btn-toolbar) .btn-group .btn {
     float: none;
     display: inline-block;
 }
 
-flx-list .btn-group button {
+flx-list :not(div.btn-toolbar) .btn-group button {
     min-width: 25px;
     height: 25px;
     padding: 5px;
@@ -131,16 +138,16 @@ flx-list .btn-group button {
     display: inline-block;
 }
 
-flx-list td .btn-group {
+flx-list td :not(div.btn-toolbar) .btn-group {
     margin-left: 5px;
 }
 
 
-flx-list td .btn-group button > i {
+flx-list td :not(div.btn-toolbar) .btn-group button > i {
     font-size: 14px;
 }
 
-flx-list td .btn-group button > span {
+flx-list td :not(div.btn-toolbar) .btn-group button > span {
     margin-right: 5px;
 }
 
@@ -195,7 +202,11 @@ flx-list .flxRszTbl tr.selected:nth-child(odd):not(.rowHeader), .flx-list tr.sel
 
 flx-list .flxRszTbl .rowInsert, .flx-list .rowInsert {
     background-color: lighten(dbColor(HeaderColor),10) !important;
-    color: white !important;
+    color: white;
+}
+
+flx-list .flxRszTbl .rowInsert .cronExpression, .flx-list .rowInsert .cronExpression {
+    color: #555;
 }
 
 
@@ -225,6 +236,11 @@ flx-module.empty flx-list .flxRszTbl tr td:last-child, .flx-module.empty flx-lis
 
 flx-module.empty flx-list table.flxRszTbl, .flx-module.empty flx-list table {
     border-spacing: 0 10px;
+}
+
+flx-list[mode="edit"] flx-image {
+    height: 30px;
+    color: #42526e;
 }
 
 @media (max-width: dbSize(medium)) {
@@ -288,4 +304,10 @@ flx-module.empty flx-list table.flxRszTbl, .flx-module.empty flx-list table {
         background-color: white;
         color: lighten(black,30);
     }
+}
+
+flx-list td > .tag.label-info {
+    border: 1px solid white;
+    border-radius: 0.4em;
+    line-height: 25px;
 }

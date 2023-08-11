@@ -1,6 +1,15 @@
 /**
  * @namespace flexygo.utils
  */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var flexygo;
 (function (flexygo) {
     var utils;
@@ -20,6 +29,13 @@ var flexygo;
             qrcode.makeCode(text);
         }
         utils.showQR = showQR;
+        function generateQR(text, size = 400) {
+            let elm = $('<div style="width:' + size + 'px;height:' + size + 'px;margin: 0 auto;" />');
+            let qrcode = new QRCode(elm[0], { width: size, height: size });
+            qrcode.makeCode(text);
+            return elm.find('canvas')[0].toDataURL();
+        }
+        utils.generateQR = generateQR;
         /**
         * Check if two objects are equivalent
         * @method ObjectsAreEquivalent
@@ -66,7 +82,12 @@ var flexygo;
                     if (typeof paramValue == 'undefined') {
                         paramValue = null;
                     }
-                    ret += JSON.stringify(paramValue).replace(/'/g, "\\'").replace(/"/g, "'");
+                    if (typeof paramValue == 'string' && !paramValue.startsWith("{") && !paramValue.endsWith("}")) {
+                        ret += "'" + paramValue.replace(/\\/g, "\\\\").replace(/'/g, "\\'").replace(/"/g, "&quot;").replace(/\r?\n|\r/g, " ") + "'";
+                    }
+                    else {
+                        ret += JSON.stringify(paramValue).replace(/'/g, "\\'").replace(/"/g, "'");
+                    }
                 }
             }
             if (nonEvaluateParams) {
@@ -199,6 +220,64 @@ var flexygo;
             return ($(window).width() <= flexygo.utils.size.s);
         }
         utils.isSizeSmartphone = isSizeSmartphone;
+        /**
+        * Says if the screen is in tactil mode.
+        * @method isTactilModeActive
+        * @return {boolean} True if tactil mode is active, false if not.
+        */
+        function isTactilModeActive() {
+            return (flexygo.storage.local.get("tactilMode") ? true : false);
+        }
+        utils.isTactilModeActive = isTactilModeActive;
+        /**
+        * Toggles tactil mode.
+        * @method toggleTactilMode
+        */
+        function toggleTactilMode() {
+            if (isTactilModeActive()) {
+                $('html').removeClass("tactilMode");
+                flexygo.storage.local.add("tactilMode", false);
+                flexygo.msg.success("Tactil Mode Desactivated");
+            }
+            else {
+                $('html').addClass("tactilMode");
+                flexygo.storage.local.add("tactilMode", true);
+                flexygo.msg.success("Tactil Mode Activated");
+            }
+            flexygo.storage.local.save();
+            window.location.reload();
+            $('flx-nav#mainMenu > ul > li[title="Tools"] > ul').slideToggle();
+        }
+        utils.toggleTactilMode = toggleTactilMode;
+        /**
+        * Says if the screen is in full screen mode.
+        * @method isFullScreenActive
+        * @return {boolean} True if full screen is active, false if not.
+        */
+        function isFullScreenActive() {
+            return window.innerHeight == screen.height;
+        }
+        utils.isFullScreenActive = isFullScreenActive;
+        /**
+        * Toggles full screen.
+        * @method toggleFullScreen
+        */
+        function toggleFullScreen() {
+            let oldIcon, newIcon;
+            if (isFullScreenActive()) {
+                document.exitFullscreen();
+                oldIcon = "icon-collapse";
+                newIcon = "icon-expand-4";
+            }
+            else {
+                $('html')[0].requestFullscreen();
+                oldIcon = "icon-expand-4";
+                newIcon = "icon-collapse";
+            }
+            $('#mainMenu li[title="Toggle full screen"] i').removeClass(oldIcon);
+            $('#mainMenu li[title="Toggle full screen"] i').addClass(newIcon);
+        }
+        utils.toggleFullScreen = toggleFullScreen;
         /**
         * Says if the agent's navigator comes from a mobile.
         * @method isAgentMobile
@@ -385,6 +464,15 @@ var flexygo;
         }
         utils.sleep = sleep;
         /**
+        * A promise to wait until the time ends
+        * @param {number} milliseconds - number of milliseconds to stop.
+        * @method asyncSleep
+        */
+        function asyncSleep(milliseconds) {
+            return new Promise(resolve => setTimeout(resolve, milliseconds));
+        }
+        utils.asyncSleep = asyncSleep;
+        /**
         * Check if text is base64
         * @param {string} str - text base64.
         * @method isBase64
@@ -461,6 +549,67 @@ var flexygo;
             }, interval);
         }
         utils.onlineCheck = onlineCheck;
+        function refreshModuleViewersInfo(module, listUsers) {
+            if ($('body').find(module).length > 0) {
+                let userName = flexygo.context.currentUserLogin;
+                let items = 0;
+                let viewerTemplate = $('<div class="tooltip flx-info-viewers" role="tooltip"><div class="tooltip-inner"></div></div>');
+                let tooltiptitle = $(`<div><small class="txt-muted txt-uppercase">${flexygo.localization.translate('flxmodule.currentlyViewing')}</small><br></div>`);
+                for (let us in listUsers) {
+                    if (us !== userName) {
+                        tooltiptitle.append('<small>' + listUsers[us] + '</small><br>');
+                        items++;
+                    }
+                }
+                $('body').find(module).find("#flx-viewer-module #flx-flip-back").html(items.toString());
+                $('body').find(module).find("#flx-viewer-module").attr("data-original-title", $(tooltiptitle)[0].outerHTML);
+                $('body').find(module).find("#flx-viewer-module").tooltip({ template: $(viewerTemplate)[0].outerHTML, html: true, title: $('body').find(module).find("#flx-viewer-module").attr("data-original-title"), placement: 'bottom' });
+                if (items > 0) {
+                    $('body').find(module).find("#flx-viewer-module").removeClass("hidden");
+                }
+                else {
+                    $('body').find(module).find("#flx-viewer-module").addClass("hidden");
+                }
+            }
+        }
+        utils.refreshModuleViewersInfo = refreshModuleViewersInfo;
+        ;
+        function checkObserverModule(module, interval, removeElement = false) {
+            let userId = flexygo.context.currentUserId;
+            setTimeout(function () {
+                if ($('body').find(module).length > 0) {
+                    if ($('body').find(module)[0].ModuleViewers) {
+                        var params = { UserId: null, ModuleName: null, ObjectName: null, ObjectWhere: null, RemoveElement: null };
+                        if ($('body').find(module).length == 0) {
+                            removeElement = true;
+                        }
+                        params.UserId = userId;
+                        params.ModuleName = module.moduleName;
+                        params.ObjectName = module.objectname;
+                        params.ObjectWhere = module.objectwhere;
+                        params.RemoveElement = removeElement;
+                        flexygo.ajax.post('~/api/Page', 'IsObserverModule', params, (response) => {
+                            if (response) {
+                                console.log(response);
+                                refreshModuleViewersInfo(module, response);
+                            }
+                        }, (err) => {
+                            console.log(err);
+                        }, () => {
+                            if ($('body').find(module).length > 0) {
+                                if ($('body').find(module)[0].ModuleViewers) {
+                                    flexygo.utils.checkObserverModule(module, interval);
+                                }
+                            }
+                        });
+                    }
+                }
+                //else {
+                //    flexygo.utils.checkObserverModule(module, interval, true);
+                //}
+            }, interval);
+        }
+        utils.checkObserverModule = checkObserverModule;
         /**
         * Evaluates JavaScript code and executes it.
         * @param {string} dynamicCode - Dynamic Code.
@@ -472,6 +621,36 @@ var flexygo;
             /*jQuery.globalEval*/
         }
         utils.execDynamicCode = execDynamicCode;
+        /**
+        * Evaluates JavaScript code and executes it.
+        * @param {string} dynamicCode - Dynamic Code.
+        * @method execAsyncDynamicCode
+        * @return {Promise<any>}
+        */
+        function execAsyncDynamicCode(dynamicCode) {
+            return __awaiter(this, void 0, void 0, function* () {
+                return yield eval(dynamicCode);
+            });
+        }
+        utils.execAsyncDynamicCode = execAsyncDynamicCode;
+        /**
+        * Evaluates JavaScript code and executes it.
+        * @param {string} dynamicCode - Dynamic Code.
+        * @method execAsyncDynamicCode
+        * @return {Promise<any>}
+        */
+        function execAsyncFunction(jsFunction, paramNames = [], paramValues = []) {
+            return __awaiter(this, void 0, void 0, function* () {
+                let res, context;
+                context = paramValues[paramNames.indexOf('triggerElement')];
+                context = context ? context[0] : window;
+                context.customFunction = new Function(...paramNames, jsFunction);
+                res = yield context.customFunction.call(context, ...paramValues);
+                context.customFunction = null;
+                return res;
+            });
+        }
+        utils.execAsyncFunction = execAsyncFunction;
         /**
         * Evaluates if variable has defined value.
         * @param {any} value - Variable to evaluate
@@ -516,7 +695,7 @@ var flexygo;
         * @return {boolean}
         */
         function isInMainContent(element, margin) {
-            const mainContent = $(element).closest('#mainContent')[0];
+            const mainContent = $(element).closest('main')[0];
             if (!margin) {
                 margin = 0;
             }
@@ -534,6 +713,21 @@ var flexygo;
                 || (bounds.top <= viewport.bottom && bounds.top >= viewport.top);
         }
         utils.isInMainContent = isInMainContent;
+        /**
+        * Check if is a valid JSON string.
+        * @method isEmptyAttribute
+        * @returns {boolean} True if it's a valid JSON string, false if it's not
+        */
+        function isJSON(string) {
+            try {
+                JSON.parse(string);
+            }
+            catch (e) {
+                return false;
+            }
+            return true;
+        }
+        utils.isJSON = isJSON;
         /**
         * Get file icon.
         * @method getFileIcon
@@ -669,6 +863,192 @@ var flexygo;
             }
         }
         utils.getFileIcon = getFileIcon;
+        utils.colors = [
+            "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177", "#0d5ac1",
+            "#f205e6", "#1c0365", "#14a9ad", "#4ca2f9", "#a4e43f", "#d298e2", "#6119d0",
+            "#d2737d", "#c0a43c", "#f2510e", "#651be6", "#79806e", "#61da5e", "#cd2f00",
+            "#9348af", "#01ac53", "#c5a4fb", "#996635", "#b11573", "#4bb473", "#75d89e",
+            "#2f3f94", "#2f7b99", "#da967d", "#34891f", "#b0d87b", "#ca4751", "#7e50a8",
+            "#c4d647", "#e0eeb8", "#11dec1", "#289812", "#566ca0", "#ffdbe1", "#2f1179",
+            "#935b6d", "#916988", "#513d98", "#aead3a", "#9e6d71", "#4b5bdc", "#0cd36d",
+            "#250662", "#cb5bea", "#228916", "#ac3e1b", "#df514a", "#539397", "#880977",
+            "#f697c1", "#ba96ce", "#679c9d", "#c6c42c", "#5d2c52", "#48b41b", "#e1cf3b",
+            "#5be4f0", "#57c4d8", "#a4d17a", "#225b8", "#be608b", "#96b00c", "#088baf",
+            "#f158bf", "#e145ba", "#ee91e3", "#05d371", "#5426e0", "#4834d0", "#802234",
+            "#6749e8", "#0971f0", "#8fb413", "#b2b4f0", "#c3c89d", "#c9a941", "#41d158",
+            "#fb21a3", "#51aed9", "#5bb32d", "#807fb", "#21538e", "#89d534", "#d36647",
+            "#7fb411", "#0023b8", "#3b8c2a", "#986b53", "#f50422", "#983f7a", "#ea24a3",
+            "#79352c", "#521250", "#c79ed2", "#d6dd92", "#e33e52", "#b2be57", "#fa06ec",
+            "#1bb699", "#6b2e5f", "#64820f", "#1c271", "#21538e", "#89d534", "#d36647",
+            "#7fb411", "#0023b8", "#3b8c2a", "#986b53", "#f50422", "#983f7a", "#ea24a3",
+            "#79352c", "#521250", "#c79ed2", "#d6dd92", "#e33e52", "#b2be57", "#fa06ec",
+            "#1bb699", "#6b2e5f", "#64820f", "#1c271", "#9cb64a", "#996c48", "#9ab9b7",
+            "#06e052", "#e3a481", "#0eb621", "#fc458e", "#b2db15", "#aa226d", "#792ed8",
+            "#73872a", "#520d3a", "#cefcb8", "#a5b3d9", "#7d1d85", "#c4fd57", "#f1ae16",
+            "#8fe22a", "#ef6e3c", "#243eeb", "#1dc18", "#dd93fd", "#3f8473", "#e7dbce",
+            "#421f79", "#7a3d93", "#635f6d", "#93f2d7", "#9b5c2a", "#15b9ee", "#0f5997",
+            "#409188", "#911e20", "#1350ce", "#10e5b1", "#fff4d7", "#cb2582", "#ce00be",
+            "#32d5d6", "#17232", "#608572", "#c79bc2", "#00f87c", "#77772a", "#6995ba",
+            "#fc6b57", "#f07815", "#8fd883", "#060e27", "#96e591", "#21d52e", "#d00043",
+            "#b47162", "#1ec227", "#4f0f6f", "#1d1d58", "#947002", "#bde052", "#e08c56",
+            "#28fcfd", "#bb09b", "#36486a", "#d02e29", "#1ae6db", "#3e464c", "#a84a8f",
+            "#911e7e", "#3f16d9", "#0f525f", "#ac7c0a", "#b4c086", "#c9d730", "#30cc49",
+            "#3d6751", "#fb4c03", "#640fc1", "#62c03e", "#d3493a", "#88aa0b", "#406df9",
+            "#615af0", "#4be47", "#2a3434", "#4a543f", "#79bca0", "#a8b8d4", "#00efd4",
+            "#7ad236", "#7260d8", "#1deaa7", "#06f43a", "#823c59", "#e3d94c", "#dc1c06",
+            "#f53b2a", "#b46238", "#2dfff6", "#a82b89", "#1a8011", "#436a9f", "#1a806a",
+            "#4cf09d", "#c188a2", "#67eb4b", "#b308d3", "#fc7e41", "#af3101", "#ff065",
+            "#71b1f4", "#a2f8a5", "#e23dd0", "#d3486d", "#00f7f9", "#474893", "#3cec35",
+            "#1c65cb", "#5d1d0c", "#2d7d2a", "#ff3420", "#5cdd87", "#a259a4", "#e4ac44",
+            "#1bede6", "#8798a4", "#d7790f", "#b2c24f", "#de73c2", "#d70a9c", "#25b67",
+            "#88e9b8", "#c2b0e2", "#86e98f", "#ae90e2", "#1a806b", "#436a9e", "#0ec0ff",
+            "#f812b3", "#b17fc9", "#8d6c2f", "#d3277a", "#2ca1ae", "#9685eb", "#8a96c6",
+            "#dba2e6", "#76fc1b", "#608fa4", "#20f6ba", "#07d7f6", "#dce77a", "#77ecca"
+        ];
+        function hexToRgbA(hex, opacity) {
+            var c;
+            if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+                c = hex.substring(1).split('');
+                if (c.length == 3) {
+                    c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                }
+                c = '0x' + c.join('');
+                return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+            }
+            throw new Error('Bad Hex');
+        }
+        utils.hexToRgbA = hexToRgbA;
+        /**
+        * Scrolls to the desired height
+        * @method scrollTo
+        * @param {string} scrollHeight Height where us desired to scroll
+        */
+        function scrollTo(scrollHeight) {
+            if (flexygo.utils.isSizeMobile()) {
+                $(window).scrollTop(scrollHeight);
+            }
+            else {
+                var mainContent = document.getElementById('mainContent');
+                mainContent.scrollTop = scrollHeight;
+            }
+        }
+        utils.scrollTo = scrollTo;
+        /**
+        * Launch dark/light mode effect.
+        * @method isEmptyAttribute
+        * @param {boolean} dark Attribute Name.
+        */
+        function skinModeEffect(dark) {
+            let txt = 'skin.lightmode';
+            let iconMode = 'fa fa-sun-o';
+            if (dark) {
+                txt = 'skin.darkmode';
+                iconMode = 'fa fa-moon-o';
+            }
+            $("body").click();
+            let anim = '';
+            anim += `<div id="SkinModeBackground" class="${(dark ? 'dark' : '')}">`;
+            anim += `<i id="SkinModeIcon" class="${iconMode}"></i>`;
+            anim += `<div id="SkinModeText" style="width: 500px;">${flexygo.localization.translate(txt)}</div>`;
+            anim += '<div class="loader"><div class="loader-wrapper"><span></span><span></span><span></span><span></span><span></span></div></div>';
+            anim += '</div>';
+            $('body').append(anim);
+            $('#SkinModeText').textillate({
+                autoStart: false,
+                in: {
+                    delayScale: 2, delay: 40, effect: 'flipInY'
+                }
+            });
+            $('#SkinModeBackground').show('fold', null, 500, function () {
+                $('#SkinModeText').textillate('start');
+                $('#SkinModeIcon').show('fade', null, 1500);
+            });
+        }
+        utils.skinModeEffect = skinModeEffect;
+        function getErrorMessage(err) {
+            let text = '';
+            if (err.error && err.error.Message) {
+                text = err.error.Message;
+            }
+            else if (err.sql) {
+                text = err.message;
+            }
+            else if (err.message) {
+                text = err.message;
+            }
+            else if (err.Message) {
+                text = err.Message;
+            }
+            else if (typeof err == 'string') {
+                text = err;
+            }
+            else {
+                text = JSON.stringify(err);
+            }
+            return text;
+        }
+        utils.getErrorMessage = getErrorMessage;
+        /**
+        * Generate random color based on a text seed.
+        * @method randomColor
+        * @param {text} seed Any string to get always same color.
+        * @return {string} Color in
+        */
+        function randomColor(seed) {
+            let value = seed;
+            while (!$.isNumeric(value) || (this.colors.length <= value)) {
+                let currentIndex = 0;
+                value = value.toString().split('');
+                for (let i = 0; i < value.length; i++) {
+                    if ($.isNumeric(value[i])) {
+                        currentIndex += parseInt(value[i]);
+                    }
+                    else {
+                        currentIndex += value[i].charCodeAt();
+                    }
+                }
+                value = currentIndex;
+            }
+            return this.colors[value];
+        }
+        utils.randomColor = randomColor;
+        utils.colors = ['#EF9A9A',
+            '#F48FB1',
+            '#CE93D9',
+            '#694c9f',
+            '#4e5a9a',
+            '#32638a',
+            '#244b5d',
+            '#4a9ba7',
+            '#30635e',
+            '#2ea879',
+            '#679238',
+            '#a5b22e',
+            '#59819d',
+            '#bca047',
+            '#FFCC80',
+            '#FFAB91',
+            '#BDAAA4',
+            '#B1BEC5',
+            '#D32E2E',
+            '#C2175B',
+            '#7B1FA2',
+            '#5D35B1',
+            '#3948AB',
+            '#1D88E5',
+            '#009BE5',
+            '#00ACC1',
+            '#00897B',
+            '#43A046',
+            '#7CB342',
+            '#C0CA33',
+            '#FED935',
+            '#FFB300',
+            '#FB8C00',
+            '#F4501D',
+            '#6D4C41',
+            '#757575',
+            '#546E7A'];
     })(utils = flexygo.utils || (flexygo.utils = {}));
 })(flexygo || (flexygo = {}));
 (function (flexygo) {
@@ -759,7 +1139,7 @@ var flexygo;
     $.fn.data = function (key, value) {
         var getController = false;
         if (key && key === "controller") {
-            if (arguments && arguments.length && arguments.length === 1) {
+            if (arguments && arguments.length && arguments.length === 1) { //
                 getController = true;
             }
         }
@@ -780,8 +1160,37 @@ var flexygo;
         return res;
     };
 })(jQuery);
+function printText(text) {
+    // Create a random name for the print frame.
+    var strFrameName = ("printer-" + (new Date()).getTime());
+    // Create an iFrame with the new name.
+    var jFrame = $("<iframe name='" + strFrameName + "'>");
+    jFrame.css("width", "1000px")
+        .css("z-index", "100")
+        .css("height", "800px")
+        .css("position", "absolute")
+        .css("left", "-9999px")
+        .appendTo($("body:first"));
+    // Get a FRAMES reference to the new frame.
+    var objFrame = window.frames[strFrameName];
+    // Get a reference to the DOM in the new frame.
+    var objDoc = objFrame.document;
+    // Write the HTML for the document. In this, we will
+    // write out the HTML of the current element.
+    objDoc.open();
+    objDoc.write(text);
+    objDoc.close();
+    // Print the document.
+    objFrame.focus();
+    setTimeout(function () { objFrame.print(); }, 1000);
+    // Have the frame remove itself in about a minute so that
+    // we don't build up too many of these frames.
+    setTimeout(function () {
+        jFrame.remove();
+    }, (60 * 1000));
+}
 // Create a jquery plugin that prints the given element.
-jQuery.fn.print = function () {
+jQuery.fn.print = function (title) {
     // NOTE: We are trimming the jQuery collection down to the
     // first element in the collection.
     if (this.size() > 1) {
@@ -799,11 +1208,15 @@ jQuery.fn.print = function () {
     // Create an iFrame with the new name.
     var jFrame = $("<iframe name='" + strFrameName + "'>");
     jFrame
+        //.css("width", width + "px")
+        //1000 so grid wont be displayed as lists
         .css("width", "1000px")
         .css("z-index", "100")
         .css("height", "800px")
         .css("position", "absolute")
         .css("left", "-9999px")
+        // .css("top", "0px")
+        // .css("left", "0px")
         .appendTo($("body:first"));
     // Get a FRAMES reference to the new frame.
     var objFrame = window.frames[strFrameName];
@@ -821,7 +1234,10 @@ jQuery.fn.print = function () {
     objDoc.write("<html>");
     objDoc.write("<head>");
     objDoc.write("<title>");
-    objDoc.write(document.title);
+    if (title)
+        objDoc.write(title);
+    else
+        objDoc.write(document.title);
     objDoc.write("</title>");
     objDoc.write(jStyleDiv.html());
     //objDoc.write(SrcDiv.html());
@@ -831,6 +1247,25 @@ jQuery.fn.print = function () {
     objDoc.write("</body>");
     objDoc.write("</html>");
     objDoc.close();
+    //Establecer valores para los edit
+    $(objDoc).find('flx-edit flx-text,flx-check,flx-dbcombo,flx-combo,flx-switch').each(function () {
+        switch ($(this).prop("tagName").toLowerCase()) {
+            case 'flx-dbcombo':
+                $(this).find('input').attr('value', $(this).attr('text'));
+                break;
+            case 'flx-combo':
+                $(this).find('select option[value="' + $(this).attr('value') + '"]').attr('selected', 'selected');
+                break;
+            case 'flx-check':
+            case 'flx-switch':
+                if ($(this).attr('value') == "true") {
+                    $(this).find('input').attr('checked', 'checked');
+                }
+                break;
+            default:
+                $(this).find('input').attr('value', $(this).attr('value'));
+        }
+    });
     // Print the document.
     objFrame.focus();
     //gridstack CssRules
@@ -930,7 +1365,7 @@ $(function () {
                 listMod.additionalWhere = null;
             }
             else {
-                listMod.additionalWhere = 'Mails.FolderId = \'' + folderId + '\'';
+                listMod.additionalWhere = 'Mails_Objects.FolderId = \'' + folderId + '\'';
             }
             //Refresh list module
             listMod.refresh();
@@ -949,6 +1384,9 @@ $(function () {
             itm.attr('objectName', objectName);
             itm.attr('objectId', objectId);
             let cont = flexygo.targets.createContainer({ targetid: 'popup1280x1024' }, false, $(this));
+            if (!cont) {
+                return;
+            }
             cont.addClass('mailViewer');
             cont.html(itm);
             $(mail).parent().addClass('seen');
@@ -1056,9 +1494,11 @@ $(function () {
                 //Remove and add individuality active class because use a standard template (.box) each object
                 if (jObject.hasClass('active')) {
                     jObject.removeClass('active');
-                    jButton.closest('[pagename="offline_App_View"]').find(Object.keys(selectors).join(", ")).attr({ objectwhere: '1=0', 'related-objectname': null }).each((index, elem) => { elem.refresh(); });
+                    //jButton.closest('[pagename="offline_App_View"]').find(Object.keys(selectors).join(", ")).attr({ objectwhere: '1=0', 'related-objectname': null }).each((index: number, elem: flexygo.ui.wc.FlxListElement): void => { elem.refresh(); });
+                    (jButton.closest('[pagename="offline_App_View"]').find('[modulename="sysofflineTabs"]').get(0)).refresh();
                 }
                 else {
+                    jButton.closest('[pagename="offline_App_View"]');
                     jObject.addClass('active');
                     jObject.closest('flx-list').find(`.offline-container > div > [objectname].active:not([objectname="${objectName}"])`).removeClass('active').find('.buttons > .active').removeClass('active');
                     jButton.closest('[pagename="offline_App_View"]').find(Object.keys(selectors).join(", ")).attr({ 'related-objectname': objectName }).each((index, elem) => { $(elem).attr({ objectwhere: selectors[`flx-list#${elem.id}`] }); });

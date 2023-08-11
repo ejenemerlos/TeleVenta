@@ -35,7 +35,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     this.type = element.attr('type') || 'text';
                     element.removeAttr('type');
                     let propName = element.attr('property');
@@ -206,13 +205,7 @@ var flexygo;
                             this.setValue(Value);
                         }
                     }
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'disabled', 'requiredmessage', 'mask', 'style', 'class', 'decimalplaces', 'minvalue', 'maxvalue', 'maxvaluemessage', 'minvaluemessage', 'regexp', 'regexptext', 'placeholder', 'iconclass', 'helpid', 'allownewfunction', 'allownewobject'];
+                    this.connected = true;
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -399,9 +392,12 @@ var flexygo;
                     let me = $(this);
                     //let iconsRight = this.getIconButtons();
                     let control = $('<div>');
-                    if (this.type == 'date') {
-                        this.inputmin = $('<input type="text" onfocus="(this.type=\'date\')" class="form-control" />');
-                        this.inputmax = $('<input type="text" onfocus="(this.type=\'date\')" class="form-control" />');
+                    if (this.type == 'date' || this.type == 'datetime-local') {
+                        if (this.type === 'datetime-local' && me.closest('flx-module')[0] && me.closest('flx-module')[0].getAttribute('moduleName') === 'LoginsAndLocations') {
+                            control = $('<div style="width: 300px;">');
+                        }
+                        this.inputmin = $('<input type="text" onfocus="(this.type=\'' + this.type + '\')" class="form-control" />');
+                        this.inputmax = $('<input type="text" onfocus="(this.type=\'' + this.type + '\')" class="form-control" />');
                     }
                     else {
                         this.inputmin = $('<input type="' + this.type + '" class="form-control" />');
@@ -409,6 +405,10 @@ var flexygo;
                     }
                     control.append(this.inputmin);
                     control.append(this.inputmax);
+                    control.find('input').on('change', ev => {
+                        let input = ev.currentTarget;
+                        input.setAttribute('value', input.value);
+                    });
                     //if (iconsRight) {
                     //    control.append(iconsRight)
                     //    control.addClass("input-group");
@@ -510,7 +510,20 @@ var flexygo;
                     if (this.options && this.options.Mask) {
                         input.mask(this.options.Mask);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    let filter = null;
+                    let hasFilterDependencyProperty = false;
+                    if (me.closest('flx-filter').length > 0) {
+                        filter = me.closest('flx-filter')[0];
+                        let filterProperties = filter.settings[filter.active].Properties;
+                        for (let propertyKey in filterProperties) {
+                            if (filterProperties[propertyKey].PropertyName == me.attr("property") && (filterProperties[propertyKey].DependingFilterProperties).length > 0) {
+                                hasFilterDependencyProperty = true;
+                                break;
+                            }
+                        }
+                    }
+                    if ((this.options && this.options.CauseRefresh) || hasFilterDependencyProperty || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -519,7 +532,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.DecimalPlaces && this.options.DecimalPlaces.toString() != '' && this.options.DecimalPlaces > 0) {
@@ -561,9 +574,11 @@ var flexygo;
                         this.inputmin.val('');
                     }
                     else if (this.type == 'date') {
+                        this.inputmin.attr('type', this.type);
                         this.inputmin.val(moment(valorMin).format('YYYY-MM-DD'));
                     }
                     else if (this.type == 'datetime-local') {
+                        this.inputmin.attr('type', this.type);
                         this.inputmin.val(moment(valorMin).format('YYYY-MM-DD hh:mm'));
                     }
                     else {
@@ -573,9 +588,11 @@ var flexygo;
                         this.inputmax.val('');
                     }
                     else if (this.type == 'date') {
+                        this.inputmax.attr('type', this.type);
                         this.inputmax.val(moment(valorMax).format('YYYY-MM-DD'));
                     }
                     else if (this.type == 'datetime-local') {
+                        this.inputmax.attr('type', this.type);
                         this.inputmax.val(moment(valorMax).format('YYYY-MM-DD hh:mm'));
                     }
                     else {
@@ -622,6 +639,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxRangeElement.observedAttributes = ['type', 'property', 'required', 'disabled', 'requiredmessage', 'mask', 'style', 'class', 'decimalplaces', 'minvalue', 'maxvalue', 'maxvaluemessage', 'minvaluemessage', 'regexp', 'regexptext', 'placeholder', 'iconclass', 'helpid', 'allownewfunction', 'allownewobject'];
             wc.FlxRangeElement = FlxRangeElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

@@ -31,7 +31,6 @@ var flexygo;
                */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     var propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
                         var parentCtl = element.closest('flx-edit,flx-list,flx-propertymanager,flx-view,flx-filter');
@@ -108,13 +107,7 @@ var flexygo;
                         this.options.Hide = Hide == 'true';
                     }
                     this.init();
-                }
-                /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['property', 'label', 'style', 'type', 'class', 'iconclass', 'hide'];
+                    this.connected = true;
                 }
                 /**
                 * Fires when the attribute value of the element is changed.
@@ -240,6 +233,11 @@ var flexygo;
                 triggerDependencies() {
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxSeparatorElement.observedAttributes = ['property', 'label', 'style', 'type', 'class', 'iconclass', 'hide'];
             wc.FlxSeparatorElement = FlxSeparatorElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

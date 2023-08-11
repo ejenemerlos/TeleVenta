@@ -8,6 +8,7 @@ declare namespace flexygo.utils {
      * @param {string} text - The text to include in QR, by default current location page.
      */
     function showQR(text: string): void;
+    function generateQR(text: string, size?: number): string;
     /**
     * Check if two objects are equivalent
     * @method ObjectsAreEquivalent
@@ -64,6 +65,28 @@ declare namespace flexygo.utils {
        * @return {boolean} True if screen is smartphone size, false if not.
        */
     function isSizeSmartphone(): boolean;
+    /**
+    * Says if the screen is in tactil mode.
+    * @method isTactilModeActive
+    * @return {boolean} True if tactil mode is active, false if not.
+    */
+    function isTactilModeActive(): boolean;
+    /**
+    * Toggles tactil mode.
+    * @method toggleTactilMode
+    */
+    function toggleTactilMode(): void;
+    /**
+    * Says if the screen is in full screen mode.
+    * @method isFullScreenActive
+    * @return {boolean} True if full screen is active, false if not.
+    */
+    function isFullScreenActive(): boolean;
+    /**
+    * Toggles full screen.
+    * @method toggleFullScreen
+    */
+    function toggleFullScreen(): void;
     /**
     * Says if the agent's navigator comes from a mobile.
     * @method isAgentMobile
@@ -140,6 +163,12 @@ declare namespace flexygo.utils {
     */
     function sleep(milliseconds: any): void;
     /**
+    * A promise to wait until the time ends
+    * @param {number} milliseconds - number of milliseconds to stop.
+    * @method asyncSleep
+    */
+    function asyncSleep(milliseconds: any): Promise<any>;
+    /**
     * Check if text is base64
     * @param {string} str - text base64.
     * @method isBase64
@@ -154,6 +183,8 @@ declare namespace flexygo.utils {
     */
     function areParents(objectname1: string, objectname2: string): boolean;
     function onlineCheck(interval: any): void;
+    function refreshModuleViewersInfo(module: flexygo.ui.wc.FlxModuleElement, listUsers: any): void;
+    function checkObserverModule(module: flexygo.ui.wc.FlxModuleElement, interval: any, removeElement?: boolean): void;
     /**
     * Evaluates JavaScript code and executes it.
     * @param {string} dynamicCode - Dynamic Code.
@@ -161,6 +192,20 @@ declare namespace flexygo.utils {
     * @return {any}
     */
     function execDynamicCode(dynamicCode: string): any;
+    /**
+    * Evaluates JavaScript code and executes it.
+    * @param {string} dynamicCode - Dynamic Code.
+    * @method execAsyncDynamicCode
+    * @return {Promise<any>}
+    */
+    function execAsyncDynamicCode(dynamicCode: string): Promise<any>;
+    /**
+    * Evaluates JavaScript code and executes it.
+    * @param {string} dynamicCode - Dynamic Code.
+    * @method execAsyncDynamicCode
+    * @return {Promise<any>}
+    */
+    function execAsyncFunction(jsFunction: string, paramNames?: string[], paramValues?: any[]): Promise<any>;
     /**
     * Evaluates if variable has defined value.
     * @param {any} value - Variable to evaluate
@@ -183,10 +228,39 @@ declare namespace flexygo.utils {
     */
     function isInMainContent(element: HTMLElement, margin?: number): boolean;
     /**
+    * Check if is a valid JSON string.
+    * @method isEmptyAttribute
+    * @returns {boolean} True if it's a valid JSON string, false if it's not
+    */
+    function isJSON(string: string): boolean;
+    /**
     * Get file icon.
     * @method getFileIcon
     */
     function getFileIcon(extension: string): string;
+    var colors: string[];
+    function hexToRgbA(hex: any, opacity: any): string;
+    /**
+    * Scrolls to the desired height
+    * @method scrollTo
+    * @param {string} scrollHeight Height where us desired to scroll
+    */
+    function scrollTo(scrollHeight: number): any;
+    /**
+    * Launch dark/light mode effect.
+    * @method isEmptyAttribute
+    * @param {boolean} dark Attribute Name.
+    */
+    function skinModeEffect(dark: boolean): any;
+    function getErrorMessage(err: any): string;
+    /**
+    * Generate random color based on a text seed.
+    * @method randomColor
+    * @param {text} seed Any string to get always same color.
+    * @return {string} Color in
+    */
+    function randomColor(seed: string): any;
+    var colors: Array<string>;
 }
 declare namespace flexygo.utils.querystring {
     function getParamValue(url: string, paramName: string): string;
@@ -198,6 +272,7 @@ declare namespace flexygo.utils.querystring {
         value: string;
     }];
 }
+declare function printText(text: any): void;
 declare namespace flexygo.mail {
     /**
     * Filters mail list Module with folder Name.

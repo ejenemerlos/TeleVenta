@@ -60,6 +60,42 @@ var flexygo;
         }
         api.BasicPropertyLoweredKey = BasicPropertyLoweredKey;
         /**
+       * api for Dependency properties
+       * @class DependencyProperties
+       * @constructor
+       * @return {DependencyProperties} .
+       */
+        class DependencyProperties {
+        }
+        api.DependencyProperties = DependencyProperties;
+        /**
+        * api for Dependency properties
+        * @class DependencyPropertiesLoweredKey
+        * @constructor
+        * @return {DependencyPropertiesLoweredKey} .
+        */
+        class DependencyPropertiesLoweredKey {
+        }
+        api.DependencyPropertiesLoweredKey = DependencyPropertiesLoweredKey;
+        /**
+       * api for filter Dependency properties
+       * @class DependencyFilterProperties
+       * @constructor
+       * @return {DependencyFilterProperties} .
+       */
+        class DependencyFilterProperties {
+        }
+        api.DependencyFilterProperties = DependencyFilterProperties;
+        /**
+        * api for filter Dependency properties
+        * @class DependencyFilterPropertiesLoweredKey
+        * @constructor
+        * @return {DependencyFilterPropertiesLoweredKey} .
+        */
+        class DependencyFilterPropertiesLoweredKey {
+        }
+        api.DependencyFilterPropertiesLoweredKey = DependencyFilterPropertiesLoweredKey;
+        /**
         * api for ObjectProperty
         * @class ObjectProperty
         * @constructor
@@ -95,6 +131,9 @@ var flexygo;
         class SearchProperty {
         }
         api.SearchProperty = SearchProperty;
+        class SearchPropertyLoweredKey {
+        }
+        api.SearchPropertyLoweredKey = SearchPropertyLoweredKey;
         /**
         * api for SearchSettings
         * @class SearchSettings
@@ -187,6 +226,9 @@ var flexygo;
         * @return {ToolbarButton} .
         */
         class ToolbarButton {
+            constructor() {
+                this.BagOnly = false;
+            }
         }
         api.ToolbarButton = ToolbarButton;
         /**
@@ -280,6 +322,24 @@ var flexygo;
             class GetHTMLResponse {
             }
             chart.GetHTMLResponse = GetHTMLResponse;
+            /**
+        * api for GetSettingsParameters
+        * @class GetSettingsParameters
+        * @constructor
+        * @return {GetSettingsParameters} .
+        */
+            class GetSettingsParameters {
+            }
+            chart.GetSettingsParameters = GetSettingsParameters;
+            /**
+        * api for GetSettingsResponse
+        * @class GetSettingsResponse
+        * @constructor
+        * @return {GetSettingsResponse} .
+        */
+            class GetSettingsResponse {
+            }
+            chart.GetSettingsResponse = GetSettingsResponse;
         })(chart = api.chart || (api.chart = {}));
     })(api = flexygo.api || (flexygo.api = {}));
 })(flexygo || (flexygo = {}));
@@ -350,6 +410,15 @@ var flexygo;
             }
             kanban.getKanbanParams = getKanbanParams;
             /**
+            * api for getKanbanColumnParams
+            * @class getKanbanParams
+            * @constructor
+            * @return {getKanbanParams} .
+            */
+            class getKanbanColumnParams {
+            }
+            kanban.getKanbanColumnParams = getKanbanColumnParams;
+            /**
             * api for getKanbanResponse
             * @class getKanbanResponse
             * @constructor
@@ -367,6 +436,15 @@ var flexygo;
             class kanbanSettings {
             }
             kanban.kanbanSettings = kanbanSettings;
+            /**
+            * api for kanbanSettingOrders
+            * @class kanbanSettingOrders
+            * @constructor
+            * @return {kanbanSettingOrders} .
+            */
+            class kanbanSettingOrders {
+            }
+            kanban.kanbanSettingOrders = kanbanSettingOrders;
         })(kanban = api.kanban || (api.kanban = {}));
     })(api = flexygo.api || (flexygo.api = {}));
 })(flexygo || (flexygo = {}));
@@ -455,6 +533,9 @@ var flexygo;
             class DependencyAction {
             }
             edit.DependencyAction = DependencyAction;
+            class FilterDependencyAction {
+            }
+            edit.FilterDependencyAction = FilterDependencyAction;
             /**
             * api for DependencyHelper
             * @class DependencyHelper
@@ -464,6 +545,9 @@ var flexygo;
             class DependencyHelper {
             }
             edit.DependencyHelper = DependencyHelper;
+            class DependencyFilterHelper {
+            }
+            edit.DependencyFilterHelper = DependencyFilterHelper;
             /**
             * api for saveDependenciesConfigParams
             * @class saveDependenciesConfigParams
@@ -473,6 +557,9 @@ var flexygo;
             class saveDependenciesConfigParams {
             }
             edit.saveDependenciesConfigParams = saveDependenciesConfigParams;
+            class saveFilterDependenciesConfigParams {
+            }
+            edit.saveFilterDependenciesConfigParams = saveFilterDependenciesConfigParams;
             /**
             * api for ObjectRowDependency
             * @class ObjectRowDependency
@@ -510,6 +597,15 @@ var flexygo;
             }
             edit.processAllListDependenciesResponse = processAllListDependenciesResponse;
             /**
+            * api for processFilterDependenciesParams
+            * @class processFilterDependenciesParams
+            * @constructor
+            * @return {processFilterDependenciesParams}
+            */
+            class processFilterDependenciesParams {
+            }
+            edit.processFilterDependenciesParams = processFilterDependenciesParams;
+            /**
            * api for getEditTemplateParams
            * @class getEditTemplateParams
            * @constructor
@@ -536,6 +632,15 @@ var flexygo;
             class getComboTextParams {
             }
             edit.getComboTextParams = getComboTextParams;
+            /**
+        * api for getComboTextParamsByView
+        * @class getComboTextParamsByView
+        * @constructor
+        * @return {getComboTextParamsByView} .
+        */
+            class getComboTextParamsByView {
+            }
+            edit.getComboTextParamsByView = getComboTextParamsByView;
             /**
            * api for getComboDataParams
            * @class getComboDataParams
@@ -1069,7 +1174,7 @@ var flexygo;
             class getProcessInfoByNameParams {
             }
             process.getProcessInfoByNameParams = getProcessInfoByNameParams;
-            var ProcessType;
+            let ProcessType;
             (function (ProcessType) {
                 ProcessType[ProcessType["Standard"] = -1] = "Standard";
                 ProcessType[ProcessType["StoredProcedure"] = 0] = "StoredProcedure";
@@ -1373,7 +1478,7 @@ var flexygo;
             class UpdateNewVersionParams {
             }
             sys.UpdateNewVersionParams = UpdateNewVersionParams;
-            var eAutoUpdaterState;
+            let eAutoUpdaterState;
             (function (eAutoUpdaterState) {
                 eAutoUpdaterState[eAutoUpdaterState["eStateIdle"] = 0] = "eStateIdle";
                 eAutoUpdaterState[eAutoUpdaterState["eStateWorking"] = 1] = "eStateWorking";
@@ -1382,7 +1487,7 @@ var flexygo;
                 eAutoUpdaterState[eAutoUpdaterState["eStateWaitingForResponse"] = 4] = "eStateWaitingForResponse";
                 eAutoUpdaterState[eAutoUpdaterState["eStateServiceRestarted"] = 5] = "eStateServiceRestarted";
             })(eAutoUpdaterState = sys.eAutoUpdaterState || (sys.eAutoUpdaterState = {}));
-            var eAutoUpdaterStatus;
+            let eAutoUpdaterStatus;
             (function (eAutoUpdaterStatus) {
                 eAutoUpdaterStatus[eAutoUpdaterStatus["eStatusUpdatingService"] = 0] = "eStatusUpdatingService";
                 eAutoUpdaterStatus[eAutoUpdaterStatus["eStatusCheckingPackages"] = 1] = "eStatusCheckingPackages";

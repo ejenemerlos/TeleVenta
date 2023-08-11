@@ -32,7 +32,6 @@ var flexygo;
                * @method connectedCallback
                */
                 connectedCallback() {
-                    this.connected = true;
                     let element = $(this);
                     this.type = element.attr('type') || 'text';
                     let propName = element.attr('property');
@@ -109,13 +108,7 @@ var flexygo;
                     if (Value && Value != '') {
                         this.setValue(Value);
                     }
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['property', 'style', 'class', 'decimalplaces', 'iconclass', 'helpid', 'hide'];
+                    this.connected = true;
                 }
                 /**
                 * Fires when the attribute value of the element is changed.
@@ -294,6 +287,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxInputViewElement.observedAttributes = ['property', 'style', 'class', 'decimalplaces', 'iconclass', 'helpid', 'hide'];
             wc.FlxInputViewElement = FlxInputViewElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

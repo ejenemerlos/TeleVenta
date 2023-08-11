@@ -127,13 +127,6 @@ var flexygo;
                     }
                 }
                 /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'disabled', 'requiredmessage', 'theme', 'placeholder', 'iconclass', 'helpid', 'hide'];
-                }
-                /**
                 * Fires when the attribute value of the element is changed.
                 * @method attributeChangedCallback
                 */
@@ -240,11 +233,13 @@ var flexygo;
                     else {
                         this.readonly = false;
                     }
-                    let txtArea = $('<textarea id="txtHTML" style="min-height:100%;width:100%;"></textarea>');
-                    me.html(txtArea);
+                    let txtArea = '<textarea id="txtHTML" style="min-height:100%;width:100%;"></textarea>';
+                    let rnd = $(this.getWizardButton() + txtArea);
+                    me.html(rnd);
+                    this.setButtonsSettings(this);
                     if (me.attr("onchange") && me.attr("onchange") != '') {
-                        txtArea.off('change');
-                        txtArea.on('change', () => { flexygo.utils.execDynamicCode.call(this, me.attr("onchange")); });
+                        rnd.off('change');
+                        rnd.on('change', () => { flexygo.utils.execDynamicCode.call(this, me.attr("onchange")); });
                     }
                     if (this.options && this.options.Locked) {
                         this.readonly = this.options.Locked;
@@ -335,7 +330,8 @@ var flexygo;
                     if (this.options && this.options.IsRequiredMessage) {
                         input.attr('data-msg-required', this.options.IsRequiredMessage);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -344,7 +340,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Hide) {
@@ -397,9 +393,39 @@ var flexygo;
                             return 'css';
                         case 'sql':
                             return 'text/x-mssql';
+                        case 'csharp':
+                            return 'text/x-csharp';
                         default:
                             return null;
                     }
+                }
+                getWizardButton() {
+                    let temButtons = '';
+                    if (this.options && this.options.SearchFunction) {
+                        temButtons = '<button class="btn btn-assistant" type= "button" name="wizardBtn" title= "' + flexygo.localization.translate('viewmanager.openwizard') + '"><i class="flx-icon icon-wizard-1"></i></button>';
+                    }
+                    if (this.options && this.options.AllowNewFunction) {
+                        temButtons += '<button class="btn btn-assistant margin-right-xl" type= "button" name="helpButton" title= "' + flexygo.localization.translate('templates.openiconlist') + '"><i class="flx-icon icon-images"></i></button>';
+                    }
+                    return temButtons;
+                }
+                setButtonsSettings(m) {
+                    let wizardBtn = $(this).find('[name="wizardBtn"]');
+                    let helpButton = $(this).find('[name="helpButton"]');
+                    if ($(this).closest("flx-module").attr('type') == 'flx-edit') {
+                        wizardBtn.show();
+                        helpButton.show();
+                    }
+                    else if ($(this).closest("flx-module").attr('type') == 'flx-view') {
+                        wizardBtn.hide();
+                        helpButton.hide();
+                    }
+                    wizardBtn.on('click', function () {
+                        flexygo.utils.execDynamicCode.call(m, m.options.SearchFunction);
+                    });
+                    helpButton.on('click', function () {
+                        flexygo.utils.execDynamicCode.call(m, m.options.AllowNewFunction);
+                    });
                 }
                 /**
                 * Trigger Dependencies.
@@ -413,6 +439,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxCodeElement.observedAttributes = ['type', 'property', 'required', 'disabled', 'requiredmessage', 'theme', 'placeholder', 'iconclass', 'helpid', 'hide'];
             wc.FlxCodeElement = FlxCodeElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

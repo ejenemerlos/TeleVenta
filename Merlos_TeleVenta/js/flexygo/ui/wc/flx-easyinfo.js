@@ -42,13 +42,6 @@ var flexygo;
                     }
                 }
                 /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['modulename', 'value'];
-                }
-                /**
                 * Fires when the attribute value of the element is changed.
                 * @method attributeChangedCallback
                 */
@@ -85,6 +78,7 @@ var flexygo;
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     me.empty();
                     if (this.moduleName) {
                         let params = {
@@ -147,19 +141,23 @@ var flexygo;
                 */
                 addEasInfo(value, easySymbol, label, iconclass, color, click) {
                     let newInfo;
-                    newInfo = $('<h5><span><i class=""></i></span></h5>');
+                    newInfo = $('<h5><i class=""></i><span></span><label></label></h5>');
                     if (click) {
                         newInfo.attr('onclick', click);
-                        newInfo.addClass('clickable');
+                        newInfo.attr('class', 'clickable');
                     }
-                    newInfo.prepend(label || '');
+                    //newInfo.prepend(label || '');
                     newInfo.find('span').append(value);
                     newInfo.find('span').append(easySymbol || '');
+                    newInfo.find('label').append(label || '');
                     if (iconclass && iconclass != '') {
                         newInfo.find('i').attr('class', iconclass);
                     }
                     if (color && color != '') {
                         newInfo.find('span').attr('style', 'color:' + color);
+                    }
+                    if (color && color != '') {
+                        newInfo.find('i').attr('style', 'color:' + color);
                     }
                     return newInfo;
                 }
@@ -169,7 +167,7 @@ var flexygo;
                * @param {string} str
                * @return {string}
                */
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 /**
@@ -191,6 +189,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+              * Array of observed attributes.
+              * @property observedAttributes {Array}
+            */
+            FlxEasyInfoElement.observedAttributes = ['modulename', 'value'];
             wc.FlxEasyInfoElement = FlxEasyInfoElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

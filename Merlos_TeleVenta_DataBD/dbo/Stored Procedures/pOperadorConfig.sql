@@ -8,12 +8,15 @@ BEGIN TRY
 				, @rol varchar(20)		= (select JSON_VALUE(@elJS,'$.paramStd[0].currentRole'))
 				, @usuario varchar(20)	= (select JSON_VALUE(@elJS,'$.paramStd[0].currentReference'))
 
+				-- insert into aaa (datos) values ( CONCAT('@fecha: ',@fecha) )     --   select * from aaa      --   delete aaa
+
 		declare @fechaMesDia char(4) = CONCAT(substring(@fecha,4,2), substring(@fecha,1,2))
 	
 		if @fecha is null or @fecha='' set @fecha='PENDIENTE'
 
 		declare @idTV varchar(50) = 
 		replace(replace(replace(replace(replace(convert(varchar,getdate(),121),' ',''),'/',''),':',''),'.',''),'-','') 
+		
 
 		if @modo='guardar' or @modo='recargar' BEGIN
 			--	comprobar que no exista el nombreTV
@@ -23,8 +26,9 @@ BEGIN TRY
 				return -1 
 			end			
 		
-			if @modo='recargar'
-			set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
+			if @modo='recargar' BEGIN
+				set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)				
+			END
 
 			declare @i int, @valor varchar(1000) 
 		
@@ -147,7 +151,7 @@ BEGIN TRY
 							  )
 					)
 			'
-			insert into aaa (datos) values ('principal: '+@sql) --  select * from aaa
+			--insert into aaa (datos) values ('principal: '+@sql) --  select * from aaa    --   delete aaa
 			EXEC(@sql)
 
 
@@ -182,30 +186,54 @@ BEGIN TRY
 					) and @IdPedidoTV <> ''
 				BEGIN 
 					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
-					insert into aaa (datos) 
-					values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha
-							,' - @IdTeleVenta: ',@idTV,' - @IdPedidoTV: <<',@IdPedidoTV,'>>')
-					) 
+					--insert into aaa (datos) 
+					--values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha
+					--		,' - @IdTeleVenta: ',@idTV,' - @IdPedidoTV: <<',@IdPedidoTV,'>>')
+					--) 
 				END	
 				
 				FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
 			END	CLOSE elCursor deallocate elCursor
 
-
 			-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
 			set @sql = '
 			insert into [TeleVentaDetalle] (id,cliente,horario)
 				select '''+@idTV+''' as id
-					,  cliente
-					,  substring(cast(fechaHora as varchar),13,5)+'' - ''+substring(cast(fechaHora as varchar),13,5) as horario
+					,   cliente
+					,   LEFT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+						+'' - ''
+						+RIGHT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+						as horario
 				from llamadasOD
-				where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(@gestores,'a.','')+' and insertada=0 
-			update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(@gestores,'a.','')+'
+				where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(isnull(@gestores,''),'a.','')+' 
+						and (gestor='''+@usuario+''' or gestor is NULL) 
+						and insertada=0 
+			update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(isnull(@gestores,''),'a.','')+'
 			'
 			EXEC(@sql)
+			
 		END
 
+
+
 		set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
+
+		-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
+		declare @sqlR varchar(max) = '
+		insert into [TeleVentaDetalle] (id,cliente,horario)
+			select '''+@idTV+''' as id
+				,   cliente
+				,   LEFT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+					+'' - ''
+					+RIGHT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+					as horario
+			from llamadasOD
+			where convert(varchar(10),fechaHora,105)='''+@fecha+''' 
+					and (gestor='''+@usuario+''' or gestor is NULL)  
+					and insertada=0 
+		update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' and (gestor='''+@usuario+''' or gestor is NULL)  
+		'
+		EXEC(@sqlR)
 
 		--  devolución de filtros
 			declare @gestor varchar(max) = 

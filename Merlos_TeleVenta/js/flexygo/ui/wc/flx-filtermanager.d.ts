@@ -50,6 +50,16 @@ declare namespace flexygo.ui.wc {
        */
         getFilters(): void;
         /**
+         * Hides the properties already selected
+         * @method hideProperties
+         * */
+        hideProperties(): void;
+        /**
+         * Show the hidden properties
+         * @method showProperties
+         * */
+        showProperties(): void;
+        /**
         * Add a new filter
         * @method newFilter
         */
@@ -70,6 +80,11 @@ declare namespace flexygo.ui.wc {
        * @method editFilter
        */
         editFilter(): void;
+        /**
+         * Validate if can save the filter
+         * @method validateSaveProcess
+         */
+        validateSaveProcess(): void;
         /**
         * Save a filter
         * @method saveFilter
@@ -94,7 +109,7 @@ declare namespace flexygo.ui.wc {
         * @method appendFields
         */
         appendFields(): void;
-        private createField(fld);
-        private findPath(obj);
+        private createField;
+        private findPath;
     }
 }

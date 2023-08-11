@@ -32,7 +32,6 @@ var flexygo;
                 }
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
                         let parentCtl = element.closest('flx-edit,flx-list,flx-propertymanager,flx-view,flx-filter');
@@ -205,9 +204,7 @@ var flexygo;
                     if (Value && Value !== '') {
                         this.setValue(Value);
                     }
-                }
-                static get observedAttributes() {
-                    return ['property', 'required', 'disabled', 'multiple', 'separator', 'requiredmessage', 'style', 'class', 'iconclass', 'helpid', 'hide', 'objectname', 'viewname', 'sqlvaluefield', 'sqldisplayfield', 'pagesize', 'additionalwhere', 'validatormessage', 'cnnstring'];
+                    this.connected = true;
                 }
                 attributeChangedCallback(attrName, oldVal, newVal) {
                     let element = $(this);
@@ -284,14 +281,17 @@ var flexygo;
                             isDirty = true;
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             isDirty = true;
                         }
                     }
@@ -388,7 +388,13 @@ var flexygo;
                         let editCtl = me.closest('flx-view')[0];
                         iconsRight = $('<div class="input-group-btn" />');
                         let icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', (e) => {
-                            flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
+                            if (this.options.ObjModeLink == 'Other') {
+                                flexygo.nav.openPageName(this.options.PageNameLink, editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink, true);
+                            }
+                            else {
+                                flexygo.nav.openPage(this.options.ObjModeLink, editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
+                            }
+                            //flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
                         });
                         iconsRight.append(icon1);
                     }
@@ -502,7 +508,13 @@ var flexygo;
                     }
                     if (this.options && this.options.ObjNameLink && this.options.ObjWhereLink) {
                         icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', (e) => {
-                            flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
+                            if (this.options.ObjModeLink == 'Other') {
+                                flexygo.nav.openPageName(this.options.PageNameLink, editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink, true);
+                            }
+                            else {
+                                flexygo.nav.openPage(this.options.ObjModeLink, editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
+                            }
+                            //flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
                         });
                         ret.append(icon1);
                     }
@@ -670,7 +682,8 @@ var flexygo;
                     if (this.options && this.options.ValidatorMessage && this.options.ValidatorMessage !== '') {
                         input.attr('data-msg-sqlvalidator', this.options.ValidatorMessage);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && (this.options.CauseRefresh || this.options.SQLValidator)) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -679,18 +692,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
-                        });
-                    }
-                    if (this.options && this.options.SQLValidator != null) {
-                        input.on('change', (e) => {
-                            let ev = {
-                                class: "property",
-                                type: "changed",
-                                sender: this,
-                                masterIdentity: this.property
-                            };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Hide) {
@@ -789,8 +791,10 @@ var flexygo;
                 }
                 setValueView(value) {
                     this.value = value;
-                    let input = $(this).find('label');
-                    input.html(value);
+                    $(this).find('label').text(value);
+                    if (value !== null) {
+                        $(this).find('label').attr('title', value);
+                    }
                 }
                 getValue() {
                     let me = $(this);
@@ -823,6 +827,7 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            FlxComboElement.observedAttributes = ['property', 'required', 'disabled', 'multiple', 'separator', 'requiredmessage', 'style', 'class', 'iconclass', 'helpid', 'hide', 'objectname', 'viewname', 'sqlvaluefield', 'sqldisplayfield', 'pagesize', 'additionalwhere', 'validatormessage', 'cnnstring'];
             wc.FlxComboElement = FlxComboElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

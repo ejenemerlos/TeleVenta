@@ -37,6 +37,10 @@ declare namespace flexygo.ui.wc {
         tCSSText: string;
         tScriptText: string;
         isNew: boolean;
+        TemplateToolbarCollection: any;
+        currentViewers: {
+            [name: string]: string;
+        };
         /**
         * Fires when element is attached to DOM
         * @method connectedCallback
@@ -74,7 +78,7 @@ declare namespace flexygo.ui.wc {
         configure(): void;
         paintProperties(data: any, template: string): string;
         parseEditString(str: string): string;
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         getModuleFullId(): string;
     }
 }

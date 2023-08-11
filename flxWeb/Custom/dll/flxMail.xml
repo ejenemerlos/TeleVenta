@@ -6,6 +6,22 @@ flxMail
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
 <member name="M:FLEXYGO.Mails.Processes.LinkEmails(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,System.String)">
  <summary>
  Reloads the cache.
@@ -16,6 +32,35 @@ flxMail
  <param name="Objectname">.</param>
  <param name="ObjectId">Returns a Process Helper.</param>
  <param name="FolderId">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Processes.SetFolders(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Get folder.
+ </summary>
+ <param name="aSender">The form sender.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Processes.NewFolder(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ Sync new folder.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Processes.SyncFolder(FLEXYGO.Security.EmailAccount,System.Collections.Generic.IReadOnlyCollection{Limilabs.Client.IMAP.FolderInfo},System.String,FLEXYGO.Data.DataManager)">
+ <summary>
+ Sync new folder.
+ </summary>
+ <param name="EmailAccount">The entity.</param>
+ <param name="Folders">The entity.</param>
+ <param name="Folder">Returns a Process Helper.</param>
+ <param name="dm">Returns a Process Helper.</param>
  <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could not reload Cache</exception>
 </member>
@@ -95,6 +140,92 @@ flxMail
  <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could not reload Cache</exception>
 </member>
+<member name="M:FLEXYGO.Mails.Processes.InsertMailAccount(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Insert new mail account
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.Mails.Processes.UpdateMailAccount(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an mail account.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.Mails.Processes.DeleteMailAccount(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an mail account.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="T:FLEXYGO.Mails.Processes.AuthMail">
+ <summary>
+ Class AuthMail is used to get mail info.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.AuthMail.AuthSuccess">
+ <summary>
+ If Auth Success true
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.AuthMail.AuthJSCode">
+ <summary>
+ The Authorization JSCode
+ </summary>
+</member>
+<member name="T:FLEXYGO.Mails.Processes.MailHelper">
+ <summary>
+ Class MailHelper is used to get mail info.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.AuthorizationEndpoint">
+ <summary>
+ The Authorization Endpoint
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.TokenEndpoint">
+ <summary>
+ The Token Endpoint
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.ClientId">
+ <summary>
+ The Client ID
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.TenantId">
+ <summary>
+ The Tenant ID
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.ClientSecret">
+ <summary>
+ The Client Secret
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.Scopes">
+ <summary>
+ The scopes
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.AccountTypeId">
+ <summary>
+ The Account Type Id
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.AccountType">
+ <summary>
+ The Account Type
+ </summary>
+</member>
+<member name="F:FLEXYGO.Mails.Processes.MailHelper.TokenType">
+ <summary>
+ The Token Type
+ </summary>
+</member>
 <member name="T:FLEXYGO.Mails.Sending">
  <summary>
  Class Reception.
@@ -138,6 +269,25 @@ flxMail
  <param name="MessageId">Mail to view.</param>
  <returns>List with mails</returns>
  <exception cref="T:System.Exception">Couldn't get mail items</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Reception.ListMails(FLEXYGO.Security.EmailAccount,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Object,System.Int64,System.Int32)">
+ <summary>
+ List Mails.
+ </summary>
+ <returns>List with mails</returns>
+ <exception cref="T:System.Exception">Couldn't get mail items</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Reception.DownloadMails(FLEXYGO.Security.EmailAccount,System.String,System.Int32,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Download Mails.
+ </summary>
+ <returns>Boolean</returns>
+</member>
+<member name="M:FLEXYGO.Mails.Reception.SyncDownloadMails(FLEXYGO.Security.EmailAccount,System.String,System.Collections.Generic.List{System.Int64},System.Int32,System.String)">
+ <summary>
+ SyncDownload Mails.
+ </summary>
+ <returns>Boolean</returns>
 </member>
 <member name="M:FLEXYGO.Mails.Reception.ListEmails(FLEXYGO.Security.EmailAccount,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Object,System.Int32,System.Int32)">
  <summary>
@@ -208,7 +358,22 @@ flxMail
  <returns><c>true</c> if mail was sent, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could Not send template mail</exception>
 </member>
-<member name="M:FLEXYGO.Mails.Mail.SendTemplateMail(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.String,System.Net.Mail.SmtpClient,FLEXYGO.Objects.EntityObject,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Mails.Mail.SendTemplateMail(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Sends the template mail.
+ </summary>
+ <param name="EMail">The email.</param>
+ <param name="subject">The subject.</param>
+ <param name="Body">The body.</param>
+ <param name="From">Mail sender email</param>
+ <param name="ReplyTo">Mail to reply To</param>
+ <param name="CC">Carbon Copy.</param>
+ <param name="FromName">An specifc Name to send from</param>
+ <param name="CCO">Hidden Carbon Copy.</param>
+ <returns><c>true</c> if mail was sent, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could Not send template mail</exception>
+</member>
+<member name="M:FLEXYGO.Mails.Mail.SendTemplateMail(System.String,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.Net.Mail.Attachment},System.String,System.Net.Mail.SmtpClient,FLEXYGO.Objects.EntityObject,System.String,System.String,System.String,System.String)">
  <summary>
  Sends the template mail.
  </summary>
@@ -223,6 +388,7 @@ flxMail
  <param name="Entity">Entity to parse properties.</param>
  <param name="ReplyTo">Reply to.</param>
  <param name="CC">CC.</param>
+ <param name="CCO">CCO or BCC.</param>
  <returns><c>true</c> if mail was sent, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could Not send template mail</exception>
 </member>
@@ -313,22 +479,6 @@ flxMail
  <summary>
  Key Field To Link Object
  </summary>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
 </member>
 </members>
 </doc>

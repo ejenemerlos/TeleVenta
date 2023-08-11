@@ -6,6 +6,96 @@ FlexyGo
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.MyWebExtension">
+ <summary>
+ Módulo usado para definir las propiedades que están disponibles en el espacio de nombres My para proyectos web.
+ </summary>
+ <remarks></remarks>
+</member>
+<member name="P:FLEXYGO.My.MyWebExtension.Computer">
+ <summary>
+ Devuelve información sobre el equipo host.
+ </summary>
+</member>
+<member name="P:FLEXYGO.My.MyWebExtension.User">
+ <summary>
+ Devuelve información del usuario web actual.
+ </summary>
+</member>
+<member name="P:FLEXYGO.My.MyWebExtension.Request">
+ <summary>
+ Devuelve un objeto Request.
+ </summary>
+</member>
+<member name="P:FLEXYGO.My.MyWebExtension.Response">
+ <summary>
+ Devuelve un objeto Response.
+ </summary>
+</member>
+<member name="P:FLEXYGO.My.MyWebExtension.Log">
+ <summary>
+ Devuelve el objeto de registro Asp.
+ </summary>
+</member>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="F:FLEXYGO.AzureAuth._Links">
+<summary>
+Links control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.AzureAuth._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.AzureAuth._lblText">
+<summary>
+lblText control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.AzureAuth._MainButton">
+<summary>
+MainButton control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="M:FLEXYGO.AzureAuth.LogOut(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Logout
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
 <member name="F:FLEXYGO.Confirm._Links">
 <summary>
 Links control.
@@ -229,103 +319,238 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <returns>System.String.</returns>
 </member>
-<member name="F:FLEXYGO.login1._Links">
+<member name="F:FLEXYGO.Authorize._Links">
 <summary>
-Control Links.
+Links control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._form1">
+<summary>
+form1 control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._logo">
+<summary>
+logo control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._lblTitle">
+<summary>
+lblTitle control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._lblSuccess">
+<summary>
+lblSuccess control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._hidReturnUrl">
+<summary>
+hidReturnUrl control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._hidJSONResponse">
+<summary>
+hidJSONResponse control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._UserName">
+<summary>
+UserName control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._UserNameRequired">
+<summary>
+UserNameRequired control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._pnlPassword">
+<summary>
+pnlPassword control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._Password">
+<summary>
+Password control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._PasswordRequired">
+<summary>
+PasswordRequired control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._MainButton">
+<summary>
+MainButton control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.Authorize._btnAuthorize">
+<summary>
+btnAuthorize control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.login1._Links">
+<summary>
+Links control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._form1">
 <summary>
-Control form1.
+form1 control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._UserName">
 <summary>
-Control UserName.
+UserName control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._UserNameRequired">
 <summary>
-Control UserNameRequired.
+UserNameRequired control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._Password">
 <summary>
-Control Password.
+Password control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._PasswordRequired">
 <summary>
-Control PasswordRequired.
+PasswordRequired control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._MainButton">
 <summary>
-Control MainButton.
+MainButton control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._RememberMe">
 <summary>
-Control RememberMe.
+RememberMe control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._RememberMeLabel">
 <summary>
-Control RememberMeLabel.
+RememberMeLabel control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._RegisterHyperLink">
 <summary>
-Control RegisterHyperLink.
+RegisterHyperLink control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="F:FLEXYGO.login1._ForgotPasswordHyperLink">
 <summary>
-Control ForgotPasswordHyperLink.
+ForgotPasswordHyperLink control.
 </summary>
 <remarks>
-Campo generado automáticamente.
-Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
+</remarks>
+</member>
+<member name="F:FLEXYGO.login1._azureAADLogin">
+<summary>
+azureAADLogin control.
+</summary>
+<remarks>
+Auto-generated field.
+To modify move field declaration from designer file to code-behind file.
 </remarks>
 </member>
 <member name="T:FLEXYGO.Authentication.LoginService">
@@ -359,6 +584,13 @@ Para modificarlo, mueva la declaración del campo del archivo del diseñador al 
  </summary>
 </member>
 <member name="M:FLEXYGO.Authentication.LoginService.NewUser(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Create a new user and sends email confirmation if is necessary.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.Authentication.LoginService.NewUserFromAAD(FLEXYGO.Objects.EntityObject,System.Collections.Generic.Dictionary{System.String,System.Object},FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  Create a new user and sends email confirmation.
  </summary>
@@ -461,6 +693,15 @@ GotoLogin control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member>
+<member name="M:FLEXYGO.ManagePassword.RedirectToAfter(System.Web.UI.Page,System.String,System.String,System.String)">
+ <summary>
+ Redirects to a given path after n miliseconds.
+ </summary>
+ <param name="aPage">a page.</param>
+ <param name="key">The key.</param>
+ <param name="Path">The path.</param>
+ <param name="MilliSec">The number of milliseconds</param>
 </member>
 <member name="F:FLEXYGO.Register._Links">
 <summary>
@@ -735,7 +976,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SecurityController.SetSecurity(System.String,System.String,System.String,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.SecurityController.SetSecurity(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
  <summary>
  Sets the security for given roles or users to diferent objects in the applicaion. Only Administrators
  </summary>
@@ -748,7 +989,7 @@ To modify move field declaration from designer file to code-behind file.
  <returns>ActionResult.</returns>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SecurityController.getObjectKey(System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.SecurityController.getObjectKey(System.String,System.String,System.String,System.String)">
  <summary>
  Gets the object key. Only Administrators
  </summary>
@@ -808,15 +1049,16 @@ To modify move field declaration from designer file to code-behind file.
  Must be designer to update objects
  </exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SysController.setSkinCacheVars(FLEXYGO.Utilities.General.KeyValuePairs[])">
+<member name="M:FLEXYGO.Controlers.UI.SysController.setSkinCacheVars(FLEXYGO.Utilities.General.KeyValuePairs[],System.String)">
  <summary>
  Sets the skin cache vars. Only designers
  </summary>
  <param name="VarValues">The variable values.</param>
+ <param name="SkinId">The skin id.</param>
  <returns>ActionResult.</returns>
  <exception cref="T:System.Exception">Must be designer to change skin variables</exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SysController.saveSkinCacheVars">
+<member name="M:FLEXYGO.Controlers.UI.SysController.saveSkinCacheVars(System.String)">
  <summary>
  Saves the skin cache vars. Only designers
  </summary>
@@ -883,7 +1125,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ViewName">Name of the view.</param>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SysController.getFilters(System.String,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Controlers.UI.SysController.getFilters(System.String)">
  <summary>
  Gets the object defined search filters.
  </summary>
@@ -901,12 +1143,13 @@ To modify move field declaration from designer file to code-behind file.
  <returns>ActionResult.</returns>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.SysController.saveView(System.String,System.String,FLEXYGO.Controlers.UI.SysController.FilterSaveHelper[],System.String)">
+<member name="M:FLEXYGO.Controlers.UI.SysController.saveView(System.String,System.String,System.String,FLEXYGO.Controlers.UI.SysController.FilterSaveHelper[],System.String)">
  <summary>
  Saves a SQL sentence as an object data view. Only designers
  </summary>
  <param name="ObjectName">Name of the object.</param>
  <param name="ViewName">Name of the view.</param>
+ <param name="Mode">Mode</param>
  <param name="Properties">The properties.</param>
  <param name="SQL">The SQL Sentence.</param>
  <returns>ActionResult.</returns>
@@ -988,6 +1231,12 @@ To modify move field declaration from designer file to code-behind file.
 <member name="M:FLEXYGO.Controlers.UI.SysController.IsConnectionAlive">
  <summary>
  Checks if connection is alive
+ </summary>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.SysController.IsObserverModule(System.String,System.String,System.String,System.String)">
+ <summary>
+ Checks module viewers
  </summary>
  <returns>ActionResult.</returns>
 </member>
@@ -1245,7 +1494,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ProcessController.execProcessByName(System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+<member name="M:FLEXYGO.Controlers.UI.ProcessController.execProcessByName(System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String)">
  <summary>
  Executes the process by name.
  </summary>
@@ -1277,7 +1526,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ObjectWhere">The object where.</param>
  <returns>returns EntityHelper as ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.EntityController.Insert(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+<member name="M:FLEXYGO.Controlers.UI.EntityController.Insert(System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.String)">
  <summary>
  Inserts the specified object based on the received properties and the object name.
  returns an EntityHelper as an ActionResult
@@ -1287,7 +1536,13 @@ To modify move field declaration from designer file to code-behind file.
  <returns>returns EntityHelper as ActionResult.</returns>
  <exception cref="T:System.Exception">Error on insert: Obj.LastError</exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.EntityController.Update(System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+<member name="M:FLEXYGO.Controlers.UI.EntityController.FormatPropertiesDates(FLEXYGO.Objects.Settings.BasicPropertyCollection)">
+ <summary>
+ This function formats dates into an understandable format for future 
+ </summary>
+ <returns></returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.EntityController.Update(System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.String)">
  <summary>
  Updates the specified based on the received properties and the object name.
  returns an EntityHelper as an ActionResult
@@ -1298,7 +1553,7 @@ To modify move field declaration from designer file to code-behind file.
  <returns>Entity helper as ActionResult.</returns>
  <exception cref="T:System.Exception">Error on update: Obj.LastError</exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.EntityController.Delete(System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.EntityController.Delete(System.String,System.String,System.String,System.String)">
  <summary>
  Deletes the specified based on the received properties and the object name.
  returns an EntityHelper as an ActionResult
@@ -1308,7 +1563,7 @@ To modify move field declaration from designer file to code-behind file.
  <returns>Entity helper as ActionResult.</returns>
  <exception cref="T:System.Exception">Error on delete:  Obj.LastError</exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.EntityController.GetProcesses(System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.EntityController.GetProcesses(System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the processes collection based on the received properties and the object name.
  returns an NavigationNodes as an ActionResult
@@ -1432,6 +1687,21 @@ To modify move field declaration from designer file to code-behind file.
  The WarningMessage
  </summary>
 </member>
+<member name="F:FLEXYGO.Controlers.UI.EntityController.EntityHelper.SuccessMessage">
+ <summary>
+ The SuccessMessage
+ </summary>
+</member>
+<member name="F:FLEXYGO.Controlers.UI.EntityController.EntityHelper.LastProcessName">
+ <summary>
+ The LastExecutedProcess
+ </summary>
+</member>
+<member name="F:FLEXYGO.Controlers.UI.EntityController.EntityHelper.LastAfterProcessName">
+ <summary>
+ The LastAfterProcessName
+ </summary>
+</member>
 <member name="T:FLEXYGO.Controlers.UI.EntityController.TemplateHelper">
  <summary>
  Class TemplateHelper used for encapsulating template features.
@@ -1448,6 +1718,66 @@ To modify move field declaration from designer file to code-behind file.
  <summary>
  The Data
  </summary>
+</member>
+<member name="T:FLEXYGO.Controlers.UI.ImageRecognitionManagerController">
+ <summary>
+ Class ImageManagerController.
+ </summary>
+ <seealso cref="T:FLEXYGO.FlxController" />
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.GetImages(System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Get Images.
+ </summary>
+ <param name="ObjectId">Relate object id.</param>
+ <param name="ObjectName">Relate object name.</param>
+ <param name="ImageId">Image Id.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.SetImage(System.String,System.String,System.String,System.String,System.Boolean,System.String)">
+ <summary>
+ Set Image.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object Id.</param>
+ <param name="Name">Name.</param>
+ <param name="Base64">Base64.</param>
+ <param name="IgnoreIfExists">Ignore if exists.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.RemoveImage(System.String,System.String)">
+ <summary>
+ Remove Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.UpdateImage(System.String,System.Boolean,System.Int32,System.String)">
+ <summary>
+ Update Image.
+ </summary>
+ <param name="ImageId">Image Id.</param>
+ <param name="MainImage">Main Image.</param>
+ <param name="OrderNumber">Order Number.</param>
+ <param name="ObjectName">Object Name.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.RemoveAllImages(System.String,System.String,System.String,System.String)">
+ <summary>
+ Remove all Images.
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ImageRecognitionManagerController.DownloadAllImages(System.String,System.String,System.String,System.String)">
+ <summary>
+ Downloads a zip with all the images
+ </summary>
+ <param name="ObjectName">The Object Name</param>
+ <param name="ObjectId">The sysImages Object Id</param>
+ <returns>ActionResult.</returns>
 </member>
 <member name="T:FLEXYGO.Controlers.UI.MailController">
  <summary>
@@ -1470,6 +1800,18 @@ To modify move field declaration from designer file to code-behind file.
  Gets the Mail Folders
  </summary>
  <returns>List(Of FLEXYGO.Mails.MailFolder).</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.MailController.GetMails(System.Int64,System.Int32,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Object)">
+ <summary>
+ Gets the Mails
+ </summary>
+ <returns>List(Of FLEXYGO.Mails.MailHeader).</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.MailController.DownloadMails(System.String,System.Int32)">
+ <summary>
+ Download the Mails
+ </summary>
+ <returns></returns>
 </member>
 <member name="M:FLEXYGO.Controlers.UI.MailController.GetMailHeaders(System.Int32,System.Int32,System.String,System.Boolean,System.String,System.String,System.String,System.Object,System.Object)">
  <summary>
@@ -1496,6 +1838,18 @@ To modify move field declaration from designer file to code-behind file.
 <member name="M:FLEXYGO.Controlers.UI.MailController.GetMailBadgeValue">
  <summary>
  Gets mails pending to read notification active count
+ </summary>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.MailController.refreshMailToken">
+ <summary>
+ Refresh mail token
+ </summary>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.MailController.checkMailToken">
+ <summary>
+ Check mail token
  </summary>
  <returns>ActionResult.</returns>
 </member>
@@ -1600,7 +1954,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ObjectName">Relate object name.</param>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ChatterController.SetMessage(System.String,System.String,System.Nullable{System.Guid},System.String,FLEXYGO.UI.Chatter.Attachment[])">
+<member name="M:FLEXYGO.Controlers.UI.ChatterController.SetMessage(System.String,System.String,System.Nullable{System.Guid},System.String,FLEXYGO.UI.Chatter.Attachment[],System.String,System.String)">
  <summary>
  Set Messages.
  </summary>
@@ -1608,6 +1962,37 @@ To modify move field declaration from designer file to code-behind file.
  <param name="DestinationParentMessage">Destination Parent Message.</param>
  <param name="Content">Content.</param>
  <param name="Attachments">Attachments.</param>
+ <param name="ContentMarked">ContentMarked.</param>
+ <param name="Mentions">Mentions.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ChatterController.UpdateMessage(System.String,System.String,FLEXYGO.UI.Chatter.Attachment[],System.String,System.String,System.String,System.String)">
+ <summary>
+ Update Messages.
+ </summary>
+ <param name="MessageId">Content.</param>
+ <param name="Content">Content.</param>
+ <param name="Attachments">Attachments.</param>
+ <param name="ContentMarked">ContentMarked.</param>
+ <param name="Mentions">Mentions.</param>
+ <param name="DestinationObjectName">DestinationObjectName.</param>
+ <param name="DestinationObjectId">DestinationObjectId.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ChatterController.DeleteMessage(System.String,System.String,System.String)">
+ <summary>
+ Delete Messages.
+ </summary>
+ <param name="MessageId">Content.</param>
+ <param name="DestinationObjectName">DestinationObjectName.</param>
+ <param name="DestinationObjectId">DestinationObjectId.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ChatterController.SetMentions(System.String)">
+ <summary>
+ Set Mentions.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
  <returns>ActionResult.</returns>
 </member>
 <member name="T:FLEXYGO.Controlers.UI.KanbanController">
@@ -1616,7 +2001,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.KanbanController.GetKanban(System.String,System.String,System.String,System.Object,FLEXYGO.filterHelper[])">
+<member name="M:FLEXYGO.Controlers.UI.KanbanController.GetKanban(System.String,System.String,System.String,System.String,System.Object,FLEXYGO.filterHelper[])">
  <summary>
  Gets the kanban module based on provided parameters.
  Returns a KanbanHelper as an ActionResult
@@ -1624,6 +2009,22 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ObjectName">Name of the object.</param>
  <param name="ObjectWhere">The object where.</param>
  <param name="ModuleName">The module identifier.</param>
+ <returns>ActionResult.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException">
+ Module object name can't be blank
+ or
+ Error in web service getKanban
+ </exception>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.KanbanController.GetKanbanColumn(System.String,System.String,System.String,System.String,System.String,System.Object,FLEXYGO.filterHelper[])">
+ <summary>
+ Gets a colum from the kanban module based on provided parameters.
+ Returns a KanbanHelper as an ActionResult
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="ObjectWhere">The object where.</param>
+ <param name="ModuleName">The module identifier.</param>
+ <param name="ColumnId">The column id.</param>
  <returns>ActionResult.</returns>
  <exception cref="T:FLEXYGO.Exceptions.LocalizedException">
  Module object name can't be blank
@@ -1942,6 +2343,29 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <returns>ActionResult.</returns>
 </member>
+<member name="T:FLEXYGO.Controlers.UI.ReportController">
+ <summary>
+ Class ReportController.
+ </summary>
+ <seealso cref="T:FLEXYGO.FlxController" />
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ReportController.GetReportExcel(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the report excel.
+ </summary>
+ <param name="ObjectName">The object name.</param>
+ <param name="ObjectWhere">The object where</param>
+ <param name="ReportName">The report name</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.ReportController.GetReportConfig(System.String,System.String,System.String)">
+ <summary>
+ Gets the report excel.
+ </summary>
+ <param name="ReportName">The report name</param>
+ <param name="ObjectName">The object name.</param>
+ <returns>ActionResult.</returns>
+</member>
 <member name="T:FLEXYGO.Controlers.UI.SchedulerViewController">
  <summary>
  Class SchedulerController.
@@ -2081,13 +2505,20 @@ To modify move field declaration from designer file to code-behind file.
  <param name="PageName">The page identifier.</param>
  <returns>ActionResult.</returns>
 </member>
+<member name="M:FLEXYGO.Controlers.UI.ChartController.GetSettings(System.String)">
+ <summary>
+ Gets the settings for chart.
+ </summary>
+ <param name="ChartSettingName">Setting name.</param>
+ <returns>ActionResult.</returns>
+</member>
 <member name="T:FLEXYGO.Controlers.UI.ImageManagerController">
  <summary>
  Class ImageManagerController.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.GetImages(System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.GetImages(System.String,System.String,System.String,System.String,System.String)">
  <summary>
  Get Images.
  </summary>
@@ -2096,7 +2527,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ImageId">Image Id.</param>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.SetImage(System.String,System.String,System.String,System.String,System.Boolean)">
+<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.SetImage(System.String,System.String,System.String,System.String,System.Boolean,System.String)">
  <summary>
  Set Image.
  </summary>
@@ -2131,7 +2562,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.RemoveAllImages(System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.RemoveAllImages(System.String,System.String,System.String,System.String)">
  <summary>
  Remove all Images.
  </summary>
@@ -2139,7 +2570,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ObjectId">The sysImages Object Id</param>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.DownloadAllImages(System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.ImageManagerController.DownloadAllImages(System.String,System.String,System.String,System.String)">
  <summary>
  Downloads a zip with all the images
  </summary>
@@ -2201,7 +2632,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:System.Web.Mvc.Controller" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.UploadController.Upload(System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.UploadController.Upload(System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Upload.
  </summary>
@@ -2226,7 +2657,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.GetDocument(System.String,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.GetDocument(System.String,System.String,System.String,System.String,System.String)">
  <summary>
  Get Images.
  </summary>
@@ -2246,7 +2677,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="LastAppend">Last Append.</param>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.SetDocument(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.SetDocument(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String)">
  <summary>
  Saves Document.
  </summary>
@@ -2262,6 +2693,14 @@ To modify move field declaration from designer file to code-behind file.
  <param name="PartialUpload">Partial upload.</param>
  <param name="IgnoreIfExists">Ignore if exists.</param>
  <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.LinkDocument(System.String,System.String,System.String)">
+ <summary>
+ Link documents to an object.
+ </summary>
+ <param name="ObjectName">Object Name.</param>
+ <param name="ObjectId">Object id.</param>
+ <param name="DocGuid">Document id.</param>
 </member>
 <member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.RemoveDocument(System.String,System.String,System.String)">
  <summary>
@@ -2312,7 +2751,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <returns>ActionResult.</returns>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.DownloadAllDocuments(System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.DocumentManagerController.DownloadAllDocuments(System.String,System.String,System.String,System.String)">
  <summary>
  Downloads a zip with all the documents
  </summary>
@@ -2326,7 +2765,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ImageController.SaveFile(System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+<member name="M:FLEXYGO.Controlers.UI.ImageController.SaveFile(System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[],System.String)">
  <summary>
  Saves base64 image as a file.
  </summary>
@@ -2446,6 +2885,16 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Page">The page.</param>
  <param name="AdditionalWhere">The additional where.</param>
  <param name="SQLValueField">The SQL Value Field.</param>
+ <returns>ActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.Controlers.UI.EditController.GetComboTextByView(System.String,System.String,System.String,System.String)">
+ <summary>
+ Gets the combo value and display text for a defined value by view
+ </summary>
+ <param name="ObjectName">Name of the object.</param>
+ <param name="Viewname">Name of the view.</param>
+ <param name="Valuefield">The SQL Value Field.</param>
+ <param name="Value">The value.</param>
  <returns>ActionResult.</returns>
 </member>
 <member name="M:FLEXYGO.Controlers.UI.EditController.GetComboDataView(System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
@@ -2577,6 +3026,17 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Properties">Array with the properties and his values.</param>
  <returns>ActionResult.</returns>
 </member>
+<member name="M:FLEXYGO.Controlers.UI.EditController.ProcessFilterDependencies(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Process the change event of a filter property with dependencies
+ returns a list with the filter actions to process.
+ </summary>
+ <param name="SearchId">Identifier of Active filter</param>
+ <param name="ObjectName">Name of the object collection.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="Properties">Array with the active filter properties</param>
+ <returns>ActionResult.</returns>
+</member>
 <member name="M:FLEXYGO.Controlers.UI.EditController.ValidateProperty(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Process de change event of a property with validate
@@ -2600,6 +3060,17 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Dependencies">Dependencies config collection</param>
  <returns>ActionResult.</returns>
 </member>
+<member name="M:FLEXYGO.Controlers.UI.EditController.SaveFilterDependenciesConfig(System.String,System.String,System.String,FLEXYGO.UI.Edit.DependencyFilterHelper[])">
+ <summary>
+ Save the dependencies of a filter property. Only for designers
+ returns a list with the filter actions to process.
+ </summary>
+ <param name="SearchId">Identifier of Active filter</param>
+ <param name="ObjectName">Name of the object collection.</param>
+ <param name="PropertyName">The property name.</param>
+ <param name="Dependencies">Dependencies config collection</param>
+ <returns>ActionResult.</returns>
+</member>
 <member name="M:FLEXYGO.Controlers.UI.EditController.GetEditConfig(System.String)">
  <summary>
  Gets the config template based on an object name
@@ -2614,7 +3085,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.HtmlController.GetHTML(System.String,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Controlers.UI.HtmlController.GetHTML(System.String,System.String,System.String,System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the HTML content for an HTML module a SQL Feed or an Rss Feed.
  Returns an HtmlHelper as an ActionResult
@@ -2623,6 +3094,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ObjectWhere">The object where.</param>
  <param name="moduleName">The module identifier.</param>
  <param name="PageName">The page identifier.</param>
+ <param name="Defaults ">The defaults.</param>
  <returns>ActionResult.</returns>
 </member>
 <member name="T:FLEXYGO.Controlers.UI.ListController">
@@ -2631,7 +3103,7 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <seealso cref="T:FLEXYGO.FlxController" />
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ListController.GetList(System.String,System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.String,System.Object,FLEXYGO.filterHelper[],System.String,System.String,System.Nullable{System.Int32},System.String)">
+<member name="M:FLEXYGO.Controlers.UI.ListController.GetList(System.String,System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.String,System.Object,FLEXYGO.filterHelper[],System.String,System.String,System.Nullable{System.Int32},System.String,System.Collections.Generic.Dictionary{System.String,FLEXYGO.Objects.Settings.TemplateGroup},FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the list based on provided parameters.
  Returns a ListHelper as an ActionResult
@@ -2650,6 +3122,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="ViewId">The view id</param>
  <param name="PageSize">The page size</param>
  <param name="PresetId">The preset id</param>
+ <param name="Defaults">The defaults</param>
  <returns>ActionResult.</returns>
  <exception cref="T:FLEXYGO.Exceptions.LocalizedException">
  Module object name can't be blank
@@ -2720,7 +3193,7 @@ To modify move field declaration from designer file to code-behind file.
  Error in web service getList
  </exception>
 </member>
-<member name="M:FLEXYGO.Controlers.UI.ListController.LoadFilters(System.String,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Controlers.UI.ListController.LoadFilters(System.String)">
  <summary>
  Loads the filters.
  </summary>
@@ -2913,6 +3386,13 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Modules">List of new modules associated to the page.</param>
  <returns>ActionResult.</returns>
 </member>
+<member name="M:FLEXYGO.Controlers.UI.PageController.GetExternalAuth(System.String)">
+ <summary>
+ Gets external app login
+ </summary>
+ <param name="AppName">AppName</param>
+ <returns>IHttpActionResult.</returns>
+</member>
 <member name="T:FLEXYGO.Controlers.UI.RssController">
  <summary>
  Class RssController.
@@ -3024,7 +3504,7 @@ To modify move field declaration from designer file to code-behind file.
  The default pagesize
  </summary>
 </member>
-<member name="M:FLEXYGO.WebApiControllers.WA_EntityController.GetCollection(System.String,System.String,System.Int32,System.Int32,System.String,System.Boolean)">
+<member name="M:FLEXYGO.WebApiControllers.WA_EntityController.GetCollection(System.String,System.String,System.Int32,System.Int32,System.String,System.Boolean,System.Boolean)">
  <summary>
  Gets the collection.
  </summary>
@@ -3215,6 +3695,26 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <param name="filterContext">The filter context.</param>
  <exception cref="T:System.ArgumentException">Security Check. Operation not allowed</exception>
+</member>
+<member name="T:FLEXYGO.WebHooksControllers.WHController">
+ <summary>
+ Class WA_EntityController.
+ </summary>
+ <seealso cref="T:System.Web.Http.ApiController" />
+</member>
+<member name="M:FLEXYGO.WebHooksControllers.WHController.SecureWebHook(System.String)">
+ <summary>
+ Gets webhooks from secure senders
+ </summary>
+ <param name="WebHookID">Webhook sender</param>
+ <returns>IHttpActionResult.</returns>
+</member>
+<member name="M:FLEXYGO.WebHooksControllers.WHController.GuestWebHook(System.String)">
+ <summary>
+ Gets webhooks from guest senders
+ </summary>
+ <param name="WebHookID">Webhook sender</param>
+ <returns>IHttpActionResult.</returns>
 </member>
 <member name="F:FLEXYGO.ErrorPage._DetailedErrorPanel">
 <summary>
@@ -3936,6 +4436,24 @@ Campo generado automáticamente.
 Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
 </remarks>
 </member>
+<member name="F:FLEXYGO.LicensePage._lblModules">
+<summary>
+Control lblModules.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
+<member name="F:FLEXYGO.LicensePage._txtModules">
+<summary>
+Control txtModules.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
 <member name="F:FLEXYGO.LicensePage._pnlActivatedNonEvaluation">
 <summary>
 Control pnlActivatedNonEvaluation.
@@ -4035,6 +4553,153 @@ Campo generado automáticamente.
 Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
 </remarks>
 </member>
+<member name="M:FLEXYGO.LicensePage.Page_Init(System.Object,System.EventArgs)">
+ <summary>
+ Handles the Init event of the Page control.
+ </summary>
+ <param name="sender">The source of the event.</param>
+ <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+</member>
+<member name="T:FLEXYGO.Web.UI.Page">
+ <summary>
+ Class Page.
+ </summary>
+ <seealso cref="T:System.Web.UI.Page" />
+</member>
+<member name="F:FLEXYGO.Web.UI.Page.jsreferences">
+ <summary>
+ The jsreferences
+ </summary>
+</member>
+<member name="F:FLEXYGO.Web.UI.Page.cssreferences">
+ <summary>
+ The cssreferences
+ </summary>
+</member>
+<member name="F:FLEXYGO.Web.UI.Page.skin">
+ <summary>
+ The skin
+ </summary>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.Page_Init(System.Object,System.EventArgs)">
+ <summary>
+ Handles the Init event of the Page control.
+ </summary>
+ <param name="sender">The source of the event.</param>
+ <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.loadBundles">
+ <summary>
+ Loads the bundles containing css and Java script
+ </summary>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getJsScripts">
+ <summary>
+ Gets the general js scripts.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getCssScripts">
+ <summary>
+ Gets the general CSS scripts.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getProjectName">
+ <summary>
+ Gets Project Name.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getUserMode">
+ <summary>
+ Gets User mode.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getSkinScripts">
+ <summary>
+ Gets the specific skin scripts.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getSkinCss">
+ <summary>
+ Gets the specific skin CSS.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getInterfaceScripts">
+ <summary>
+ Gets the specific skin scripts.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getInterfaceCss">
+ <summary>
+ Gets the specific skin CSS.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getLogo">
+ <summary>
+ Gets the logo.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getFavIcon">
+ <summary>
+ Gets the FavIcon.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getMainNavPanel">
+ <summary>
+ Gets the Main Navigation Panel.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getMainMenu">
+ <summary>
+ Gets the Main Menu.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getInitScripts">
+ <summary>
+ Restarts App if user has changed.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.getMissingFiles">
+ <summary>
+ Displays error message with any missing files.
+ </summary>
+ <returns>System.String.</returns>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.DisplayErrorMessage(System.Web.UI.Page,System.String,System.String)">
+ <summary>
+ Displays an error message on a given Page using flexygo.msg.error script.
+ </summary>
+ <param name="aPage">a page.</param>
+ <param name="key">The key.</param>
+ <param name="Message">The message.</param>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.DisplayWarningMessage(System.Web.UI.Page,System.String,System.String,System.String)">
+ <summary>
+ Displays a warning message on a given Page using flexygo.msg.error script.
+ </summary>
+ <param name="aPage">a page.</param>
+ <param name="key">The key.</param>
+ <param name="Message">The message.</param>
+ <param name="Title">The title.</param>
+</member>
+<member name="M:FLEXYGO.Web.UI.Page.DisplayConfirmMessage(System.Web.UI.Page,System.String,System.String)">
+ <summary>
+ Displays a confirm message on a given page using flexygo.msg.confirm script.
+ </summary>
+ <param name="aPage">a page.</param>
+ <param name="key">The key.</param>
+ <param name="Message">The message.</param>
+</member>
 <member name="T:FLEXYGO.Reports">
  <summary>
  Class Reports.
@@ -4049,6 +4714,13 @@ form1 control.
 Auto-generated field.
 To modify move field declaration from designer file to code-behind file.
 </remarks>
+</member>
+<member name="M:FLEXYGO.Reports.Page_Init(System.Object,System.EventArgs)">
+ <summary>
+ Handles the Init event of the Page control.
+ </summary>
+ <param name="sender">The source of the event.</param>
+ <param name="e">The <see cref="T:System.EventArgs" /> instance containing the event data.</param>
 </member>
 <member name="M:FLEXYGO.Reports.Page_Load(System.Object,System.EventArgs)">
  <summary>
@@ -4075,6 +4747,12 @@ To modify move field declaration from designer file to code-behind file.
  Can not print new objects. Please save object before printing.
  or
  </exception>
+</member>
+<member name="M:FLEXYGO.Reports.isMobile">
+ <summary>
+ Determines whether the call is made form a mobile environment.
+ </summary>
+ <returns><c>true</c> if this instance is mobile; otherwise, <c>false</c>.</returns>
 </member>
 <member name="T:FLEXYGO.Global_asax">
  <summary>
@@ -4214,53 +4892,6 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <value><c>true</c> if this instance is reusable; otherwise, <c>false</c>.</value>
 </member>
-<member name="T:FLEXYGO.My.MyWebExtension">
- <summary>
- Módulo usado para definir las propiedades que están disponibles en el espacio de nombres My para proyectos web.
- </summary>
- <remarks></remarks>
-</member>
-<member name="P:FLEXYGO.My.MyWebExtension.Computer">
- <summary>
- Devuelve información sobre el equipo host.
- </summary>
-</member>
-<member name="P:FLEXYGO.My.MyWebExtension.User">
- <summary>
- Devuelve información del usuario web actual.
- </summary>
-</member>
-<member name="P:FLEXYGO.My.MyWebExtension.Request">
- <summary>
- Devuelve un objeto Request.
- </summary>
-</member>
-<member name="P:FLEXYGO.My.MyWebExtension.Response">
- <summary>
- Devuelve un objeto Response.
- </summary>
-</member>
-<member name="P:FLEXYGO.My.MyWebExtension.Log">
- <summary>
- Devuelve el objeto de registro Asp.
- </summary>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member>
 <member name="T:FLEXYGO.Startup">
  <summary>
  Class Startup.
@@ -4306,6 +4937,16 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Response">The response object to set the error status code</param>
  <returns>Jerror.</returns>
 </member>
+<member name="M:FLEXYGO.AjaxError.AjaxMessageException(System.String,System.String,System.Exception,System.Web.HttpResponseBase)">
+ <summary>
+ Transform de exception in json result
+ </summary>
+ <param name="ErrorTitle">An error title to describe the exception's context</param>
+ <param name="ErrorMessage">An error message to describe the exception's context</param>
+ <param name="Exception">The exception to transform</param>
+ <param name="Response">The response object to set the error status code</param>
+ <returns>Jerror.</returns>
+</member>
 <member name="M:FLEXYGO.AjaxError.AjaxSecurityException(System.String,System.String,System.Web.HttpResponseBase)">
  <summary>
  Transform a security exception in json result
@@ -4325,7 +4966,7 @@ To modify move field declaration from designer file to code-behind file.
  <param name="Response">The response object to set the error status code</param>
  <returns>Jerror.</returns>
 </member>
-<member name="M:FLEXYGO.AjaxError.AjaxLog(System.Exception,System.Diagnostics.EventLogEntryType)">
+<member name="M:FLEXYGO.AjaxError.AjaxLog(System.Exception,System.Boolean)">
  <summary>
  Ajax log
  </summary>
@@ -4384,9 +5025,54 @@ To modify move field declaration from designer file to code-behind file.
  </summary>
  <param name="FilterContext">The filter context</param>
 </member>
+<member name="F:FLEXYGO.CalendarToken._TokenText">
+<summary>
+Control TokenText.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
+<member name="F:FLEXYGO.CalendarToken._Scope">
+<summary>
+Control Scope.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
+<member name="F:FLEXYGO.MailToken._TokenText">
+<summary>
+Control TokenText.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
 <member name="F:FLEXYGO.ContactsToken._TokenText">
 <summary>
 Control TokenText.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
+<member name="F:FLEXYGO.RedSys._form1">
+<summary>
+Control form1.
+</summary>
+<remarks>
+Campo generado automáticamente.
+Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+</remarks>
+</member>
+<member name="F:FLEXYGO.RedSys._InfoText">
+<summary>
+Control InfoText.
 </summary>
 <remarks>
 Campo generado automáticamente.

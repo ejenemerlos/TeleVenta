@@ -21,6 +21,7 @@ var flexygo;
                 CustomProperty: 'Custom Property Dep.',
                 save: 'Guardar',
                 addmore: 'Añadir mas propiedades dependientes',
+                addmorefilter: 'Añadir mas filtros dependientes',
                 sqlvalue: 'SQL Valor',
                 sqlclass: 'SQL Clase',
                 sqlcombofilter: 'Filtro SQL para desplegable',
@@ -38,8 +39,9 @@ var flexygo;
                 valueApply: 'Valores afectados',
                 CusPropertyName: 'Nombre Custom Control',
                 SQLCustomProperty: 'SQL Custom Property',
-                connectionstrings: 'Cadenas de connexió',
-                connStringvalues: 'Valors de la cadena de connexió'
+                connectionstrings: 'Cadenas de conexión',
+                connStringvalues: 'Valores de la cadena de conexión',
+                relateddep: 'Dependencias relacionadas'
             };
             eses.develop = {
                 developer: 'Desarrollador',
@@ -67,16 +69,20 @@ var flexygo;
                 objectpropertysecurity: 'Seguridad de propiedades',
                 pageSettings: 'Propiedades de la página',
                 chatter: 'Chatter',
+                users: 'Usuarios',
+                roles: 'Roles',
             };
             eses.history = {
                 historyempty: 'Histórico de navegación vacio',
-                showmore: 'Ver mas',
+                showmore: 'Ver más',
             };
             eses.navigation = {
                 relatedobjects: 'Objetos relacionados',
                 reports: 'Informes',
                 noelements: 'No existen elementos',
                 popupwarning: 'La configuración de su navegador está bloqueando las ventanas emergentes.',
+                reportmaxrows: 'Este informe utiliza {0} filas para filtrar y supera el límite de {1}. Aplique primero un filtro más restrictivo.',
+                scrolltop: 'Ir arriba'
             };
             eses.msg = {
                 confirm: 'Confirme la acción',
@@ -94,6 +100,7 @@ var flexygo;
                 appendwarning: 'Seleccione un tipo y nombre de campo.',
                 createfields: 'Añadir campos',
                 enterfieldname: 'Nombre del campo',
+                reservedword: 'es una palabra reservada',
                 selecttype: 'Seleccione Tipo de datos',
                 seedependencies: 'Ver dependencias',
                 templates: 'Plantillas',
@@ -122,6 +129,11 @@ var flexygo;
                 adddetachedproperty: 'Añadir propiedad desconectada',
                 selecttable: 'Seleccione Tabla',
                 loadmore: 'Scroll para cargar más',
+                hasdependencies: 'Lanza dependencias',
+                hasdependingproperties: 'Afectado por dependencias',
+                withchangeprocess: 'Con proceso de cambio',
+                throwto: 'Lanza a',
+                affectedby: 'Afectada por'
             };
             eses.flxeditgrid = {
                 addrow: 'Añadir fila',
@@ -251,13 +263,22 @@ var flexygo;
                 add: 'Añadir',
                 errornofilter: 'Por favor, añada primero un nuevo filtro.',
                 errornofields: 'Por favor, añada al menos un campo de filtro.',
+                fieldnotappend: 'No se ha podido agregar la siguiente propiedad porque ya existe una con el mismo nombre:',
+                fieldsnotappend: 'No se han podido agregar las siguientes propiedades porque ya existe una con el mismo nombre:',
                 save: 'Guardar',
                 delete: 'Eliminar',
+                hasfilterdependencies: 'Lanza dependencias',
+                hasfilterdependingproperties: 'Afectado por dependencias',
+                throwto: 'Lanza a',
+                affectedby: 'Afectada por'
             };
             eses.sortmanager = {
                 sort: 'Ordenar',
+                fields: 'Campos',
                 apply: 'Aceptar',
                 clean: 'Limpiar',
+                groups: 'Agrupaciones',
+                applied: 'Aplicados'
             };
             eses.flxlist = {
                 noentriesfound: 'Sin resultados.',
@@ -281,6 +302,10 @@ var flexygo;
                 mindate: 'Fecha mínima',
                 maxdate: 'Fecha máxima',
                 unseen: 'Solo no leidos',
+                sync: 'Sincronizando',
+                waitsync: 'Espere a que finalice la sincronización.',
+                nomail: 'Correo no encontrado.',
+                nomailalert: 'No se encontró el correo en el servidor.',
             };
             eses.flxmodule = {
                 delete: 'Eliminar',
@@ -289,6 +314,8 @@ var flexygo;
                 edit: 'Editar',
                 view: 'Ver',
                 print: 'Imprimir',
+                printpage: 'Imprimir página',
+                printmodule: 'Imprimir módulo',
                 help: 'Ayuda',
                 settings: 'Configuración',
                 process: 'Proceso',
@@ -307,6 +334,7 @@ var flexygo;
                 uniqueBagError: 'Campo de clave unica no definido.',
                 nofieldBagError: 'No se ha podido encontrar el campo <b>{0}</b>. Añádalo a la consulta o quite el botón de selección.',
                 noItemsSelected: 'Seleccione primero algún elemento de la lista.',
+                currentlyViewing: 'Viendo actualmente'
             };
             eses.flxnav = {
                 notimplemented: 'Acción no implementada',
@@ -335,6 +363,8 @@ var flexygo;
                 errorfilenumber: 'Sólo acepta una imagen',
                 infotostart: 'Busca o arrastra una imagen para comenzar',
                 errorfilename: 'La imagen no tiene nombre',
+                errorrootpath: 'Ruta raíz',
+                extension: 'Extensión de fichero no aceptado.',
             };
             eses.documentmanager = {
                 upload: 'Subir',
@@ -365,6 +395,10 @@ var flexygo;
                 view: 'Ver',
                 downloadall: 'Descargar todos los documentos',
                 nodocuments: 'No hay documentos para descargar',
+                msgremove: '¿Está seguro de que quiere eliminar el documento?',
+                sendselection: 'Enviar documentos seleccionados por correo',
+                noselection: 'No hay documentos seleccionados',
+                filterdocs: 'Filtrar documentos',
             };
             eses.imagemanager = {
                 upload: 'Subir',
@@ -389,16 +423,19 @@ var flexygo;
                 uploaded: 'Subido',
                 error: 'Error de subida',
                 info: 'Arrastra para subir',
+                extension: 'Extensión de fichero no aceptado.',
             };
             eses.file = {
                 saved: 'Fichero guardado ;)',
                 errorsaving: 'Error guardando fichero :(',
                 resultbase64: 'Fichero subido con éxito',
+                extension: 'Extensión de fichero no aceptado.',
             };
             eses._export = {
                 success: 'Exito exportado datos ;)',
                 error: 'Error exportando datos :(',
                 exportinglist: 'Exportando lista',
+                exportlimit: 'Se ha superado el numero maximo de registros a exportar, por favor usa un filtro más restrictivo',
             };
             eses.menumanager = {
                 deleteMenu: 'Borrar menu',
@@ -412,6 +449,7 @@ var flexygo;
                 edit: 'Editar',
                 submenus: 'Submenús',
                 newsubmenu: 'Submenú nuevo',
+                menuSecurity: 'Seguridad de los menús',
             };
             eses.modulemanager = {
                 save: 'Guardar',
@@ -440,6 +478,7 @@ var flexygo;
                 deletenode: 'Borrar nodo',
                 deletenodequestion: '¿Está seguro de que desea eliminar este nodo?',
                 addfields: 'Añadir campos',
+                cloneDependencies: 'Clonar dependencias del objeto'
             };
             eses.objectmanager = {
                 selecticon: 'Seleccione un icono',
@@ -484,6 +523,7 @@ var flexygo;
                 end: 'Fín',
                 colproperties: 'Propiedades Edit grid (opcional)',
                 save: 'Guardar',
+                filtersettings: 'Configuración de filtros',
             };
             eses.flxpropertymanager = {
                 addfields: 'Haga click en "añadir campos" para comenzar.',
@@ -557,9 +597,16 @@ var flexygo;
                 errornosql: 'El campo SQL no puede estar en blanco.',
                 validate: 'Validar',
                 errorduplicateprop: 'El campo {0} ya existe en la lista.',
+                save: 'Guardar',
+                cancel: 'Cancelar',
+                viewwizard: 'Asistente de Vistas',
+                selectobject: 'Por favor, selecciona un objeto',
+                openwizard: 'Abrir asistente',
+                saved: 'Guardado :)',
             };
             eses.templates = {
                 addnewtemplate: 'Añadir plantilla',
+                openiconlist: 'Abrir lista de iconos',
             };
             eses.flxscheduler = {
                 objects: 'Objetos',
@@ -590,12 +637,17 @@ var flexygo;
                 search: 'Buscar...',
                 pleasewrite: 'Por favor escriba el texto a buscar',
                 speak: 'Hable ahora...',
+                pleaseobject: 'Por favor, seleccione antes un objeto',
+                searchnode: 'Búsqueda',
             };
             eses.text = {
                 map: 'Haz click en el mapa',
                 errormap: 'La dirección no se ha encontrado',
                 api: 'Clave de la API de Google no encontrada.',
                 apihelp: 'Vea nuestra ayuda para descubrir cómo obtener.',
+                nophone: 'Introduzca un número de teléfono',
+                nomail: 'Introduzca una dirección de correo',
+                seeMap: 'Ver en google maps'
             };
             eses.flxfunnel = {
                 data: 'Sin datos',
@@ -654,6 +706,8 @@ var flexygo;
                 composerplaceholder: 'Escriba algo',
                 sendbutton: 'Registrar',
                 startinfo: 'Primero debe configurar el chatter',
+                deleteconfirm: '¿Está seguro de eliminar el mensaje?',
+                saveButton: 'Guardar',
             };
             eses.offline = {
                 createobjecttitle: 'Añade un nuevo objeto a la App',
@@ -665,6 +719,105 @@ var flexygo;
             eses.offlineemulator = {
                 ios: 'Cambiar a modo iOS',
                 md: 'Cambiar a modo Android',
+            };
+            eses.combobuilder = {
+                datasource: 'Origen de datos',
+                fromtable: 'Tabla',
+                fromview: 'Vista',
+                selectcnnstring: 'Seleccione la cadena de conexión',
+                validcnnstring: 'Debe seleccionar una cadena de conexión',
+                selecttable: 'Seleccione un origen',
+                validorigin: 'Indique un origen válido',
+                viewkeyfields: 'Campos clave de la vista',
+                saved: 'Guardado',
+                save: 'Guardar',
+                cancel: 'Cancelar',
+                selectvaluefield: 'Seleccione el campo a guardar',
+                selectdisplayfield: 'Seleccione el campo a mostrar',
+                selectadditionalfield: 'Seleccione campos adicionales',
+                selectorderfield: 'Seleccione el campo para ordenar los resultados',
+                comboassistant: 'Asistente',
+                cnnstring: 'Cadena de conexión',
+                origin: 'Origen',
+                sqlsentence: 'Sentencia SQL',
+                valuefield: 'Campo a guardar',
+                displayfield: 'Campo a mostrar',
+                additionalfield: 'Campos adicionales',
+                orderfield: 'Campo para ordenar',
+                validvaluefield: 'Indique un campo a guardar',
+                validdisplayfield: 'Indique un campo a mostrar',
+                validorderfield: 'Indique un campo para ordenar',
+                validsqlsentence: 'La sentencia SQL no es válida',
+            };
+            eses.formatsmanager = {
+                formatassistant: 'Asistente',
+                field: 'Campo',
+                selectfield: 'Selecciona el campo',
+                validfield: 'Selecciona un campo válido',
+                validformat: 'Selecciona un tipo de formato válido',
+                selectformat: 'Selecciona un tipo de formato',
+                formattype: 'Tipo de formato',
+                saved: 'Guardado',
+                nosaved: 'No se ha guardado ningún formato',
+                decimal: 'Formato de decimal',
+                isdate: 'Formato de fecha',
+                translate: 'Traducir texto',
+                save: 'Guardar',
+                cancel: 'Cancelar',
+                casetrue: 'Si es cierto',
+                casefalse: 'Si es falso',
+                boolformat: 'Formato booleano',
+                isnull: 'El valor es nulo',
+                numdecimals: 'Número de decimales',
+                switchformat: 'Switch',
+                casenotnull: 'El valor no es nulo',
+                stringformat: 'Texto a formatear',
+                stringtype: 'Tipo de formato de texto',
+                validstringformat: 'Selecciona un tipo de formato de texto válido',
+                uppercase: 'Mayúsculas',
+                lowercase: 'Minúsculas',
+                characternumber: 'Número de carácteres a mostrar',
+                addoption: 'Añade una opción',
+                addelse: 'Añade una opción por defecto',
+                dateformat: 'Tipo de formato de fecha',
+                selectdateformat: 'Selecciona un tipo de formato de fecha',
+                validdateformat: 'Selecciona un tipo de formato de fecha válido',
+                dateLT: '19:05',
+                dateLTS: '19:05:57',
+                dateL: '13/07/2021',
+                datel: '13/7/2021',
+                dateLL: '13 de julio de 2021',
+                datell: '13 jul. 2021',
+                dateLLL: '13 de julio de 2021 19:05',
+                datelll: '13 jul. 2021 19:05',
+                dateLLLL: 'martes 13 de julio de 2021 19:05',
+                datellll: 'mar., 13 jul. 2021 19:05',
+                translatesentence: 'Texto a traducir',
+                option: 'Opción',
+                result: 'Resultado',
+                elseoption: 'Por defecto',
+                requiredobject: 'Primero debe seleccionar un objeto',
+            };
+            eses.imports = {
+                template: 'Archivo de plantilla',
+            };
+            eses.htmlreport = {
+                generate: 'Generando informe',
+            };
+            eses.skin = {
+                darkmode: 'Modo Oscuro',
+                lightmode: 'Modo Claro'
+            };
+            eses.flxBarcode = {
+                noCamera: 'No se ha encontrado ninguna cámara',
+                IOSerr: 'Esta funcionalidad no está disponible en IOS',
+                noCode: 'No se puede encontrar ningún código en esta imagen.'
+            };
+            eses.abhSign = {
+                save: 'Guardar',
+                title: 'Seleccione un documento',
+                help: 'Ayuda Abh Sign',
+                lastPage: 'Última página'
             };
         })(eses = culture.eses || (culture.eses = {}));
     })(culture = flexygo.culture || (flexygo.culture = {}));

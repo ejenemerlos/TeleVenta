@@ -8,6 +8,12 @@ var flexygo;
         class ModuleFilterHistory {
         }
         nav.ModuleFilterHistory = ModuleFilterHistory;
+        class PresetHistoryValue {
+        }
+        nav.PresetHistoryValue = PresetHistoryValue;
+        class ModulePresetHistory {
+        }
+        nav.ModulePresetHistory = ModulePresetHistory;
         class FlexygoHistory {
         }
         nav.FlexygoHistory = FlexygoHistory;
@@ -24,9 +30,12 @@ var flexygo;
          * @param {boolean} isClone -
          * @param {flexygo.nav.FlexygoHistory} previousHist - Previous page history
         */
-        function openPage(pagetypeid, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement, isClone, previousHist) {
+        function openPage(pagetypeid, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement, isClone, previousHist, presets) {
             if (typeof event != 'undefined') {
                 event.preventDefault();
+            }
+            if (flexygo.utils.isTactilModeActive()) {
+                flexygo.utils.scrollTo(0);
             }
             if (flexygo.utils.isSizeMobile() && targetid.indexOf('modal') != 0) {
                 targetid = "current";
@@ -53,7 +62,8 @@ var flexygo;
                 objectwhere: objectwhere,
                 defaults: defaults,
                 pagetypeid: pagetypeid,
-                filtersValues: (previousHist && previousHist.filtersValues) ? previousHist.filtersValues : null
+                filtersValues: (previousHist && previousHist.filtersValues) ? previousHist.filtersValues : null,
+                presetsValues: (previousHist && previousHist.presetsValues) ? previousHist.presetsValues : null
             };
             if (targetid && targetid.indexOf('new') == 0) {
                 flexygo.targets.openNewWindow(histObj, targetid);
@@ -74,15 +84,24 @@ var flexygo;
                 flexygo.ajax.post('~/api/Page', 'GetPageByObject', { "StrType": pagetypeid, "ObjectName": objectname, "ObjectWhere": objectwhere, "IsClone": isClone }, (ret) => {
                     histObj.pagename = ret.PageName;
                     var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                    if (!pageContainer) {
+                        NProgress.done();
+                        return;
+                    }
                     var editObj = flexygo.history.get(pageContainer);
                     if (editObj.targetid.indexOf('main') == 0 || (editObj.targetid.indexOf('current') == 0 && pageContainer.is('#realMain'))) {
                         editObj.pagename = ret.PageName;
                         flexygo.history.replace(editObj, pageContainer);
                     }
                     ret.pageHistory = histObj;
-                    openPageReturn(ret, objectname, objectwhere, defaults, pageContainer, null, null, isClone);
-                    if (pagetypeid != 'edit' || (objectwhere && objectwhere != '')) {
-                        flexygo.history.historyLog.add(ret.IconCssClass, ret.Descrip, histObj);
+                    openPageReturn(ret, objectname, objectwhere, defaults, pageContainer, null, null, isClone, null, presets);
+                    if (!excludeHist) {
+                        if (pagetypeid != 'edit' || (objectwhere && objectwhere != '')) {
+                            flexygo.history.historyLog.add(ret.IconCssClass, ret.Descrip, ret.pageHistory);
+                        }
+                    }
+                    if (pageContainer.is('#realMain') && ret.PageWindowDescrip != null) {
+                        document.title = ret.PageWindowDescrip;
                     }
                 }, (error) => {
                     flexygo.exceptions.httpShow(error);
@@ -122,9 +141,12 @@ var flexygo;
          * @param {boolean} isClone -
         * @param {flexygo.nav.FlexygoHistory} previousHist - Previous page history
         */
-        function openPageName(pagename, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement, isClone, previousHist) {
+        function openPageName(pagename, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement, isClone, previousHist, presets) {
             if (typeof event != 'undefined') {
                 event.preventDefault();
+            }
+            if (flexygo.utils.isTactilModeActive()) {
+                flexygo.utils.scrollTo(0);
             }
             if (flexygo.utils.isSizeMobile() && targetid.indexOf('modal') != 0) {
                 targetid = "current";
@@ -145,7 +167,8 @@ var flexygo;
                 objectwhere: objectwhere,
                 defaults: defaults,
                 pagename: pagename,
-                filtersValues: (previousHist && previousHist.filtersValues) ? previousHist.filtersValues : null
+                filtersValues: (previousHist && previousHist.filtersValues) ? previousHist.filtersValues : null,
+                presetsValues: (previousHist && previousHist.presetsValues) ? previousHist.presetsValues : null
             };
             if (targetid && targetid.indexOf('new') == 0) {
                 flexygo.targets.openNewWindow(histObj, targetid);
@@ -168,9 +191,18 @@ var flexygo;
                         histObj.pagetypeid = ret.StrType;
                     }
                     var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                    if (!pageContainer) {
+                        NProgress.done();
+                        return;
+                    }
                     ret.pageHistory = histObj;
-                    openPageReturn(ret, objectname, objectwhere, defaults, pageContainer, null, null, isClone);
-                    flexygo.history.historyLog.add(ret.IconCssClass, ret.Descrip, histObj);
+                    openPageReturn(ret, objectname, objectwhere, defaults, pageContainer, null, null, isClone, null, presets);
+                    if (!excludeHist) {
+                        flexygo.history.historyLog.add(ret.IconCssClass, ret.Descrip, ret.pageHistory);
+                    }
+                    if (pageContainer.is('#realMain')) {
+                        document.title = ret.PageWindowDescrip;
+                    }
                 }, (error) => {
                     flexygo.exceptions.httpShow(error);
                     let ev = {
@@ -199,7 +231,7 @@ var flexygo;
         * @param {function} callBack - callback to be called after execute
         * @param {boolean} showprogress - false to hide progress indicator
        */
-        function execProcess(processname, objectname, objectwhere, defaults, processparams, targetid, excludeHist, triggerElement, callBack, showProgress) {
+        function execProcess(processname, objectname, objectwhere, defaults, processparams, targetid, excludeHist, triggerElement, callBack, showProgress, originalProcess) {
             if (typeof event != 'undefined') {
                 event.preventDefault();
             }
@@ -208,6 +240,9 @@ var flexygo;
             let target;
             if (typeof (showProgress) == typeof (true)) {
                 proc.showProgress = showProgress;
+            }
+            if (originalProcess) {
+                proc.progressBar = originalProcess.progressBar;
             }
             if (triggerElement) {
                 triggerElement = getRealTarget(triggerElement);
@@ -253,7 +288,7 @@ var flexygo;
             }
         }
         nav.execProcess = execProcess;
-        function openPageReturn(pageConf, objectname, objectwhere, defaults, pageContainer, reportname, processname, isClone, reportwhere) {
+        function openPageReturn(pageConf, objectname, objectwhere, defaults, pageContainer, reportname, processname, isClone, reportwhere, presets) {
             pageContainer.html(flexygo.utils.loadingMsg());
             //Hide menu when page is loaded.
             if (!flexygo.utils.isSizeMobile()) {
@@ -276,7 +311,7 @@ var flexygo;
                 //else {
                 //    pageContainer.attr('class', 'pageContainer ' + bodyClass);
                 //}
-                if (pageConf.Descrip.includes("{{") && !flexygo.utils.isBlank(reportname)) {
+                if (pageConf.Descrip.includes("{{ReportName") && !flexygo.utils.isBlank(reportname)) {
                     pageConf.Descrip = reportname;
                 }
                 pageContainer.closest('.flx-dialog,.flx-dialog-modal').find("span.ui-dialog-title").text(pageConf.Descrip);
@@ -290,65 +325,97 @@ var flexygo;
                     pageContainer.append('<style name="custom-style">' + pageConf.Style + '</style>');
                 }
                 var modules = flexygo.utils.sortObject(pageConf.Modules, 'Order');
-                for (let i = 0; i < modules.length; i++) {
-                    let mod = modules[i];
-                    var cont = pageContainer.find('.' + mod.LayoutPositionId);
-                    if (cont.length == 0) {
-                        cont = pageContainer;
+                let parsedPresets = flexygo.utils.isJSON(flexygo.utils.parser.replaceAll(presets, "'", '"')) ? JSON.parse(flexygo.utils.parser.replaceAll(presets, "'", '"')) : presets;
+                let presetHistoryValue = new PresetHistoryValue();
+                if (parsedPresets != null) {
+                    pageConf.pageHistory.presetsValues = new flexygo.nav.ModulePresetHistory();
+                }
+                if (typeof parsedPresets == 'object') {
+                    for (const key in parsedPresets) {
+                        presetHistoryValue = new PresetHistoryValue();
+                        presetHistoryValue.presetId = parsedPresets[key];
+                        pageConf.pageHistory.presetsValues[key] = presetHistoryValue;
                     }
-                    let container = $('<flx-module></flx-module>');
-                    container.html(mod.ContainerTemplate).attr('modulename', mod.ModuleName).attr('type', mod.WebComponent.split(' ')[0]).addClass(mod.ContainerClass);
-                    if (flexygo.utils.isSizeMobile() && modules.length == 1) {
-                        container.find('.cntHeader').hide();
-                    }
-                    cont.append(container);
-                    var componentString = mod.WebComponent;
-                    if (mod.Params) {
-                        componentString += ' ' + mod.Params;
-                    }
-                    /*var mode = 'edit';
-                    if (reportname) { mode= 'report'; }
-                    if (proccid) { mode= 'process'; }*/
-                    //console.log("openpageret", mod.ModuleName, mod.ObjectDefaults);
-                    let ctrl = container[0];
-                    ctrl.componentString = componentString;
-                    ctrl.isClone = isClone;
-                    ctrl.objectname = objectname;
-                    ctrl.objectwhere = objectwhere;
-                    //ctrl.mode = mode;
-                    ctrl.reportname = reportname;
-                    ctrl.reportwhere = reportwhere;
-                    ctrl.processname = processname;
-                    ctrl.moduleName = mod.ModuleName;
-                    ctrl.moduleTitle = mod.Title;
-                    ctrl.icon = mod.IconClass;
-                    if (mod.HeaderClass && mod.HeaderClass != '') {
-                        ctrl.headerClass = mod.HeaderClass;
-                    }
-                    if (mod.ModuleClass && mod.ModuleClass != '') {
-                        ctrl.moduleClass = mod.ModuleClass;
-                    }
-                    ctrl.canCollapse = mod.CanCollapse;
-                    ctrl.canEnlarge = mod.CanEnlarge;
-                    ctrl.canRefresh = mod.CanRefresh;
-                    //ctrl.canClose = true;
-                    ctrl.canConfig = true;
-                    ctrl.JSAfterLoad = mod.JSAfterLoad;
-                    ctrl.objectdefaults = mod.ObjectDefaults;
-                    if (ctrl.objectdefaults) {
-                        for (let key in ctrl.objectdefaults) {
-                            if (ctrl.objectdefaults[key] != null && ctrl.objectdefaults[key].toString().indexOf('/Date(') != -1) {
-                                ctrl.objectdefaults[key] = moment(moment.utc(ctrl.objectdefaults[key]).toDate()).format('YYYY-MM-DDTHH:mm:ss');
-                            }
-                        }
-                    }
-                    ctrl.moduleConfig = mod;
-                    ctrl.ManualInit = mod.ManualInit;
-                    if (mod.InitHidden) {
-                        container.attr('init', 'false').hide();
+                }
+                else if (typeof parsedPresets == 'string') {
+                    presetHistoryValue.presetId = parsedPresets;
+                    pageConf.pageHistory.presetsValues['*'] = presetHistoryValue;
+                }
+                let def;
+                if (defaults) {
+                    if (typeof defaults == 'string') {
+                        def = JSON.parse(flexygo.utils.parser.replaceAll(defaults, "'", '"'));
                     }
                     else {
-                        ctrl.init();
+                        def = defaults;
+                    }
+                }
+                for (let i = 0; i < modules.length; i++) {
+                    let mod = modules[i];
+                    if (mod['Active'] !== false) {
+                        var cont = pageContainer.find('.' + mod.LayoutPositionId);
+                        if (cont.length == 0) {
+                            cont = pageContainer;
+                        }
+                        let container = $('<flx-module></flx-module>');
+                        container.html(mod.ContainerTemplate).attr('modulename', mod.ModuleName).attr('type', mod.WebComponent.split(' ')[0]).addClass(mod.ContainerClass);
+                        if (mod.PresetName && presets == undefined) {
+                            container.html(mod.ContainerTemplate).attr('presetname', mod.PresetName).attr('presettext', mod.PresetText).attr('preseticon', mod.PresetIcon).attr('removepreset', mod.RemovePreset);
+                        }
+                        if (flexygo.utils.isSizeMobile() && modules.length == 1) {
+                            container.find('.cntHeader').hide();
+                        }
+                        cont.append(container);
+                        var componentString = mod.WebComponent;
+                        if (mod.Params) {
+                            componentString += ' ' + flexygo.utils.parser.compile(def, mod.Params);
+                        }
+                        /*var mode = 'edit';
+                        if (reportname) { mode= 'report'; }
+                        if (proccid) { mode= 'process'; }*/
+                        //console.log("openpageret", mod.ModuleName, mod.ObjectDefaults);
+                        let ctrl = container[0];
+                        ctrl.componentString = componentString;
+                        ctrl.isClone = isClone;
+                        ctrl.objectname = objectname;
+                        ctrl.objectwhere = objectwhere;
+                        //ctrl.mode = mode;
+                        ctrl.reportname = reportname;
+                        ctrl.reportwhere = reportwhere;
+                        ctrl.processname = processname;
+                        ctrl.moduleName = mod.ModuleName;
+                        ctrl.moduleTitle = mod.Title;
+                        ctrl.icon = mod.IconClass;
+                        if (mod.HeaderClass && mod.HeaderClass != '') {
+                            ctrl.headerClass = mod.HeaderClass;
+                        }
+                        if (mod.ModuleClass && mod.ModuleClass != '') {
+                            ctrl.moduleClass = mod.ModuleClass;
+                        }
+                        ctrl.canCollapse = mod.CanCollapse;
+                        ctrl.canEnlarge = mod.CanEnlarge;
+                        ctrl.canRefresh = mod.CanRefresh;
+                        //ctrl.canClose = true;
+                        ctrl.canConfig = true;
+                        ctrl.JSAfterLoad = mod.JSAfterLoad;
+                        ctrl.objectdefaults = mod.ObjectDefaults;
+                        if (ctrl.objectdefaults) {
+                            for (let key in ctrl.objectdefaults) {
+                                if (ctrl.objectdefaults[key] != null && ctrl.objectdefaults[key].toString().indexOf('/Date(') != -1) {
+                                    ctrl.objectdefaults[key] = moment(moment.utc(ctrl.objectdefaults[key]).toDate()).format('YYYY-MM-DDTHH:mm:ss');
+                                }
+                            }
+                        }
+                        ctrl.moduleConfig = mod;
+                        ctrl.ManualInit = mod.ManualInit;
+                        ctrl.HTMLInit = mod.HTMLInit;
+                        ctrl.ModuleViewers = mod.ModuleViewers;
+                        if (mod.InitHidden) {
+                            container.attr('init', 'false').hide();
+                        }
+                        else {
+                            ctrl.init();
+                        }
                     }
                 }
                 let ev = {
@@ -418,6 +485,10 @@ var flexygo;
             }
             else {
                 var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                if (!pageContainer) {
+                    NProgress.done();
+                    return;
+                }
                 if (triggerElement && !triggerElement.closest('.pageContainer').is(pageContainer)) {
                     pageContainer.data('opener', triggerElement.closest('.pageContainer'));
                 }
@@ -441,8 +512,15 @@ var flexygo;
         * @param {JQuery} triggerElement - Relative element to open the page
        */
         function openReportsParams(reportname, reportwhere, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement) {
-            //report params page is currenty syspage-reportparams-default
-            flexygo.nav.openReportsParamsPage('syspage-reportparams-default', reportname, reportwhere, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement);
+            let reportConfig = new flexygo.obj.Entity('sysReport', 'Reports.ReportName=\'' + reportname + '\'');
+            let objData = reportConfig.getView('vNet_Reports', 0, 1, null, null, null)[0];
+            if (objData.numParameters > 0) {
+                //report params page is currenty syspage-reportparams-default
+                flexygo.nav.openReportsParamsPage('syspage-reportparams-default', reportname, reportwhere, objectname, objectwhere, defaults, targetid, excludeHist, triggerElement);
+            }
+            else {
+                viewReport(reportname, reportwhere, objectname, objectwhere, defaults, null, targetid, excludeHist, true);
+            }
         }
         nav.openReportsParams = openReportsParams;
         /**
@@ -488,6 +566,10 @@ var flexygo;
             }
             else {
                 var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                if (!pageContainer) {
+                    NProgress.done();
+                    return;
+                }
                 flexygo.ajax.post('~/api/Page', 'GetPageByName', { "PageName": pagename }, (ret) => {
                     ret.pageHistory = histObj;
                     openPageReturn(ret, objectname, objectwhere, defaults, pageContainer, reportname, null, null, reportwhere);
@@ -508,32 +590,62 @@ var flexygo;
          * @param {boolean} excludeHist - True to not store in history
          * @param {JQuery} triggerElement - Relative element to open the page
         */
-        function viewReport(reportname, reportwhere, objectname, objectwhere, defaults, params, targetid, excludeHist) {
+        function viewReport(reportname, reportwhere, objectname, objectwhere, defaults, params, targetid, excludeHist, hasParams = false) {
             if (typeof event != 'undefined') {
                 event.preventDefault();
             }
-            let reportConfig = new flexygo.obj.Entity('Sysreport', 'reportName=\'' + reportname + '\'');
-            reportConfig.read();
-            //html report
-            if (reportConfig.data.TypeId.Value == 'html') {
-                let templateId = reportConfig.data.TemplateId.Value;
-                let filter = reportConfig.data.FilterSentence.Value;
-                flexygo.nav.openPrintPage(objectname, objectwhere, templateId, targetid, filter);
-            }
-            else {
-                //crystal report
-                var callParams;
-                callParams = 'ObjectName=' + objectname + '&ObjectWhere=' + objectwhere + '&ReportName=' + reportname;
-                //came from param form
-                if (params)
-                    callParams += '&Params=' + JSON.stringify(params);
-                //report definition has a report where
-                if (reportwhere)
-                    callParams += '&Filter=' + reportwhere;
-                //put it all into one encoded id
-                callParams = 'id=' + flexygo.history.Base64.encode(callParams);
-                flexygo.nav.openURL('~/forms/Reports.aspx', callParams);
-            }
+            let reportConfig;
+            flexygo.ajax.post('~/api/Report', 'GetReportConfig', { "ReportName": reportname, "ObjectName": objectname, "ObjectWhere": objectwhere }, (reportConfig) => {
+                if (reportConfig.MaxRows && reportConfig.CurrentRows && reportConfig.CurrentRows > reportConfig.MaxRows) {
+                    flexygo.msg.warning(flexygo.localization.translate('navigation.reportmaxrows').replace('{0}', reportConfig.CurrentRows).replace('{1}', reportConfig.MaxRows));
+                    return;
+                }
+                let paramsJSON = {}, filter;
+                if (params) {
+                    for (let i = 0; i < params.length; i++) {
+                        paramsJSON[params[i].key] = params[i].value;
+                    }
+                }
+                //html report
+                if (reportConfig.TypeId == 'html') {
+                    $('body').append('<div class="aboveLoading"><div class="centerLoading"> <div id="flx-dependency-loader" class="reportSpinner margin-top-l margin-right-s" style="position: initial;width: 30px;height: 30px;"/><h1 class="margin-left-s loadingTitle">' + flexygo.localization.translate('htmlreport.generate') + '</h1></div></div>');
+                    flexygo.utils.asyncSleep(0).then(() => {
+                        let templateId = reportConfig.TemplateId;
+                        filter = flexygo.utils.parser.compile(paramsJSON, (reportConfig.AdditionalWhere == null ? "" : reportConfig.AdditionalWhere));
+                        let descrip = reportConfig.ReportDescrip;
+                        flexygo.nav.openPrintPage(objectname, objectwhere, templateId, targetid, filter, descrip);
+                    });
+                }
+                else if (reportConfig.TypeId == 'excel') {
+                    filter = flexygo.utils.parser.compile(paramsJSON, (reportConfig.AdditionalWhere == null ? "" : reportConfig.AdditionalWhere));
+                    flexygo.ajax.syncPost('~/api/Report', 'GetReportExcel', { "ObjectName": objectname, "ObjectWhere": objectwhere, "ReportName": reportname, "AdditionalWhere": filter }, (ret) => {
+                        if (ret.Success) {
+                            var func = new Function(ret.Link);
+                            func.call(ret.Link);
+                        }
+                    });
+                }
+                else {
+                    //crystal report
+                    var callParams;
+                    callParams = 'ObjectName=' + objectname + '&ObjectWhere=' + objectwhere + '&ReportName=' + reportname;
+                    //came from param form
+                    if (params)
+                        callParams += '&Params=' + JSON.stringify(params);
+                    //defaults for the params
+                    if (defaults && defaults != 'null')
+                        callParams += '&Defaults=' + JSON.stringify(defaults);
+                    //if has params even hide
+                    if (hasParams)
+                        callParams += '&HasParams=' + hasParams;
+                    //report definition has a report where
+                    if (reportwhere)
+                        callParams += '&Filter=' + reportwhere;
+                    //put it all into one encoded id
+                    callParams = 'id=' + flexygo.history.Base64.encode(callParams);
+                    flexygo.nav.openURL('~/forms/Reports.aspx', callParams);
+                }
+            });
         }
         nav.viewReport = viewReport;
         /**
@@ -614,6 +726,10 @@ var flexygo;
             }
             else {
                 var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                if (!pageContainer) {
+                    NProgress.done();
+                    return;
+                }
                 var navString = '';
                 navString += '<div class="col-9 col-m-6 col-s-12">';
                 navString += '<flx-container type="emptyCnt">';
@@ -641,6 +757,9 @@ var flexygo;
                 mCtl.addItem('flx-icon icon-remove', 'Deshacer Edición', () => { wcMaster.uneditAll(); });
                 mCtl.addItem('flx-icon icon-save', 'Guardar todo', () => { wcMaster.saveAll(); });
                 flexygo.history.historyLog.add('flx-icon icon-properties-settings', tablename, histObj);
+                if (pageContainer.is('#realMain')) {
+                    document.title = tablename;
+                }
             }
         }
         nav.openEditTable = openEditTable;
@@ -683,10 +802,17 @@ var flexygo;
             }
             else {
                 var pageContainer = flexygo.targets.createContainer(histObj, excludeHist, triggerElement);
+                if (!pageContainer) {
+                    NProgress.done();
+                    return;
+                }
                 flexygo.ajax.post('~/api/Page', 'GetHelpById', { "HelpId": helpid }, (ret) => {
                     if (ret) {
                         ret.pageHistory = histObj;
                         flexygo.history.historyLog.add('flx-icon icon-help-2', ret.Title, histObj);
+                        if (pageContainer.is('#realMain')) {
+                            document.title = ret.Title;
+                        }
                         pageContainer.html(ret.HTMLText);
                         pageContainer.prepend('<div class="develop-only help-button help-fixed"><button class="btn btn-default" onclick="flexygo.nav.openPage(\'edit\',\'sysHelp\',\'(HelpId=\\\'' + helpid + '\\\')\',null,\'current\',false,$(this))"><i class="flx-icon icon-pencil"></i> </button></div>');
                         //$(document).trigger('helpLoaded', [helpid, pageContainer]);
@@ -711,7 +837,7 @@ var flexygo;
         * @param {string} filter - Object or collection filter
         * @param {string} targetid - Target to open the window
        */
-        function openPrintPage(objectName, objectWhere, templateId, targetid, filter) {
+        function openPrintPage(objectName, objectWhere, templateId, targetid, filter, descrip) {
             //Hide menu when page loaded
             if (!flexygo.utils.isSizeMobile()) {
                 $('#mainMenu').find('.item-opened').parent().find('ul').slideUp(flexygo.utils.animationTime);
@@ -734,7 +860,8 @@ var flexygo;
             //    repbody +='</div><div class="report" ></div > </div>'
             //    pageContainer.html(repbody);
             //    pageContainer.find('.report').html(htmlText);
-            $(htmlText).print();
+            $(htmlText).print(descrip);
+            $('body > .aboveLoading').remove();
         }
         nav.openPrintPage = openPrintPage;
         /**
@@ -766,7 +893,34 @@ var flexygo;
         function getObjectMenu(objectname, objectwhere, defaults, btn, coord, options) {
             var cntMenu = $('flx-contextmenu')[0];
             if (!cntMenu.hideMenu(btn)) {
-                let proc = new flexygo.obj.Entity(objectname, objectwhere).processes(options);
+                let defPage, defMenu;
+                if (btn) {
+                    let histObj = flexygo.history.get(btn);
+                    if (typeof histObj != 'undefined' && histObj.defaults) {
+                        if (typeof histObj.defaults == 'string') {
+                            defPage = JSON.parse(flexygo.utils.parser.replaceAll(histObj.defaults, "'", '"'));
+                        }
+                        else {
+                            defPage = histObj.defaults;
+                        }
+                    }
+                }
+                if (defaults) {
+                    if (typeof defaults == 'string') {
+                        defMenu = JSON.parse(flexygo.utils.parser.replaceAll(defaults, "'", '"'));
+                    }
+                    else {
+                        defMenu = defaults;
+                    }
+                }
+                if (defPage) {
+                    Object.assign(defPage, defMenu);
+                    defaults = JSON.stringify(defPage);
+                }
+                else if (defMenu) {
+                    defaults = JSON.stringify(defMenu);
+                }
+                let proc = new flexygo.obj.Entity(objectname, objectwhere).processes(options, defaults);
                 //Clear not Show in Menu items
                 if (proc.ObjectLink && Object.keys(proc.ObjectLink.ChildNodes).length > 0) {
                     for (let key in proc.ObjectLink.ChildNodes) {
@@ -893,6 +1047,104 @@ var flexygo;
             flexygo.events.trigger(ev);
         }
         nav.toggleFlxnav = toggleFlxnav;
+    })(nav = flexygo.nav || (flexygo.nav = {}));
+})(flexygo || (flexygo = {}));
+(function (flexygo) {
+    var nav;
+    (function (nav) {
+        var external;
+        (function (external) {
+            /**
+            * Navigate to default page
+            * @method goHome
+            * @param {string} appname - External app project name
+            * @param {string} targetid - Target to open the window
+            */
+            function goHome(appname, targetid) {
+                if (typeof event != 'undefined') {
+                    event.preventDefault();
+                }
+                var histObj = {
+                    targetid: targetid
+                };
+                externalTarget(appname, histObj);
+            }
+            external.goHome = goHome;
+            /**
+             * Opens the default object page
+             * @method openPage
+             * @param {string} appname - External app project name
+             * @param {string} pagetypeid - Type of the page
+             * @param {string} objectname - Name of the collection or entity
+             * @param {string} objectwhere - Where of the collection or entity
+             * @param {string} defaults - Defaults to be added to the page
+             * @param {string} targetid - Target to open the window
+             * @param {JQuery} triggerElement - Relative element to open the page
+            */
+            function openPage(appname, pagetypeid, objectname, objectwhere, defaults, targetid, triggerElement) {
+                if (typeof event != 'undefined') {
+                    event.preventDefault();
+                }
+                var histObj = {
+                    targetid: targetid,
+                    navigateFun: 'openpage',
+                    objectname: objectname,
+                    objectwhere: objectwhere,
+                    defaults: defaults,
+                    pagetypeid: pagetypeid
+                };
+                externalTarget(appname, histObj);
+            }
+            external.openPage = openPage;
+            /**
+             * Opens a page by its name
+             * @method openPageName
+             * @param {string} pagename - Identifier of the page
+             * @param {string} appname - External app project name
+             * @param {string} objectname - Name of the collection or entity
+             * @param {string} objectwhere - Where of the collection or entity
+             * @param {string} defaults - Defaults to be added to the page
+             * @param {string} targetid - Target to open the window
+             * @param {JQuery} triggerElement - Relative element to open the page
+            */
+            function openPageName(appname, pagename, objectname, objectwhere, defaults, targetid, triggerElement) {
+                if (typeof event != 'undefined') {
+                    event.preventDefault();
+                }
+                var histObj = {
+                    navigateFun: 'openpagename',
+                    targetid: targetid,
+                    objectname: objectname,
+                    objectwhere: objectwhere,
+                    defaults: defaults,
+                    pagename: pagename,
+                };
+                externalTarget(appname, histObj);
+            }
+            external.openPageName = openPageName;
+            function externalTarget(appname, objectPage) {
+                flexygo.ajax.post('~/api/Page', 'GetExternalAuth', { "AppName": appname }, (ret) => {
+                    let url = ret.Url;
+                    if (ret && ret.length > 0 && ret[0].AccessToken) {
+                        flexygo.targets.openExternalNewWindow(url, ret.AccessToken, objectPage);
+                    }
+                    else {
+                        if (!url.endsWith('/')) {
+                            url += '/';
+                        }
+                        url += 'Account/Authorize?AppName=' + ret.ProjectName + '&Id=' + flexygo.context.currentUserId;
+                        window.open(url, flexygo.utils.uniqueId(), 'scrollbars=no,status=yes,titlebar=no,resizable=no,width=800,height=600');
+                        flexygo.events.on(this, 'process', 'info', (e) => {
+                            if (e.masterIdentity == 'authorizedPage' && e.sender.AppName == appname) {
+                                flexygo.events.off(this, 'process', 'info');
+                                flexygo.targets.openExternalNewWindow(url, e.sender.AccessToken, objectPage);
+                            }
+                        });
+                    }
+                });
+            }
+            external.externalTarget = externalTarget;
+        })(external = nav.external || (nav.external = {}));
     })(nav = flexygo.nav || (flexygo.nav = {}));
 })(flexygo || (flexygo = {}));
 //# sourceMappingURL=navigation.js.map

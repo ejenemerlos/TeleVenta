@@ -6,6 +6,22 @@ flxObjectConfig
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
 <member name="T:FLEXYGO.Objects.Settings.ObjectAditionalTableSettings">
  <summary>
  Class ObjectAditionalTableSettings enables Object properties from other tables.
@@ -275,6 +291,11 @@ flxObjectConfig
  A Templates reload
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings.eReloadType.Filters">
+ <summary>
+ A Filters reload of collection
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._ObjectName">
  <summary>
   The Object Name
@@ -450,6 +471,36 @@ flxObjectConfig
  The delete sentence
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._BeforeInsert">
+ <summary>
+ The before insert sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._AfterInsert">
+ <summary>
+ The after insert sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._BeforeUpdate">
+ <summary>
+ The before update sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._AfterUpdate">
+ <summary>
+ The after update sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._BeforeDelete">
+ <summary>
+ The before delete sentence
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._AfterDelete">
+ <summary>
+ The after delete sentence
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._LoadProcessName">
  <summary>
  The load process Id
@@ -508,6 +559,11 @@ flxObjectConfig
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._IgnoreDBRequired">
  <summary>
  Ignore db Required Fields
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._ConfirmOkText">
+ <summary>
+ Confirm Ok test Message
  </summary>
 </member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._ParentName">
@@ -578,6 +634,11 @@ flxObjectConfig
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._PropertiesLoaded">
  <summary>
  If properties are loaded
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectSettings._SearchSettingsLoaded">
+ <summary>
+ If _SearchSettings are loaded
  </summary>
 </member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectSettings._Processes">
@@ -751,6 +812,12 @@ flxObjectConfig
  </summary>
  <value><c>true</c> if Ignores database required fields; otherwise, <c>false</c>.</value>
 </member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.ConfirmOkText">
+ <summary>
+ Gets a value indicating whether this <see cref="T:FLEXYGO.Objects.Settings.ObjectSettings"/> Confirm message will show.
+ </summary>
+ <value><c>true</c> if shows the confirm message; otherwise, <c>false</c>.</value>
+</member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectSettings.NavigateNodeId">
  <summary>
  Gets the Navigate Node Id function.
@@ -801,7 +868,7 @@ flxObjectConfig
 </member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectSettings.DeleteProcessName">
  <summary>
- Gets or sets  the delete process name
+ Gets or sets the delete process name
  </summary>
  <value>system.string.</value>
 </member>
@@ -810,6 +877,42 @@ flxObjectConfig
  Gets or sets the update process name.
  </summary>
  <value>system.string</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.BeforeInsert">
+ <summary>
+ Gets or sets the before insert process name
+ </summary>
+ <value>system.Long.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.AfterInsert">
+ <summary>
+ Gets or sets the after insert process name
+ </summary>
+ <value>system.Long.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.BeforeUpdate">
+ <summary>
+ Gets or sets the before update process name.
+ </summary>
+ <value>system.string</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.AfterUpdate">
+ <summary>
+ Gets or sets the after update process name.
+ </summary>
+ <value>system.string</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.BeforeDelete">
+ <summary>
+ Gets or sets the before delete process name
+ </summary>
+ <value>system.string.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectSettings.AfterDelete">
+ <summary>
+ Gets or sets the after delete process name
+ </summary>
+ <value>system.string.</value>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectSettings.LoadProcessName">
  <summary>
@@ -933,6 +1036,11 @@ flxObjectConfig
  Gets the complete property collection.
  </summary>
  <value>ObjectPropertyCollection.</value>
+</member>
+<member name="M:FLEXYGO.Objects.Settings.ObjectSettings.SearchSettings(FLEXYGO.Security.UserSecurityConfig)">
+ <summary>
+ Gets the complete property collection.
+ </summary>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectSettings.PropertiesWithDefinition">
  <summary>
@@ -1536,6 +1644,11 @@ flxObjectConfig
  </summary>
  
 </member>
+<member name="F:FLEXYGO.Objects.Settings.Template._UserDefinedGroups">
+ <summary>
+ Template can be grouped by user
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.Template.ObjectName">
  <summary>
  The Object Name
@@ -1631,6 +1744,11 @@ flxObjectConfig
  A collection with fields to group by
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.Template.GroupList">
+ <summary>
+ A collection with fields to group by
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.Template.TableColumns">
  <summary>
  Base collection with table column names and translations
@@ -1653,7 +1771,7 @@ flxObjectConfig
  Class TemplateGroup.
  </summary>
 </member>
-<member name="F:FLEXYGO.Objects.Settings.TemplateGroup.GroupField">
+<member name="F:FLEXYGO.Objects.Settings.TemplateGroup._GroupField">
  <summary>
  The Group By Property
  </summary>
@@ -1668,14 +1786,24 @@ flxObjectConfig
  The Footer text
  </summary>
 </member>
-<member name="F:FLEXYGO.Objects.Settings.TemplateGroup.Order">
+<member name="F:FLEXYGO.Objects.Settings.TemplateGroup._Order">
  <summary>
  The Order
  </summary>
 </member>
-<member name="F:FLEXYGO.Objects.Settings.TemplateGroup.OrderMode">
+<member name="F:FLEXYGO.Objects.Settings.TemplateGroup._OrderMode">
  <summary>
  The Order Mode (asc, desc)
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.TemplateGroup._Label">
+ <summary>
+ Field Label
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.TemplateGroup._UserDefault">
+ <summary>
+ Set group as default for users
  </summary>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.TemplateGroup.Header">
@@ -1840,6 +1968,16 @@ flxObjectConfig
  The confirm text
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProcess.IconMenuClass">
+ <summary>
+ The icon Menu CSS class
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProcess.TextMenuClass">
+ <summary>
+ The text menu CSS class
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectProcess.IconClass">
  <summary>
  The icon CSS class
@@ -1855,9 +1993,14 @@ flxObjectConfig
  The menu text
  </summary>
 </member>
-<member name="F:FLEXYGO.Objects.Settings.ObjectProcess.ParentMenuId">
+<member name="F:FLEXYGO.Objects.Settings.ObjectProcess.MenuDisabled">
  <summary>
  The parent menu identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProcess.ParentMenuId">
+ <summary>
+ If the menu is disabled
  </summary>
 </member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectProcess.ParentIconClass">
@@ -1957,12 +2100,6 @@ flxObjectConfig
  Class ObjectProcessParam.
  </summary>
 </member>
-<member name="P:FLEXYGO.Objects.Settings.ProcessParam.DataType">
- <summary>
- Gets the type of the data.
- </summary>
- <value>The type of the data.</value>
-</member>
 <member name="P:FLEXYGO.Objects.Settings.ProcessParam.ProcessName">
  <summary>
  Gets or sets the process identifier.
@@ -2010,6 +2147,11 @@ flxObjectConfig
 <member name="F:FLEXYGO.Objects.Settings.ProcessConfig.ConfirmText">
  <summary>
  The Confirm Text
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ProcessConfig.LoadingMessage">
+ <summary>
+ The Loading Message text
  </summary>
 </member>
 <member name="F:FLEXYGO.Objects.Settings.ProcessConfig.JSforParams">
@@ -2152,6 +2294,11 @@ flxObjectConfig
  Change the runButtonText
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ProcessConfig.RunButtonIconName">
+ <summary>
+ Run Button Icon
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ProcessConfig.ReturnTableNames">
  <summary>
  Tablenames for returning datasets
@@ -2165,6 +2312,16 @@ flxObjectConfig
 <member name="F:FLEXYGO.Objects.Settings.ProcessConfig.LoadProcessName">
  <summary>
  The load process Id
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ProcessConfig.BeforeExec">
+ <summary>
+ The process to execute before execution
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ProcessConfig.AfterExec">
+ ''' <summary>
+ The process to execute after execution
  </summary>
 </member>
 <member name="M:FLEXYGO.Objects.Settings.ProcessConfig.#ctor">
@@ -2519,6 +2676,16 @@ flxObjectConfig
  The object where link
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._ObjModeLink">
+ <summary>
+ The object Mode link
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._PageNameLink">
+ <summary>
+ The Page name link
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectProperty._TargetIdLink">
  <summary>
  The target id new object link
@@ -2709,6 +2876,31 @@ flxObjectConfig
  Offline
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._ExtensionId">
+ <summary>
+ ExtensionId
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._Extensions">
+ <summary>
+ Extensions
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._Autoselect">
+ <summary>
+ Autoselect
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._ThrowDependenciesOnInvalid">
+ <summary>
+ ThrowDependenciesOnInvalid
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._BarcodeReaders">
+ <summary>
+ BarcodeReaders
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectProperty._ObjectName">
  <summary>
  The object name
@@ -2775,6 +2967,16 @@ flxObjectConfig
  Security Can edit
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._HasDependencies">
+ <summary>
+ Has dependencies
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectProperty._HasDependingProperties">
+ <summary>
+ Has depending properties
+ </summary>
+</member>
 <member name="M:FLEXYGO.Objects.Settings.ObjectProperty.#ctor">
  <summary>
  Initializes a new instance of the <see cref="T:FLEXYGO.Objects.Settings.ObjectProperty"/> class.
@@ -2785,11 +2987,11 @@ flxObjectConfig
  Initializes a new instance of the <see cref="T:FLEXYGO.Objects.Settings.ObjectProperty"/> class.
  </summary>
 </member>
-<member name="M:FLEXYGO.Objects.Settings.ObjectProperty.AutoIncrementValue(FLEXYGO.Data.DataManager)">
+<member name="M:FLEXYGO.Objects.Settings.ObjectProperty.AutoIncrementSentence(FLEXYGO.Data.DataManager)">
  <summary>
- Returns Property AutoIncrement value
+ Returns Property AutoIncrementSentence
  </summary>
- <return>Property value based on auto increment function</return>
+ <return>Parsed sentence for get autoincrement value.</return>
 </member>
 <member name="M:FLEXYGO.Objects.Settings.ObjectProperty.IsValuableType">
  <summary>
@@ -3053,6 +3255,18 @@ flxObjectConfig
  Gets or sets the object where link.
  </summary>
  <value>The object where link.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.ObjModeLink">
+ <summary>
+ Gets or sets the object mode link.
+ </summary>
+ <value>The object mode link.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.PageNameLink">
+ <summary>
+ Gets or sets the Page name link.
+ </summary>
+ <value>The Page name link.</value>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectProperty.TargetIdLink">
  <summary>
@@ -3330,6 +3544,48 @@ flxObjectConfig
  </summary>
  <value>The ImageMaxHeight.</value>
 </member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.ExtensionId">
+ <summary>
+ Gets or sets the ExtensionId.
+ </summary>
+ <value>The ExtensionId.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.Extensions">
+ <summary>
+ Gets or sets the Extensions.
+ </summary>
+ <value>The Extensions.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.Autoselect">
+ <summary>
+ Gets the autoselect.
+ </summary>
+ <value>The search where.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.HasDependencies">
+ <summary>
+ Returns if Property has dependencies
+ </summary>
+ <value>True or false</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.HasDependingProperties">
+ <summary>
+ Returns if Property has depending properties
+ </summary>
+ <value>True or false</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.ThrowDependenciesOnInvalid">
+ <summary>
+ Gets the ThrowDependenciesOnInvalid.
+ </summary>
+ <value>The search where.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectProperty.BarcodeReaders">
+ <summary>
+ Gets the BarcodeReaders.
+ </summary>
+ <value>The search where.</value>
+</member>
 <member name="M:FLEXYGO.Objects.Settings.ObjectProperty.LoadListValues(FLEXYGO.Configuration.Tokens.ConfToken)">
  <summary>
  Loads list of values.
@@ -3525,6 +3781,16 @@ flxObjectConfig
  Remove when parent is deletes
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectRelationsSettings._SQLEnabled">
+ <summary>
+ The SQL Enabled code
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectRelationsSettings._SQLEnabledDescrip">
+ <summary>
+ The SQL Enabled Descrption
+ </summary>
+</member>
 <member name="M:FLEXYGO.Objects.Settings.ObjectRelationsSettings.#ctor">
  <summary>
  Initializes a new instance of the <see cref="T:FLEXYGO.Objects.Settings.ObjectRelationsSettings"/> class.
@@ -3549,6 +3815,18 @@ flxObjectConfig
  Gets the child collection name.
  </summary>
  <value>The parent.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectRelationsSettings.SQLEnabled">
+ <summary>
+ Gets the sql enabled code.
+ </summary>
+ <value>The sql enabled code.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.ObjectRelationsSettings.SQLEnabledDescrip">
+ <summary>
+ Gets the sql enabled description.
+ </summary>
+ <value>The sql enabled description.</value>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.ObjectRelationsSettings.ShowInMenu">
  <summary>
@@ -3665,6 +3943,11 @@ flxObjectConfig
  Description of enabled condition
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectReport.MaxRows">
+ <summary>
+ If object has two many rows crystal reports throws exception.
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ObjectReport.EnabledProperty">
  <summary>
  Property to evaluate visibility
@@ -3742,6 +4025,11 @@ flxObjectConfig
  The file Path
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.ReportSettings.FilterReportReplacingSentence">
+ <summary>
+ Filter Report Replacing SQL Sentence with filtered SQL
+ </summary>
+</member>
 <member name="F:FLEXYGO.Objects.Settings.ReportSettings.AdditionalWhere">
  <summary>
  The Additional Where Sentence
@@ -3755,6 +4043,11 @@ flxObjectConfig
 <member name="F:FLEXYGO.Objects.Settings.ReportSettings.Params">
  <summary>
  The Parameter List
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ReportSettings.UseTLS1_2">
+ <summary>
+ TLS Version
  </summary>
 </member>
 <member name="M:FLEXYGO.Objects.Settings.ReportSettings.#ctor">
@@ -3956,9 +4249,59 @@ flxObjectConfig
  The property config
  </summary>
 </member>
+<member name="F:FLEXYGO.Objects.Settings.SearchProperty.DependingFilterProperties">
+ <summary>
+ The filter property dependant Properties
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.SearchProperty.DependingFilterFrom">
+ <summary>
+ The filter properties they depend On
+ </summary>
+</member>
 <member name="T:FLEXYGO.Objects.Settings.SearchPropertyCollection">
  <summary>
  Page Search Property collection.
+ </summary>
+</member>
+<member name="T:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty">
+ <summary>
+ ObjectDependantFilterProperty Structure.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.ObjectName">
+ <summary>
+ The object name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.PropertyName">
+ <summary>
+ The property name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.DependantPropertyName">
+ <summary>
+ The dependant property name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.DependantObjectName">
+ <summary>
+ The dependant object name.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.SQLComboSentence">
+ <summary>
+ The new SQL for combo items.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.SQLComboFilter">
+ <summary>
+ The new SQL where sentence.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Objects.Settings.ObjectDependantFilterProperty.ConnStringId">
+ <summary>
+ The connection string identifier
  </summary>
 </member>
 <member name="T:FLEXYGO.Objects.Settings.PresetSetting">
@@ -4000,22 +4343,6 @@ flxObjectConfig
  <summary>
  The Order
  </summary>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
-  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
-</summary>
 </member>
 <member name="T:FLEXYGO.Configuration.Tokens.ConfToken">
  <summary>

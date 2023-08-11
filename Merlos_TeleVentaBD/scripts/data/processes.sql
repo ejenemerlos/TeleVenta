@@ -4,44 +4,46 @@ BEGIN TRY
 
 MERGE INTO [Processes] AS Target
 USING (VALUES
-  (N'MerlosDLL',1,N'product',NULL,N'MerlosDLL',NULL,NULL,NULL,N'~/Merlos/dll/MerlosDLL.dll',N'MerlosDLL.Merlos',N'Proceso',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pAppTeleVenta',0,N'product',NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,N'AppTeleVenta',0,0,1)
- ,(N'pArticulos',0,N'product',NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pArticulosBuscar',0,N'product',NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pArticulosCliente',0,N'product',NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pClienteDatos',0,N'product',NULL,N'pClienteDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pClienteDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pClientesADI',0,N'product',NULL,N'pClientesADI',NULL,NULL,NULL,NULL,NULL,NULL,N'pClientesADI',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pClientesBasic',0,N'product',NULL,N'pClientesBasic',NULL,NULL,NULL,NULL,NULL,NULL,N'pClientesBasic',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pComunes',0,N'product',NULL,N'pComunes',NULL,NULL,NULL,NULL,NULL,NULL,N'pComunes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pConfigBBDD',0,N'product',NULL,N'pConfigBBDD',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigBBDD',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pConfigDiv',0,N'product',NULL,N'pConfigDiv',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigDiv',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pConfigPrimeraBBDD',0,N'product',NULL,N'pConfigPrimeraBBDD',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigPrimeraBBDD',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pConfiguracion',0,N'product',NULL,N'pConfiguracion',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfiguracion',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pConfiguracionLanzar',0,N'product',NULL,N'pConfiguracionLanzar',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfiguracionLanzar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pContactos',0,N'product',NULL,N'pContactos',NULL,NULL,NULL,NULL,NULL,NULL,N'pContactos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pEmpresas',0,N'product',NULL,N'pEmpresas',NULL,NULL,NULL,NULL,NULL,NULL,N'pEmpresas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pEstTV',0,N'product',NULL,N'pEstTV',NULL,NULL,NULL,NULL,NULL,NULL,N'pEstTV',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pIncidencias',0,N'product',NULL,N'pIncidencias',NULL,NULL,NULL,NULL,NULL,NULL,N'pIncidencias',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pInpDatos',0,N'product',NULL,N'pInpDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pInpDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pLlamadas',0,N'product',NULL,N'pLlamadas',NULL,NULL,NULL,NULL,NULL,NULL,N'pLlamadas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pMerlos',0,N'product',NULL,N'pMerlos',NULL,NULL,NULL,NULL,NULL,NULL,N'pMerlos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pObjetoDatos',0,N'product',NULL,N'pObjetoDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pObjetoDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pOfertas',0,N'product',NULL,N'pOfertas',NULL,NULL,NULL,NULL,NULL,NULL,N'pOfertas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pOperadorConfig',0,N'product',NULL,N'pOperadorConfig',NULL,NULL,NULL,NULL,NULL,NULL,N'pOperadorConfig',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pPedido_Nuevo',0,N'product',NULL,N'pPedido_Nuevo',NULL,NULL,NULL,NULL,NULL,NULL,N'pPedido_Nuevo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pPedidoDetalle',0,N'product',NULL,N'pPedidoDetalle',NULL,NULL,NULL,NULL,NULL,NULL,N'pPedidoDetalle',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pPreciosTabla',0,N'product',NULL,N'pPreciosTabla',NULL,NULL,NULL,NULL,NULL,NULL,N'pPreciosTabla',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pReconfigurarElPortal',0,N'product',NULL,N'pReconfigurarElPortal',NULL,NULL,NULL,NULL,NULL,NULL,N'pReconfigurarElPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pSeries',0,N'product',NULL,N'pSeries',NULL,NULL,NULL,NULL,NULL,NULL,N'pSeries',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pUltimosPedidos',0,N'product',NULL,N'pUltimosPedidos',NULL,NULL,NULL,NULL,NULL,NULL,N'pUltimosPedidos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pUltimosPedidosArticulos',0,N'product',NULL,N'pUltimosPedidosArticulos',NULL,NULL,NULL,NULL,NULL,NULL,N'pUltimosPedidosArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
- ,(N'pVersiones',0,N'product',NULL,N'pVersiones',NULL,NULL,NULL,NULL,NULL,NULL,N'pVersiones',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,0,NULL,NULL,0,0,1)
-) AS Source ([ProcessName],[TypeId],[ClassId],[ConfirmText],[ProcessDescrip],[ParamsDescrip],[ReturnDescrip],[JSforParams],[File],[Class],[Method],[StoredName],[Code],[ExternalUrl],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[TimeOut],[ConnStringId],[TargetId],[ProcessFlowText],[Auditable],[Refresh],[IsTransacted],[AdminOnly],[ConfirmOkText],[CloseDialogOnOk],[RunButtonText],[LoadProcessName],[GipeParams],[Summary],[ReturnTableNames],[Reserved],[Offline],[OriginId])
+  (N'MerlosDLL',1,N'product',NULL,NULL,N'MerlosDLL',NULL,NULL,NULL,N'~/Merlos/dll/MerlosDLL.dll',N'MerlosDLL.Merlos',N'Proceso',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pAppTeleVenta',0,N'product',NULL,NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,N'pAppTeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,N'AppTeleVenta',0,0,NULL,NULL,1)
+ ,(N'pArticulos',0,N'product',NULL,NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pArticulosBuscar',0,N'product',NULL,NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosBuscar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pArticulosCliente',0,N'product',NULL,NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,N'pArticulosCliente',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pClienteDatos',0,N'product',NULL,NULL,N'pClienteDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pClienteDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pClientesADI',0,N'product',NULL,NULL,N'pClientesADI',NULL,NULL,NULL,NULL,NULL,NULL,N'pClientesADI',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pClientesBasic',0,N'product',NULL,NULL,N'pClientesBasic',NULL,NULL,NULL,NULL,NULL,NULL,N'pClientesBasic',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pComunes',0,N'product',NULL,NULL,N'pComunes',NULL,NULL,NULL,NULL,NULL,NULL,N'pComunes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pConfigBBDD',0,N'product',NULL,NULL,N'pConfigBBDD',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigBBDD',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pConfigDiv',0,N'product',NULL,NULL,N'pConfigDiv',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigDiv',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pConfigPrimeraBBDD',0,N'product',NULL,NULL,N'pConfigPrimeraBBDD',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfigPrimeraBBDD',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pConfiguracion',0,N'product',NULL,NULL,N'pConfiguracion',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfiguracion',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pConfiguracionLanzar',0,N'product',NULL,NULL,N'pConfiguracionLanzar',NULL,NULL,NULL,NULL,NULL,NULL,N'pConfiguracionLanzar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pContactos',0,N'product',NULL,NULL,N'pContactos',NULL,NULL,NULL,NULL,NULL,NULL,N'pContactos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pEmpresas',0,N'product',NULL,NULL,N'pEmpresas',NULL,NULL,NULL,NULL,NULL,NULL,N'pEmpresas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pEstTV',0,N'product',NULL,NULL,N'pEstTV',NULL,NULL,NULL,NULL,NULL,NULL,N'pEstTV',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pIncidencias',0,N'product',NULL,NULL,N'pIncidencias',NULL,NULL,NULL,NULL,NULL,NULL,N'pIncidencias',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pInpDatos',0,N'product',NULL,NULL,N'pInpDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pInpDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pLlamadas',0,N'product',NULL,NULL,N'pLlamadas',NULL,NULL,NULL,NULL,NULL,NULL,N'pLlamadas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pMerlos',0,N'product',NULL,NULL,N'pMerlos',NULL,NULL,NULL,NULL,NULL,NULL,N'pMerlos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pObjetoDatos',0,N'product',NULL,NULL,N'pObjetoDatos',NULL,NULL,NULL,NULL,NULL,NULL,N'pObjetoDatos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pOfertas',0,N'product',NULL,NULL,N'pOfertas',NULL,NULL,NULL,NULL,NULL,NULL,N'pOfertas',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pOperadorConfig',0,N'product',NULL,NULL,N'pOperadorConfig',NULL,NULL,NULL,NULL,NULL,NULL,N'pOperadorConfig',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pPedido_Linea',0,N'product',NULL,NULL,N'pPedido_Linea',NULL,NULL,NULL,NULL,NULL,NULL,N'pPedido_Linea',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pPedido_Nuevo',0,N'product',NULL,NULL,N'pPedido_Nuevo',NULL,NULL,NULL,NULL,NULL,NULL,N'pPedido_Nuevo',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pPedidoDetalle',0,N'product',NULL,NULL,N'pPedidoDetalle',NULL,NULL,NULL,NULL,NULL,NULL,N'pPedidoDetalle',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pPreciosTabla',0,N'product',NULL,NULL,N'pPreciosTabla',NULL,NULL,NULL,NULL,NULL,NULL,N'pPreciosTabla',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pReconfigurarElPortal',0,N'product',NULL,NULL,N'pReconfigurarElPortal',NULL,NULL,NULL,NULL,NULL,NULL,N'pReconfigurarElPortal',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pSeries',0,N'product',NULL,NULL,N'pSeries',NULL,NULL,NULL,NULL,NULL,NULL,N'pSeries',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pUltimosPedidos',0,N'product',NULL,NULL,N'pUltimosPedidos',NULL,NULL,NULL,NULL,NULL,NULL,N'pUltimosPedidos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pUltimosPedidosArticulos',0,N'product',NULL,NULL,N'pUltimosPedidosArticulos',NULL,NULL,NULL,NULL,NULL,NULL,N'pUltimosPedidosArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+ ,(N'pVersiones',0,N'product',NULL,NULL,N'pVersiones',NULL,NULL,NULL,NULL,NULL,NULL,N'pVersiones',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,N'DataConnectionString',N'modal640x480',NULL,1,0,0,0,1,0,NULL,NULL,NULL,0,NULL,NULL,0,0,NULL,NULL,1)
+) AS Source ([ProcessName],[TypeId],[ClassId],[ConfirmText],[LoadingMessage],[ProcessDescrip],[ParamsDescrip],[ReturnDescrip],[JSforParams],[File],[Class],[Method],[StoredName],[Code],[ExternalUrl],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[TimeOut],[ConnStringId],[TargetId],[ProcessFlowText],[Auditable],[Refresh],[IsTransacted],[AdminOnly],[ConfirmOkText],[CloseDialogOnOk],[RunButtonText],[RunButtonIconName],[LoadProcessName],[GipeParams],[Summary],[ReturnTableNames],[Reserved],[Offline],[BeforeExec],[AfterExec],[OriginId])
 ON (Target.[ProcessName] = Source.[ProcessName])
 WHEN MATCHED AND (
 	NULLIF(Source.[TypeId], Target.[TypeId]) IS NOT NULL OR NULLIF(Target.[TypeId], Source.[TypeId]) IS NOT NULL OR 
 	NULLIF(Source.[ClassId], Target.[ClassId]) IS NOT NULL OR NULLIF(Target.[ClassId], Source.[ClassId]) IS NOT NULL OR 
 	NULLIF(Source.[ConfirmText], Target.[ConfirmText]) IS NOT NULL OR NULLIF(Target.[ConfirmText], Source.[ConfirmText]) IS NOT NULL OR 
+	NULLIF(Source.[LoadingMessage], Target.[LoadingMessage]) IS NOT NULL OR NULLIF(Target.[LoadingMessage], Source.[LoadingMessage]) IS NOT NULL OR 
 	NULLIF(Source.[ProcessDescrip], Target.[ProcessDescrip]) IS NOT NULL OR NULLIF(Target.[ProcessDescrip], Source.[ProcessDescrip]) IS NOT NULL OR 
 	NULLIF(Source.[ParamsDescrip], Target.[ParamsDescrip]) IS NOT NULL OR NULLIF(Target.[ParamsDescrip], Source.[ParamsDescrip]) IS NOT NULL OR 
 	NULLIF(Source.[ReturnDescrip], Target.[ReturnDescrip]) IS NOT NULL OR NULLIF(Target.[ReturnDescrip], Source.[ReturnDescrip]) IS NOT NULL OR 
@@ -71,17 +73,21 @@ WHEN MATCHED AND (
 	NULLIF(Source.[ConfirmOkText], Target.[ConfirmOkText]) IS NOT NULL OR NULLIF(Target.[ConfirmOkText], Source.[ConfirmOkText]) IS NOT NULL OR 
 	NULLIF(Source.[CloseDialogOnOk], Target.[CloseDialogOnOk]) IS NOT NULL OR NULLIF(Target.[CloseDialogOnOk], Source.[CloseDialogOnOk]) IS NOT NULL OR 
 	NULLIF(Source.[RunButtonText], Target.[RunButtonText]) IS NOT NULL OR NULLIF(Target.[RunButtonText], Source.[RunButtonText]) IS NOT NULL OR 
+	NULLIF(Source.[RunButtonIconName], Target.[RunButtonIconName]) IS NOT NULL OR NULLIF(Target.[RunButtonIconName], Source.[RunButtonIconName]) IS NOT NULL OR 
 	NULLIF(Source.[LoadProcessName], Target.[LoadProcessName]) IS NOT NULL OR NULLIF(Target.[LoadProcessName], Source.[LoadProcessName]) IS NOT NULL OR 
 	NULLIF(Source.[GipeParams], Target.[GipeParams]) IS NOT NULL OR NULLIF(Target.[GipeParams], Source.[GipeParams]) IS NOT NULL OR 
 	NULLIF(Source.[Summary], Target.[Summary]) IS NOT NULL OR NULLIF(Target.[Summary], Source.[Summary]) IS NOT NULL OR 
 	NULLIF(Source.[ReturnTableNames], Target.[ReturnTableNames]) IS NOT NULL OR NULLIF(Target.[ReturnTableNames], Source.[ReturnTableNames]) IS NOT NULL OR 
 	NULLIF(Source.[Reserved], Target.[Reserved]) IS NOT NULL OR NULLIF(Target.[Reserved], Source.[Reserved]) IS NOT NULL OR 
 	NULLIF(Source.[Offline], Target.[Offline]) IS NOT NULL OR NULLIF(Target.[Offline], Source.[Offline]) IS NOT NULL OR 
+	NULLIF(Source.[BeforeExec], Target.[BeforeExec]) IS NOT NULL OR NULLIF(Target.[BeforeExec], Source.[BeforeExec]) IS NOT NULL OR 
+	NULLIF(Source.[AfterExec], Target.[AfterExec]) IS NOT NULL OR NULLIF(Target.[AfterExec], Source.[AfterExec]) IS NOT NULL OR 
 	NULLIF(Source.[OriginId], Target.[OriginId]) IS NOT NULL OR NULLIF(Target.[OriginId], Source.[OriginId]) IS NOT NULL) THEN
  UPDATE SET
   [TypeId] = Source.[TypeId], 
   [ClassId] = Source.[ClassId], 
   [ConfirmText] = Source.[ConfirmText], 
+  [LoadingMessage] = Source.[LoadingMessage], 
   [ProcessDescrip] = Source.[ProcessDescrip], 
   [ParamsDescrip] = Source.[ParamsDescrip], 
   [ReturnDescrip] = Source.[ReturnDescrip], 
@@ -111,16 +117,19 @@ WHEN MATCHED AND (
   [ConfirmOkText] = Source.[ConfirmOkText], 
   [CloseDialogOnOk] = Source.[CloseDialogOnOk], 
   [RunButtonText] = Source.[RunButtonText], 
+  [RunButtonIconName] = Source.[RunButtonIconName], 
   [LoadProcessName] = Source.[LoadProcessName], 
   [GipeParams] = Source.[GipeParams], 
   [Summary] = Source.[Summary], 
   [ReturnTableNames] = Source.[ReturnTableNames], 
   [Reserved] = Source.[Reserved], 
   [Offline] = Source.[Offline], 
+  [BeforeExec] = Source.[BeforeExec], 
+  [AfterExec] = Source.[AfterExec], 
   [OriginId] = Source.[OriginId]
 WHEN NOT MATCHED BY TARGET THEN
- INSERT([ProcessName],[TypeId],[ClassId],[ConfirmText],[ProcessDescrip],[ParamsDescrip],[ReturnDescrip],[JSforParams],[File],[Class],[Method],[StoredName],[Code],[ExternalUrl],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[TimeOut],[ConnStringId],[TargetId],[ProcessFlowText],[Auditable],[Refresh],[IsTransacted],[AdminOnly],[ConfirmOkText],[CloseDialogOnOk],[RunButtonText],[LoadProcessName],[GipeParams],[Summary],[ReturnTableNames],[Reserved],[Offline],[OriginId])
- VALUES(Source.[ProcessName],Source.[TypeId],Source.[ClassId],Source.[ConfirmText],Source.[ProcessDescrip],Source.[ParamsDescrip],Source.[ReturnDescrip],Source.[JSforParams],Source.[File],Source.[Class],Source.[Method],Source.[StoredName],Source.[Code],Source.[ExternalUrl],Source.[PageTypeId],Source.[PageName],Source.[ReportName],Source.[HelpId],Source.[ReportWhere],Source.[ObjectName],Source.[ObjectWhere],Source.[Defaults],Source.[TimeOut],Source.[ConnStringId],Source.[TargetId],Source.[ProcessFlowText],Source.[Auditable],Source.[Refresh],Source.[IsTransacted],Source.[AdminOnly],Source.[ConfirmOkText],Source.[CloseDialogOnOk],Source.[RunButtonText],Source.[LoadProcessName],Source.[GipeParams],Source.[Summary],Source.[ReturnTableNames],Source.[Reserved],Source.[Offline],Source.[OriginId])
+ INSERT([ProcessName],[TypeId],[ClassId],[ConfirmText],[LoadingMessage],[ProcessDescrip],[ParamsDescrip],[ReturnDescrip],[JSforParams],[File],[Class],[Method],[StoredName],[Code],[ExternalUrl],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[TimeOut],[ConnStringId],[TargetId],[ProcessFlowText],[Auditable],[Refresh],[IsTransacted],[AdminOnly],[ConfirmOkText],[CloseDialogOnOk],[RunButtonText],[RunButtonIconName],[LoadProcessName],[GipeParams],[Summary],[ReturnTableNames],[Reserved],[Offline],[BeforeExec],[AfterExec],[OriginId])
+ VALUES(Source.[ProcessName],Source.[TypeId],Source.[ClassId],Source.[ConfirmText],Source.[LoadingMessage],Source.[ProcessDescrip],Source.[ParamsDescrip],Source.[ReturnDescrip],Source.[JSforParams],Source.[File],Source.[Class],Source.[Method],Source.[StoredName],Source.[Code],Source.[ExternalUrl],Source.[PageTypeId],Source.[PageName],Source.[ReportName],Source.[HelpId],Source.[ReportWhere],Source.[ObjectName],Source.[ObjectWhere],Source.[Defaults],Source.[TimeOut],Source.[ConnStringId],Source.[TargetId],Source.[ProcessFlowText],Source.[Auditable],Source.[Refresh],Source.[IsTransacted],Source.[AdminOnly],Source.[ConfirmOkText],Source.[CloseDialogOnOk],Source.[RunButtonText],Source.[RunButtonIconName],Source.[LoadProcessName],Source.[GipeParams],Source.[Summary],Source.[ReturnTableNames],Source.[Reserved],Source.[Offline],Source.[BeforeExec],Source.[AfterExec],Source.[OriginId])
 WHEN NOT MATCHED BY SOURCE AND TARGET.OriginId = 1 THEN 
  DELETE
 ;

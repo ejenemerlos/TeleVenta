@@ -34,6 +34,11 @@ declare namespace flexygo.ui.wc {
         };
         data: any;
         JSforParams: string;
+        currentViewers: {
+            [name: string]: string;
+        };
+        maxTabIndex: number;
+        isClone: boolean;
         constructor();
         /**
         * Fires when element is attached to DOM
@@ -78,11 +83,17 @@ declare namespace flexygo.ui.wc {
         initReportMode(): void;
         /**
         * Gets maximum tab index.
-        * @method getMaxTabindex
+        * @method setMaxTabindex
+        * @param {flexygo.api.ObjectPropertyCollection} props
+        */
+        setMaxTabindex(props: flexygo.api.ObjectPropertyCollection): void;
+        /**
+        * Gets last loaded edit controls number
+        * @method lastEditControlsCount
         * @param {flexygo.api.ObjectPropertyCollection} props
         * @return {string}
         */
-        getMaxTabindex(props: flexygo.api.ObjectPropertyCollection): string;
+        lastEditControlsCount(): number;
         /**
       * Init the webcomponent in edit process parameter mode.
       * @method initProcessMode
@@ -93,17 +104,15 @@ declare namespace flexygo.ui.wc {
         * @method initValidate
         */
         initValidate(): void;
+        loadingDependencies: number;
+        pendingSaveButton: JQuery;
+        addLock(): void;
+        removeLock(): void;
         /**
         * Starts control rendering.
         * @method render
         */
         render(): void;
-        /**
-        * Checks if form is dirty.
-        * @method checkDirtyEdit
-        * @return {boolean}
-        */
-        checkDirtyEdit(): boolean;
         /**
        * Establish webcomponent settings
        * @method configure
@@ -168,7 +177,7 @@ declare namespace flexygo.ui.wc {
        * @param {string} str
        * @return {string}
        */
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         /**
       * Refreshes a property
       * @method refreshProperty
@@ -192,6 +201,11 @@ declare namespace flexygo.ui.wc {
         */
         appendStack(prop: JQuery): void;
         /**
+        * Order the gridstack control
+        * @method orderStack
+        */
+        orderStack(): void;
+        /**
        * Gets module full Id using pagename objectname modulename
        * @method getModuleFullId
        * @return {string}
@@ -205,10 +219,24 @@ declare namespace flexygo.ui.wc {
         */
         validateSQLProperty(propertyName: string, Properties: flexygo.api.edit.KeyValuePair[]): void;
         /**
+        * Validate every property thas has an SQL validation configured
+        * @method validateSQLProperties
+        */
+        validateSQLProperties(): void;
+        paintLoadingEdit(): void;
+        removeLoadingEdit(): void;
+        paintLoadingProperty(e: flexygo.events.FlexygoEvent): void;
+        removeLoadingProperty(e: flexygo.events.FlexygoEvent): void;
+        /**
       * Captures property change event
       * @method onPropertyChanged
       * @param {flexygo.events.FlexygoEvent} e
       */
         onPropertyChanged(e: flexygo.events.FlexygoEvent): void;
+        /**
+        * Set tab index to elements
+        * @method setTabIndex
+        */
+        setTabIndex(): void;
     }
 }

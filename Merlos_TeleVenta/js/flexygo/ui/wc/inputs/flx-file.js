@@ -30,13 +30,6 @@ var flexygo;
                     this.mode = 'object';
                 }
                 /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['ObjectName', 'ObjectWhere', 'ModuleName', 'RootPath', 'Path', 'Property', 'Type', 'Mode', 'disabled'];
-                }
-                /**
                 * Init the webcomponent.
                 * @method init
                 */
@@ -63,7 +56,7 @@ var flexygo;
                     var rendered;
                     if (this.mode !== 'view') {
                         rendered = `<div class="input-group">
-                                <input type="text" class="form-control f-text" disabled placeholder="Upload File">
+                                <input type="text" class="form-control f-text" readonly placeholder="Upload File">
                                 <label class="input-group-btn">
                                     <label class="btn f-btn">
                                        <i class="fa fa-search"></i><input type="file" class="hide"/>
@@ -133,14 +126,15 @@ var flexygo;
                         flexygo.ajax.post('~/api/File', 'SaveFile', params, (response) => {
                             if (response && !response.fileError) {
                                 this.setValue(response.path);
-                                if (this.options && this.options.CauseRefresh) {
+                                const module = $(this).closest('flx-module')[0];
+                                if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                                     let ev = {
                                         class: "property",
                                         type: "changed",
                                         sender: this,
                                         masterIdentity: this.property
                                     };
-                                    flexygo.events.trigger(ev);
+                                    flexygo.events.trigger(ev, $(this));
                                 }
                                 flexygo.msg.success('file.saved');
                             }
@@ -150,8 +144,15 @@ var flexygo;
                         });
                     }
                     else if (this.type === 'base64') {
-                        this.setValue(base64);
-                        flexygo.msg.success('file.saved');
+                        let extns = this.options.Extensions.toLowerCase().split("|");
+                        let fileExtension = name.substring(name.lastIndexOf(".")).toLowerCase();
+                        if (extns.indexOf(fileExtension) > -1 || this.options.ExtensionId == 'sysAll') {
+                            this.setValue(base64);
+                            flexygo.msg.success('file.saved');
+                        }
+                        else {
+                            flexygo.msg.error('file.extension');
+                        }
                     }
                 }
                 /**
@@ -199,8 +200,15 @@ var flexygo;
                             me.find('div').first().addClass('input-group');
                         }
                     }
-                    if (this.options && this.options.RegExp) {
-                        input.attr('accept', this.options.RegExp);
+                    if ((this.options && this.options.RegExp) || (this.options && this.options.Extensions)) {
+                        if (this.options.RegExp) {
+                            input.attr('accept', this.options.RegExp);
+                        }
+                        else if (this.options.Extensions) {
+                            if (this.options.ExtensionId != 'sysAll') {
+                                input.attr('accept', flexygo.utils.parser.replaceAll(this.options.Extensions, '|', ','));
+                            }
+                        }
                     }
                 }
                 /**
@@ -339,6 +347,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxFileWcElement.observedAttributes = ['ObjectName', 'ObjectWhere', 'ModuleName', 'RootPath', 'Path', 'Property', 'Type', 'Mode', 'disabled'];
             wc.FlxFileWcElement = FlxFileWcElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

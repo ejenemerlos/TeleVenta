@@ -42,7 +42,8 @@ declare namespace flexygo.ui.wc {
         init(): void;
         render(): void;
         showModule(modIndex: number): void;
-        translate(str: string): string;
+        saveModulePresetHistory(module: api.pages.PageModule): void;
+        flxTranslate(str: string): string;
         startLoading(): void;
         stopLoading(): void;
     }

@@ -59,9 +59,13 @@ declare namespace flexygo.ui.wc {
             [key: string]: flexygo.api.SavedSearch;
         };
         filterobjectname: string;
+        additionalWhere: string;
         filterValues: FlxFilterInfo[];
         activeFilter: string;
         moduleButtons: flexygo.api.Toolbar;
+        currentViewers: {
+            [name: string]: string;
+        };
         /**
         * Init the webcomponent. REQUIRED.
         * @method init
@@ -72,6 +76,11 @@ declare namespace flexygo.ui.wc {
         * @method refresh
         */
         refresh(): void;
+        /**
+        * Refresh de one colum. REQUIRED.
+        * @method refresh
+        */
+        refreshColumn(columnid: string): void;
         setFilter(): void;
         /**
         * Render HTML data.
@@ -85,7 +94,9 @@ declare namespace flexygo.ui.wc {
         descripClick(el: JQuery, pageType: any): void;
         newCardClick(el: JQuery): void;
         onDialogClosed(e: flexygo.events.FlexygoEvent): void;
+        setCardEventClick(me: JQuery): void;
         loadKanban(refreshButtons: boolean, refreshFilters: boolean): void;
+        loadColumn(refreshButtons: boolean, refreshFilters: boolean, columnid: string): void;
         /**
        * Load filters
        * @method loadFilters

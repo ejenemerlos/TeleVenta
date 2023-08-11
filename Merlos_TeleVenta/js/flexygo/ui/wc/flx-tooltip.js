@@ -30,6 +30,7 @@ var flexygo;
                     this.desktopOnly = false;
                     this.opened = false;
                     this.elementid = "";
+                    this.innerContent = "";
                 }
                 /**
                 * Fires when element is attached to DOM
@@ -51,7 +52,9 @@ var flexygo;
                     if (me.attr("desktoponly") && me.attr("desktoponly").toLocaleLowerCase() == 'true') {
                         this.desktopOnly = true;
                     }
-                    this.innerContent = me.html();
+                    if (this.innerContent == "" || me.html() != '') {
+                        this.innerContent = me.html();
+                    }
                     me.html("");
                     this.init();
                 }
@@ -68,7 +71,7 @@ var flexygo;
                 * Monitor the list of observed attribute for changes.
                 * @property observedAttributes
                 */
-                static get observedAttributes() {
+                observedAttributes() {
                     return ["objectname", "objectwhere", "templateid", "placement", "container", "mode", "helpId"];
                 }
                 /**
@@ -156,7 +159,7 @@ var flexygo;
                         content: flexygo.utils.loadingMsg(),
                         trigger: trigger,
                         container: container
-                    }).on('show.bs.popover', (e) => {
+                    }).off('show.bs.popover').on('show.bs.popover', (e) => {
                         $('flx-tooltip').each((i, e) => {
                             if (e === this) {
                                 //set content only first time
@@ -187,7 +190,7 @@ var flexygo;
                                 }
                             }
                         });
-                    }).on('shown.bs.popover', (e) => {
+                    }).off('shown.bs.popover').on('shown.bs.popover', (e) => {
                         this.elementid = $(e.target).attr('aria-describedby');
                         if (this.mode === "popover") {
                             $(document).on('click.flxtooltip.' + this.elementid, (e) => {
@@ -203,19 +206,19 @@ var flexygo;
                                 }
                             });
                         }
-                    }).on('hide.bs.popover', (e) => {
+                    }).off('hide.bs.popover').on('hide.bs.popover', (e) => {
                         this.opened = false;
                     });
                     if (trigger === "hover") {
-                        parent.on("mouseover.flxtooltip", () => {
+                        parent.off("mouseover.flxtooltip").on("mouseover.flxtooltip", () => {
                             if (this.opened === false) {
                                 this.opened = true;
                                 this.pop.popover('show');
                             }
                         });
                     }
-                    else {
-                        parent.on("click.flxtooltip", () => {
+                    else { //manual (click)
+                        parent.off("click.flxtooltip").on("click.flxtooltip", () => {
                             if (this.opened === false) {
                                 this.opened = true;
                                 this.pop.popover('show');

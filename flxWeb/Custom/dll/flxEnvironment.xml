@@ -6,6 +6,22 @@ flxEnvironment
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
 <member name="T:FLEXYGO.Environment.EnvironmentSettings">
  <summary>
  Class EnvironmentSettings gives access to all Environment Objects.
@@ -732,6 +748,16 @@ flxEnvironment
  Check it to avoid flexygo init modules.
  </summary>
 </member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.HTMLInit">
+ <summary>
+ The module html init code
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.ModuleViewers">
+ <summary>
+ Check it to avoid flexygo init module viewers.
+ </summary>
+</member>
 <member name="F:FLEXYGO.Environment.ModuleDefinition.IconClass">
  <summary>
  The icon class
@@ -825,6 +851,36 @@ flxEnvironment
 <member name="F:FLEXYGO.Environment.ModuleDefinition.Cache">
  <summary>
  Cache value in minutes
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.PresetName">
+ <summary>
+ Preset Name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.RemovePreset">
+ <summary>
+ Remove Preset
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.MixedChartTypes">
+ <summary>
+ The MixedChartTypes value
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.MixedChartLabels">
+ <summary>
+ The MixedChartLabels value
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.ChartLineBorderDash">
+ <summary>
+ The ChartLineBorderDash value
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ModuleDefinition.ChartLineFill">
+ <summary>
+ The ChartLineFill value
  </summary>
 </member>
 <member name="T:FLEXYGO.Environment.Modules">
@@ -1015,6 +1071,57 @@ flxEnvironment
  To report has params
  </summary>
 </member>
+<member name="F:FLEXYGO.Environment.ToolBarButton.BagOnly">
+ <summary>
+ Execute process only if bag has checks selected
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.ToolBarButton.BagObject">
+ <summary>
+ Child Name
+ </summary>
+</member>
+<member name="T:FLEXYGO.Environment.TemplateToolbar">
+ <summary>
+ Class TemplateToolbars.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.TemplateToolbar.ToolbarId">
+ <summary>
+ The Button identifier
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.TemplateToolbar.Toolbar">
+ <summary>
+ The parent button identifier
+ </summary>
+</member>
+<member name="T:FLEXYGO.Environment.TemplateToolbarCollection">
+ <summary>
+ Class ObjectPropertyCollection.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Environment.TemplateToolbarCollection.Add(FLEXYGO.Environment.TemplateToolbar)">
+ <summary>
+ Adds the ObjectProperty object to the Collection using Name as Key.
+ </summary>
+ <param name="aTemplateToolbar">An ObjectProperty object.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Environment.TemplateToolbarCollection.Remove(FLEXYGO.Environment.TemplateToolbar)">
+ <summary>
+ Removes the TemplateToolbar object from the Collection using Name as Key.
+ </summary>
+ <param name="aTemplateToolbar">An TemplateToolbar object.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Environment.TemplateToolbarCollection.Contains(System.String)">
+ <summary>
+ Checks  if TemplateToolbar exists in Collection using ToolbarId.
+ </summary>
+ <param name="ToolbarId">The Property Name.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
 <member name="T:FLEXYGO.Environment.ePageType">
  <summary>
  Enum ePageType
@@ -1158,6 +1265,11 @@ flxEnvironment
 <member name="F:FLEXYGO.Environment.Page.Modules">
  <summary>
  The Page modules
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.Page.PageWindowDescrip">
+ <summary>
+ Windows Page Title
  </summary>
 </member>
 <member name="P:FLEXYGO.Environment.Page.StrType">
@@ -1314,6 +1426,46 @@ flxEnvironment
 <member name="F:FLEXYGO.Environment.PageModule.Events">
  <summary>
  The Page modules
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.PresetName">
+ <summary>
+ The module Preset
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.PresetText">
+ <summary>
+ The module Preset Text
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.PresetIcon">
+ <summary>
+ The module Preset Icon
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.RemovePreset">
+ <summary>
+ Remove Preset
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.HTMLInit">
+ <summary>
+ The module html init code
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.ModuleViewers">
+ <summary>
+ Check it to avoid flexygo init module viewers.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.Active">
+ <summary>
+ The module Active property
+ </summary>
+</member>
+<member name="F:FLEXYGO.Environment.PageModule.PropsEventDependant">
+ <summary>
+ Props wich will trigger an event
  </summary>
 </member>
 <member name="T:FLEXYGO.Environment.PageModules">
@@ -1547,6 +1699,35 @@ flxEnvironment
  <param name="MoreInfo">The more information.</param>
  <exception cref="T:FLEXYGO.Exceptions.LocalizedException">Error Logging error</exception>
 </member>
+<member name="M:FLEXYGO.Environment.Sentinel.GetBrowserInfo">
+ <summary>
+ Determines Browser Name and version.
+ </summary>
+ <returns>String with browser name and version</returns>
+</member>
+<member name="T:FLEXYGO.Environment.Sentinel.BrowserInfo">
+ <summary>
+ Class BrowserInfo.
+ </summary>
+</member>
+<member name="P:FLEXYGO.Environment.Sentinel.BrowserInfo.Name">
+ <summary>
+ Gets or sets the name.
+ </summary>
+ <value>The name.</value>
+</member>
+<member name="P:FLEXYGO.Environment.Sentinel.BrowserInfo.Version">
+ <summary>
+ Gets or sets the version.
+ </summary>
+ <value>The version.</value>
+</member>
+<member name="P:FLEXYGO.Environment.Sentinel.BrowserInfo.IP">
+ <summary>
+ Gets or sets the ip.
+ </summary>
+ <value>The ip.</value>
+</member>
 <member name="T:FLEXYGO.Environment.Sentinel.eErrorSeverity">
  <summary>
  Enum eErrorSeverity
@@ -1739,6 +1920,11 @@ flxEnvironment
  The description
  </summary>
 </member>
+<member name="F:FLEXYGO.Environment.DefaultTemplate.UserDefinedGroups">
+ <summary>
+ User Defined Groups
+ </summary>
+</member>
 <member name="T:FLEXYGO.Environment.DefaultTemplates">
  <summary>
  Class DefaultTemplates.
@@ -1778,22 +1964,6 @@ flxEnvironment
  </summary>
  <exception cref="T:System.Exception">Error Loading Default Template types definition.</exception>
  <exception cref="T:System.Exception">Error Loading default templates definition.</exception>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
 </member>
 </members>
 </doc>

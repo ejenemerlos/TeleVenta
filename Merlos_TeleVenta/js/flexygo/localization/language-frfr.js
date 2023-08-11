@@ -21,6 +21,7 @@ var flexygo;
                 CustomProperty: 'Propriété personnalisée',
                 save: 'Sauvegarder',
                 addmore: 'Ajouter d’autres propriétés en attente',
+                addmorefilter: 'Ajouter d\'autres filtres en attente',
                 sqlvalue: 'SQL Valeur',
                 sqlclass: 'SQL Classe',
                 sqlcombofilter: 'Filtre SQL pour déroulant',
@@ -41,6 +42,7 @@ var flexygo;
                 connectionstrings: 'Chaînes de connexion',
                 connStringvalues: 'Valeurs de chaîne de connexion',
                 view: 'regarder',
+                relateddep: 'Dépendances associées'
             };
             frfr.develop = {
                 developer: 'Développeur',
@@ -68,6 +70,8 @@ var flexygo;
                 objectpropertysecurity: 'Sécurité des propriétés',
                 pageSettings: 'Propriétés de la page',
                 chatter: 'Chatter',
+                users: 'Utilisateurs',
+                roles: 'Les rôles',
             };
             frfr.history = {
                 historyempty: 'Historique de navigation vide',
@@ -78,6 +82,8 @@ var flexygo;
                 reports: 'Rapports',
                 noelements: ' Il n’y a pas d’éléments',
                 popupwarning: 'Les paramètres de votre navigateur bloquent les fenêtres pop-up.',
+                reportmaxrows: 'Ce rapport utilise {0} lignes pour filtrer et dépasse la limite de {1}. Appliquez d\'abord un filtre plus restrictif.',
+                scrolltop: 'Monter'
             };
             frfr.msg = {
                 confirm: 'Confirmer l’action',
@@ -95,6 +101,7 @@ var flexygo;
                 appendwarning: 'Sélectionnez un type et un nom de champ.',
                 createfields: 'Ajouter des champs',
                 enterfieldname: ' Nom du champ',
+                reserveword: 'est un mot réservé',
                 selecttype: 'Sélectionner le type de données',
                 seedependencies: 'Afficher dépendances',
                 templates: 'Modèles',
@@ -123,6 +130,11 @@ var flexygo;
                 adddetachedproperty: 'Ajouter un champ déconnecté',
                 selecttable: 'Sélectionnez Tableau',
                 loadmore: 'Faites défiler pour charger plus',
+                hasdependencies: 'Lance des dépendances',
+                hasdependingproperties: 'Affecté par les dépendances',
+                withchangeprocess: 'Avec processus de changement',
+                throwto: 'Jeter à',
+                affectedby: 'Affecté par'
             };
             frfr.flxeditgrid = {
                 addrow: 'Ajouter ligne',
@@ -252,8 +264,22 @@ var flexygo;
                 add: 'Ajouter',
                 errornofilter: 'Veuillez d’abord ajouter un nouveau filtre.',
                 errornofields: 'Veuillez ajouter au moins un champ de filtre.',
+                fieldnotappend: 'La propriété suivante n\'a pas pu être ajoutée car une autre avec le même nom existe déjà:',
+                fieldsnotappend: 'Les propriétés suivantes n\'ont pas pu être ajoutées car une autre avec le même nom existe déjà:',
                 save: 'Sauvegarder',
                 delete: 'Supprimer',
+                hasfilterdependencies: 'Lance des dépendances',
+                hasfilterdependingproperties: 'Affecté par les dépendances',
+                throwto: 'Jeter à',
+                affectedby: 'Affecté par'
+            };
+            frfr.sortmanager = {
+                sort: 'Ordre',
+                fields: 'Champs',
+                apply: 'Appliquer',
+                clean: 'Nettoyer',
+                groups: 'Groupements',
+                applied: 'Appliqué'
             };
             frfr.flxlist = {
                 noentriesfound: 'Sans résultat.',
@@ -277,6 +303,10 @@ var flexygo;
                 mindate: 'Date minimale',
                 maxdate: 'Date maximale',
                 unseen: 'Il suffit de ne pas lire',
+                sync: 'Synchronisation',
+                waitsync: 'Attendez la fin de la synchronisation.',
+                nomail: 'Mail introuvable.',
+                nomailalert: 'Le courrier n’a pas été trouvé sur le serveur.',
             };
             frfr.flxmodule = {
                 delete: 'Supprimer',
@@ -285,6 +315,8 @@ var flexygo;
                 edit: 'Modifier',
                 view: 'Afficher',
                 print: 'Imprimer',
+                printpage: 'Imprimer la page',
+                printmodule: 'Module dimpression',
                 help: 'Aide',
                 settings: 'Configuration',
                 process: 'Processus',
@@ -303,6 +335,7 @@ var flexygo;
                 uniqueBagError: 'Champ d\'identificateur unique non défini.',
                 nofieldBagError: 'Impossible de trouver le champ <b>{0}</b>. Ajoutez-le pour interroger ou supprimer le bouton de sélection.',
                 noItemsSelected: 'D\'abord sélectionner un élément de la liste.',
+                currentlyViewing: 'Visionnage en cours'
             };
             frfr.flxnav = {
                 notimplemented: ' Action non mise en œuvre ',
@@ -331,6 +364,8 @@ var flexygo;
                 errorfilenumber: 'Sólo acepta una imagen',
                 infotostart: 'Rechercher ou faire glisser une image pour démarrer',
                 errorfilename: 'L’image n’a pas de nom',
+                errorrootpath: 'Chemin racine',
+                extension: 'Extension de fichier non acceptée.',
             };
             frfr.documentmanager = {
                 upload: 'Télécharger',
@@ -360,6 +395,10 @@ var flexygo;
                 documentempty: 'Document vide',
                 downloadall: 'Télécharger tous les documents',
                 nodocuments: 'Aucun document à télécharger',
+                msgremove: 'Etes-vous sûr de vouloir supprimer le document?',
+                sendselection: 'Envoyer les documents sélectionnés',
+                noselection: 'Aucun document sélectionné',
+                filterdocs: 'Filtrer les documents',
             };
             frfr.imagemanager = {
                 upload: 'Télécharger',
@@ -384,16 +423,19 @@ var flexygo;
                 uploaded: 'Téléchargé',
                 error: 'Erreur de téléchargement',
                 info: 'Faire glisser pour télécharger',
+                extension: 'Extension de fichier non acceptée.',
             };
             frfr.file = {
                 saved: 'Fichier sauvegardé ;)',
                 errorsaving: 'Erreur en enregistrant fichier :(',
                 resultbase64: '1 fichier en base64',
+                extension: 'Extension de fichier non acceptée.',
             };
             frfr._export = {
                 success: 'Succès exportation données ;)',
                 error: 'Erreur exportation données :(',
                 exportinglist: 'Exportant liste',
+                exportlimit: 'Le nombre maximum d&#39enregistrements à exporter a été dépassé, veuillez utiliser un filtre plus restrictif',
             };
             frfr.menumanager = {
                 deleteMenu: 'Supprimer menu',
@@ -407,6 +449,7 @@ var flexygo;
                 edit: 'Éditer',
                 submenus: 'Sous-menus',
                 newsubmenu: 'Nouveau sous-menu',
+                menuSecurity: 'Sécurité des menus',
             };
             frfr.modulemanager = {
                 save: 'Sauvegarder',
@@ -435,6 +478,7 @@ var flexygo;
                 deletenode: 'Supprimer nœud',
                 deletenodequestion: 'Êtes-vous sûr de vouloir supprimer ce nœud?',
                 addfields: 'Ajouter champs',
+                cloneDependencies: 'Cloner les dépendances d\'objet'
             };
             frfr.objectmanager = {
                 selecticon: 'Sélectionnez une icône ',
@@ -479,6 +523,7 @@ var flexygo;
                 end: 'Fin',
                 colproperties: 'Propriétés Edit grid (facultatif)',
                 save: 'Sauvegarder',
+                filtersettings: 'Paramètres de filtre',
             };
             frfr.flxpropertymanager = {
                 addfields: 'Cliquez sur "ajouter champs" pour démarrer.',
@@ -552,9 +597,16 @@ var flexygo;
                 errornosql: 'Le champ SQL ne peut pas être vide..',
                 validate: 'Valider',
                 errorduplicateprop: 'Le champ {0} existe déjà dans la liste.',
+                save: 'Save',
+                cancel: 'Cancel',
+                viewwizard: 'View Wizard',
+                selectobject: 'Veuillez sélectionner un objet',
+                openwizard: 'Ouvrir l\'assistant',
+                saved: 'Saved :)',
             };
             frfr.templates = {
                 addnewtemplate: 'Ajouter modèle',
+                openiconlist: 'Ouvrir la liste des icônes',
             };
             frfr.flxscheduler = {
                 objects: 'Objets',
@@ -585,12 +637,17 @@ var flexygo;
                 search: 'Chercher...',
                 pleasewrite: 'S’il vous plaît entrer le texte pour rechercher',
                 speak: 'Parlez maintenant...',
+                pleaseobject: 'Veuillez d’abord sélectionner un objet',
+                searchnode: 'Recherche',
             };
             frfr.text = {
                 map: 'Cliquez sur la carte',
                 errormap: 'Adresse non trouvée',
                 api: 'Clé API Google introuvable.',
                 apihelp: 'Voir notre aide pour savoir comment obtenir.',
+                nophone: 'Entrez un numéro de téléphone',
+                nomail: 'Entrez une adresse e-mail',
+                seeMap: 'Voir sur google maps'
             };
             frfr.flxfunnel = {
                 data: 'Aucune donnée',
@@ -649,6 +706,8 @@ var flexygo;
                 composerplaceholder: 'Écris quelque chose ...',
                 sendbutton: 'Registre',
                 startinfo: 'Vous devez d\'abord configurer le chatter',
+                deleteconfirm: '¿Êtes-vous sûr de vouloir supprimer le message?',
+                saveButton: 'Enregistrer',
             };
             frfr.offline = {
                 createobjecttitle: 'Ajouter un nouvel objet à l\'application',
@@ -660,6 +719,105 @@ var flexygo;
             frfr.offlineemulator = {
                 ios: 'Activer le mode iOS',
                 md: 'Activer le mode Android',
+            };
+            frfr.combobuilder = {
+                datasource: 'Data source',
+                fromtable: "Table",
+                fromview: 'View',
+                selectcnnstring: "Sélectionnez la chaîne de connexion",
+                validcnnstring: "Vous devez sélectionner une chaîne de connexion",
+                selecttable: "Sélectionner une source",
+                validorigin: "Spécifier une source valide",
+                viewkeyfields: "Afficher les champs clés",
+                saved: 'Saved',
+                save: 'Save',
+                cancel: 'Annuler',
+                selectvaluefield: "Sélectionnez le champ à sauvegarder",
+                selectdisplayfield: "Sélectionnez le champ à afficher",
+                selectadditionalfield: "Sélectionnez des champs supplémentaires",
+                selectorderfield: "Sélectionnez le champ pour trier les résultats",
+                comboassistant: 'Assistant',
+                cnnstring: "Chaîne de connexion",
+                origin: "Origine",
+                sqlsentence: 'Déclaration SQL',
+                valuefield: "Champ à stocker",
+                displayfield: "Champ à afficher",
+                additionalfield: "Champs supplémentaires",
+                orderfield: "Champ à trier",
+                validvaluefield: "Spécifier un champ à stocker",
+                validdisplayfield: "Spécifier un champ à afficher",
+                validorderfield: "Indiquez un champ à trier",
+                validsqlsentence: 'SQL statement is invalid',
+            };
+            frfr.formatsmanager = {
+                formatassistant: 'Assistant',
+                field: 'Champ',
+                selectfield: 'Sélectionner un champ',
+                validfield: 'Sélectionnez un champ valide',
+                validformat: 'Sélectionnez un format valide',
+                selectformat: "Sélectionner le type de format",
+                formattype: "Type de format",
+                saved: 'Enregistré',
+                nosaved: 'Aucun format n\'a été enregistré',
+                decimal: 'Format décimal',
+                isdate: 'Format date',
+                translate: 'Traduire la phrase',
+                save: 'Enregistrer',
+                cancel: 'Annuler',
+                casetrue: 'Cas vrai',
+                casefalse: 'Case false',
+                boolformat: 'Format booléen',
+                isnull: 'La valeur est nulle',
+                numdecimals: 'Nombre de décimales',
+                switchformat: 'Changement de cas',
+                casenotnull: 'La valeur n\'est pas nulle',
+                stringformat: 'Chaîne à formater',
+                stringtype: 'Type de format de chaîne de caractères',
+                validstringformat: 'Sélectionnez un type de format de chaîne de caractères valide',
+                uppercase: 'Majuscules',
+                lowercase: 'Minuscules',
+                characternumber: "Nombre de caractères à afficher",
+                addoption: 'Ajouter une option',
+                addelse: 'Ajouter une option par défaut',
+                dateformat: 'Type de format de date',
+                selectdateformat: 'Sélectionner le type de format de date',
+                validdateformat: 'Sélectionnez le type de format de date valide',
+                dateLT: '19:05',
+                dateLTS: '19:05:57',
+                dateL: '13/07/2021',
+                datel: '13/7/2021',
+                dateLL: '13 de juillet de 2021',
+                datell: '13 juil. 2021',
+                dateLLL: '13 juillet 2021 19:05',
+                datelll: '13 juil. 2021 19:05',
+                dateLLLL: 'mardi 13 de julio de 2021 19:05',
+                datellll: 'mar. 13 jul. 2021 19:05',
+                translatesentence: 'Phrase à traduire',
+                option: 'Option',
+                result: 'Resultat',
+                elseoption: "Option par défaut",
+                requiredobject: 'Vous devez d\'abord sélectionner un objet',
+            };
+            frfr.imports = {
+                template: 'Fichier modèle',
+            };
+            frfr.htmlreport = {
+                generate: 'Génération de rapport',
+            };
+            frfr.skin = {
+                darkmode: 'Mode Sombre',
+                lightmode: 'Mode Lumière'
+            };
+            frfr.flxBarcode = {
+                noCamera: 'Aucune caméra disponible trouvée',
+                IOSerr: 'Cette fonctionnalité n\'est pas disponible sur IOS',
+                noCode: 'Aucun code ne peut être trouvé dans cette image.'
+            };
+            frfr.abhSign = {
+                save: 'Enregistrer',
+                title: 'Sélectionnez un document',
+                help: 'Aide Abh Sign',
+                lastPage: 'Dernière page'
             };
         })(frfr = culture.frfr || (culture.frfr = {}));
     })(culture = flexygo.culture || (flexygo.culture = {}));

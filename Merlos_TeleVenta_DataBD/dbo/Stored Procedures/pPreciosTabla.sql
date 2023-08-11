@@ -5,13 +5,28 @@ BEGIN TRY
 			, @empresa char(2) = isnull((select JSON_VALUE(@parametros,'$.empresa')),'')
 			, @cliente varchar(50) = isnull((select JSON_VALUE(@parametros,'$.cliente')),'')
 			, @articulo varchar(50) = isnull((select JSON_VALUE(@parametros,'$.articulo')),'')
-			, @unidades varchar(50) = isnull((select JSON_VALUE(@parametros,'$.unidades')),'')
+			, @unidades int = cast(isnull((select JSON_VALUE(@parametros,'$.unidades')),'0') as int)
+			, @cajasUdsPeso varchar(50) = isnull((select JSON_VALUE(@parametros,'$.cajasUdsPeso')),'')
 			, @FechaTeleVenta varchar(10) = isnull((select JSON_VALUE(@parametros,'$.FechaTeleVenta')),'')
 			, @articulosDatos varchar(max) = ''
+
+	declare @unicaja int
+	declare @peso numeric(20,5)
 
 	declare @precioTarifa varchar(50)
 	declare @elPrecio varchar(50)
 	declare @elDto varchar(50)
+
+	if @cajasUdsPeso='cajas' BEGIN
+		set @unicaja = (select isnull(UNICAJA,0) from vArticulos where CODIGO=@articulo)
+		if @unicaja>0 set @unidades = @unidades * @unicaja
+	END
+
+	if @cajasUdsPeso='peso' BEGIN
+		set @peso = (select isnull(peso,0) from vArticulos where CODIGO=@articulo)
+		if @peso='' set @peso=0
+		if @peso>0 set @unidades = @unidades / @peso
+	END
 
 
 	if @modo='verArticuloTarifas' BEGIN

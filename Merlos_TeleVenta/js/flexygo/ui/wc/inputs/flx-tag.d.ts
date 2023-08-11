@@ -21,6 +21,7 @@ declare namespace flexygo.ui.wc {
         dropOptions: string[];
         property: string;
         value: any;
+        isDefaultValue: boolean;
         /**
         * Fires when element is attached to DOM
         * @method connectedCallback
@@ -46,6 +47,7 @@ declare namespace flexygo.ui.wc {
         setValue(value: any): void;
         setValueView(value: any): void;
         getValue(): any;
+        getSeparator(): string;
         getOptions(strs: any): (q: any, cb: any) => void;
         /**
         * Trigger Dependencies.

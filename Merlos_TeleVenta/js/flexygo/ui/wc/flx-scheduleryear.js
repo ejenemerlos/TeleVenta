@@ -43,13 +43,6 @@ var flexygo;
                     }
                 }
                 /**
-              * Array of observed attributes.
-              * @property observedAttributes {Array}
-              */
-                static get observedAttributes() {
-                    return ['modulename', 'value'];
-                }
-                /**
                * Fires when the attribute value of the element is changed.
                * @method attributeChangedCallback
                */
@@ -84,6 +77,7 @@ var flexygo;
                     let ctx = this;
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     let parentModule = me.closest('flx-module');
                     let wcModule = parentModule[0];
                     if (parentModule && wcModule) {
@@ -92,6 +86,7 @@ var flexygo;
                     var thisYear = (new Date()).getFullYear();
                     var start = new Date("1/1/" + thisYear);
                     ctx.me.current = moment(start.valueOf());
+                    ctx.me.empty();
                     ctx.me.append('<div class="calendar"></div>');
                     ctx.render();
                 }
@@ -172,8 +167,10 @@ var flexygo;
                                 $('.calendar').find('tr *').removeAttr("style").removeClass("bg-outstanding txt-danger").popover('destroy');
                                 $('.calendar').find('td *').css('width', '26px');
                                 let filtros = this.closest('flx-multicombo').getValue();
-                                ctx.me.filter = filtros.split('|').join('\',\'');
-                                ctx.changeEvents(ctx.additionalWhere, ctx.me.filter);
+                                if (filtros) {
+                                    ctx.me.filter = filtros.split('|').join('\',\'');
+                                    ctx.changeEvents(ctx.additionalWhere, ctx.me.filter);
+                                }
                             });
                         }
                     });
@@ -268,7 +265,7 @@ var flexygo;
                                     me.find('td[data-month="' + month + '"][data-day-of-month="' + date + '"]').css('font-weight', 'normal');
                                 }
                                 else {
-                                    me.find('td[data-month="' + month + '"][data-day-of-month="' + date + '"]').find("div").css('background-color', ev.color);
+                                    me.find('td[data-month="' + month + '"][data-day-of-month="' + date + '"]').find("div").css('background', ev.color);
                                     me.find('td[data-month="' + month + '"][data-day-of-month="' + date + '"]').find("div").css('border-radius', '60%');
                                     me.find('td[data-month="' + month + '"][data-day-of-month="' + date + '"]').css('font-weight', 'normal');
                                 }
@@ -276,16 +273,22 @@ var flexygo;
                                 var div = document.createElement('div');
                                 $(div).addClass('event');
                                 var square = document.createElement('div');
-                                $(square).addClass('event-category').css('background-color', ev.color);
+                                $(square).addClass('event-category').css('background', ev.color);
                                 var span = $('<span />').html(' ' + ev.eventName);
                                 if (ev.pageType == "edit" && ev.canEdit) {
                                     $(div).click(function () {
                                         flexygo.nav.openPage(ev.pageType, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), null, ev.target, false, $(this));
                                     });
                                 }
-                                if (ev.pageType == "view" && ev.canView) {
+                                else if (ev.pageType == "view" && ev.canView) {
                                     $(div).click(function () {
                                         flexygo.nav.openPage(ev.pageType, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), null, ev.target, false, $(this));
+                                    });
+                                }
+                                else if (ev.pageType == "generic") {
+                                    $(div).click(function () {
+                                        var func = new Function('objectname', 'objectwhere', 'calEvent', 'jsEvent', 'view', ev.OnClickJS);
+                                        func.call(this, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), ev);
                                     });
                                 }
                                 eventColor = ev.color;
@@ -337,7 +340,7 @@ var flexygo;
                                 masterIdentity: $(this).attr('currentdate'),
                                 detailIdentity: null
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                 }
@@ -359,7 +362,7 @@ var flexygo;
                         day = '0' + day;
                     return [year, month, day].join('');
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 startLoading() {
@@ -373,6 +376,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+          * Array of observed attributes.
+          * @property observedAttributes {Array}
+          */
+            FlxSchedulerYearElement.observedAttributes = ['modulename', 'value'];
             wc.FlxSchedulerYearElement = FlxSchedulerYearElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

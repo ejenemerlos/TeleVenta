@@ -37,7 +37,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     this.type = element.attr('type') || 'html';
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
@@ -81,13 +80,6 @@ var flexygo;
                         this.options.CssClass = Class;
                         element.attr('Control-Class', this.options.CssClass);
                         element.attr('Class', '');
-                    }
-                    let PlaceHolder = element.attr('PlaceHolder');
-                    if (PlaceHolder && PlaceHolder !== '') {
-                        if (!this.options) {
-                            this.options = new flexygo.api.ObjectProperty();
-                        }
-                        this.options.PlaceHolder = PlaceHolder;
                     }
                     let IconClass = element.attr('IconClass');
                     if (IconClass && IconClass !== '') {
@@ -136,13 +128,7 @@ var flexygo;
                     if (Value && Value !== '') {
                         this.setValue(Value);
                     }
-                }
-                /**
-               * Array of observed attributes. REQUIRED
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'disabled', 'requiredmessage', 'class', 'placeholder', 'iconclass', 'helpid', 'hide'];
+                    this.connected = true;
                 }
                 attributeChangedCallback(attrName, oldVal, newVal) {
                     let element = $(this);
@@ -202,21 +188,19 @@ var flexygo;
                             this.options.IsRequiredMessage = newVal;
                             this.refresh();
                         }
-                        if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                        if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                             if (!this.options) {
                                 this.options = new flexygo.api.ObjectProperty();
                             }
                             this.options.CssClass = newVal;
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
-                            this.refresh();
-                        }
-                        if (attrName.toLowerCase() === 'placeholder' && newVal && newVal !== '') {
-                            if (!this.options) {
-                                this.options = new flexygo.api.ObjectProperty();
+                            if (element.attr('Control-Class') !== this.options.CssClass) {
+                                if (newVal != '') {
+                                    element.attr('Control-Class', this.options.CssClass);
+                                    element.attr('Class', this.options.CssClass);
+                                }
+                                //element.attr('Class', '');
+                                this.refresh();
                             }
-                            this.options.PlaceHolder = newVal;
-                            this.refresh();
                         }
                         if (attrName.toLowerCase() === 'iconclass' && newVal && newVal !== '') {
                             if (!this.options) {
@@ -250,11 +234,15 @@ var flexygo;
                 }
                 init() {
                     let me = $(this);
+                    let val = this.getValue();
                     if (me.attr('mode') && me.attr('mode').toLowerCase() === 'view') {
                         this.initViewMode();
                     }
                     else {
                         this.initEditMode();
+                    }
+                    if (val && val !== "") {
+                        this.setValue(val);
                     }
                 }
                 initViewMode() {
@@ -275,9 +263,6 @@ var flexygo;
                     }
                     if (this.options && this.options.Locked) {
                         this.readonly = this.options.Locked;
-                    }
-                    if (this.options && this.options.PlaceHolder) {
-                        me.attr('placeholder', this.options.PlaceHolder);
                     }
                     setTimeout(() => {
                         me.find(".summernote").summernote("code", me.find('textarea')[0].value);
@@ -344,8 +329,9 @@ var flexygo;
                     if (this.options && this.options.Hide) {
                         me.addClass("hideControl");
                     }
-                    if (this.options && this.options.CauseRefresh) {
-                        input.on('change', () => {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
+                        me.find('.summernote').on('summernote.change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
                                 class: "property",
@@ -353,19 +339,24 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                 }
                 getValue() {
                     let me = $(this);
-                    if (me.find('.summernote').summernote('codeview.isActivated')) {
-                        me.find('.summernote').summernote('codeview.deactivate');
+                    let pluginInput = me.find('.summernote');
+                    if (pluginInput.summernote('codeview.isActivated')) {
+                        pluginInput.summernote('codeview.deactivate');
+                    }
+                    if (pluginInput.summernote('isEmpty')) {
+                        return '';
                     }
                     return me.find('textarea').val();
                 }
                 setValue(value) {
                     $(this).find('textarea').val(value);
+                    $(this).find(".summernote").summernote("code", $(this).find('textarea')[0].value);
                     if (this.myCM) {
                         this.myCM.getDoc().setValue(value);
                     }
@@ -400,6 +391,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes. REQUIRED
+           * @property observedAttributes {Array}
+           */
+            FlxHtmlEditElement.observedAttributes = ['type', 'property', 'required', 'disabled', 'requiredmessage', 'class', 'iconclass', 'helpid', 'hide'];
             wc.FlxHtmlEditElement = FlxHtmlEditElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

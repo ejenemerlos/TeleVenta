@@ -6,6 +6,22 @@ flxSecurity
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
 <member name="T:FLEXYGO.Security.IPLockout">
  <summary>
  Class IPLockout.
@@ -92,6 +108,80 @@ flxSecurity
  <summary>
  Undoes the impersonation.
  </summary>
+</member>
+<member name="T:FLEXYGO.Security.UserFilterPropertySecurity">
+ <summary>
+ Class UserFilterPropertySecurity.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserFilterPropertySecurity._SearchId">
+ <summary>
+ The Search Id
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserFilterPropertySecurity._ObjectName">
+ <summary>
+ The Object Name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserFilterPropertySecurity._PropertyName">
+ <summary>
+ The Property Name
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserFilterPropertySecurity._CanView">
+ <summary>
+ Can view The Module
+ </summary>
+</member>
+<member name="P:FLEXYGO.Security.UserFilterPropertySecurity.CanView">
+ <summary>
+ Gets a value indicating whether this Module can be viewed.
+ </summary>
+ <value><c>true</c> if can view; otherwise, <c>false</c>.</value>
+</member>
+<member name="P:FLEXYGO.Security.UserFilterPropertySecurity.CombinedKey">
+ <summary>
+ Gets the combined key.
+ </summary>
+ <value>The combined key.</value>
+</member>
+<member name="T:FLEXYGO.Security.UserFilterPropertySecurityCollection">
+ <summary>
+ Class UserFilterPropertySecurityCollection.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Security.UserFilterPropertySecurityCollection.Add(FLEXYGO.Security.UserFilterPropertySecurity)">
+ <summary>
+ Adds the UserFilterPropertySecurity object to the Collection using ModuleName.
+ </summary>
+ <param name="UserFilterPropertySecurity">An UserFilterPropertySecurity object.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Security.UserFilterPropertySecurityCollection.Remove(FLEXYGO.Security.UserFilterPropertySecurity)">
+ <summary>
+ Removes the UserFilterPropertySecurity object from the Collection using ModuleName.
+ </summary>
+ <param name="UserFilterPropertySecurity">An UserFilterPropertySecurity object.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Security.UserFilterPropertySecurityCollection.Remove(System.String,System.String,System.String)">
+ <summary>
+ Removes the UserFilterPropertySecurity object from the Collection using ModuleName.
+ </summary>
+ <param name="SearchId">The SearchId</param>
+ <param name="ObjectName">The ObjectName</param>
+ <param name="PropertyName">The PropertyName</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Security.UserFilterPropertySecurityCollection.Contains(System.String,System.String,System.String)">
+ <summary>
+ Checks  if UserFilterPropertySecurity Object exists in Collection using ModuleName.
+ </summary>
+ <param name="SearchId">The SearchId</param>
+ <param name="ObjectName">The ObjectName</param>
+ <param name="PropertyName">The PropertyName</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
 </member>
 <member name="T:FLEXYGO.Security.UserMasterTableSecurity">
  <summary>
@@ -439,6 +529,11 @@ flxSecurity
  is a Designer
  </summary>
 </member>
+<member name="F:FLEXYGO.Security.UserSecurityConfig._IsLocked">
+ <summary>
+ User is Locked
+ </summary>
+</member>
 <member name="F:FLEXYGO.Security.UserSecurityConfig._Reference">
  <summary>
  The reference
@@ -447,6 +542,11 @@ flxSecurity
 <member name="F:FLEXYGO.Security.UserSecurityConfig._SubReference">
  <summary>
  The SubReference
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserSecurityConfig._Mode">
+ <summary>
+ The mode (dark or light mode)
  </summary>
 </member>
 <member name="F:FLEXYGO.Security.UserSecurityConfig._UserContextVars">
@@ -524,6 +624,11 @@ flxSecurity
  If Modules security is loaded
  </summary>
 </member>
+<member name="F:FLEXYGO.Security.UserSecurityConfig._FilterPropertiesSecurityLoaded">
+ <summary>
+ If Filter Properties security is loaded
+ </summary>
+</member>
 <member name="F:FLEXYGO.Security.UserSecurityConfig._TemplateSecurityLoaded">
  <summary>
  If Templates security is loaded
@@ -532,6 +637,11 @@ flxSecurity
 <member name="F:FLEXYGO.Security.UserSecurityConfig._ModulesSecurity">
  <summary>
  The Modules Security Collection
+ </summary>
+</member>
+<member name="F:FLEXYGO.Security.UserSecurityConfig._FilterPropertiesSecurity">
+ <summary>
+ The Filter Properties Security Collection
  </summary>
 </member>
 <member name="F:FLEXYGO.Security.UserSecurityConfig._TemplatesSecurity">
@@ -638,6 +748,12 @@ flxSecurity
  </summary>
  <value><c>true</c> if this instance is Administrator; otherwise, <c>false</c>.</value>
 </member>
+<member name="P:FLEXYGO.Security.UserSecurityConfig.IsLocked">
+ <summary>
+ Gets a value indicating whether this user is Locked.
+ </summary>
+ <value><c>true</c> if this instance is Locked; otherwise, <c>false</c>.</value>
+</member>
 <member name="P:FLEXYGO.Security.UserSecurityConfig.IsDesigner">
  <summary>
  Gets a value indicating whether this user is a Designer.
@@ -698,6 +814,12 @@ flxSecurity
  </summary>
  <value>The SubReference.</value>
 </member>
+<member name="P:FLEXYGO.Security.UserSecurityConfig.Mode">
+ <summary>
+ Gets the user Mode for dark or light modes
+ </summary>
+ <value>system.string.</value>
+</member>
 <member name="P:FLEXYGO.Security.UserSecurityConfig.ObjectSecurity">
  <summary>
  Gets the UserObjectSecurityCollection.
@@ -745,6 +867,12 @@ flxSecurity
  </summary>
  <value>The UserModuleSecurityCollection.</value>
 </member>
+<member name="P:FLEXYGO.Security.UserSecurityConfig.FilterPropertiesSecurity">
+ <summary>
+ Gets the Filter Property security.
+ </summary>
+ <value>The UserModuleSecurityCollection.</value>
+</member>
 <member name="P:FLEXYGO.Security.UserSecurityConfig.TemplatesSecurity">
  <summary>
  Gets the Templates security.
@@ -786,7 +914,7 @@ flxSecurity
  <returns><c>true</c> if this module can be viewed; otherwise, <c>false</c>.</returns>
  <exception cref="T:System.Exception">Error Checking Can Update</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.CanViewObjectModule(FLEXYGO.Objects.Settings.IObjectSettings,System.String,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanViewObjectModule(FLEXYGO.Objects.Settings.IObjectSettings,System.String,System.String,FLEXYGO.Data.DataManager)">
  <summary>
  Determines whether this EntityObject can be viewed.
  </summary>
@@ -803,7 +931,17 @@ flxSecurity
  <returns><c>true</c> if this EntityObject can be viewed; otherwise, <c>false</c>.</returns>
  <exception cref="T:System.Exception">Error Checking Can View</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.CanUpdateObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanViewFilterProperty(System.String,System.String,System.String)">
+ <summary>
+ Determines whether this FilterProperty can be viewed.
+ </summary>
+ <param name="SearchId">Search Id</param>
+ <param name="ObjectName">Object Name</param>
+ <param name="PropertyName">Property Name</param>
+ <returns><c>true</c> if this EntityObject can be viewed; otherwise, <c>false</c>.</returns>
+ <exception cref="T:System.Exception">Error Checking Can View</exception>
+</member>
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanUpdateObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String,FLEXYGO.Data.DataManager)">
  <summary>
  Determines whether this EntityObject can be Updated .
  </summary>
@@ -812,7 +950,7 @@ flxSecurity
  <returns><c>true</c> if this EntityObject Can be updated; otherwise, <c>false</c>.</returns>
  <exception cref="T:System.Exception">Error Checking Can Update</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.CanInsertObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanInsertObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String,FLEXYGO.Data.DataManager,System.String)">
  <summary>
  Determines whether the EntityObject can be Inserted.
  </summary>
@@ -821,7 +959,7 @@ flxSecurity
  <returns><c>true</c> if this EntityObject can be Inserted; otherwise, <c>false</c>.</returns>
  <exception cref="T:System.Exception">Error Checking Can Insert</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.CanDeleteObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanDeleteObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String,FLEXYGO.Data.DataManager)">
  <summary>
  Determines whether the EntityObject can be deleted.
  </summary>
@@ -830,7 +968,7 @@ flxSecurity
  <returns><c>true</c> if this EntityObject can be deleted; otherwise, <c>false</c>.</returns>
  <exception cref="T:System.Exception">Error Checking Can Delete</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.CanViewObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.CanViewObject(FLEXYGO.Objects.Settings.IObjectSettings,System.String,FLEXYGO.Data.DataManager)">
  <summary>
  Determines whether this EntityObject can be viewed.
  </summary>
@@ -942,7 +1080,7 @@ flxSecurity
  <param name="ReportName">The Report identifier.</param>
  <returns><c>true</c> if this Report can be Run; otherwise, <c>false</c>.</returns>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig.SetSecurity(System.String,System.String,System.String,System.String,System.String,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.SetSecurity(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
  <summary>
  Sets the security for given roles or users to diferent objects in the applicaion.
  </summary>
@@ -959,6 +1097,7 @@ flxSecurity
  <summary>
  Loads Basic ObjectSecurity for specified user.
  </summary>
+ 
 </member>
 <member name="M:FLEXYGO.Security.UserSecurityConfig.AddObjectSecurity(System.String,System.Boolean,System.String,System.Boolean,System.String,System.Boolean,System.String,System.Boolean,System.String,System.Boolean,System.String,System.Boolean)">
  <summary>
@@ -1020,6 +1159,16 @@ flxSecurity
  Loads Modules Security.
  </summary>
 </member>
+<member name="M:FLEXYGO.Security.UserSecurityConfig._loadFilterPropertiesSecurity">
+ <summary>
+ Loads Basic FilterPropertiesSecurity for specified user.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Security.UserSecurityConfig.AddFilterPropertySecurity(System.String,System.String,System.String,System.Boolean)">
+ <summary>
+ Loads Object Process Security.
+ </summary>
+</member>
 <member name="M:FLEXYGO.Security.UserSecurityConfig._loadTemplatesSecurity">
  <summary>
  Loads Basic Templates Security for specified user.
@@ -1040,7 +1189,7 @@ flxSecurity
  Loads Page Security.
  </summary>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig._MatchesCondition(System.String,FLEXYGO.Objects.Settings.IObjectSettings,System.String)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig._MatchesCondition(System.String,FLEXYGO.Objects.Settings.IObjectSettings,System.String,FLEXYGO.Data.DataManager,System.String)">
  <summary>
  Matches condition.
  </summary>
@@ -1061,7 +1210,7 @@ flxSecurity
  <returns><c>true</c> if condition is matched, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">_MatchesCondition:   + e.Message</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig._resultsExist(System.String,FLEXYGO.Objects.Settings.IObjectSettings)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig._resultsExist(System.String,FLEXYGO.Objects.Settings.IObjectSettings,FLEXYGO.Data.DataManager)">
  <summary>
  Determines if there are resulting values.
  </summary>
@@ -1086,7 +1235,14 @@ flxSecurity
  <returns>BaseCollection with default tokens.</returns>
  <exception cref="T:System.Exception">error Message</exception>
 </member>
-<member name="M:FLEXYGO.Security.UserSecurityConfig._GetDBTokens(FLEXYGO.Utilities.General.BaseCollection,FLEXYGO.Data.UserConnectionCollection)">
+<member name="M:FLEXYGO.Security.UserSecurityConfig.RefreshCustomContextVars(FLEXYGO.Utilities.General.BaseCollection@,FLEXYGO.Data.UserConnectionCollection)">
+ <summary>
+ Refresh the database context vars.
+ </summary>
+ <param name="lRetVal">The return values.</param>
+ <param name="ConnectionStrings">a UserConnectionCollection.</param>
+</member>
+<member name="M:FLEXYGO.Security.UserSecurityConfig._GetDBTokens(FLEXYGO.Utilities.General.BaseCollection@,FLEXYGO.Data.UserConnectionCollection)">
  <summary>
  Gets the database tokens.
  </summary>
@@ -1163,6 +1319,21 @@ flxSecurity
 <member name="P:FLEXYGO.Security.EmailAccount.UseTLS">
  <summary>
  If TLS protocol is active or not
+ </summary>
+</member>
+<member name="P:FLEXYGO.Security.EmailAccount.UseSTARTTLS">
+ <summary>
+ If STARTTLS protocol is active or not
+ </summary>
+</member>
+<member name="P:FLEXYGO.Security.EmailAccount.MailAccountEndpointId">
+ <summary>
+ The mail account endpoint
+ </summary>
+</member>
+<member name="P:FLEXYGO.Security.EmailAccount.AuthTypeId">
+ <summary>
+ The mail account auth type
  </summary>
 </member>
 <member name="T:FLEXYGO.BlackList">
@@ -1271,6 +1442,12 @@ flxSecurity
  Gets Entity TableName.
  </summary>
  <value>Table Name.</value>
+</member>
+<member name="P:FLEXYGO.Objects.Settings.IObjectSettings.Schema">
+ <summary>
+ Gets Entity Schema.
+ </summary>
+ <value>Database Schema</value>
 </member>
 <member name="P:FLEXYGO.Objects.Settings.IObjectSettings.ConnStringId">
  <summary>
@@ -1848,6 +2025,12 @@ flxSecurity
  <param name="parentAreaId">The parent area identifier.</param>
  <returns>NavigationNodes.</returns>
 </member>
+<member name="M:FLEXYGO.User.Interface.UserNavigateNodes.UserInterface._checkNodeSqlEnable(FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode,FLEXYGO.Security.UserSecurityConfig)">
+ <summary>
+ Disable nodes if SQL enabled is 0
+ </summary>
+ <param name="Node">Node.</param>
+</member>
 <member name="T:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode">
  <summary>
  Class NavigationNode.
@@ -1876,6 +2059,16 @@ flxSecurity
 <member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.Title">
  <summary>
  The title
+ </summary>
+</member>
+<member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.IconMenuClass">
+ <summary>
+ The icon Menu CSS class
+ </summary>
+</member>
+<member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.TextMenuClass">
+ <summary>
+ The text menu CSS class
  </summary>
 </member>
 <member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.IconClass">
@@ -2058,6 +2251,21 @@ flxSecurity
  If node should be displayed
  </summary>
 </member>
+<member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.SQLEnabledDescrip">
+ <summary>
+ SQLEnabled Description 
+ </summary>
+</member>
+<member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.SQLEnabled">
+ <summary>
+ If node should be displayed due to SQLEnable sentence 
+ </summary>
+</member>
+<member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.ConnStringId">
+ <summary>
+ ConnStringId to execute SQLEnable sentence
+ </summary>
+</member>
 <member name="F:FLEXYGO.User.Interface.UserNavigateNodes.NavigationNode.ReportMode">
  <summary>
 Enabled report modes PDF,WORd,EXCEL...
@@ -2226,22 +2434,6 @@ Enabled report modes PDF,WORd,EXCEL...
  Determines whether this instance is mobile.
  </summary>
  <returns><c>true</c> if this instance is mobile; otherwise, <c>false</c>.</returns>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
 </member>
 </members>
 </doc>

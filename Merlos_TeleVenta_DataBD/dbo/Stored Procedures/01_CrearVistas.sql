@@ -101,7 +101,7 @@ BEGIN TRY
 	case when C.FECHA_BAJ IS NULL or C.FECHA_BAJ=''1900-01-01 00:00:00'' THEN 0 ELSE 1 END AS BAJA, 
 	tiva.CODIGO as tipoIVA, isnull(tiva.IVA,0) as IVA, c.AGENCIA,
 	isnull(tiva.RECARG,0) as recargoIVA,
-	C.RUTA, r.NOMBRE as nRuta,
+	C.RUTA, r.NOMBRE as nRuta, C.PVERDE,
 	mLat.VALOR as LATITUD, mLon.VALOR as LONGITUD,
 ' set @Sentencia = @Sentencia + '
 	case when 
@@ -122,7 +122,7 @@ BEGIN TRY
 	, isnull(o.observaciones,'''') as ObservacionesInternas
 
 	FROM '+@GESTION+'.DBO.CLIENTES C 
-	LEFT JOIN '+@GESTION+'.dbo.telf_cli tc ON tc.CLIENTE = C.CODIGO AND tc.ORDEN = 1 
+	LEFT JOIN (select CLIENTE, MAX(telefono) as telefono from '+@GESTION+'.dbo.telf_cli where cliente!='''' and ORDEN=1 group by cliente) tc ON tc.CLIENTE = C.CODIGO
 	LEFT JOIN '+@GESTION+'.dbo.CONTlf_CLI ct ON ct.CLIENTE = C.CODIGO AND ct.PREDET = 1 
 	LEFT JOIN '+@GESTION+'.dbo.BANC_CLI B ON B.CLIENTE = C.CODIGO AND B.ORDEN = 1 
 	LEFT JOIN '+@GESTION+'.dbo.FPAG FP    ON FP.CODIGO = C.FPAG 
@@ -134,7 +134,7 @@ BEGIN TRY
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLon ON mLon.CODIGO=C.CODIGO and mLon.FICHERO=''CLIENTES'' and mLon.CAMPO=''LGT''
 	LEFT JOIN clientes_adi ca on ca.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
 	LEFT JOIN ObservacionesInternas o on o.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
-	WHERE LEFT(C.CODIGO,2)=''43'' and C.FECHA_BAJ is null
+	WHERE LEFT(C.CODIGO,2)=''43'' and C.FECHA_BAJ is null and C.BLOQ_CLI=0
 	'
 	exec(@Sentencia)
 	select  'vClientes'
@@ -242,7 +242,7 @@ BEGIN TRY
 					, convert(varchar(10), CAV.FECHA, 103) as FECHA
 					, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI as DIRECCION, CAV.CLIENTE as codCliente 			
 					, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
-					, ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),'''') AS OBSERVACIO
+					, replace(ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),''''),''"'',''&#34;'') AS OBSERVACIO
 					, env.DIRECCION as nDireccion, ven.nombre as nVendedor
 					, replace(cli.nombre,''"'',''-'') collate Modern_Spanish_CI_AI as nCliente
 					, cast(replace(cli.nombre,''"'',''-'') as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
@@ -305,7 +305,7 @@ BEGIN TRY
 			, convert(varchar(10), CAV.FECHA, 103) as FECHA
 			, CAV.CLIENTE, CAV.REFERCLI, CAV.ENV_CLI as DIRECCION, CAV.CLIENTE as codCliente 			
 			, CAV.USUARIO, CAV.pronto, CAV.VENDEDOR
-			, ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),'''') AS OBSERVACIO
+			, replace(ISNULL(CAST(CAV.OBSERVACIO AS VARCHAR(max)),''''),''"'',''&#34;'') AS OBSERVACIO
 			, env.DIRECCION as nDireccion, ven.nombre as nVendedor
 			, replace(cli.nombre,''"'',''-'') collate Modern_Spanish_CI_AI as nCliente
 			, cast(replace(cli.nombre,''"'',''-'') as varchar(100)) collate Modern_Spanish_CI_AI as NombreCliente
@@ -492,6 +492,12 @@ BEGIN TRY
 			-(select ISNULL(SUM(dpv.SERVIDAS),0) FROM '+@GESTION+'.[DBO].c_pedive cpv inner join '+@GESTION+'.[DBO].d_pedive dpv on dpv.empresa=cpv.empresa and dpv.numero=cpv.numero and dpv.letra=cpv.letra where dpv.ARTICULO=art.CODIGO and cpv.TRASPASado=0 and cpv.cancelado=0)          
 			as PteSalir, 
 
+			(select ISNULL(SUM(FINAL),0) from '+@GESTION+'.dbo.stocks2 where ARTICULO=art.CODIGO)
+			-
+			(select ISNULL(SUM(dpv.UNIDADES),0) FROM '+@GESTION+'.[DBO].c_pedive cpv inner join '+@GESTION+'.[DBO].d_pedive dpv on dpv.empresa=cpv.empresa and dpv.numero=cpv.numero and dpv.letra=cpv.letra where dpv.ARTICULO=art.CODIGO and cpv.TRASPASado=0 and cpv.cancelado=0)
+			-(select ISNULL(SUM(dpv.SERVIDAS),0) FROM '+@GESTION+'.[DBO].c_pedive cpv inner join '+@GESTION+'.[DBO].d_pedive dpv on dpv.empresa=cpv.empresa and dpv.numero=cpv.numero and dpv.letra=cpv.letra where dpv.ARTICULO=art.CODIGO and cpv.TRASPASado=0 and cpv.cancelado=0)   
+			as StockReal,
+
 			((select ISNULL(SUM(FINAL),0)     from '+@GESTION+'.dbo.stocks2        where ARTICULO=art.CODIGO and ALMACEN=alm.CODIGO)
 			-((select ISNULL(SUM(dpv.UNIDADES),0) FROM '+@GESTION+'.[DBO].c_pedive cpv inner join '+@GESTION+'.[DBO].d_pedive dpv on dpv.empresa=cpv.empresa and dpv.numero=cpv.numero and dpv.letra=cpv.letra where dpv.ARTICULO=art.CODIGO and cpv.TRASPASado=0 and cpv.cancelado=0)
 			-(select ISNULL(SUM(dpv.SERVIDAS),0)  FROM '+@GESTION+'.[DBO].c_pedive cpv inner join '+@GESTION+'.[DBO].d_pedive dpv on dpv.empresa=cpv.empresa and dpv.numero=cpv.numero and dpv.letra=cpv.letra where dpv.ARTICULO=art.CODIGO and cpv.TRASPASado=0 and cpv.cancelado=0)))
@@ -530,8 +536,9 @@ BEGIN TRY
 			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET
 			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
 			, art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
-			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, coalesce(pvp.pvp,0.00) as pvp
+			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, art.DTO2,	art.DTO3, coalesce(pvp.pvp,0.00) as pvp
 			, isnull(SUM(st.StockVirtual),0) as StockVirtual
+			, isnull(SUM(st.StockReal),0) as StockReal
 	from '+@GESTION+'.[DBO].articulo art
 	left join vStock st on st.ARTICULO=art.CODIGO
 	left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
@@ -542,7 +549,7 @@ BEGIN TRY
 			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET
 			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
 			, art.CARAC, art.UNICAJA, art.peso, art.litros, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
-			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1,pvp.pvp
+			, art.COST_ESCAN, art.TIPO_ESCAN, art.IVALOT, art.DTO1, art.DTO2, art.DTO3,pvp.pvp
 	' 
 	exec(@Sentencia)
 	select  'vArticulos'
@@ -648,7 +655,8 @@ BEGIN TRY
 	RTRIM(LTRIM(E.DIRECCION)) AS DIRECCION, RTRIM(LTRIM(E.CODPOS)) AS CODPOS, RTRIM(LTRIM(E.POBLACION)) AS POBLACION, 
 	RTRIM(LTRIM(E.PROVINCIA)) AS PROVINCIA, RTRIM(LTRIM(E.TELEFONO)) AS TELEFONO, RTRIM(LTRIM(E.FAX)) AS FAX, 
 	RTRIM(LTRIM(E.MOBIL)) AS MOBIL, RTRIM(LTRIM(E.EMAIL)) AS EMAIL, RTRIM(LTRIM(E.[HTTP])) AS WEB, 
-	RTRIM(LTRIM(E.TXTFACTU1)) AS TXTFACTU1, RTRIM(LTRIM(E.TXTFACTU2)) AS TXTFACTU2, e.logo, e.almacen, f.tarifapret, f.DIAS_ENTRE, E.LETRA
+	RTRIM(LTRIM(E.TXTFACTU1)) AS TXTFACTU1, RTRIM(LTRIM(E.TXTFACTU2)) AS TXTFACTU2, e.logo, e.almacen, f.tarifapret, f.DIAS_ENTRE
+	, E.LETRA, E.VENDEDOR
 	FROM '+@GESTION+'.DBO.EMPRESA E  
 	LEFT JOIN '+@GESTION+'.DBO.FACTUCNF F ON F.EMPRESA=E.CODIGO
 	'
@@ -1271,6 +1279,27 @@ BEGIN TRY
 
 
 
+	-- Vista vPedidos_Basic
+	IF EXISTS (select * FROM sys.views where name = 'vPedidos_Basic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vPedidos_Basic] as 	
+		SELECT
+			  CONCAT('''+@EJERCICIOAnt+''',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
+			, LETRA, NUMERO
+		FROM ['+@GESTIONAnt+'].dbo.c_pedive
+				
+		UNION
+				
+		SELECT
+				CONCAT('''+@EJERCICIO+''',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
+			, LETRA, NUMERO
+		FROM ['+@GESTION+'].dbo.c_pedive
+	'
+	exec(@Sentencia)
+	select  'vPedidos_Basic'
+
+
+
+
 	-- Vista vIncidenciasArticulos
 	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasArticulos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasArticulos] as 	
@@ -1280,18 +1309,19 @@ BEGIN TRY
 		, g.nombre as nGestor
 		, ia.nombre as nIncidencia
 		, cli.nombre as nCliente
-		, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
+		, cpv.LETRA
+		, ltrim(rtrim(cpv.NUMERO)) as pedido
 		, art.NOMBRE as nArticulo
 		from TeleVentaIncidencias i
 		left join gestores g on g.codigo=i.gestor
 		left join inci_art ia on ia.codigo=i.incidencia
-		left join vClientes cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
-		left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
-		left join vArticulos art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
+		left join (select CODIGO, NOMBRE from vClientes) cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
+		left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+		left join (select CODIGO, NOMBRE from vArticulos) art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
 		where i.tipo=''Articulo''
 	'
 	exec(@Sentencia)
-	select  'NombreVista'
+	select 'vIncidenciasArticulos'
 
 
 
@@ -1299,22 +1329,24 @@ BEGIN TRY
 	-- Vista vIncidenciasClientes
 	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasClientes] as 	
-	select i.* 
-			, i.FechaInsertUpdate as Fecha
-			, convert(varchar(10),i.FechaInsertUpdate,103) as laFecha
-			, g.NOMBRE as nGestor
-			, cli.NOMBRE as nCliente
-			, icli.nombre as nIncidencia
-			, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
+	select i.id, i.idpedido, i.tipo, i.articulo, i.observaciones
+		, i.FechaInsertUpdate
+		, format(i.FechaInsertUpdate,''dd-MM-yyyy'') as laFecha
+		, i.gestor
+		, i.incidencia
+		, i.cliente
+		, cli.NOMBRE as nCliente
+		, icli.nombre as nIncidencia
+		, cpv.LETRA
+		, ltrim(rtrim(cpv.NUMERO)) as pedido
 	from TeleVentaIncidencias i
-	left join vGestores g on g.CODIGO=i.gestor
 	left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=i.cliente
 	left join inci_cli icli on icli.codigo=i.incidencia
-	left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+	left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
 	where i.tipo=''Cliente''
 	'
 	exec(@Sentencia)
-	select  'NombreVista'
+	select 'vIncidenciasClientes'
 
 
 	

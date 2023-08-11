@@ -33,6 +33,7 @@ var flexygo;
                     this.tEmpty = null;
                     this.tCSSText = null;
                     this.tScriptText = null;
+                    this.TemplateToolbarCollection = null;
                 }
                 /**
                 * Fires when element is attached to DOM
@@ -47,13 +48,6 @@ var flexygo;
                             this.init();
                         }
                     }
-                }
-                /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['modulename'];
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -79,6 +73,7 @@ var flexygo;
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     me.html('');
                     flexygo.ui.templates.setDefaultTemplate(this);
                     //let loadRet = this.loadRet;
@@ -102,6 +97,7 @@ var flexygo;
                             this.tCSSText = response.Template.CSSText;
                             this.templateId = response.Template.Id;
                             this.isNew = response.IsNew;
+                            this.TemplateToolbarCollection = response.TemplateToolbarCollection;
                             if (response.TemplateList) {
                                 this.templateList = response.TemplateList;
                             }
@@ -112,7 +108,30 @@ var flexygo;
                                 if (response.Buttons) {
                                     wcModule.setButtons(response.Buttons, response.ObjectName, response.ObjectWhere);
                                 }
+                                else {
+                                    wcModule.setButtons(null, response.ObjectName, response.ObjectWhere);
+                                }
                                 wcModule.setObjectDescrip(response.Title);
+                                if (wcModule.ModuleViewers) {
+                                    this.currentViewers = response.CurrentViewers;
+                                    flexygo.utils.refreshModuleViewersInfo(wcModule, this.currentViewers);
+                                    flexygo.utils.checkObserverModule(wcModule, 20000);
+                                    flexygo.events.on(this, 'push', 'notify', function (e) {
+                                        switch (e.masterIdentity) {
+                                            case 'GetSetModuleViewers': {
+                                                if ((wcModule.moduleName == '' ? null : wcModule.moduleName) == (e.sender.ModuleName == '' ? null : e.sender.ModuleName)
+                                                    && (wcModule.objectname == '' ? null : wcModule.objectname) == (e.sender.ObjectName == '' ? null : e.sender.ObjectName)
+                                                    && (wcModule.objectwhere == '' ? null : wcModule.objectwhere) == (e.sender.ObjectWhere == '' ? null : e.sender.ObjectWhere)) {
+                                                    flexygo.utils.refreshModuleViewersInfo(wcModule, e.sender.ActiveUsers);
+                                                }
+                                                break;
+                                            }
+                                            default: {
+                                                break;
+                                            }
+                                        }
+                                    });
+                                }
                             }
                         }
                     });
@@ -144,6 +163,9 @@ var flexygo;
                     if (this.tScriptText && this.tScriptText !== '') {
                         let render = flexygo.utils.parser.recursiveCompile(def, flexygo.utils.parser.recursiveCompile(this.data, this.tScriptText, this), this);
                         rendered += '<script>' + render + '</script>';
+                    }
+                    if (this.objectname === "sysOfflineApp") {
+                        rendered += `<div id="monete" class="clickable" onclick="flexygo.nav.openHelpId('syshelp-AppOflineAccess','current',false,$(this))">${flexygo.localization.translate('develop.help').toUpperCase()} 🙊</div>`;
                     }
                     me.html(rendered);
                     me.append('<div style="clear:both"></div>');
@@ -215,7 +237,7 @@ var flexygo;
                             }
                         }
                         let params = {
-                            ObjectName: me.attr('ObjectName'),
+                            ObjectName: (this.objectname ? this.objectname : me.attr('ObjectName')),
                             IsNew: false,
                             IsView: true,
                             Properties: Properties
@@ -317,7 +339,7 @@ var flexygo;
                         let propName = $(controls[i]).attr('property');
                         let ctl = $(controls[i])[0];
                         if (ctl && ctl.setValue) {
-                            if (this.data[propName].WebComponent == 'flx-dbcombo') {
+                            if (this.data[propName].WebComponent == 'flx-dbcombo' || this.data[propName].WebComponent.includes('flx-radio')) {
                                 ctl.setValue(this.data[propName].Value, this.data[propName].Text);
                             }
                             else if ($(ctl).attr('type') && ($(ctl).attr('type').toLowerCase() === 'datetime-local' || $(ctl).attr('type').toLowerCase() === 'date' || $(ctl).attr('type').toLowerCase() === 'number')) {
@@ -448,7 +470,7 @@ var flexygo;
                     }
                     return flexygo.utils.parser.compile(obj, str, this);
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 getModuleFullId() {
@@ -462,6 +484,11 @@ var flexygo;
                     return page.pagename + '|' + page.objectname + '|' + this.moduleName;
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxViewElement.observedAttributes = ['modulename'];
             wc_1.FlxViewElement = FlxViewElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

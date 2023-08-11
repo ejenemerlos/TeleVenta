@@ -33,7 +33,6 @@ var flexygo;
               */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
                         let parentCtl = element.closest('flx-edit,flx-list,flx-propertymanager,flx-view,flx-filter');
@@ -110,13 +109,7 @@ var flexygo;
                             }
                         }
                     }
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['modulename', 'property', 'disabled', 'style', 'class', 'hide'];
+                    this.connected = true;
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -167,14 +160,17 @@ var flexygo;
                             this.init();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             this.init();
                         }
                     }
@@ -278,7 +274,8 @@ var flexygo;
                     else {
                         input.attr('name', flexygo.utils.uniqueName());
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', (e) => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -287,7 +284,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Locked) {
@@ -356,6 +353,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxSwitchElement.observedAttributes = ['modulename', 'property', 'disabled', 'style', 'class', 'hide'];
             wc.FlxSwitchElement = FlxSwitchElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

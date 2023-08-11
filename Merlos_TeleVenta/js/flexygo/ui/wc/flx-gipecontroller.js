@@ -15,13 +15,6 @@ var flexygo;
                     this.connected = false;
                 }
                 /**
-                * Array of observed attributes. REQUIRED
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return [];
-                }
-                /**
                 * Fires when element is attached to DOM
                 * @method connectedCallback
                 */
@@ -132,6 +125,9 @@ var flexygo;
                     };
                     let defaults = null; ///OJO!!!!!!!
                     var pageContainer = flexygo.targets.createContainer(histObj, false, null);
+                    if (!pageContainer) {
+                        return;
+                    }
                     //if (triggerElement && !triggerElement.closest('.pageContainer').is(pageContainer)) {
                     //    pageContainer.data('opener', triggerElement.closest('.pageContainer'));
                     //}
@@ -244,6 +240,11 @@ var flexygo;
                     });
                 }
             }
+            /**
+            * Array of observed attributes. REQUIRED
+            * @property observedAttributes {Array}
+            */
+            FlxGipeControllerElement.observedAttributes = [];
             wc.FlxGipeControllerElement = FlxGipeControllerElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

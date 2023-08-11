@@ -1,3 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="ab332126-6ef2-4f7c-9e41-856a49092e5f" ChangeDateTime="03/02/2022 16:23:30">
+    <Property Name="ElementName" Value="[dbo].[Merlos_LOG].[error]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Merlos_LOG]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="accion" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="29d07141-71de-4e5e-9ae7-c34528422fd9" ChangeDateTime="07/06/2023 09:27:11">
+    <Property Name="ElementName" Value="[dbo].[Merlos_Log].[FechaInsert]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Merlos_Log]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FechaInsertUpdate" />
+  </Operation>
 </Operations>

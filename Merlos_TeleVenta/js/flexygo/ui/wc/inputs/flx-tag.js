@@ -27,6 +27,7 @@ var flexygo;
                     this.dropOptions = null;
                     this.property = null;
                     this.value = null;
+                    this.isDefaultValue = true;
                 }
                 /**
                 * Fires when element is attached to DOM
@@ -34,7 +35,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     this.type = element.attr('type') || 'text';
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
@@ -154,18 +154,27 @@ var flexygo;
                         }
                         this.options.Hide = Hide == 'true';
                     }
+                    let RegExp = element.attr('RegExp');
+                    if (RegExp && RegExp !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.RegExp = RegExp;
+                    }
+                    let RegExpText = element.attr('RegExpText');
+                    if (RegExpText && RegExpText !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.RegExpText = RegExpText;
+                    }
                     this.init();
                     let Value = element.attr('Value');
                     if (Value && Value !== '') {
                         this.setValue(Value);
                     }
-                }
-                /**
-              * Array of observed attributes.
-              * @property observedAttributes {Array}
-              */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'separator', 'disabled', 'requiredmessage', 'style', 'class', 'placeholder', 'iconclass', 'hide'];
+                    this.isDefaultValue = false;
+                    this.connected = true;
                 }
                 /**
               * Fires when the attribute value of the element is changed.
@@ -239,14 +248,17 @@ var flexygo;
                             this.refresh();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             this.refresh();
                         }
                     }
@@ -269,6 +281,20 @@ var flexygo;
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.Hide = newVal;
+                        this.refresh();
+                    }
+                    if (attrName.toLowerCase() === 'regexp' && newVal && newVal !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.RegExp = newVal;
+                        this.refresh();
+                    }
+                    if (attrName.toLowerCase() === 'regexptext' && newVal && newVal !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.RegExpText = newVal;
                         this.refresh();
                     }
                 }
@@ -343,6 +369,28 @@ var flexygo;
                     if (iconsLeft || iconsRight) {
                         control.addClass("input-group");
                     }
+                    input.on('itemAdded', (event) => {
+                        if (this.options.RegExp && event.item) {
+                            let regExp = new RegExp(this.options.RegExp);
+                            if (!regExp.test(event.item)) {
+                                let values = input.tagsinput()[0].$container.find('> span');
+                                values.filter((i) => {
+                                    return $(values[i]).text() === event.item;
+                                }).removeClass('label-info').addClass('label-danger');
+                            }
+                            //$(input).valid();
+                        }
+                        const module = me.closest('flx-module')[0];
+                        if (this.options.SQLValidator || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
+                            let ev = {
+                                class: "property",
+                                type: "changed",
+                                sender: this,
+                                masterIdentity: this.property
+                            };
+                            flexygo.events.trigger(ev, me);
+                        }
+                    });
                     me.html(control);
                     this.setOptions();
                 }
@@ -431,7 +479,28 @@ var flexygo;
                 setOptions() {
                     let me = $(this);
                     let input = me.find('input');
+                    let filter = null;
+                    let hasFilterDependencyProperty = false;
+                    if (me.closest('flx-filter').length > 0) {
+                        filter = me.closest('flx-filter')[0];
+                        let filterProperties = filter.settings[filter.active].Properties;
+                        for (let propertyKey in filterProperties) {
+                            if (filterProperties[propertyKey].PropertyName == me.attr("property") && (filterProperties[propertyKey].DependingFilterProperties).length > 0) {
+                                hasFilterDependencyProperty = true;
+                                break;
+                            }
+                        }
+                    }
                     input.on('change.refreshvalue', (e) => {
+                        if (hasFilterDependencyProperty) {
+                            let ev = {
+                                class: "property",
+                                type: "changed",
+                                sender: this,
+                                masterIdentity: this.property
+                            };
+                            flexygo.events.trigger(ev, me);
+                        }
                         me.attr('value', input.tagsinput('items').join(this.options.Separator));
                     });
                     if (this.options && this.options.Name && this.options.Name !== '') {
@@ -446,16 +515,19 @@ var flexygo;
                     if (this.options && this.options.Locked) {
                         input.prop('disabled', this.options.Locked);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
+                            if (this.isDefaultValue)
+                                return;
                             let ev = {
                                 class: "property",
                                 type: "changed",
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.PlaceHolder) {
@@ -475,6 +547,15 @@ var flexygo;
                     }
                     if (this.options && this.options.Hide) {
                         me.addClass("hideControl");
+                    }
+                    if (this.options && this.options.RegExp && this.options.RegExp !== '') {
+                        input.attr('regex', this.options.RegExp);
+                    }
+                    if (this.options && this.options.RegExpText && this.options.RegExpText !== '') {
+                        input.attr('data-msg-regex', this.options.RegExpText);
+                    }
+                    if (this.options && this.options.ValidatorMessage && this.options.ValidatorMessage !== '') {
+                        input.attr('data-msg-sqlvalidator', this.options.ValidatorMessage);
                     }
                     if (this.options && this.options.DropDownValues) {
                         this.dropOptions = [];
@@ -546,6 +627,9 @@ var flexygo;
                         }
                     }
                 }
+                getSeparator() {
+                    return this.options.Separator;
+                }
                 getOptions(strs) {
                     return function findMatches(q, cb) {
                         let matches, substringRegex;
@@ -571,6 +655,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+          * Array of observed attributes.
+          * @property observedAttributes {Array}
+          */
+            FlxTagElement.observedAttributes = ['type', 'property', 'required', 'separator', 'disabled', 'requiredmessage', 'style', 'class', 'placeholder', 'iconclass', 'hide', 'regexp', 'regexptext'];
             wc.FlxTagElement = FlxTagElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

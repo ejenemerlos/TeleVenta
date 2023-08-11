@@ -28,6 +28,7 @@ var flexygo;
                     this.moduleName = null;
                     this.TypeMode = null;
                     this.fileName = null;
+                    this.name = null;
                     /**
                     * Control Mode
                     * @property type {string}
@@ -43,7 +44,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     let typeMode = element.attr('type') || element.attr('typemode') || 'embeded';
                     if (typeMode && typeMode !== '') {
                         this.TypeMode = typeMode;
@@ -153,17 +153,11 @@ var flexygo;
                         this.options.ImageCompressionType = parseInt(ImageCompressionType);
                     }
                     this.init();
+                    this.connected = true;
                     //let Value = element.attr('value');
                     //if (Value && Value !== '') {
                     //    this.setValue(Value);
                     //}
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'typemode', 'modulename', 'property', 'required', 'locked', 'disabled', 'style', 'class', 'hide', 'tag'];
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -224,14 +218,17 @@ var flexygo;
                             this.refresh();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             this.refresh();
                         }
                     }
@@ -370,7 +367,8 @@ var flexygo;
                     if (this.options && this.options.IsRequired) {
                         input.prop('required', true);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', (e) => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -379,7 +377,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                 }
@@ -397,6 +395,11 @@ var flexygo;
                 }
                 setValue(value, text) {
                     let me = $(this);
+                    if (this.TypeMode === 'base64') {
+                        if (value && value.toString().indexOf('data:') != 0) {
+                            value = 'data:image/png;base64,' + value;
+                        }
+                    }
                     if (!text) {
                         text = value;
                     }
@@ -485,21 +488,40 @@ var flexygo;
                                 FileName: this.fileName,
                                 Base64: result.split(',')[1],
                                 CurrentValue: me.attr('value'),
-                                FormValues: formValues
+                                FormValues: formValues,
+                                Name: this.name
                             };
-                            flexygo.ajax.post('~/api/Image', 'SaveFile', params, (ret) => {
-                                if (ret.Value != 'errorrootpath')
-                                    this.setValue(ret.Value, ret.Text);
-                                else {
-                                    flexygo.msg.error('image.errorrootpath');
-                                }
-                            });
+                            if ($(this).parents('flx-list').length > 0) {
+                                flexygo.ajax.syncPost('~/api/Image', 'SaveFile', params, (ret) => {
+                                    if (ret.Value != 'errorrootpath')
+                                        this.setValue(ret.Value, ret.Text);
+                                    else {
+                                        flexygo.msg.error('image.errorrootpath');
+                                    }
+                                });
+                            }
+                            else {
+                                flexygo.ajax.post('~/api/Image', 'SaveFile', params, (ret) => {
+                                    if (ret.Value != 'errorrootpath')
+                                        this.setValue(ret.Value, ret.Text);
+                                    else {
+                                        flexygo.msg.error('image.errorrootpath');
+                                    }
+                                });
+                            }
                             if (!this.fileName) {
                                 flexygo.msg.warning('image.errorfilename');
                             }
                         }
                         else if (this.TypeMode === 'base64') {
-                            this.setValue(result);
+                            let extns = this.options.Extensions.toLowerCase().split("|");
+                            let fileExtension = this.name.substring(this.name.lastIndexOf(".")).toLowerCase();
+                            if (extns.indexOf(fileExtension) > -1 || this.options.ExtensionId == 'sysAll') {
+                                this.setValue(result);
+                            }
+                            else {
+                                flexygo.msg.error('image.extension');
+                            }
                         }
                     }
                     catch (err) {
@@ -512,13 +534,30 @@ var flexygo;
                     let imageElement;
                     let image;
                     let rounded;
+                    let accept = '';
+                    if ((this.options && this.options.RegExp) || (this.options && this.options.Extensions)) {
+                        if (this.options.RegExp) {
+                            accept = this.options.RegExp;
+                        }
+                        else if (this.options.Extensions) {
+                            if (this.options.ExtensionId != 'sysAll') {
+                                accept = flexygo.utils.parser.replaceAll(this.options.Extensions, '|', ',');
+                            }
+                        }
+                    }
                     image = me.find('img').attr("src");
                     if (this.TypeMode === 'file') {
-                        this.fileName = this.getFileName(image);
+                        this.name = this.getName(me.attr('value'), this.TypeMode);
+                        this.fileName = this.getFileName(me.attr('value'));
+                    }
+                    else {
+                        if (me.attr('value')) {
+                            this.name = "." + me.attr('value').substring(me.attr('value').indexOf("/") + 1, me.attr('value').indexOf(";"));
+                        }
                     }
                     rounded = false;
                     this.pageContainer = $(`<div class="flx-cpr-image container cnt-Body pageContainerImage">
-                                    <div class="bg-white cpr-subcontainer ctl-cpr-transition">
+                                    <div class="padding-l cpr-subcontainer ctl-cpr-transition">
                                                 <div class="panel panel-default panel-wizard col-md-12 cpr-panel">
                                                     <div class="panel-heading cpr-heading">
                                                         <div class="btn-group cpr-btn-group" data-toggle="buttons">
@@ -594,7 +633,7 @@ var flexygo;
                                                     </div>
                                                 </div>
                                                 <label class="btn btn-default btn-file bg-outstanding cpr-btn-browse">`
-                        + flexygo.localization.translate('image.browsebutton') + `<input type="file" class="hide" accept="image/*"/>
+                        + flexygo.localization.translate('image.browsebutton') + `<input type="file" class="hide" accept="${accept}"/>
                                                 </label>
                                                 <button type="button" method="save" value="" class="btn btn-default bg-info cpr-btn-save" data-original-title="" title="">
                                                     <i class="flx-icon icon-save-2" flx-fw=""></i> ` + flexygo.localization.translate('image.savebutton') +
@@ -670,6 +709,12 @@ var flexygo;
                         }
                         imageElement.cropper(options);
                     }
+                    this.pageContainer.parent().on('click', () => {
+                        event.stopPropagation();
+                    });
+                    $('.ui-widget-overlay.ui-front').on('click', () => {
+                        event.stopPropagation();
+                    });
                     this.pageContainer.find('button').on('click', (e) => {
                         let element = $(e.currentTarget);
                         let method = element.attr('method');
@@ -772,6 +817,7 @@ var flexygo;
                         if (element.attr('type') === 'file') {
                             if (element[0].files && element[0].files[0]) {
                                 if (this.options.ObjectName != 'sysObjectImage') {
+                                    this.name = element[0].files[0].name;
                                     let reader = new FileReader();
                                     reader.onload = (e) => {
                                         let options = null;
@@ -880,9 +926,26 @@ var flexygo;
                 }
                 getFileName(url) {
                     if (url) {
-                        let index = url.lastIndexOf("/") + 1;
+                        let index = url.lastIndexOf("\\") + 1;
                         let filenameWithExtension = url.substr(index);
                         let filename = filenameWithExtension.split(".")[0];
+                        return filename;
+                    }
+                    else {
+                        return url;
+                    }
+                }
+                getName(url, mode) {
+                    if (url) {
+                        let index = url.lastIndexOf("\\") + 1;
+                        let filenameWithExtension = url.substr(index);
+                        let filename;
+                        if (mode === 'file') {
+                            filename = filenameWithExtension;
+                        }
+                        else {
+                            filename = filenameWithExtension.split("?")[0];
+                        }
                         return filename;
                     }
                     else {
@@ -913,6 +976,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxImageElement.observedAttributes = ['type', 'typemode', 'modulename', 'property', 'required', 'locked', 'disabled', 'style', 'class', 'hide', 'tag'];
             wc.FlxImageElement = FlxImageElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

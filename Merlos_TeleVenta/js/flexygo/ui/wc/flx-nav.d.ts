@@ -35,6 +35,7 @@ declare namespace flexygo.ui.wc {
         network: vis.Network;
         nodes: vis.DataSet<vis.Node>;
         edges: vis.DataSet<vis.Edge>;
+        lastSize: string;
         /**
         * Fires when element is attached to DOM
         * @method connectedCallback
@@ -160,6 +161,6 @@ declare namespace flexygo.ui.wc {
          * @hideAfterClick navItemClick
         */
         hideAfterClick(): void;
-        private toUnicode(name);
+        private toUnicode;
     }
 }

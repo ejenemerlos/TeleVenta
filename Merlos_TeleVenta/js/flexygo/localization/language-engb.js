@@ -21,6 +21,7 @@ var flexygo;
                 CustomProperty: 'Custom Property Dep.',
                 save: 'Save',
                 addmore: 'Add more depending properties',
+                addmorefilter: 'Add more depending filters',
                 sqlvalue: 'SQL Value',
                 sqlclass: 'SQL Class',
                 sqlcombofilter: 'SQL Combo Filter',
@@ -39,7 +40,8 @@ var flexygo;
                 CusPropertyName: 'Custom Control name',
                 SQLCustomProperty: 'SQL Custom Property',
                 connectionstrings: 'Connection strings',
-                connStringvalues: 'Connection string values'
+                connStringvalues: 'Connection string values',
+                relateddep: 'Related dependencies'
             };
             engb.develop = {
                 developer: 'Developer',
@@ -67,6 +69,8 @@ var flexygo;
                 objectpropertysecurity: 'Property security',
                 pageSettings: 'Page Settings',
                 chatter: 'Chatter',
+                users: 'Users',
+                roles: 'Roles',
             };
             engb.history = {
                 historyempty: 'Navigation history empty',
@@ -82,6 +86,8 @@ var flexygo;
                 reports: 'Reports',
                 noelements: 'No existing elements',
                 popupwarning: 'Pop-up windows blocked by browser. Please, change settings.',
+                reportmaxrows: 'This report uses {0} rows to filter and exceeds the {1} limit. Please apply a more restrictive filter first.',
+                scrolltop: 'Go up'
             };
             engb.flxfilter = {
                 searchplaceholder: 'Search by: ',
@@ -102,6 +108,7 @@ var flexygo;
                 appendwarning: 'Please select a field type and a field name',
                 createfields: 'Create new table fields',
                 enterfieldname: 'Field Name',
+                reserveword: 'is a reserved word',
                 selecttype: 'Select data type',
                 seedependencies: 'See dependencies',
                 templates: 'Templates',
@@ -130,6 +137,11 @@ var flexygo;
                 adddetachedproperty: 'Add detached property',
                 selecttable: 'Select Table',
                 loadmore: 'Scroll to load more',
+                hasdependencies: 'Throw dependencies',
+                hasdependingproperties: 'Affected by dependencies',
+                withchangeprocess: 'With change process',
+                throwto: 'Throw to',
+                affectedby: 'Affected by'
             };
             engb.flxeditgrid = {
                 addrow: 'Add row',
@@ -251,13 +263,22 @@ var flexygo;
                 add: 'Add',
                 errornofilter: 'Please, add new filter first.',
                 errornofields: 'Please, append some fields first.',
+                fieldnotappend: 'The following property could not be added because one with the same name already exists:',
+                fieldsnotappend: 'The following properties could not be added because ones with the same name already exist:',
                 save: 'Save',
                 delete: 'Delete',
+                hasfilterdependencies: 'Throw dependencies',
+                hasfilterdependingproperties: 'Affected by dependencies',
+                throwto: 'Throw to',
+                affectedby: 'Affected by'
             };
             engb.sortmanager = {
                 sort: 'Sort',
+                fields: 'Fields',
                 apply: 'Apply',
                 clean: 'Clean',
+                groups: 'Groups',
+                applied: 'Applied'
             };
             engb.flxlist = {
                 noentriesfound: 'No entries found.',
@@ -281,6 +302,10 @@ var flexygo;
                 mindate: 'Min Date',
                 maxdate: 'Max Date',
                 unseen: 'Only unseen',
+                sync: 'Synchronizing',
+                waitsync: 'Wait for the synchronization to finish.',
+                nomail: 'Mail not found.',
+                nomailalert: 'The mail was not found on the server.',
             };
             engb.flxmodule = {
                 delete: 'Delete',
@@ -289,6 +314,8 @@ var flexygo;
                 edit: 'Edit',
                 view: 'View',
                 print: 'Print',
+                printpage: 'Print page',
+                printmodule: 'Print module',
                 help: 'Help',
                 settings: 'Settings',
                 process: 'Process',
@@ -307,6 +334,7 @@ var flexygo;
                 uniqueBagError: 'Undefined Unique Identifier Field.',
                 nofieldBagError: 'Can\'t find field <b>{0}</b> in current row. Add it to query or remove selection button.',
                 noItemsSelected: 'Select some items from the list first.',
+                currentlyViewing: 'Currently viewing'
             };
             engb.flxnav = {
                 notimplemented: 'Action node not implemented',
@@ -336,6 +364,7 @@ var flexygo;
                 infotostart: 'Browse or drag an image to start',
                 errorfilename: 'The image has not got name',
                 errorrootpath: 'Root Path',
+                extension: 'File extension not accepted.',
             };
             engb.documentmanager = {
                 upload: 'Upload',
@@ -366,6 +395,10 @@ var flexygo;
                 view: 'View',
                 downloadall: 'Download all documents',
                 nodocuments: 'No documents to download',
+                msgremove: 'Are you sure you want to remove the document?',
+                sendselection: 'Send selection',
+                noselection: 'No documents selected',
+                filterdocs: 'Filter documents',
             };
             engb.imagemanager = {
                 upload: 'Upload',
@@ -390,16 +423,19 @@ var flexygo;
                 uploaded: 'Uploaded',
                 error: 'Upload error',
                 info: 'Drag to upload',
+                extension: 'File extension not accepted.',
             };
             engb.file = {
                 saved: 'File saved ;)',
                 errorsaving: 'Error saving file :(',
                 resultbase64: '1 file in base64',
+                extension: 'File extension not accepted.',
             };
             engb._export = {
                 success: 'Success exporting data ;)',
                 error: 'Error exporting data :(',
                 exportinglist: 'Exporting list',
+                exportlimit: 'The maximum number of records to export has been exceeded, please use a more restrictive filter',
             };
             engb.menumanager = {
                 deleteMenu: 'Delete menu',
@@ -413,6 +449,7 @@ var flexygo;
                 edit: 'edit',
                 submenus: 'Submenus',
                 newsubmenu: 'New submenu',
+                menuSecurity: 'Menu security',
             };
             engb.modulemanager = {
                 save: 'Save',
@@ -441,6 +478,7 @@ var flexygo;
                 deletenode: 'Delete node',
                 deletenodequestion: 'Are you sure you want to delete this node?',
                 addfields: 'Add fields',
+                cloneDependencies: 'Clone object dependencies'
             };
             engb.objectmanager = {
                 selecticon: 'Select icon',
@@ -485,6 +523,7 @@ var flexygo;
                 end: 'End',
                 colproperties: 'Edit grid properties (optional)',
                 save: 'Save',
+                filtersettings: 'Filter Settings',
             };
             engb.flxpropertymanager = {
                 addfields: 'Click "add fields" button to start.',
@@ -558,9 +597,16 @@ var flexygo;
                 errornosql: 'SQL field can\'t be blank.',
                 validate: 'Validate',
                 errorduplicateprop: 'Field {0} alredy exists.',
+                save: 'Save',
+                cancel: 'Cancel',
+                viewwizard: 'View Wizard',
+                selectobject: 'Please, select a object name',
+                openwizard: 'Open assistant',
+                saved: 'Saved :)',
             };
             engb.templates = {
                 addnewtemplate: 'Add new Template',
+                openiconlist: 'Open icon list',
             };
             engb.flxscheduler = {
                 objects: 'Objects',
@@ -591,12 +637,17 @@ var flexygo;
                 search: 'Search...',
                 pleasewrite: 'Please write the text to search',
                 speak: 'Speak now...',
+                pleaseobject: 'Please select an object first',
+                searchnode: 'Search',
             };
             engb.text = {
                 map: 'Click on the map',
                 errormap: 'The address was not found',
                 api: 'Google API Key not found.',
                 apihelp: 'See our help to find out how to get.',
+                nophone: 'Enter a telephone number',
+                nomail: 'Enter an email address',
+                seeMap: 'See in google maps'
             };
             engb.flxfunnel = {
                 data: 'No data',
@@ -655,6 +706,8 @@ var flexygo;
                 composerplaceholder: 'Type something',
                 sendbutton: 'Register',
                 startinfo: 'You must first configure the chatter',
+                deleteconfirm: 'Are you sure to delete the message?',
+                saveButton: 'Save',
             };
             engb.offline = {
                 createobjecttitle: 'Add new object to App',
@@ -666,6 +719,105 @@ var flexygo;
             engb.offlineemulator = {
                 ios: 'Toggle iOS mode',
                 md: 'Toggle Android mode',
+            };
+            engb.combobuilder = {
+                datasource: 'Data source',
+                fromtable: 'Table',
+                fromview: 'View',
+                selectcnnstring: 'Select connection string',
+                validcnnstring: 'You must enter a valid connection string',
+                selecttable: 'Select origin',
+                validorigin: 'You must enter a valid origin',
+                viewkeyfields: 'View key fields',
+                saved: 'Saved',
+                save: 'Save',
+                cancel: 'Cancel',
+                selectvaluefield: 'Select value field',
+                selectdisplayfield: 'Select display field',
+                selectadditionalfield: 'Select additionals fields',
+                selectorderfield: 'Select order field',
+                comboassistant: 'Wizard',
+                cnnstring: 'Connection string',
+                origin: 'Origin',
+                sqlsentence: 'SQL sentence',
+                valuefield: 'Value field',
+                displayfield: 'Display field',
+                additionalfield: 'Additional fields',
+                orderfield: 'Order field',
+                validvaluefield: 'You must enter a value field',
+                validdisplayfield: 'You must enter a display field',
+                validorderfield: 'You must enter a order field',
+                validsqlsentence: 'SQL sentence is not valid',
+            };
+            engb.formatsmanager = {
+                formatassistant: 'Formats Wizzard',
+                field: 'Field',
+                selectfield: 'Select field',
+                validfield: 'Select valid field',
+                validformat: 'Select valid format',
+                selectformat: 'Select format type',
+                formattype: 'Format type',
+                saved: 'Saved',
+                nosaved: 'No format has been saved',
+                decimal: 'Decimal format',
+                isdate: 'Date format',
+                translate: 'Translate sentence',
+                save: 'Save',
+                cancel: 'Cancel',
+                casetrue: 'Case true',
+                casefalse: 'Case false',
+                boolformat: 'Boolean format',
+                isnull: 'Value is null',
+                numdecimals: 'Number of decimals places',
+                switchformat: 'Switch case',
+                casenotnull: 'Value is not null',
+                stringformat: 'String to format',
+                stringtype: 'String format type',
+                validstringformat: 'Select valid string format type',
+                uppercase: 'Uppercase',
+                lowercase: 'Lowercase',
+                characternumber: 'Number of character to show',
+                addoption: 'Add option',
+                addelse: 'Add else',
+                dateformat: 'Date format type',
+                selectdateformat: 'Select date format type',
+                validdateformat: 'Select valid date format type',
+                dateLT: '7:05 PM',
+                dateLTS: '7:05:57 PM',
+                dateL: '07/13/2021',
+                datel: '7/13/2021',
+                dateLL: 'July 13 2021',
+                datell: 'Jul 13 2021',
+                dateLLL: 'July 13, 2021 7:05 PM',
+                datelll: 'Jul 13, 2021 7:05 PM',
+                dateLLLL: 'Tuesday, July 13 2021 7:05 PM',
+                datellll: 'Tue, Jul 13 2021 7:05 PM',
+                translatesentence: 'Sentence to translate',
+                option: 'Option',
+                result: 'Result',
+                elseoption: 'Else',
+                requiredobject: 'You must first select an object',
+            };
+            engb.imports = {
+                template: 'Template file',
+            };
+            engb.htmlreport = {
+                generate: 'Generating report',
+            };
+            engb.skin = {
+                darkmode: 'Dark Mode',
+                lightmode: 'Light Mode'
+            };
+            engb.flxBarcode = {
+                noCamera: 'No available camera found',
+                IOSerr: 'This functionalitie isn\'t available on IOS',
+                noCode: 'Can\'t find any code on this picture.'
+            };
+            engb.abhSign = {
+                save: 'Save',
+                title: 'Select a document',
+                help: 'Help Abh Sign',
+                lastPage: 'Last Page'
             };
         })(engb = culture.engb || (culture.engb = {}));
     })(culture = flexygo.culture || (flexygo.culture = {}));

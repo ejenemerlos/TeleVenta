@@ -34,7 +34,6 @@ var flexygo;
                 * @method connectedCallback
                 */
                 connectedCallback() {
-                    this.connected = true;
                     let element = $(this);
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
@@ -69,12 +68,6 @@ var flexygo;
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.Separator = Separator;
-                    }
-                    else {
-                        if (!this.options) {
-                            this.options = new flexygo.api.ObjectProperty();
-                        }
-                        this.options.Separator = ';';
                     }
                     if (typeof element.attr('Disabled') !== 'undefined') {
                         if (!this.options) {
@@ -152,16 +145,11 @@ var flexygo;
                     }
                     this.init();
                     let Value = element.attr('Value');
+                    let Text = element.attr('Text');
                     if (Value && Value !== '') {
-                        this.setValue(Value);
+                        this.setValue(Value, Text);
                     }
-                }
-                /**
-               * Array of observed attributes. REQUIRED
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'property', 'required', 'disabled', 'multiple', 'separator', 'requiredmessage', 'style', 'class', 'iconclass', 'hide', 'validatormessage'];
+                    this.connected = true;
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -196,7 +184,12 @@ var flexygo;
                         else {
                             this.options.IsRequired = false;
                         }
-                        element.find('input').prop('required', this.options.IsRequired);
+                        if (this.options.Multiple) {
+                            element.find('input.radioValInput').prop('required', this.options.IsRequired);
+                        }
+                        else {
+                            element.find('input').prop('required', this.options.IsRequired);
+                        }
                     }
                     if (attrName.toLowerCase() === 'disabled') {
                         if (!this.options) {
@@ -244,14 +237,17 @@ var flexygo;
                             this.refresh();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             this.refresh();
                         }
                     }
@@ -272,9 +268,10 @@ var flexygo;
                 }
                 refresh() {
                     let val = this.getValue();
+                    let txt = $(this).attr('Text');
                     this.init();
-                    if (val && val !== "") {
-                        this.setValue(val);
+                    if (val && val != "") {
+                        this.setValue(val, txt);
                     }
                 }
                 init() {
@@ -295,11 +292,15 @@ var flexygo;
                     else {
                         this.name = flexygo.utils.uniqueName();
                     }
+                    let name = this.name;
                     if (this.options && this.options.DropDownValues) {
+                        let checked = control.find('input:checked');
+                        control.empty();
                         for (let i = 0; i < this.options.DropDownValues.length; i++) {
                             label = $('<label />');
                             if (this.options.Multiple) {
                                 input = $('<input type="checkbox">');
+                                name = this.options.DropDownValues[i][this.options.SQLDisplayField];
                             }
                             else {
                                 input = $('<input type="radio">');
@@ -307,10 +308,18 @@ var flexygo;
                             if (me.attr('tabindex') && me.attr('tabindex') !== '') {
                                 input.attr('tabindex', me.attr('tabindex'));
                             }
-                            input.attr('value', this.options.DropDownValues[i][this.options.SQLValueField]).attr('name', this.name);
+                            input.attr('value', this.options.DropDownValues[i][this.options.SQLValueField]).attr('name', name);
                             label.append(input).append(this.options.DropDownValues[i][this.options.SQLDisplayField]);
                             control.append(label);
                         }
+                        if (this.options.Multiple) {
+                            control.append(`<input class="hidden radioValInput" name="${this.name}"/>`);
+                        }
+                        checked.map((i, e) => {
+                            let checkInput = control.find('input[value="' + e.value + '"]')[0];
+                            if (checkInput)
+                                checkInput.checked = true;
+                        });
                     }
                     else if (this.options.HTMLDropDownValues) {
                         for (let j = 0; j < this.options.HTMLDropDownValues.length; j++) {
@@ -327,8 +336,11 @@ var flexygo;
                             control.append(label);
                         }
                     }
-                    input.on('blur', () => { me.trigger('blur'); });
-                    if (this.options && this.options.CauseRefresh) {
+                    if (typeof (input) !== 'undefined') {
+                        input.on('blur', () => { me.trigger('blur'); });
+                    }
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && (this.options.CauseRefresh && this.options.SQLValidator)) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         control.find('input').off('change').on('change', () => {
                             let ev = {
                                 class: "property",
@@ -336,18 +348,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
-                        });
-                    }
-                    if (this.options && this.options.SQLValidator != null) {
-                        control.find('input').off('change').on('change', (e) => {
-                            let ev = {
-                                class: "property",
-                                type: "changed",
-                                sender: this,
-                                masterIdentity: this.property
-                            };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Locked) {
@@ -363,7 +364,12 @@ var flexygo;
                         me.children('div').addClass(this.options.CssClass);
                     }
                     if (this.options && this.options.IsRequired) {
-                        control.find('input').prop('required', this.options.IsRequired);
+                        if (this.options.Multiple) {
+                            control.find('input.radioValInput').prop('required', this.options.IsRequired);
+                        }
+                        else {
+                            control.find('input').prop('required', this.options.IsRequired);
+                        }
                     }
                     if (this.options && this.options.IsRequiredMessage) {
                         control.find('input').attr('data-msg-required', this.options.IsRequiredMessage);
@@ -383,6 +389,12 @@ var flexygo;
                         inp.attr('lastvalue', inp.prop('checked'));
                     });
                 }
+                changeSQLData(newSQL, newOptions) {
+                    this.options.SQLSentence = newSQL;
+                    this.options.SQLEditSentence = newSQL;
+                    this.options.DropDownValues = newOptions;
+                    this.setOptions();
+                }
                 setValue(value, text) {
                     let me = $(this);
                     let input;
@@ -391,16 +403,24 @@ var flexygo;
                     //    this.setValueView(value);
                     //} else {
                     if (this.options.Multiple) {
-                        let opt = value.toString().split(this.options.Separator);
-                        for (let i = 0; i < opt.length; i++) {
-                            if (me.find('input[value="' + opt[i] + '"]').length === 0) {
-                                label = $('<label />');
-                                input = $('<input type="checkbox">');
-                                input.attr('value', opt[i]).attr('name', this.name);
-                                label.append(input).append(opt[i]);
-                                me.find('div').append(label);
+                        if (!flexygo.utils.isBlank(value)) {
+                            let opt = value.toString().split(this.options.Separator);
+                            for (let i = 0; i < opt.length; i++) {
+                                if (me.attr('mode') && me.attr('mode').toLowerCase() === 'view') {
+                                    me.find('input[value="' + opt[i] + '"]').prop('checked', true).prop('disabled', true);
+                                }
+                                else {
+                                    if (me.find('input[value="' + opt[i] + '"]').length === 0) {
+                                        label = $('<label />');
+                                        input = $('<input type="checkbox">');
+                                        input.attr('value', opt[i]).attr('name', this.name);
+                                        label.append(input).append(opt[i]);
+                                        me.find('div').append(label);
+                                    }
+                                    me.find('input[value="' + opt[i] + '"]').prop('checked', true);
+                                    me.attr('value', value);
+                                }
                             }
-                            me.find('input[value="' + opt[i] + '"]').prop('checked', true);
                         }
                     }
                     else {
@@ -440,15 +460,22 @@ var flexygo;
                     //    return this.value;
                     //}
                     let input = me.find('input:checked');
+                    let val;
                     if (input.length === 0 || input.val() === '') {
-                        return null;
+                        val = null;
                     }
                     else if (input.length === 1) {
-                        return input.val();
+                        val = input.val();
                     }
                     else {
-                        return input.map((i, e) => { return e.value; }).get().join(this.options.Separator);
+                        val = input.map((i, e) => { return e.value; }).get().join(this.options.Separator);
                     }
+                    //Set value into the hidden input when multicheck
+                    let valueInput = $(this).find('input.radioValInput')[0];
+                    if (valueInput) {
+                        valueInput.value = val;
+                    }
+                    return val;
                 }
                 /**
                 * Trigger Dependencies.
@@ -464,6 +491,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+           * Array of observed attributes. REQUIRED
+           * @property observedAttributes {Array}
+           */
+            FlxRadioElement.observedAttributes = ['type', 'property', 'required', 'disabled', 'multiple', 'separator', 'requiredmessage', 'style', 'class', 'iconclass', 'hide', 'validatormessage'];
             wc.FlxRadioElement = FlxRadioElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

@@ -7,8 +7,8 @@
 * @class security
 */
 declare namespace flexygo.security {
-    function set(el: JQuery, type: string, key: string, item: string, value: string, id: string, key2: string): void;
-    function getObjectKey(type: string, key: string, key2: string): string;
+    function set(el: JQuery, type: string, key: string, item: string, value: string, id: string, key2: string, key3: string): void;
+    function getObjectKey(type: string, key: string, key2: string, key3: string): string;
 }
 /**
 * Security Roles.

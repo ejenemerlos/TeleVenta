@@ -6,6 +6,28 @@ flxAccount
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="M:FLEXYGO.Authentication.Identity.ApplicationOAuthProvider.IsUserAuthorized(System.String)">
+ <summary>
+ Is user autorized to use WebAPI.
+ </summary>
+ <param name="aUser">a user.</param>
+</member>
 <member name="T:FLEXYGO.Authentication.Identity.EmailService">
  <summary>
  Class EmailService.
@@ -41,6 +63,13 @@ flxAccount
  Constructor
  </summary>
  <param name="store">The store.</param>
+</member>
+<member name="M:FLEXYGO.Authentication.Identity.ApplicationUserManager.Create(Microsoft.AspNet.Identity.Owin.IdentityFactoryOptions{FLEXYGO.Authentication.Identity.ApplicationUserManager})">
+ <summary>
+ Creates with the specified options.
+ </summary>
+ <param name="options">The options.</param>
+ <returns>ApplicationUserManager.</returns>
 </member>
 <member name="M:FLEXYGO.Authentication.Identity.ApplicationUserManager.Create(Microsoft.AspNet.Identity.Owin.IdentityFactoryOptions{FLEXYGO.Authentication.Identity.ApplicationUserManager},Microsoft.Owin.IOwinContext)">
  <summary>
@@ -394,39 +423,6 @@ flxAccount
  </summary>
  <param name="returnUrl">The return URL.</param>
  <param name="response">The response.</param>
-</member>
-<member name="T:FLEXYGO.Authentication.Identity.Startup">
- <summary>
- Class Startup For configuring authentication.
- </summary>
-</member>
-<member name="M:FLEXYGO.Authentication.Identity.Startup.ConfigureAuth(Owin.IAppBuilder)">
- <summary>
- Configures the authentication.
- </summary>
- <param name="app">The application.</param>
-</member>
-<member name="M:FLEXYGO.Authentication.Identity.BasicAuthorizationProvider.IsUserAuthorized(System.String)">
- <summary>
- Is user autorized to use WebAPI.
- </summary>
- <param name="aUser">a user.</param>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
 </member>
 </members>
 </doc>

@@ -30,7 +30,6 @@ var flexygo;
                 */
                 connectedCallback() {
                     let element = $(this);
-                    this.connected = true;
                     let isFilter = false;
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
@@ -140,13 +139,7 @@ var flexygo;
                             }
                         }
                     }
-                }
-                /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['modulename', 'property', 'disabled', 'style', 'class', 'hide', 'allownull'];
+                    this.connected = true;
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -341,6 +334,7 @@ var flexygo;
                                         this.setValue(false);
                                 }
                             }
+                            //Normal Check
                             else {
                                 if (input.prop('checked')) {
                                     me.attr('checked', 'true');
@@ -374,7 +368,20 @@ var flexygo;
                     if (this.options && this.options.CssClass) {
                         me.children('div').addClass(this.options.CssClass);
                     }
-                    if (this.options && this.options.CauseRefresh) {
+                    const module = me.closest('flx-module')[0];
+                    let filter = null;
+                    let hasFilterDependencyProperty = false;
+                    if (me.closest('flx-filter').length > 0) {
+                        filter = me.closest('flx-filter')[0];
+                        let filterProperties = filter.settings[filter.active].Properties;
+                        for (let propertyKey in filterProperties) {
+                            if (filterProperties[propertyKey].PropertyName == me.attr("property") && (filterProperties[propertyKey].DependingFilterProperties).length > 0) {
+                                hasFilterDependencyProperty = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (hasFilterDependencyProperty || (this.options && this.options.CauseRefresh) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         input.on('change', () => {
                             //$(document).trigger('refreshProperty', [input.closest('flx-edit'), ctx.options.Name]);
                             let ev = {
@@ -383,7 +390,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Hide) {
@@ -467,6 +474,11 @@ var flexygo;
                     input.trigger('change');
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxCheckElement.observedAttributes = ['modulename', 'property', 'disabled', 'style', 'class', 'hide', 'allownull'];
             wc.FlxCheckElement = FlxCheckElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

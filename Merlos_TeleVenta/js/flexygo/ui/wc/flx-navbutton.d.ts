@@ -2,7 +2,7 @@
  * @namespace flexygo.ui.wc
  */
 declare namespace flexygo.ui.wc {
-    type navbuttonTypes = "openpage" | "openpagename" | "execprocess" | "openprocessparams" | "openreportsparams" | "viewreport" | "openhelpid";
+    type navbuttonTypes = "home" | "openpage" | "openpagename" | "execprocess" | "openprocessparams" | "openreportsparams" | "viewreport" | "openhelpid" | "externalhome" | "externalopenpage" | "externalopenpagename";
     /**
     * Library for the FlxSampleWcElement
     *
@@ -22,6 +22,11 @@ declare namespace flexygo.ui.wc {
         * @property connected {boolean}
         */
         connected: boolean;
+        /**
+        * External App Name
+        * @property appname {string}
+        */
+        appname: string;
         /**
        * Type
        * @property type {navbuttonTypes}
@@ -103,6 +108,16 @@ declare namespace flexygo.ui.wc {
         */
         showprogress: boolean;
         /**
+        * Sets the preset of the compatible elemets
+        * @property showProgress {boolean}
+        */
+        presets: string;
+        /**
+        * Disables the onclick event
+        * @property disabled {boolean}
+        */
+        disabled: boolean;
+        /**
        * Fires when element is attached to DOM
        * @method connectedCallback
        */
@@ -127,5 +142,12 @@ declare namespace flexygo.ui.wc {
         * @method render
         */
         render(): void;
+        /**
+        * Executes the designated nav function
+        * @param ev Click/mouseDown jquery event
+        * @param me Component in jquery type
+        * @method execNavFunction
+        */
+        execNavFunction(ev: JQueryEventObject, me: any): void;
     }
 }

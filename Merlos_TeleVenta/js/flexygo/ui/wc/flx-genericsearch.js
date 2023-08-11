@@ -37,13 +37,6 @@ var flexygo;
                     }
                 }
                 /**
-                * Array of observed attributes.
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['params'];
-                }
-                /**
                 * Fires when the attribute value of the element is changed.
                 * @method attributeChangedCallback
                 */
@@ -61,13 +54,14 @@ var flexygo;
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     if (!this.gridId) {
                         me.html('<div class="search input-group"><input type="search" placeholder="No relation defined"><span class="input-group-addon bg-danger"><i class="flx-icon icon-stop"></i></span></div>');
                         return;
                     }
                     me.html('<div class="search input-group"><input type="search" placeholder="' + flexygo.localization.translate('flxsearch.search') + '"><span class="input-group-addon bg-outstanding"><i class="flx-icon icon-search-1"></i></span></div>');
                     me.closest('.cntBody').addClass('nopadding');
-                    me.find('input').on('keyup.search', (e) => {
+                    me.find('input').on('keyup.search & search', (e) => {
                         let modsIds = this.gridId.split('|');
                         for (let i = 0; i < modsIds.length; i++) {
                             let ct = $('flx-list[modulename="' + modsIds[i] + '"], flx-editgrid[id="' + modsIds[i] + '"]')[0];
@@ -96,6 +90,11 @@ var flexygo;
                     this.refresh();
                 }
             }
+            /**
+            * Array of observed attributes.
+            * @property observedAttributes {Array}
+            */
+            FlxGenericSearchElement.observedAttributes = ['params'];
             wc.FlxGenericSearchElement = FlxGenericSearchElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

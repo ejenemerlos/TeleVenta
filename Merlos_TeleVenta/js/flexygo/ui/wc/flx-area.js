@@ -42,9 +42,6 @@ var flexygo;
                         this.init();
                     }
                 }
-                static get observedAttributes() {
-                    return [];
-                }
                 /**
               * Fires when the attribute value of the element is changed.
               * @method attributeChangedCallback
@@ -64,6 +61,7 @@ var flexygo;
                 */
                 init() {
                     $(this).removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     this.uuid = flexygo.utils.uniqueUUID();
                     let navBar = $(this);
                     navBar.empty();
@@ -323,8 +321,9 @@ var flexygo;
                                         this.nodes.update(node);
                                         let maxId = 0;
                                         this.nodes.forEach((n) => {
-                                            if (n.id > maxId) {
-                                                maxId = parseInt(n.id);
+                                            let id = parseInt(n.id + '');
+                                            if (id > maxId) {
+                                                maxId = id;
                                             }
                                         });
                                         maxId += 1;
@@ -533,6 +532,7 @@ var flexygo;
                     }
                 }
             }
+            FlxAreaElement.observedAttributes = [];
             wc.FlxAreaElement = FlxAreaElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

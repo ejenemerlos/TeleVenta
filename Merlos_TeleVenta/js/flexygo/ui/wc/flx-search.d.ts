@@ -46,6 +46,7 @@ declare namespace flexygo.ui.wc {
         };
         filterValues: flexygo.ui.wc.FlxFilterInfo[];
         activeFilter: string;
+        userDefinedGroups: boolean;
         searchSettings: {
             [key: string]: flexygo.api.SearchSettings;
         };
@@ -59,6 +60,7 @@ declare namespace flexygo.ui.wc {
         data: any;
         buttons: flexygo.api.Toolbar;
         groups: flexygo.api.TemplateGroupCollection;
+        groupList: flexygo.api.TemplateGroupCollection;
         viewId: string;
         pager: JQuery;
         presetId: string;
@@ -73,7 +75,7 @@ declare namespace flexygo.ui.wc {
         * Monitor the list of observed attribute for changes.
         * @property observedAttributes
         */
-        static readonly observedAttributes: string[];
+        observedAttributes(): string[];
         attributeChangedCallback(attrName: string, oldVal: any, newVal: any): void;
         init(): void;
         refresh(): void;
@@ -87,7 +89,7 @@ declare namespace flexygo.ui.wc {
         * @method sort
         * @param  {api.list.PropertyOrder[]} orderInfo
         */
-        sortByObj(orderInfo: api.list.PropertyOrder[]): void;
+        sortByObj(orderInfo: api.list.PropertyOrder[], groupsInfo: flexygo.api.TemplateGroupCollection): void;
         sort(columnItem: Element, property: string, ascMode?: boolean): void;
         loadPager(): void;
         setPreset(presetName: string, presetText: string, presetIcon: string): void;
@@ -104,7 +106,7 @@ declare namespace flexygo.ui.wc {
         paintHeader(row: any): string;
         paintFooter(row: any): string;
         paintBody(row: any): string;
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         refreshPager(): void;
         _addBtns(btns: JQuery, pageNum: number): void;
         getValue(value: any): string;

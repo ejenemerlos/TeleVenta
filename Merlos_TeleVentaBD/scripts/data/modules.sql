@@ -46,8 +46,8 @@ function cargarLlamadasCliente(){
 }
 
 
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flow-chart-2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Cliente_Acciones''] .icon-minus").click();',0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Datos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Datos',N'Datos del Cliente',N'default',0,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'client',NULL,NULL,N'DataConnectionString',NULL,NULL,N'Cliente_Datos',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flow-chart-2',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Cliente_Acciones''] .icon-minus").click();',0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Cliente_Datos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Datos',N'Datos del Cliente',N'default',0,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'client',NULL,NULL,N'DataConnectionString',NULL,NULL,N'Cliente_Datos',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Cliente_Incidencias',N'flx-html',N'project',NULL,NULL,N'Cliente_Incidencias',N'Incidencias',N'default',0,0,1,0,NULL,NULL,N'<div id="dvRegInci"></div>
 
 <script>
@@ -122,9 +122,9 @@ function incidenciasIO(dv, nm) {
         else { ' + convert(nvarchar(max),NCHAR(36)) + N'(".dvInci").hide(); ' + convert(nvarchar(max),NCHAR(36)) + N'("#" + dv).slideDown(); }
     }
 }
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'admin1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Pasos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Pasos',N'Cliente_Pasos',N'none',1,1,1,0,NULL,NULL,N'<span class="btn btn-info" onclick=''flexygo.nav.openPageName("TeleVenta","","","{\"CODIGO\":\"{{CODIGO}}\"}","current",false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));''><span title="Llamada" class="flx-icon icon-phone icon-margin-right"></span><span class="hidden-m">Llamada</span></span>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,N'systb-search',NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'admin1',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Cliente_Pasos',N'flx-view',N'project',N'Cliente',N'(CODIGO=''{{CODIGO}}'')',N'Cliente_Pasos',N'Cliente_Pasos',N'none',1,1,1,0,NULL,NULL,N'<span class="btn btn-info" onclick=''flexygo.nav.openPageName("TeleVenta","","","{\"CODIGO\":\"{{CODIGO}}\"}","current",false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));''><span title="Llamada" class="flx-icon icon-phone icon-margin-right"></span><span class="hidden-m">Llamada</span></span>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Cliente_Pedidos',N'flx-objectlist',N'project',N'Pedidos',N'CLIENTE=''{{CODIGO}}''',N'Cliente_Pedidos',N'Pedidos',N'default',1,0,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'document1',N'syspager-listboth',10,NULL,N'systb-search',NULL,N'PedidosPlantilla01',NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Cliente_view_cabecera',N'flx-html',N'project',NULL,N'(CODIGO=''{{CODIGO}}'')',N'Cliente_view_cabecera',N'Encabezado cliente',N'none',1,1,1,0,NULL,NULL,N'<table class="tbS">
   <tr>
     <th>
@@ -165,8 +165,8 @@ function cargarDatosCliente(){
 	},false);
 }
 
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'Clientes_Listado',N'flx-objectlist',N'system',N'Clientes',N'{{ObjectWhere}}',N'Lisado de Clientes',N'{{ObjectDescrip}}',N'default',0,0,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'sysobjecticon',N'syspager-listboth',25,NULL,N'systb-search',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Clientes_Listado',N'flx-objectlist',N'system',N'Clientes',N'{{ObjectWhere}}',N'Lisado de Clientes',N'{{ObjectDescrip}}',N'default',0,0,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'sysobjecticon',N'syspager-listboth',25,NULL,N'systb-search',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Configuracion',N'flx-html',N'project',NULL,NULL,N'Configuracion',N'Configuracion',N'none',1,1,1,0,NULL,NULL,N'<style>
 	#tbConfigMenu tr th {padding:2px 6px;}
 	.separador { width:30px;}
@@ -646,7 +646,7 @@ function cargarDatosCliente(){
 			}
 		}		
 	}
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Contactos',N'flx-sqllist',N'project',N'Contactos',N'CLIENTE=''{{CODIGO}}''',N'Contactos',N'Contactos',N'default',1,0,1,0,N'select * from vContactos where CLIENTE=''{{CODIGO}}''',N'<div id="dvContactosBotonera" style="padding:10px;">
   <span class="MIbotonGreen esq05" style="margin:10px;"
      onclick="' + convert(nvarchar(max),NCHAR(36)) + N'(''#dvContactosBotonera'').hide();' + convert(nvarchar(max),NCHAR(36)) + N'(''#dvContactosCampos'').slideDown();">Nuevo</span>
@@ -739,25 +739,89 @@ function guardarContacto(io){
 	}else{ alert("Error SP: pConfiguracion!!!\n"+ret); }}, false);
 }
 
-' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Contactos''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'contacts-2',NULL,10,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'inciCLIlistado',N'flx-objectlist',N'project',N'{{ObjectName}}',N'{{ObjectWhere}}',N'Incidencias de Clientes',N'Incidencias de Clientes',N'default',1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'accepted-2',N'syspager-listheader',100,NULL,N'systb-list',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Contactos''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'contacts-2',NULL,10,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'inciCLIlistado',N'flx-objectlist',N'project',N'{{ObjectName}}',N'{{ObjectWhere}}',N'Incidencias de Clientes',N'Incidencias de Clientes',N'default',1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'accepted-2',N'syspager-listheader',100,NULL,N'systb-list',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Merlos_Version',N'flx-html',N'project',NULL,NULL,N'Merlos_Version',N'Versioning',N'none',0,0,0,0,NULL,NULL,N'<div>
+	<table class="tbVersioning">
+		<tr>
+			<td class="vTituloPunto"></td>
+			<th class="vTitulo">Versión v.3.3.1.3 | 07-08-2023</th>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">1</td>
+			<td class="vDescripcion">
+				Actualización del NuGet por incompatibilidad con Flexygo.
+			</td>
+		</tr>
+		<tr><td colspan="2" class="vTR"></td></tr>
+
+		<tr>
+			<td class="vTituloPunto"></td>
+			<th class="vTitulo">Versión v.3.3.1.2 | 04-08-2023</th>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">1</td>
+			<td class="vDescripcion">
+				Visualización de la versión de la aplicación en el menú superior y acceso a las versiones.
+			</td>
+		</tr>
+		<tr><td colspan="2" class="vTR"></td></tr>
+
+		<tr>
+			<td class="vTituloPunto"></td>
+			<th class="vTitulo">Versión v.3.3.1.1 | 04-08-2023</th>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">1</td>
+			<td class="vDescripcion">
+				Se ha incluido un botón de cesta global.<br />
+				Con este botón se añaden todas las líneas (que se hayan indicado unidades) a la vez, sin tener que añadir línea a línea.
+			</td>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">2</td>
+			<td class="vDescripcion">Se ha corregido la eliminación de varias líneas del mismo artículo. Ahora se elimina únicamente la línea especificada.</td>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">3</td>
+			<td class="vDescripcion">
+				Se ha modificado el proceso de inserción de las observaciones de las líneas.<br />
+				Cada línea insertada aparecerá como una nueva línea en Eurowin.
+			</td>
+		</tr>
+		<tr class="trPunto">
+			<td class="vPunto">4</td>
+			<td class="vDescripcion">
+				Se ha corregido la funcionalidad de visualización de la ficha de cliente desde la generación de pedidos para la modificación de horarios de llamadas.
+			</td>
+		</tr>
+		<tr><td colspan="2" class="vTR"></td></tr>
+	</table>
+</div>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_Cliente',N'flx-html',N'project',NULL,NULL,N'TV_Cliente',N'TV_Cliente',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Cliente <span class=''MIbotonP FR esq05'' onclick=''verFichaDeCliente()''>Ver Cliente</span></div>
 <div id="dvDatosDelCliente" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
-',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_Llamadas',N'flx-html',N'project',NULL,NULL,N'TV_Llamadas',N'TV_Llamadas',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">
 	Llamadas
 	<div class="dvImg20 icoRecarga fR" onclick="recargarTVLlamadas(true)"></div>
 	<span class="MIbotonP fR esq05" style="margin-right:20px;" onclick="anyadirCliente()">Añadir Cliente</span>
 </div>
 <div id="dvLlamadas" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
-',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_LlamadasTV',N'flx-html',N'project',NULL,NULL,N'TV_LlamadasTV',N'TV_LlamadasTV',N'none',0,0,0,0,NULL,NULL,N'<div class="tvTitulo esq1100">Llamadas Tele Venta</div>
 <div id="dvLlamadasTeleVenta" class="mi-module"></div>
-',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_OpcionesLlamada',N'flx-html',N'project',NULL,NULL,N'TV_OpcionesLlamada',N'TV_OpcionesLlamada',N'none',1,1,1,0,NULL,NULL,N'<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
 	<div id="tbOpciones" style="overflow:hidden;">
 		<div id="dvFechaTV" class="esq10" style="float:left; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9;"></div>
-		<div id="dvSerieTV" class="esq10" style="float:left; margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
+		
+		<div id="dvSerieGl" style="float:left; margin-left:15px; position:relative;">
+			<div id="dvSerieTV" class="esq10" style="margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
+			<div id="dvSerieTVCont" class="esq10" style="z-index:9999; position:absolute; background:yellow; padding:10px;">
+				registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro
+			</div>
+		</div>
+		
 		<div style="float:right; display:flex; align-items:center; justify-content:flex-end; gap:5px;">
 			<div id="btnTerminar" class="MIbotonW FR vaM inv" onclick=''terminarLlamada()'' style="white-space:nowrap;">Terminar Llamada</div>
 			<div id="btnPedido" class="MIbotonW FR vaM inv" onclick=''pedidoTV()''>Pedido</div>
@@ -841,7 +905,7 @@ function cargarTbConfigOperador(modo,comprobar){
 			 + '',''+window["opGestor"]+'',''+window["opRuta"]+'',''+window["opVendedor"]+'',''+window["opSerie"]+'',''+window["opMarca"]+''''
 			 +'',''+window["opFamilia"]+'',''+window["opSubfamilia"]+'','' + paramStd + ''}'';
 	}
-console.log(elJS);
+
 	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
 	flexygo.nav.execProcess(''pOperadorConfig'','''',null,null,[{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
 		if (ret) {
@@ -970,7 +1034,7 @@ function asignarSerieGlobal(laSerie){
 	cerrarVelo();
 }
 
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_Pedido',N'flx-html',N'project',NULL,NULL,N'TV_Pedido',N'TV_Pedido',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedido
 	<span class="flR">
 		<span id="spNoCobrarPortes">
@@ -1032,13 +1096,13 @@ function asignarSerieGlobal(laSerie){
 		if(VerificarPedido===1){ VerificarPedido=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesO); }
 		else{ VerificarPedido=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgVerificarPedido").attr("src",BtnDesI); }
 	}
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'TV_Recibos_Pendientes',N'flx-objectlist',N'project',N'RecibosPendientes',N'CLIENTE=''{{CODIGO}}''',N'TV_Recibos_Pendientes',N'Recibos Pendientes',N'default',1,0,1,0,NULL,NULL,N'{{Fecha de vencimiento}}',NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''TV_Recibos_Pendientes''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',N'syspager-listboth',20,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
+</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'inv moduloPedido',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'TV_Recibos_Pendientes',N'flx-objectlist',N'project',N'RecibosPendientes',N'CLIENTE=''{{CODIGO}}''',N'TV_Recibos_Pendientes',N'Recibos Pendientes',N'default',1,0,1,0,NULL,NULL,N'{{Fecha de vencimiento}}',NULL,NULL,NULL,N'' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''TV_Recibos_Pendientes''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',N'syspager-listboth',20,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_UltimosPedidos',N'flx-html',N'project',NULL,NULL,N'TV_UltimosPedidos',N'TV_UltimosPedidos',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Últimos Artículos Pedidos</div>
 <div id="dvUltimosPedidos" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;" onmouseleave="cerrarAVT()"></div>
-',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
- ,(N'usuariosTV',N'flx-objectlist',N'project',N'gestores',NULL,N'usuariosTV',N'Gestores',N'clean',0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',N'syspager-listfooter',20,NULL,NULL,NULL,N'gestores',NULL,N'inv sombra zi100',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,1)
-) AS Source ([ModuleName],[TypeId],[ClassId],[ObjectName],[ObjectFilter],[Descrip],[Title],[ContainerId],[CollapsibleButton],[FullscreenButton],[RefreshButton],[SearchButton],[SQlSentence],[Header],[HTMLText],[Footer],[Empty],[CssText],[ScriptText],[ChartTypeId],[ChartSettingName],[Series],[Labels],[Value],[Params],[JsonOptions],[Path],[TransFormFilePath],[IconName],[PagerId],[PageSize],[ConnStringID],[ToolbarName],[GridbarName],[TemplateId],[HeaderClass],[ModuleClass],[JSAfterLoad],[Searcher],[ShowWhenNew],[ManualInit],[SchedulerName],[TimelineSettingName],[KanbanSettingsName],[ChartBackground],[ChartBorder],[Reserved],[Cache],[Offline],[OriginId])
+',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'usuariosTV',N'flx-objectlist',N'project',N'gestores',NULL,N'usuariosTV',N'Gestores',N'clean',0,0,0,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',N'syspager-listfooter',20,NULL,NULL,NULL,N'gestores',NULL,N'inv sombra zi100',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+) AS Source ([ModuleName],[TypeId],[ClassId],[ObjectName],[ObjectFilter],[Descrip],[Title],[ContainerId],[CollapsibleButton],[FullscreenButton],[RefreshButton],[SearchButton],[SQlSentence],[Header],[HTMLText],[Footer],[Empty],[CssText],[ScriptText],[ChartTypeId],[ChartSettingName],[Series],[Labels],[Value],[Params],[JsonOptions],[Path],[TransFormFilePath],[IconName],[PagerId],[PageSize],[ConnStringID],[ToolbarName],[GridbarName],[TemplateId],[HeaderClass],[ModuleClass],[JSAfterLoad],[Searcher],[ShowWhenNew],[ManualInit],[SchedulerName],[TimelineSettingName],[KanbanSettingsName],[ChartBackground],[ChartBorder],[Reserved],[Cache],[Offline],[PresetName],[RemovePreset],[MixedChartTypes],[MixedChartLabels],[ChartLineBorderDash],[ChartLineFill],[HTMLInit],[ModuleViewers],[Active],[OriginId])
 ON (Target.[ModuleName] = Source.[ModuleName])
 WHEN MATCHED AND (
 	NULLIF(Source.[TypeId], Target.[TypeId]) IS NOT NULL OR NULLIF(Target.[TypeId], Source.[TypeId]) IS NOT NULL OR 
@@ -1089,6 +1153,15 @@ WHEN MATCHED AND (
 	NULLIF(Source.[Reserved], Target.[Reserved]) IS NOT NULL OR NULLIF(Target.[Reserved], Source.[Reserved]) IS NOT NULL OR 
 	NULLIF(Source.[Cache], Target.[Cache]) IS NOT NULL OR NULLIF(Target.[Cache], Source.[Cache]) IS NOT NULL OR 
 	NULLIF(Source.[Offline], Target.[Offline]) IS NOT NULL OR NULLIF(Target.[Offline], Source.[Offline]) IS NOT NULL OR 
+	NULLIF(Source.[PresetName], Target.[PresetName]) IS NOT NULL OR NULLIF(Target.[PresetName], Source.[PresetName]) IS NOT NULL OR 
+	NULLIF(Source.[RemovePreset], Target.[RemovePreset]) IS NOT NULL OR NULLIF(Target.[RemovePreset], Source.[RemovePreset]) IS NOT NULL OR 
+	NULLIF(Source.[MixedChartTypes], Target.[MixedChartTypes]) IS NOT NULL OR NULLIF(Target.[MixedChartTypes], Source.[MixedChartTypes]) IS NOT NULL OR 
+	NULLIF(Source.[MixedChartLabels], Target.[MixedChartLabels]) IS NOT NULL OR NULLIF(Target.[MixedChartLabels], Source.[MixedChartLabels]) IS NOT NULL OR 
+	NULLIF(Source.[ChartLineBorderDash], Target.[ChartLineBorderDash]) IS NOT NULL OR NULLIF(Target.[ChartLineBorderDash], Source.[ChartLineBorderDash]) IS NOT NULL OR 
+	NULLIF(Source.[ChartLineFill], Target.[ChartLineFill]) IS NOT NULL OR NULLIF(Target.[ChartLineFill], Source.[ChartLineFill]) IS NOT NULL OR 
+	NULLIF(Source.[HTMLInit], Target.[HTMLInit]) IS NOT NULL OR NULLIF(Target.[HTMLInit], Source.[HTMLInit]) IS NOT NULL OR 
+	NULLIF(Source.[ModuleViewers], Target.[ModuleViewers]) IS NOT NULL OR NULLIF(Target.[ModuleViewers], Source.[ModuleViewers]) IS NOT NULL OR 
+	NULLIF(Source.[Active], Target.[Active]) IS NOT NULL OR NULLIF(Target.[Active], Source.[Active]) IS NOT NULL OR 
 	NULLIF(Source.[OriginId], Target.[OriginId]) IS NOT NULL OR NULLIF(Target.[OriginId], Source.[OriginId]) IS NOT NULL) THEN
  UPDATE SET
   [TypeId] = Source.[TypeId], 
@@ -1139,10 +1212,19 @@ WHEN MATCHED AND (
   [Reserved] = Source.[Reserved], 
   [Cache] = Source.[Cache], 
   [Offline] = Source.[Offline], 
+  [PresetName] = Source.[PresetName], 
+  [RemovePreset] = Source.[RemovePreset], 
+  [MixedChartTypes] = Source.[MixedChartTypes], 
+  [MixedChartLabels] = Source.[MixedChartLabels], 
+  [ChartLineBorderDash] = Source.[ChartLineBorderDash], 
+  [ChartLineFill] = Source.[ChartLineFill], 
+  [HTMLInit] = Source.[HTMLInit], 
+  [ModuleViewers] = Source.[ModuleViewers], 
+  [Active] = Source.[Active], 
   [OriginId] = Source.[OriginId]
 WHEN NOT MATCHED BY TARGET THEN
- INSERT([ModuleName],[TypeId],[ClassId],[ObjectName],[ObjectFilter],[Descrip],[Title],[ContainerId],[CollapsibleButton],[FullscreenButton],[RefreshButton],[SearchButton],[SQlSentence],[Header],[HTMLText],[Footer],[Empty],[CssText],[ScriptText],[ChartTypeId],[ChartSettingName],[Series],[Labels],[Value],[Params],[JsonOptions],[Path],[TransFormFilePath],[IconName],[PagerId],[PageSize],[ConnStringID],[ToolbarName],[GridbarName],[TemplateId],[HeaderClass],[ModuleClass],[JSAfterLoad],[Searcher],[ShowWhenNew],[ManualInit],[SchedulerName],[TimelineSettingName],[KanbanSettingsName],[ChartBackground],[ChartBorder],[Reserved],[Cache],[Offline],[OriginId])
- VALUES(Source.[ModuleName],Source.[TypeId],Source.[ClassId],Source.[ObjectName],Source.[ObjectFilter],Source.[Descrip],Source.[Title],Source.[ContainerId],Source.[CollapsibleButton],Source.[FullscreenButton],Source.[RefreshButton],Source.[SearchButton],Source.[SQlSentence],Source.[Header],Source.[HTMLText],Source.[Footer],Source.[Empty],Source.[CssText],Source.[ScriptText],Source.[ChartTypeId],Source.[ChartSettingName],Source.[Series],Source.[Labels],Source.[Value],Source.[Params],Source.[JsonOptions],Source.[Path],Source.[TransFormFilePath],Source.[IconName],Source.[PagerId],Source.[PageSize],Source.[ConnStringID],Source.[ToolbarName],Source.[GridbarName],Source.[TemplateId],Source.[HeaderClass],Source.[ModuleClass],Source.[JSAfterLoad],Source.[Searcher],Source.[ShowWhenNew],Source.[ManualInit],Source.[SchedulerName],Source.[TimelineSettingName],Source.[KanbanSettingsName],Source.[ChartBackground],Source.[ChartBorder],Source.[Reserved],Source.[Cache],Source.[Offline],Source.[OriginId])
+ INSERT([ModuleName],[TypeId],[ClassId],[ObjectName],[ObjectFilter],[Descrip],[Title],[ContainerId],[CollapsibleButton],[FullscreenButton],[RefreshButton],[SearchButton],[SQlSentence],[Header],[HTMLText],[Footer],[Empty],[CssText],[ScriptText],[ChartTypeId],[ChartSettingName],[Series],[Labels],[Value],[Params],[JsonOptions],[Path],[TransFormFilePath],[IconName],[PagerId],[PageSize],[ConnStringID],[ToolbarName],[GridbarName],[TemplateId],[HeaderClass],[ModuleClass],[JSAfterLoad],[Searcher],[ShowWhenNew],[ManualInit],[SchedulerName],[TimelineSettingName],[KanbanSettingsName],[ChartBackground],[ChartBorder],[Reserved],[Cache],[Offline],[PresetName],[RemovePreset],[MixedChartTypes],[MixedChartLabels],[ChartLineBorderDash],[ChartLineFill],[HTMLInit],[ModuleViewers],[Active],[OriginId])
+ VALUES(Source.[ModuleName],Source.[TypeId],Source.[ClassId],Source.[ObjectName],Source.[ObjectFilter],Source.[Descrip],Source.[Title],Source.[ContainerId],Source.[CollapsibleButton],Source.[FullscreenButton],Source.[RefreshButton],Source.[SearchButton],Source.[SQlSentence],Source.[Header],Source.[HTMLText],Source.[Footer],Source.[Empty],Source.[CssText],Source.[ScriptText],Source.[ChartTypeId],Source.[ChartSettingName],Source.[Series],Source.[Labels],Source.[Value],Source.[Params],Source.[JsonOptions],Source.[Path],Source.[TransFormFilePath],Source.[IconName],Source.[PagerId],Source.[PageSize],Source.[ConnStringID],Source.[ToolbarName],Source.[GridbarName],Source.[TemplateId],Source.[HeaderClass],Source.[ModuleClass],Source.[JSAfterLoad],Source.[Searcher],Source.[ShowWhenNew],Source.[ManualInit],Source.[SchedulerName],Source.[TimelineSettingName],Source.[KanbanSettingsName],Source.[ChartBackground],Source.[ChartBorder],Source.[Reserved],Source.[Cache],Source.[Offline],Source.[PresetName],Source.[RemovePreset],Source.[MixedChartTypes],Source.[MixedChartLabels],Source.[ChartLineBorderDash],Source.[ChartLineFill],Source.[HTMLInit],Source.[ModuleViewers],Source.[Active],Source.[OriginId])
 WHEN NOT MATCHED BY SOURCE AND TARGET.OriginId = 1 THEN 
  DELETE
 ;

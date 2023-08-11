@@ -4,17 +4,18 @@ BEGIN TRY
 
 MERGE INTO [Navigation_Nodes] AS Target
 USING (VALUES
-  (N'A5754908-A03E-4AAB-9599-1349B27C3264',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',8,N'Usuarios',N'users1',N'Usuarios',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'sysUsers',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'9A816DE2-430A-436B-B7F1-145F90BF016B',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',0,N'Indicencias Clientes',N'accepted-2',N'Indicencias Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'IncidenciasClientes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'B87F546F-2907-4B51-9DAF-3AA9402D89E9',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',1,N'Indicencias Artículos',N'accepted-2',N'Indicencias Artículos',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'IncidenciasArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'D7405F0D-D42A-4835-8FCD-425121C88EB4',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',7,N'Informes',N'reports',N'Informes',N'group',NULL,NULL,N'current',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'3A3737A4-429D-431F-8D15-68704D180F61',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',2,N'Gestores',N'customer-service-1',N'Gestores',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'gestores',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'0C84E448-7232-4639-97A2-804F4F015FCC',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',3,N'TeleVenta',N'monitor',N'Pantalla de tele venta',N'page',NULL,NULL,N'current',NULL,NULL,N'TeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'D6F70F7E-5E45-4624-83B3-8CD40AE5B975',N'D7405F0D-D42A-4835-8FCD-425121C88EB4',0,N'Incidencias Clientes',N'accepted-2',N'Incidencias Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'inciCLIs',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',5,N'Mantenimientos',N'arrow-head-51',N'Mantenimientos',N'group',NULL,NULL,N'current',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'92278553-2437-4FF0-8B8D-96F6FCB61E09',N'D7405F0D-D42A-4835-8FCD-425121C88EB4',0,N'Incidencias Artículos',N'accepted-2',N'Incidencias Artículos',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'inciARTs',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
- ,(N'2AE0631F-9562-4CC6-A2DE-FCCCF28C7168',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',4,N'Clientes',N'clients',N'Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'Clientes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,1)
-) AS Source ([NodeId],[ParentNodeId],[Order],[Title],[IconName],[Descrip],[TypeId],[Params],[Url],[TargetId],[ProcessName],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[SQLSentence],[SQLConStringId],[WebComponent],[TableName],[BadgeClass],[BadgeSQL],[BadgeConStringId],[BadgeRefresh],[Enabled],[cssClass],[OriginId])
+  (N'A5754908-A03E-4AAB-9599-1349B27C3264',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',8,N'Usuarios',N'users1',N'Usuarios',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'sysUsers',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'9A816DE2-430A-436B-B7F1-145F90BF016B',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',0,N'Indicencias Clientes',N'accepted-2',N'Indicencias Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'IncidenciasClientes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'B87F546F-2907-4B51-9DAF-3AA9402D89E9',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',1,N'Indicencias Artículos',N'accepted-2',N'Indicencias Artículos',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'IncidenciasArticulos',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'D7405F0D-D42A-4835-8FCD-425121C88EB4',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',7,N'Informes',N'reports',N'Informes',N'group',NULL,NULL,N'current',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'3A3737A4-429D-431F-8D15-68704D180F61',N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',2,N'Gestores',N'customer-service-1',N'Gestores',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'gestores',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'0C84E448-7232-4639-97A2-804F4F015FCC',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',3,N'TeleVenta',N'monitor',N'Pantalla de tele venta',N'page',NULL,NULL,N'current',NULL,NULL,N'TeleVenta',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'D6F70F7E-5E45-4624-83B3-8CD40AE5B975',N'D7405F0D-D42A-4835-8FCD-425121C88EB4',0,N'Incidencias Clientes',N'accepted-2',N'Incidencias Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'inciCLIs',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'FDEDCC20-B3A2-4B6E-850E-8DA95BEBA68F',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',5,N'Mantenimientos',N'arrow-head-51',N'Mantenimientos',N'group',NULL,NULL,N'current',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'92278553-2437-4FF0-8B8D-96F6FCB61E09',N'D7405F0D-D42A-4835-8FCD-425121C88EB4',0,N'Incidencias Artículos',N'accepted-2',N'Incidencias Artículos',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'inciARTs',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'1809B7D3-199E-4C92-8495-F3D02D576BE0',N'502DC12A-C032-407C-AD4E-372A476E7309',0,N'v.{{TeleVentaVersion}}',N'noicon',N'v.{{TeleVentaVersion}}',N'page',NULL,NULL,N'current',NULL,NULL,N'Merlos_Version',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+ ,(N'2AE0631F-9562-4CC6-A2DE-FCCCF28C7168',N'25A4B4D5-44AE-4CF1-8733-568F00F31520',4,N'Clientes',N'clients',N'Clientes',N'object',NULL,NULL,N'current',NULL,N'list',NULL,NULL,NULL,NULL,N'Clientes',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,1,NULL,NULL,NULL,NULL,1)
+) AS Source ([NodeId],[ParentNodeId],[Order],[Title],[IconName],[Descrip],[TypeId],[Params],[Url],[TargetId],[ProcessName],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[SQLSentence],[SQLConStringId],[WebComponent],[TableName],[BadgeClass],[BadgeSQL],[BadgeConStringId],[BadgeRefresh],[Enabled],[cssClass],[SQLEnabledDescrip],[SQLEnabled],[ConnStringId],[OriginId])
 ON (Target.[NodeId] = Source.[NodeId])
 WHEN MATCHED AND (
 	NULLIF(Source.[ParentNodeId], Target.[ParentNodeId]) IS NOT NULL OR NULLIF(Target.[ParentNodeId], Source.[ParentNodeId]) IS NOT NULL OR 
@@ -45,6 +46,9 @@ WHEN MATCHED AND (
 	NULLIF(Source.[BadgeRefresh], Target.[BadgeRefresh]) IS NOT NULL OR NULLIF(Target.[BadgeRefresh], Source.[BadgeRefresh]) IS NOT NULL OR 
 	NULLIF(Source.[Enabled], Target.[Enabled]) IS NOT NULL OR NULLIF(Target.[Enabled], Source.[Enabled]) IS NOT NULL OR 
 	NULLIF(Source.[cssClass], Target.[cssClass]) IS NOT NULL OR NULLIF(Target.[cssClass], Source.[cssClass]) IS NOT NULL OR 
+	NULLIF(Source.[SQLEnabledDescrip], Target.[SQLEnabledDescrip]) IS NOT NULL OR NULLIF(Target.[SQLEnabledDescrip], Source.[SQLEnabledDescrip]) IS NOT NULL OR 
+	NULLIF(Source.[SQLEnabled], Target.[SQLEnabled]) IS NOT NULL OR NULLIF(Target.[SQLEnabled], Source.[SQLEnabled]) IS NOT NULL OR 
+	NULLIF(Source.[ConnStringId], Target.[ConnStringId]) IS NOT NULL OR NULLIF(Target.[ConnStringId], Source.[ConnStringId]) IS NOT NULL OR 
 	NULLIF(Source.[OriginId], Target.[OriginId]) IS NOT NULL OR NULLIF(Target.[OriginId], Source.[OriginId]) IS NOT NULL) THEN
  UPDATE SET
   [ParentNodeId] = Source.[ParentNodeId], 
@@ -75,10 +79,13 @@ WHEN MATCHED AND (
   [BadgeRefresh] = Source.[BadgeRefresh], 
   [Enabled] = Source.[Enabled], 
   [cssClass] = Source.[cssClass], 
+  [SQLEnabledDescrip] = Source.[SQLEnabledDescrip], 
+  [SQLEnabled] = Source.[SQLEnabled], 
+  [ConnStringId] = Source.[ConnStringId], 
   [OriginId] = Source.[OriginId]
 WHEN NOT MATCHED BY TARGET THEN
- INSERT([NodeId],[ParentNodeId],[Order],[Title],[IconName],[Descrip],[TypeId],[Params],[Url],[TargetId],[ProcessName],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[SQLSentence],[SQLConStringId],[WebComponent],[TableName],[BadgeClass],[BadgeSQL],[BadgeConStringId],[BadgeRefresh],[Enabled],[cssClass],[OriginId])
- VALUES(Source.[NodeId],Source.[ParentNodeId],Source.[Order],Source.[Title],Source.[IconName],Source.[Descrip],Source.[TypeId],Source.[Params],Source.[Url],Source.[TargetId],Source.[ProcessName],Source.[PageTypeId],Source.[PageName],Source.[ReportName],Source.[HelpId],Source.[ReportWhere],Source.[ObjectName],Source.[ObjectWhere],Source.[Defaults],Source.[SQLSentence],Source.[SQLConStringId],Source.[WebComponent],Source.[TableName],Source.[BadgeClass],Source.[BadgeSQL],Source.[BadgeConStringId],Source.[BadgeRefresh],Source.[Enabled],Source.[cssClass],Source.[OriginId])
+ INSERT([NodeId],[ParentNodeId],[Order],[Title],[IconName],[Descrip],[TypeId],[Params],[Url],[TargetId],[ProcessName],[PageTypeId],[PageName],[ReportName],[HelpId],[ReportWhere],[ObjectName],[ObjectWhere],[Defaults],[SQLSentence],[SQLConStringId],[WebComponent],[TableName],[BadgeClass],[BadgeSQL],[BadgeConStringId],[BadgeRefresh],[Enabled],[cssClass],[SQLEnabledDescrip],[SQLEnabled],[ConnStringId],[OriginId])
+ VALUES(Source.[NodeId],Source.[ParentNodeId],Source.[Order],Source.[Title],Source.[IconName],Source.[Descrip],Source.[TypeId],Source.[Params],Source.[Url],Source.[TargetId],Source.[ProcessName],Source.[PageTypeId],Source.[PageName],Source.[ReportName],Source.[HelpId],Source.[ReportWhere],Source.[ObjectName],Source.[ObjectWhere],Source.[Defaults],Source.[SQLSentence],Source.[SQLConStringId],Source.[WebComponent],Source.[TableName],Source.[BadgeClass],Source.[BadgeSQL],Source.[BadgeConStringId],Source.[BadgeRefresh],Source.[Enabled],Source.[cssClass],Source.[SQLEnabledDescrip],Source.[SQLEnabled],Source.[ConnStringId],Source.[OriginId])
 WHEN NOT MATCHED BY SOURCE AND TARGET.OriginId = 1 THEN 
  DELETE
 ;

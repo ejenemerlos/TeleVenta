@@ -1,22 +1,21 @@
-import { r as registerInstance, j as h, k as getElement } from './index-76f52202.js';
-import './ionic-global-693c5dc1.js';
-import { s as sql, u as util, m as msg, C as ConftokenProvider } from './messages-50a67881.js';
-import { j as jquery } from './jquery-4ed57fb2.js';
-import './utils-67a6e57b.js';
-import './index-023098c3.js';
-import './helpers-d94a0dba.js';
-import './animation-625503e5.js';
-import './index-20a23da0.js';
-import './ios.transition-267ba16c.js';
-import './md.transition-15ebc2b8.js';
-import './cubic-bezier-92995175.js';
-import './index-1da44cf3.js';
-import './index-53f14fc6.js';
-import './hardware-back-button-c2d005b0.js';
-import './index-725f2a8a.js';
-import './overlays-39d86a31.js';
-import { n as nav } from './navigation-c87efa5b.js';
-import { p as parser } from './parser-90867b5f.js';
+import { r as registerInstance, j as h, k as getElement } from './index-86ac49ff.js';
+import './ionic-global-0f98fe97.js';
+import './webapi-c55d139d.js';
+import { s as sql, i as flxSync, u as util, m as msg, C as ConftokenProvider, n as nav } from './conftoken-5bf7991f.js';
+import { j as jquery } from './jquery-5df58adb.js';
+import './utils-16079bfd.js';
+import './helpers-719f4c54.js';
+import './animation-10ea33c3.js';
+import './index-7173f7a2.js';
+import './ios.transition-95375ac9.js';
+import './md.transition-6d74e584.js';
+import './cubic-bezier-93f47170.js';
+import './index-7fe827c3.js';
+import './index-b40d441b.js';
+import './hardware-back-button-aacf3d12.js';
+import './index-50651ccc.js';
+import './overlays-5302658e.js';
+import { p as parser } from './parser-6f9bc4c3.js';
 
 var dependencies;
 (function (dependencies) {
@@ -59,10 +58,22 @@ var dependencies;
         if (dep.SQLEnabled || (dep.EnabledValues && dep.EnabledValues.length > 0) || (dep.DisabledValues && dep.DisabledValues.length > 0)) {
             //Disable property.
             if (await booleanDependency(dep.PropertyName, dep.SQLEnabled, dep.EnabledValues, dep.DisabledValues, form, tokens)) {
-                form.find('[property=' + dep.DependantPropertyName + ']').prop('disabled', false);
+                let input = form.find('[property=' + dep.DependantPropertyName + ']');
+                if (input.length !== 0) {
+                    if (input.is('flx-whiteboard') || input.is('flx-combo'))
+                        input.closest('ion-item').prop('disabled', false);
+                    else
+                        input.prop('disabled', false);
+                }
             }
             else {
-                form.find('[property=' + dep.DependantPropertyName + ']').prop('disabled', true);
+                let input = form.find('[property=' + dep.DependantPropertyName + ']');
+                if (input.length !== 0) {
+                    if (input.is('flx-whiteboard') || input.is('flx-combo'))
+                        input.closest('ion-item').prop('disabled', true);
+                    else
+                        input.prop('disabled', true);
+                }
             }
         }
     }
@@ -70,10 +81,22 @@ var dependencies;
         if (dep.SQLVisible || (dep.VisibleValues && dep.VisibleValues.length > 0) || (dep.HiddenValues && dep.HiddenValues.length > 0)) {
             //Show/hide property container.
             if (await booleanDependency(dep.PropertyName, dep.SQLVisible, dep.VisibleValues, dep.HiddenValues, form, tokens)) {
-                form.find('[container=' + dep.DependantPropertyName + ']').show();
+                let prop = form.find('[container=' + dep.DependantPropertyName + ']');
+                if (prop[0].localName.toLowerCase() === 'ion-item-divider') {
+                    prop.show();
+                }
+                else {
+                    prop.closest('ion-col').show();
+                }
             }
             else {
-                form.find('[container=' + dep.DependantPropertyName + ']').hide();
+                let prop = form.find('[container=' + dep.DependantPropertyName + ']');
+                if (prop[0].localName.toLowerCase() === 'ion-item-divider') {
+                    prop.hide();
+                }
+                else {
+                    prop.closest('ion-col').hide();
+                }
             }
         }
     }
@@ -90,21 +113,45 @@ var dependencies;
     }
     async function execComboDependency(form, dep, tokens, withValue) {
         if (dep.SQLComboSentence || dep.SQLComboFilter) {
+            let sqlSentence = null;
             if (dep.SQLComboSentence) {
                 form.find('[property=' + dep.DependantPropertyName + ']').attr('sqlsentence', parseSQLdependency(dep.SQLComboSentence, form, tokens));
+                sqlSentence = form.find('[property=' + dep.DependantPropertyName + ']').attr('sqlsentence');
             }
             else if (dep.SQLComboFilter) {
                 form.find('[property=' + dep.DependantPropertyName + ']').attr('filter', parseSQLdependency(dep.SQLComboFilter, form, tokens));
+                sqlSentence = sql.addWhere(form.find('[property=' + dep.DependantPropertyName + ']').attr('sqlsentence'), form.find('[property=' + dep.DependantPropertyName + ']').attr('filter'));
             }
             if (withValue) {
                 form.find('[property=' + dep.DependantPropertyName + ']').val(null);
+            }
+            if (sqlSentence && form.find('[property=' + dep.DependantPropertyName + ']').attr('autoselect') && withValue) {
+                sql.getTable(sqlSentence).then((tbl) => {
+                    if (tbl.rows.length === 1) {
+                        form.find('[property=' + dep.DependantPropertyName + ']').val(sql.getRow(tbl, 0)[form.find('[property=' + dep.DependantPropertyName + ']').attr('valuefield')]);
+                    }
+                });
             }
         }
     }
     async function execValueDependency(form, dep, tokens) {
         if (dep.SQLValue) {
             let value = await sql.getValue(parseSQLdependency(dep.SQLValue, form, tokens));
-            form.find('[property=' + dep.DependantPropertyName + ']').val(value);
+            let prop = form.find('[property=' + dep.DependantPropertyName + ']');
+            if (prop.is('ion-toggle') || prop.is('ion-checkbox')) {
+                prop[0].checked = value;
+            }
+            else if (prop.is('ion-datetime')) {
+                if (prop.attr('display-format').toUpperCase() === 'H:MM' || prop.attr('display-format').toUpperCase() === 'HH:MM') {
+                    prop.val(moment("2023-02-15T" + value).format('HH:mm')); //La fecha es para que lo admita moment
+                }
+                else {
+                    prop.val(value);
+                }
+            }
+            else {
+                prop.val(value);
+            }
         }
     }
     async function execCssClassDependency(form, dep, tokens) {
@@ -169,6 +216,14 @@ var dependencies;
         let val;
         if (prop.is('ion-toggle, ion-checkbox')) {
             val = (prop[0].checked ? '1' : '0');
+        }
+        else if (prop.is('ion-datetime')) {
+            val = prop.val();
+            if (!val)
+                val = 'null';
+            else if (val.indexOf('+') !== -1) {
+                val = val.split('+')[0];
+            }
         }
         else {
             val = prop.val();
@@ -1790,7 +1845,7 @@ $.validator.methods.step = function (value, element, param) {
     return this.optional(element) || true; //(value % param === 0);
 };
 
-const flxEditCss = "label.error{color:red;float:right;position:absolute;bottom:0px;right:0px}";
+const flxEditCss = "label.error{color:red;float:right;position:absolute;bottom:0px;right:0px;font-size:0.8em}[sqlvalidator=\"0\"] label.error{position:static}";
 
 const FlxEdit = class {
     constructor(hostRef) {
@@ -1799,9 +1854,14 @@ const FlxEdit = class {
         this.bodyTemplate = '{{getProperties(json)}}';
         this.footerTemplate = '<ion-fab vertical="bottom" horizontal="end" slot="fixed"><ion-fab-button onclick="flexygo.forms.save(this,event).then(() => {flexygo.nav.goBack()}).catch(err => {flexygo.msg.showError(err)});"><i class="flx-icon icon-save-21" ></i></ion-fab-button></ion-fab>';
     }
+    componentDidLoad() {
+        jquery('#loadingSpinnerModule').css('visibility', 'hidden');
+        flxSync.checkSendErrors();
+    }
     componentWillLoad() {
+        jquery('#loadingSpinnerModule').css('visibility', 'visible');
         this.refresh();
-        jquery(window).off('popstate.edit').on('popstate.edit', () => {
+        jquery(window).off('popstate.edit' + this.pageName).on('popstate.edit' + this.pageName, () => {
             if (document.location.href.toLowerCase().indexOf('/edit/') > 0 && document.location.href.toLowerCase().indexOf('/' + this.object.toLowerCase() + '/') > 0) {
                 this.refresh();
             }
@@ -1821,6 +1881,19 @@ const FlxEdit = class {
             let PropertyName = jquery(ev.currentTarget).attr('property');
             dependencies.processPropDependency(true, jquery(this.me).find('form'), this.obj.properties.filter((itm) => { return itm.PropertyName == PropertyName; })[0], this.cToken);
         });
+        jquery(this.me).find('ion-input[inputmode="decimal"]').on('ionChange', (ev) => {
+            if (!jquery(ev.currentTarget).attr("step"))
+                return;
+            let currentVal = jquery(ev.currentTarget).val();
+            let maxLenght = jquery(ev.currentTarget).attr("step").split('.')[1].length;
+            if (currentVal.split('.').length > 1 && currentVal.split('.')[1].length > maxLenght) {
+                let finalValue = currentVal.match('^-?\\d+(?:\.\\d{0,' + maxLenght + '})?')[0];
+                jquery(ev.currentTarget).val(finalValue);
+                jquery(ev.currentTarget).find('> input').val(finalValue);
+            }
+        });
+        this.initSQLValidator();
+        this.initRegularExValidator();
     }
     async refresh() {
         this.object = (this.object) ? decodeURIComponent(this.object) : null;
@@ -1836,7 +1909,7 @@ const FlxEdit = class {
         this.obj = this.cToken.objectConfig[this.object];
         this.page = parser.findTemplate(this.obj, 'edit', this.pageName);
         if (!this.obj) {
-            throw 'Object doesn\'t exists.';
+            throw new Error('Object doesn\'t exists.');
         }
         if (this.filter) {
             let sentence = 'select * from ' + this.obj.tableName;
@@ -1884,7 +1957,7 @@ const FlxEdit = class {
                 }
                 else {
                     //error objecto no encontrado.
-                    throw 'Object doesn\'t exists.';
+                    throw new Error('Object doesn\'t exists.');
                 }
             });
         }
@@ -1989,6 +2062,9 @@ const FlxEdit = class {
                 if (properties[i].Hide) {
                     itm.setAttribute('style', 'display:none');
                 }
+                if (properties[i].CSSClass) {
+                    itm.setAttribute('class', properties[i].CSSClass);
+                }
                 itm.appendChild(this.getLabel(properties[i], false));
                 form.appendChild(itm);
             }
@@ -1996,7 +2072,7 @@ const FlxEdit = class {
                 let itm = document.createElement('ion-item');
                 itm.setAttribute('container', properties[i].PropertyName);
                 if (properties[i].Hide) {
-                    itm.setAttribute('style', 'display:none');
+                    column.setAttribute('style', 'display:none');
                 }
                 let prop = this.getProperty(properties[i]);
                 let propName = properties[i].PropertyName.toLowerCase();
@@ -2014,13 +2090,48 @@ const FlxEdit = class {
                         }
                     }
                     else {
-                        prop.setAttribute('value', values[propName]);
+                        if (prop.localName === 'ion-datetime') {
+                            if (properties[i].ControlType.toLowerCase() === 'time') {
+                                prop.setAttribute('value', values[propName]);
+                            }
+                            else {
+                                prop.setAttribute('value', moment(values[propName]).format('YYYY-MM-DDTHH:mm:ss'));
+                            }
+                        }
+                        else
+                            prop.setAttribute('value', values[propName]);
                     }
                     itm.classList.add('item-has-value');
                 }
                 else if (jquery(prop).is('ion-checkbox, ion-toggle')) {
                     itm.classList.add('item-has-value');
                 }
+                if (properties[i].Locked) {
+                    if (properties[i].ControlType === 'whiteboard') {
+                        itm.setAttribute('disabled', 'true');
+                    }
+                }
+                if (jquery(prop).is('ion-textarea'))
+                    jquery(prop).attr('rows', properties[i].Height);
+                itm.appendChild(this.getLabel(properties[i], true));
+                itm.appendChild(prop);
+                column.appendChild(itm);
+                row.appendChild(column);
+            }
+            else {
+                let itm = document.createElement('ion-item');
+                itm.setAttribute('container', properties[i].PropertyName);
+                if (properties[i].CSSClass) {
+                    itm.setAttribute('class', properties[i].CSSClass);
+                }
+                if (properties[i].Hide) {
+                    column.setAttribute('style', 'display:none');
+                }
+                else {
+                    column.setAttribute('style', 'visibility:hidden');
+                }
+                let prop = document.createElement('ion-textarea');
+                jquery(prop).attr('rows', properties[i].Height);
                 itm.appendChild(this.getLabel(properties[i], true));
                 itm.appendChild(prop);
                 column.appendChild(itm);
@@ -2056,6 +2167,9 @@ const FlxEdit = class {
     }
     getProperty(prop) {
         let input = jquery('<' + prop.WebComponent + ' />')[0];
+        if (jquery(input).is('flx-dbcombo')) {
+            input.setAttribute('value', '');
+        }
         if (jquery(input).is('ion-datetime')) {
             input.setAttribute('done-text', util.translate('msg.ok'));
             input.setAttribute('cancel-text', util.translate('msg.cancel'));
@@ -2105,6 +2219,12 @@ const FlxEdit = class {
         if (prop.SQLValueField) {
             input.setAttribute('valuefield', prop.SQLValueField);
         }
+        if (prop.ValidatorMessage) {
+            input.setAttribute('data-msg-sqlvalidator', prop.ValidatorMessage);
+        }
+        if (prop.RegExpText) {
+            input.setAttribute('data-msg-regex', prop.RegExpText);
+        }
         let orderBy;
         if (prop.SQLDisplayField) {
             input.setAttribute('displayfield', prop.SQLDisplayField);
@@ -2129,6 +2249,12 @@ const FlxEdit = class {
         if (sentence) {
             input.setAttribute('sqlsentence', sentence);
         }
+        if (prop.SQLFilter) {
+            input.setAttribute('sqlfilter', prop.SQLFilter);
+        }
+        if (prop.Autoselect) {
+            input.setAttribute('autoselect', String(prop.Autoselect).toLowerCase());
+        }
         if (prop.Template) {
             jquery(input).append(jquery('<script class="comboTemplate" type="text/template"></script>').text(prop.Template.replace(/{/g, "&#123;").replace(/}/g, "&#125;")));
         }
@@ -2146,9 +2272,58 @@ const FlxEdit = class {
         }
         return input;
     }
+    initSQLValidator() {
+        for (let i = 0; i < this.obj.properties.length; i++) {
+            let prop = this.obj.properties[i];
+            if (prop.SQLValidator) {
+                let inputElement = document.getElementsByName(prop.PropertyName)[0];
+                if (inputElement) {
+                    const blurType = (inputElement.outerHTML.startsWith('<ion-input') ? 'ionBlur' : 'blur');
+                    inputElement.addEventListener(blurType, () => {
+                        let inputs = [];
+                        let sqlValidator = prop.SQLValidator;
+                        while (sqlValidator.includes("{{") && sqlValidator.includes("}}")) {
+                            let sqlValue = sqlValidator.substring(sqlValidator.indexOf("{{") + 2, sqlValidator.indexOf("}}"));
+                            sqlValidator = sqlValidator.replace("{{" + sqlValue + "}}", "?");
+                            inputs.push(document.getElementsByName(sqlValue)[0].value);
+                        }
+                        sql.getValue(sqlValidator, inputs).then((value) => {
+                            inputElement.closest('ion-item').setAttribute('sqlvalidator', value);
+                            if (blurType === 'ionBlur') {
+                                inputElement.children[0].setAttribute('data-msg-sqlvalidator', inputElement.getAttribute('data-msg-sqlvalidator'));
+                                inputElement.children[0].setAttribute('sqlvalidator', value);
+                            }
+                            else
+                                inputElement.setAttribute('sqlvalidator', value);
+                        });
+                    }, false);
+                }
+            }
+        }
+    }
+    initRegularExValidator() {
+        for (let i = 0; i < this.obj.properties.length; i++) {
+            let prop = this.obj.properties[i];
+            if (prop.RegExp) {
+                let inputElement = document.getElementsByName(prop.PropertyName)[0];
+                if (inputElement) {
+                    const blurType = (inputElement.outerHTML.startsWith('<ion-input') ? 'ionBlur' : 'blur');
+                    inputElement.addEventListener(blurType, () => {
+                        inputElement.closest('ion-item').setAttribute('regex', prop.RegExp);
+                        if (blurType === 'ionBlur') {
+                            inputElement.children[0].setAttribute('data-msg-regex', inputElement.getAttribute('data-msg-regex'));
+                            inputElement.children[0].setAttribute('regex', prop.RegExp);
+                        }
+                        else
+                            inputElement.setAttribute('regex', prop.RegExp);
+                    }, false);
+                }
+            }
+        }
+    }
     render() {
         return [
-            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, (this.modal ? null : h("ion-menu-button", { color: "outstanding" }))), h("ion-title", null, h("span", { id: "menuTitle" }, this.title)), h("ion-buttons", { slot: "end" }, h("ion-button", { color: "outstanding", onClick: () => { nav.goBack(this.me); } }, h("ion-icon", { slot: "icon-only", name: "arrow-undo-outline" }))))),
+            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, (this.modal ? null : h("ion-menu-button", { color: "outstanding" })), (this.modal ? null : h("ion-icon", { name: "alert-circle", color: "danger", class: "stack sendError flx-hide" }))), h("ion-title", null, h("span", { id: "menuTitle" }, this.title)), h("ion-buttons", { slot: "end" }, h("ion-button", { color: "outstanding", onClick: () => { nav.goBack(this.me); } }, h("ion-icon", { slot: "icon-only", name: "arrow-undo-outline" }))))),
             h("ion-header", { innerHTML: this.header }),
             h("ion-content", { innerHTML: this.body }),
             h("ion-footer", { innerHTML: this.footer })

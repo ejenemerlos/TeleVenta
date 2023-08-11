@@ -19,10 +19,16 @@ declare namespace flexygo.ui.wc {
         connected: boolean;
         moduleName: string;
         options: string;
+        mapType: string;
         data: any;
         lat: string;
         lng: string;
         mode: string;
+        arrow: boolean;
+        dotted: boolean;
+        route: boolean;
+        lineColor: string;
+        lineWidht: number;
         /**
        * Fires when element is attached to DOM
        * @method connectedCallback
@@ -42,7 +48,7 @@ declare namespace flexygo.ui.wc {
         init(): void;
         render(): void;
         initMap(): void;
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         startLoading(): void;
         stopLoading(): void;
     }

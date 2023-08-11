@@ -2,6 +2,7 @@
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[IdTeleVentaOrigen] [varchar](50) NULL,
 	[cliente] [nchar](10) NULL,
+	[gestor] [varchar](50) NULL,
 	[fechaHora] [datetime] NULL,
 	[insertada] [bit] NOT NULL,
 	[realizada] [bit] NOT NULL,

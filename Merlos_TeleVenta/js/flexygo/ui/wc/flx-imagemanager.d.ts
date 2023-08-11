@@ -73,6 +73,26 @@ declare namespace flexygo.ui.wc {
         */
         mode: string;
         /**
+        * Images Length
+        * @property imagesLength {number}
+        */
+        imagesLength: number;
+        /**
+        * Images for render
+        * @property imagesPreRender {any[]}
+        */
+        imagesPreRender: any[];
+        /**
+        * Default image class
+        * @property imageClassId {string}
+        */
+        imageClassId: any;
+        /**
+        * Additional image filter
+        * @property additionalWhere {string}
+        */
+        additionalWhere: any;
+        /**
         * Fires when element is attached to DOM
         * @method connectedCallback
         */
@@ -86,7 +106,7 @@ declare namespace flexygo.ui.wc {
         * Monitor the list of observed attribute for changes.
         * @property observedAttributes
         */
-        static readonly observedAttributes: string[];
+        observedAttributes(): string[];
         /**
         * Fires when the attribute value of the element is changed.
         * @method attributeChangedCallback
@@ -118,8 +138,10 @@ declare namespace flexygo.ui.wc {
         * @param {boolean} Main Image.
         * @param {number} Order Number.
         * @param {string} Path.
+        * @param {number} faceEncoding Number.
+        * @param {string} lastError String.
         */
-        renderImage(imageId: string, name: string, descrip: string, classId: string, classDescrip: string, mainImage: boolean, orderNumber: number, path: string): void;
+        renderImage(imageId: string, name: string, descrip: string, classId: string, classDescrip: string, mainImage: boolean, orderNumber: number, path: string, faceEncoding?: number, lastError?: string): void;
         /**
         * Main events.
         * @method mainEvents
@@ -184,6 +206,7 @@ declare namespace flexygo.ui.wc {
       * @param {File} File.
       */
         imageReader(file: any): void;
+        setCompression(compression: number, fileType: string, canvas?: any, ctx?: any): number;
         /**
        * Get image classification.
        * @method getClassification
@@ -194,5 +217,16 @@ declare namespace flexygo.ui.wc {
        * @method setGallery
        */
         setGallery(): void;
+        /**
+        * Find faces in picture and try yo recognice it with known faces.
+        * @method showFaces
+        * @param {string} file.
+        * @param {string} objectname.
+        * @param {number} tolerance.
+        * @param {string} filterids.
+        * @param {boolean} isb64.
+        * @param {Jquery} e.
+        */
+        showFaces(file: any, objectname: any, tolerance: any, filterids: any, isb64: any, e: any): void;
     }
 }

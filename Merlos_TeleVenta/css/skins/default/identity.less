@@ -3,7 +3,7 @@
 
 body, main {
     color: dbColor(txtColor);
-    background: dbColor(bgColor);
+    background-color: dbColor(bgColor);
     font-family: 'Helvetica', 'Arial', sans-serif;
     font-size: 14px;
     line-height: 1.42857143;
@@ -109,8 +109,8 @@ overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:100%;
 }
 
 .bg-module {
-    background-color: dbColor(ModuleHeaderColor);
-    color: dbColor(txtModuleHeaderColor);
+    background-color: dbColor(ModuleHeaderColor) !important;
+    color: dbColor(txtModuleHeaderColor) !important;
     padding: .5em;
 }
 
@@ -119,8 +119,8 @@ overflow: hidden;text-overflow: ellipsis;white-space: nowrap;width:100%;
 }
 
 .bg-outstanding {
-    background-color: dbColor(OutstandingColor);
-    color: dbColor(txtOutstandingColor);
+    background-color: dbColor(OutstandingColor) !important;
+    color: dbColor(txtOutstandingColor) !important;
     padding: .5em;
 }
 
@@ -154,15 +154,15 @@ button.bg-outstanding {
 }
 
 .btn-outstanding {
-    border: solid 1px dbColor(OutstandingColor);
-    color: dbColor(OutstandingColor);
-    background-color: transparent;
+    border: solid 1px dbColor(OutstandingColor) !important;
+    color: dbColor(OutstandingColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-info:hover {
-    border: solid 1px lighten(dbColor(OutstandingColor),40);
-    color: darken(dbColor(OutstandingColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(OutstandingColor),40) !important;
+    color: darken(dbColor(OutstandingColor),10) !important;
+    background-color: transparent !important;
 }
 
 
@@ -171,8 +171,8 @@ button.bg-outstanding {
 }
 
 .bg-primary {
-    background-color: dbColor(PrimaryColor);
-    color: dbColor(txtPrimaryColor);
+    background-color: dbColor(PrimaryColor) !important;
+    color: dbColor(txtPrimaryColor) !important;
     padding: .5em;
 }
 
@@ -206,15 +206,15 @@ button.bg-primary {
 }
 
 .btn-primary {
-    border: solid 1px dbColor(PrimaryColor);
-    color: dbColor(PrimaryColor);
-    background-color: transparent;
+    border: solid 1px dbColor(PrimaryColor) !important;
+    color: dbColor(PrimaryColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-primary:hover {
-    border: solid 1px lighten(dbColor(PrimaryColor),40);
-    color: darken(dbColor(PrimaryColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(PrimaryColor),40) !important;
+    color: darken(dbColor(PrimaryColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-success, .txt-success a, a.txt-success {
@@ -222,8 +222,8 @@ button.bg-primary {
 }
 
 .bg-success {
-    background-color: dbColor(SuccessColor);
-    color: dbColor(txtSuccessColor);
+    background-color: dbColor(SuccessColor) !important;
+    color: dbColor(txtSuccessColor) !important;
     padding: .5em;
 }
 
@@ -257,15 +257,15 @@ button.bg-success {
 }
 
 .btn-success {
-    border: solid 1px dbColor(SuccessColor);
-    color: dbColor(SuccessColor);
-    background-color: transparent;
+    border: solid 1px dbColor(SuccessColor) !important;
+    color: dbColor(SuccessColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-success:hover {
-    border: solid 1px lighten(dbColor(SuccessColor),40);
-    color: darken(dbColor(SuccessColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(SuccessColor),40) !important;
+    color: darken(dbColor(SuccessColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-info, .txt-info a, a.txt-info {
@@ -273,8 +273,8 @@ button.bg-success {
 }
 
 .bg-info {
-    background-color: dbColor(InfoColor);
-    color: dbColor(txtInfoColor);
+    background-color: dbColor(InfoColor) !important;
+    color: dbColor(txtInfoColor) !important;
     padding: .5em;
 }
 
@@ -308,15 +308,15 @@ button.bg-info {
 }
 
 .btn-info {
-    border: solid 1px dbColor(InfoColor);
-    color: dbColor(InfoColor);
-    background-color: transparent;
+    border: solid 1px dbColor(InfoColor) !important;
+    color: dbColor(InfoColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-info:hover {
-    border: solid 1px lighten(dbColor(InfoColor),40);
-    color: darken(dbColor(InfoColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(InfoColor),40) !important;
+    color: darken(dbColor(InfoColor),10) !important;
+    background-color: transparent !important;
 }
 
 
@@ -325,8 +325,8 @@ button.bg-info {
 }
 
 .bg-warning {
-    background-color: dbColor(WarningColor);
-    color: dbColor(txtWarningColor);
+    background-color: dbColor(WarningColor) !important;
+    color: dbColor(txtWarningColor) !important;
     padding: .5em;
 }
 
@@ -360,15 +360,15 @@ button.bg-warning {
 }
 
 .btn-warning {
-    border: solid 1px dbColor(WarningColor);
-    color: dbColor(WarningColor);
-    background-color: transparent;
+    border: solid 1px dbColor(WarningColor) !important;
+    color: dbColor(WarningColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-warning:hover {
-    border: solid 1px lighten(dbColor(WarningColor),40);
-    color: darken(dbColor(WarningColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(WarningColor),40) !important;
+    color: darken(dbColor(WarningColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-danger, .txt-danger a, a.txt-danger {
@@ -376,8 +376,8 @@ button.bg-warning {
 }
 
 .bg-danger {
-    background-color: dbColor(DangerColor);
-    color: dbColor(txtDangerColor);
+    background-color: dbColor(DangerColor) !important;
+    color: dbColor(txtDangerColor) !important;
     padding: .5em;
 }
 
@@ -411,15 +411,15 @@ button.bg-danger {
 }
 
 .btn-danger {
-    border: solid 1px dbColor(DangerColor);
-    color: dbColor(DangerColor);
-    background-color: transparent;
+    border: solid 1px dbColor(DangerColor) !important;
+    color: dbColor(DangerColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-danger:hover {
-    border: solid 1px lighten(dbColor(DangerColor),40);
-    color: darken(dbColor(DangerColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(DangerColor),40) !important;
+    color: darken(dbColor(DangerColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-tools, .txt-tools a, a.txt-tools {
@@ -427,8 +427,8 @@ button.bg-danger {
 }
 
 .bg-tools {
-    background-color: dbColor(ToolsColor);
-    color: dbColor(txtToolsColor);
+    background-color: dbColor(ToolsColor) !important;
+    color: dbColor(txtToolsColor) !important;
     padding: .5em;
 }
 
@@ -462,15 +462,15 @@ button.bg-tools {
 }
 
 .btn-tools {
-    border: solid 1px dbColor(ToolsColor);
-    color: dbColor(ToolsColor);
-    background-color: transparent;
+    border: solid 1px dbColor(ToolsColor) !important;
+    color: dbColor(ToolsColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-tools:hover {
-    border: solid 1px lighten(dbColor(ToolsColor),40);
-    color: darken(dbColor(ToolsColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(ToolsColor),40) !important;
+    color: darken(dbColor(ToolsColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-notify, .txt-notify a, a.txt-notify {
@@ -478,8 +478,8 @@ button.bg-tools {
 }
 
 .bg-notify {
-    background-color: dbColor(NotifyColor);
-    color: dbColor(txtNotifyColor);
+    background-color: dbColor(NotifyColor) !important;
+    color: dbColor(txtNotifyColor) !important;
     padding: .5em;
 }
 
@@ -513,15 +513,15 @@ button.bg-notify {
 }
 
 .btn-notify {
-    border: solid 1px dbColor(NotifyColor);
-    color: dbColor(NotifyColor);
-    background-color: transparent;
+    border: solid 1px dbColor(NotifyColor) !important;
+    color: dbColor(NotifyColor) !important;
+    background-color: transparent !important;
 }
 
 .btn-notify:hover {
-    border: solid 1px lighten(dbColor(NotifyColor),40);
-    color: darken(dbColor(NotifyColor),10);
-    background-color: transparent;
+    border: solid 1px lighten(dbColor(NotifyColor),40) !important;
+    color: darken(dbColor(NotifyColor),10) !important;
+    background-color: transparent !important;
 }
 
 .txt-white {
@@ -529,8 +529,8 @@ button.bg-notify {
 }
 
 .bg-white {
-    background-color: white;
-    color: dbColor(PrimaryColor);
+    background-color: white !important;
+    color: dbColor(PrimaryColor) !important;
     padding: .5em;
 }
 
@@ -556,9 +556,9 @@ button.bg-white {
 }
 
 .btn-white {
-    border: solid 1px white;
-    color: white;
-    background-color: transparent;
+    border: solid 1px white !important;
+    color: white !important;
+    background-color: transparent !important;
 }
 
 .highlight {
@@ -687,6 +687,96 @@ button.bg-white {
 
 .has-warning .input-group-addon {
     background-color: lighten(dbColor(WarningColor), 30);
+}
+
+.has-info .control-label, has-success .label {
+    color: dbColor(InfoColor);
+}
+
+.has-info .form-control {
+    color: dbColor(InfoColor);
+    border-color: dbColor(InfoColor);
+}
+
+.has-info .input-group-addon, .has-info .input-group-btn .btn {
+    color: dbColor(InfoColor);
+    border-color: dbColor(InfoColor);
+}
+
+.has-info .input-group-addon {
+    background-color: lighten(dbColor(InfoColor), 60);
+}
+
+.has-outstanding .control-label, has-success .label {
+    color: dbColor(OutstandingColor);
+}
+
+.has-outstanding .form-control {
+    color: dbColor(OutstandingColor);
+    border-color: dbColor(OutstandingColor);
+}
+
+.has-outstanding .input-group-addon, .has-outstanding .input-group-btn .btn {
+    color: dbColor(OutstandingColor);
+    border-color: dbColor(OutstandingColor);
+}
+
+.has-outstanding .input-group-addon {
+    background-color: lighten(dbColor(OutstandingColor), 60);
+}
+
+.has-tools .control-label, has-success .label {
+    color: dbColor(ToolsColor);
+}
+
+.has-tools .form-control {
+    color: dbColor(ToolsColor);
+    border-color: dbColor(ToolsColor);
+}
+
+.has-tools .input-group-addon, .has-tools .input-group-btn .btn {
+    color: dbColor(ToolsColor);
+    border-color: dbColor(ToolsColor);
+}
+
+.has-tools .input-group-addon {
+    background-color: lighten(dbColor(ToolsColor), 60);
+}
+
+.has-notify .control-label, has-success .label {
+    color: dbColor(NotifyColor);
+}
+
+.has-notify .form-control {
+    color: dbColor(NotifyColor);
+    border-color: dbColor(NotifyColor);
+}
+
+.has-notify .input-group-addon, .has-notify .input-group-btn .btn {
+    color: dbColor(NotifyColor);
+    border-color: dbColor(NotifyColor);
+}
+
+.has-notify .input-group-addon {
+    background-color: lighten(dbColor(NotifyColor), 60);
+}
+
+.has-primary .control-label, has-success .label {
+    color: dbColor(PrimaryColor);
+}
+
+.has-primary .form-control {
+    color: dbColor(PrimaryColor);
+    border-color: dbColor(PrimaryColor);
+}
+
+.has-primary .input-group-addon, .has-primary .input-group-btn .btn {
+    color: dbColor(PrimaryColor);
+    border-color: dbColor(PrimaryColor);
+}
+
+.has-primary .input-group-addon {
+    background-color: lighten(dbColor(PrimaryColor), 60);
 }
 
 //CARDS
@@ -1106,6 +1196,54 @@ button.bg-white {
         box-sizing: unset !important;
     }
 
+    .flx-dialog-modal.flx-slide .ui-widget-header {
+        background-color:white !important;
+        border:none;
+        height: 2.8em;
+        /*transition: all .5s;*/
+    }
+
+    .flx-dialog-modal.flx-slide .ui-dialog-titlebar-close, .flx-dialog-modal.flx-slide .ui-widget-header a.flx-icon.icon-select {
+        opacity: 0;
+        display: flex;
+        color: dbColor(OutstandingColor);
+        font-size: 16px;
+        right: 12px !important;
+        padding: 0.8em;
+        flex-wrap: wrap;
+        align-content: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all .5s;
+    }
+
+    .flx-dialog-modal.flx-slide .ui-widget-header a.flx-icon.icon-select {
+        padding: 0.3em 1em;
+    }
+
+    .flx-dialog-modal.flx-slide:hover .ui-dialog-titlebar-close, .flx-dialog-modal.flx-slide:hover .ui-widget-header a.flx-icon.icon-select {
+        opacity: 1;
+    }
+
+    body:not(.develop) .flx-dialog-modal.flx-slide .develop-only {
+        display: none !important;
+    }
+
+    .flx-dialog-modal.flx-slide .ui-dialog-titlebar-close:hover {
+        background-color: dbColor(OutstandingColor);
+        color: white;
+        animation: ring 0.7s linear 0s infinite;
+        /*transition: all .5s;*/
+    }
+
+    .flx-dialog-modal.flx-slide .ui-dialog-content {
+        background-color: white !important;
+    }
+
+    .flx-dialog-modal.flx-slide span.ui-dialog-title {
+        display: none;
+    }
+
     .ui-widget-header {
         background: dbColor(DialogHeaderColor) !important;
         background-image: none;
@@ -1125,6 +1263,10 @@ button.bg-white {
         box-sizing: unset !important;
         overflow: unset !important;
         z-index: 99999;
+    }
+
+    .flx-dialog-modal.flx-slide, .flx-dialog-modal.flx-slide .ui-corner-all {
+        border-radius: 0;
     }
 
     .ui-dialog .ui-dialog-titlebar {
@@ -1232,14 +1374,426 @@ button.bg-white {
             transform: scale(1.0) rotate(359deg);
         }
     }
-    /* The element to apply the animation to */
-        .zoomInOut {
-            animation-name: zoomInOut;
-            animation-duration: 2s;
-            animation-iteration-count: infinite;
+
+    @keyframes ring {
+        0% {
+            transform: rotate(0deg)
         }
 
-        /* for printing*/
-.htmlreport{background-color:white;height:100%;}
+        25% {
+            transform: rotate(10deg)
+        }
+
+        50% {
+            transform: rotate(0deg)
+        }
+
+        75% {
+            transform: rotate(-10deg)
+        }
+
+        100% {
+            transform: rotate(0deg)
+        }
+    }
+    /* The element to apply the animation to */
+    .zoomInOut {
+        animation-name: zoomInOut;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+    /* for printing*/
+    .htmlreport {
+        background-color: white;
+        height: 100%;
+    }
 
 
+// Scrollbar
+//IE
+body {
+    -ms-scrollbar-base-color: #cccccc;
+    -ms-scrollbar-track-color: #cccccc;
+    -ms-scrollbar-face-color: dbColor(OutstandingColor);
+    -ms-scrollbar-darkshadow-color: dbColor(OutstandingColor);
+    -ms-scrollbar-shadow-color: dbColor(OutstandingColor);
+    -ms-scrollbar-arrow-color: #cccccc;
+}
+//CHROME
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #cccccc;
+}
+
+::-webkit-scrollbar:horizontal {
+    width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: dbColor(OutstandingColor);
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: darken(dbColor(OutstandingColor), 10);
+    //border:1px solid #333333;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background-color: darken(dbColor(OutstandingColor), 20);
+    //border:1px solid #333333;
+}
+
+// END SCROLL
+
+/*//PLACE HOLDER
+::-webkit-input-placeholder { // WebKit, Blink, Edge
+    color: lighten(dbColor(txtColor), 25);
+}
+
+:-moz-placeholder { // Mozilla Firefox 4 to 18
+    color: lighten(dbColor(txtColor), 25);
+    opacity: 1;
+}
+
+::-moz-placeholder { // Mozilla Firefox 19+
+    color: lighten(dbColor(txtColor), 25);
+    opacity: 1;
+}
+
+:-ms-input-placeholder { // Internet Explorer 10-11
+    color: lighten(dbColor(txtColor), 25);
+}
+
+::-ms-input-placeholder { // Microsoft Edge
+    color: lighten(dbColor(txtColor), 25);
+}
+//END PLACEHOLDER*/
+
+
+/* EFFECT DARK/LIGHT MODE */
+.loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999999;
+    transition: all 0.3s ease-in;
+}
+
+.loader .loader-wrapper {
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: 100%;
+}
+
+.loader .loader-wrapper span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #4e4e4e;
+    opacity: 0;
+    animation: loading 3.3s infinite ease-in-out;
+}
+
+.loader .loader-wrapper span:nth-of-type(1) {
+    animation-delay: 1000ms;
+}
+
+.loader .loader-wrapper span:nth-of-type(2) {
+    animation-delay: 800ms;
+}
+
+.loader .loader-wrapper span:nth-of-type(3) {
+    animation-delay: 600ms;
+}
+
+.loader .loader-wrapper span:nth-of-type(4) {
+    animation-delay: 400ms;
+}
+
+.loader .loader-wrapper span:nth-of-type(5) {
+    animation-delay: 200ms;
+}
+
+@keyframes loading {
+    0% {
+        opacity: 0;
+        transform: translateX(-300px);
+    }
+
+    33% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+
+    66% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(300px);
+    }
+}
+
+#SkinModeBackground {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    display: none;
+    text-align: center;
+    box-shadow: 5px 5px 5px 0rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+#SkinModeText {
+    position: relative;
+    width: 100% !important;
+    top: 40%;
+    font-family: 'raleway';
+    text-align: center;
+    font-size: 100px;
+    color: dbColor(OutstandingColor);
+}
+
+#SkinModeIcon {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    font-size: 30em;
+    opacity: 0.2;
+    color: #bbb;
+}
+
+#SkinModeBackground.dark {
+    background-color: #292929;
+
+    & #SkinModeIcon {
+        color: #e3e3e3;
+    }
+
+    & .loader .loader-wrapper span {
+        background: #e3e3e3;
+    }
+}
+
+
+#flx-SkinMode {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    & span {
+        padding-left: 5px;
+        font-weight: bold;
+    }
+}
+
+#flx-SkinModeIcon {
+    width: 25px;
+    height: 25px;
+    background-color: #fff8e4;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 15px;
+    color: #db8924;
+    transition: all 0.3s ease-in;
+}
+
+#flx-SkinMode.darkmode #flx-SkinModeIcon, #flx-SkinMode:hover #flx-SkinModeIcon {
+    background-color: #444444;
+    color: white;
+
+    & i:before {
+        content: "\f186";
+    }
+}
+
+#flx-SkinMode.darkmode:hover #flx-SkinModeIcon {
+    background-color: #fff8e4;
+    color: #db8924;
+
+    & i:before {
+        content: "\f185";
+    }
+}
+
+/*********/
+
+.txt-uppercase{
+    text-transform: uppercase;
+}
+
+html.tactilMode li.flx-tactilModeIcon {
+    display: block !important;
+    font-size: 1.5em;
+}
+
+
+.flxListDependencies {
+    font-size: 10px;
+
+    ul {
+        padding-left: 1em;
+        margin: 0;
+    }
+}
+
+.cntHeader .cntButtons .popover{
+    width: auto;
+}
+
+
+/*** MODULE VIEWERS ***/
+#flx-viewer-module {
+    font-size: 10px;
+    position: relative;
+    margin-right: 1em;
+    height: 25px;
+    width: 25px;
+    top: -5px;
+    animation: fadeInDelay .4s ease;
+}
+
+.flx-info-viewers {
+    background-color: white;
+    box-shadow: 0px 0px 8px 2px #e1e1e1;
+}
+
+.flx-info-viewers .tooltip-inner {
+    background-color: white;
+    color: black;
+    width: 160px;
+    padding-left: 1.5em;
+    text-align: left;
+
+    small {
+        text-overflow: ellipsis;
+        width: 120px;
+        display: inline-block;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+}
+
+#flx-flip-back, #flx-flip-front {
+    box-shadow: inset 0 0 0 2px #eef3f7;
+    text-align: center;
+    padding-top: 7px;
+    animation-duration: 14s;
+    animation-delay: 1s;
+    line-height: 1.2;
+    animation-iteration-count: infinite;
+    position: absolute;
+    /*top: 2px;*/
+    left: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition-property: transform;
+    transition-duration: .75s;
+    width: 22px;
+    height: 22px
+}
+
+#flx-flip-front {
+    animation-name: rotateFrontCircle;
+    z-index: 5;
+    background-color: #fff;
+    color: #12344d
+}
+
+#flx-flip-back {
+    animation-name: rotateBackCircle;
+    z-index: 0;
+    transform: rotateY(-180deg);
+    background-color: dbColor(OutstandingColor);
+    color: #fff
+}
+
+@keyframes rotateFrontCircle {
+    0%,100%,16%,83% {
+        -webkit-transform: rotateY(0);
+        -ms-transform: rotateY(0);
+        -o-transform: rotateY(0);
+        transform: rotateY(0)
+    }
+
+    33%,67% {
+        -webkit-transform: rotateY(180deg);
+        -ms-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg);
+        transform: rotateY(180deg)
+    }
+}
+
+@keyframes rotateBackCircle {
+    0%,100%,16%,83% {
+        -webkit-transform: rotateY(180deg);
+        -ms-transform: rotateY(180deg);
+        -o-transform: rotateY(180deg);
+        transform: rotateY(180deg)
+    }
+
+    33%,67% {
+        -webkit-transform: rotateY(0);
+        -ms-transform: rotateY(0);
+        -o-transform: rotateY(0);
+        transform: rotateY(0)
+    }
+}
+
+/* GO TO TOP BUTTON */
+#flx-goUpArrow {
+    opacity:0;
+    position: fixed;
+    bottom: 0em;
+    right: 1em;
+    padding: 5px 7px 2px 7px;
+    background-color: dbColor(OutstandingColor);
+    border-radius: 10%;
+    color: white;
+    cursor: pointer;
+    transition: all 500ms;
+}
+
+#flx-goUpArrow.flx-showBottom {
+    display: block;
+    bottom: 1em;
+    opacity: 1;
+}
+
+#flx-goUpArrow:hover {
+    transform: scale(1.1,1.1) translateY(-3px);
+    background-color: lighten(dbColor(OutstandingColor), 15);
+}
+
+
+.flx-striped > :nth-child(odd) {
+    background-color: fade(dbColor(PrimaryColor),6%);
+}
+
+div.flx-slide [pagename="db6ce0fb-2f28-4056-b14e-e9aed2769f97"] flx-module{
+    width: unset;
+}
+
+div.flx-slide [pagename="syspage-list-icons-simplified"] flx-module[modulename="sysmod-search-icons"] {
+    position: sticky;
+    top: 0;
+    z-index: 9;
+}

@@ -125,10 +125,25 @@ declare namespace flexygo.ui.wc {
         */
         ERPObjectName: string;
         /**
+        * Config extensionId
+        * @property extensionId {string}
+        */
+        extensionId: string;
+        /**
+        * Config extensions
+        * @property extensions {string}
+        */
+        extensions: string;
+        /**
         * Related object id
         * @property rObjectId {string}
         */
         rObjectId: any;
+        /**
+        * Default document category
+        * @property categoryId {string}
+        */
+        categoryId: any;
         /**
         * Additional document filter
         * @property additionalWhere {string}
@@ -151,7 +166,7 @@ declare namespace flexygo.ui.wc {
         * Monitor the list of observed attribute for changes.
         * @property observedAttributes
         */
-        static readonly observedAttributes: string[];
+        observedAttributes(): string[];
         /**
         * Fires when the attribute value of the element is changed.
         * @method attributeChangedCallback
@@ -244,6 +259,13 @@ declare namespace flexygo.ui.wc {
       * @param {string} objectId.
       */
         downloadAllDocuments(objectName: string, objectId: string): void;
+        /**
+        * Send mail with selected documents
+        * @method sendSelectedDocuments
+        * @param {string} objectName.
+        * @param {string} objectId.
+         */
+        sendSelectedDocuments(objectName: string, objectId: string): void;
         /**
         * Start editing.
         * @method editStartDocument
@@ -340,7 +362,8 @@ declare namespace flexygo.io {
         documentId: string;
         manager: flexygo.ui.wc.FlxDocumentManagerElement;
         documentContainer: JQuery;
-        constructor(file: any, objectname: string, objectid: string, type: string, action: string, manager: flexygo.ui.wc.FlxDocumentManagerElement);
+        categoryId: any;
+        constructor(file: any, objectname: string, objectid: string, type: string, action: string, manager: flexygo.ui.wc.FlxDocumentManagerElement, categoryId: any);
         startUpload(): void;
         percentDone(): number;
         upload_file(): void;

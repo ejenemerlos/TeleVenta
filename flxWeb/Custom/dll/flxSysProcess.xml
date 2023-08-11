@@ -6,6 +6,22 @@ flxSysProcess
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
 <member name="T:FLEXYGO.CronProcesses">
  <summary>
  Class CronProcesses.
@@ -111,6 +127,189 @@ flxSysProcess
  <exception cref="T:System.InvalidOperationException">
  Error inserting notice users
  </exception>
+</member>
+<member name="M:FLEXYGO.CronProcesses.CheckCronExpression(System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Checks a cron expression
+ </summary>
+ <param name="cronExpression">Cron expresion to verify</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.CronProcesses.InsertCronTrigger(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Inserts new object
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.CronProcesses.UpdateCronTrigger(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an object.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.SysImports.GetImportSettings(FLEXYGO.Objects.EntityObject,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ GetImportSettings
+ </summary>
+ <param name="ImportId">Import Id Setting.</param>
+ <param name="FileName">File Name.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.SysImports.ImportLog(System.String,System.String,System.Boolean,System.String,System.String,System.DateTime,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ ImportLog
+ </summary>
+ <param name="ImportId">Import Id Setting.</param>
+ <param name="UserId">User Id.</param>
+ <param name="Success">Success.</param>
+ <param name="Message">Message.</param>
+ <param name="FileName">File Name.</param>
+</member>
+<member name="M:FLEXYGO.SysImports.ExcelToJSON(System.String,System.Boolean,System.Boolean,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ ExcelToJSON
+ </summary>
+ <param name="Path">Folder path.</param>
+ <param name="SuccessDeleteFile">Success Delete File.</param>
+ <param name="ErrorDeleteFile">Error Delete File.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="M:FLEXYGO.SysImports.DownloadTemplate(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ DownloadTemplate
+ </summary>
+ <param name="ImportId">Import Id Setting.</param>
+ <returns>Boolean.</returns>
+</member>
+<member name="P:FLEXYGO.Google.HeaderApi.Name">
+ <summary>
+ Name of Header
+ </summary>
+</member>
+<member name="P:FLEXYGO.Google.HeaderApi.Value">
+ <summary>
+ Value of header
+ </summary>
+</member>
+<member name="P:FLEXYGO.Google.ParamApi.Name">
+ <summary>
+ Name of Param
+ </summary>
+</member>
+<member name="P:FLEXYGO.Google.ParamApi.Value">
+ <summary>
+ Value of Param
+ </summary>
+</member>
+<member name="M:FLEXYGO.Google.GetConsent(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ It gets url to get user authorization
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="Service">Google service name: calendar, contacts.</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.GetGoogleContact(FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,RestSharp.IRestResponse@,System.String,System.String)">
+ <summary>
+ It gets Google contact information
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <param name="readFields">Field to get data (separated by commas)<br></br>
+   Example :  metadata,addresses,biographies,birthdays,emailAddresses,genders,names,nicknames,occupations,organizations,phoneNumbers
+ </param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.GetGoogleContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object,System.Object)">
+ <summary>
+ It gets Google contacts
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="readFields">Field to get data (separated by commas)<br></br>
+   Example :  metadata,addresses,biographies,birthdays,emailAddresses,genders,names,nicknames,occupations,organizations,phoneNumbers
+ </param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.CreateContactsToGoogleApi(FLEXYGO.GoogleResourceTypes.GoogleContactCreateRequest,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ It sends contacts to Google with a batch request, max 200
+ </summary>
+ <param name="ContactsRequest">Contacts Request to create</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.UpdateContactsToGoogleApi(FLEXYGO.GoogleResourceTypes.GoogleContactUpdateRequest,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ It sends contacts to Google with a batch request, max 200
+ </summary>
+ <param name="ContactsRequest">Contacts Request to update</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.DeleteContactsToGoogleApi(FLEXYGO.GoogleResourceTypes.ContactsResource,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ It delete contacts to Google with a batch request, max 500
+ </summary>
+ <param name="ContactsToDelete">Resource name of contacts to delete</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.GetGoogleCalendar(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object)">
+ <summary>
+ It gets Google calendar events
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.GetCalendarId(System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String@)">
+ <summary>
+ It gets Google calendar Id
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="calendarId">Param to save calendarId</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.SendEventsToGoogleApi(System.Collections.Generic.List{FLEXYGO.GoogleResourceTypes.GoogleEvent},FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.Object@,System.Boolean)">
+ <summary>
+ It sends calendar events to Google
+ </summary>
+ <param name="Events">Collection of calendar events</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="userId">Flexygo UserId</param>
+ <param name="response">Param to save response</param>
+ <param name="isdelete">Boolean (If is true then deleted)</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Google.APIActions(System.String,System.Collections.Generic.List{FLEXYGO.Google.HeaderApi},System.Collections.Generic.List{FLEXYGO.Google.ParamApi},System.String)">
+ <summary>
+ Function to requests API
+ </summary>
+ <returns>RestSharp response</returns>
+</member>
+<member name="M:FLEXYGO.Google.ReadToken(System.String,System.Object,System.String@,System.String@,FLEXYGO.Configuration.Tokens.ConfToken)">
+ <summary>
+ Token is read from DB, It's refreshed when it's expired
+ </summary>
+ <param name="tokenType">Services type called</param>
+ <param name="errorMsg">Error message</param>
+ <param name="token">token</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
 </member>
 <member name="M:FLEXYGO.FlxMailChimp.InsertObjectContact(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
  <summary>
@@ -440,15 +639,41 @@ flxSysProcess
  <param name="Ret">The ret.</param>
  <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
 </member>
+<member name="M:FLEXYGO.FlxMailChimp.AddContactToList(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ Adds contact to MailChimp list.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ListID">The list id</param>
+ <returns>Collection of lists.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.DeleteContactFromList(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String)">
+ <summary>
+ Deletes contact from MailChimp list.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <param name="ListID">The list id</param>
+ <returns>Collection of lists.</returns>
+</member>
 <member name="M:FLEXYGO.FlxMailChimp.NewSubscriber(FLEXYGO.Objects.EntityObject,System.String,System.Boolean,System.String,System.Text.StringBuilder@)">
  <summary>
  Adds a new subscriber.
  </summary>
  <param name="Entity">The entity.</param>
- <param name="ListID">The apikey</param>
- <param name="isCustom">The apikey</param>
+ <param name="ListID">The list id</param>
+ <param name="isCustom">isCustom</param>
  <param name="listaErrores">List of errors.</param>
  <returns>Collection of lists.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.GetContactsFromMailChimp(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ It gets a collection of contacts from MailChimp and it's saved in MailChimp_Contacts.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
 </member>
 <member name="M:FLEXYGO.FlxMailChimp.ProcessDependeciesMailChimpObjectsContacts(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
@@ -477,7 +702,8 @@ flxSysProcess
  <summary>
  All MailChimp info is deleted in configuration database.
  </summary>
- <param name="ex">Exception.</param>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">The ret.</param>
  <returns>String with MailChimp exception info.</returns>
 </member>
 <member name="M:FLEXYGO.FlxMailChimp.TestMailChimpApi(System.String,System.String@)">
@@ -486,6 +712,13 @@ flxSysProcess
  </summary>
  <param name="apiKey">ApiKey.</param>
  <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FlxMailChimp.ContactsToDatatable(System.Collections.IList)">
+ <summary>
+  Converts a List of mailChimp contacts to a DataTable Object.
+ </summary>
+ <param name="contacts">List of mailChimp contacts</param>
+ <returns>DataTable with contacts information</returns>
 </member>
 <member name="M:FLEXYGO.ObjectProcesses.IPLockout.InsertIPLockout(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
  <summary>
@@ -508,6 +741,27 @@ flxSysProcess
  <param name="Entity">User Entity object with all info</param>
  <param name="Ret">ProcessHelper for returning results</param>
 </member>
+<member name="M:FLEXYGO.ObjectProcesses.ObjectView.InsertObjectWithSQL(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Insert new object
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.ObjectProcesses.ObjectView.UpdateObjectWithSQL(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an object.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.ObjectProcesses.Skin.InsertSkin(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Inserts new object
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
 <member name="M:FLEXYGO.Office.AddRedirectURIs(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  It adds AppFullPath to RedirectURI in Azure portal.
@@ -525,7 +779,15 @@ flxSysProcess
  <param name="Service">Microsoft service name: calendar, contacts, mail,...</param>
  <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
 </member>
-<member name="M:FLEXYGO.Office.GetOfficeContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object)">
+<member name="M:FLEXYGO.Office.CountOfficeContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object)">
+ <summary>
+ It gets number of office contacts
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.GetOfficeContacts(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object@,System.Object,System.Object)">
  <summary>
  It gets office contacts
  </summary>
@@ -536,6 +798,14 @@ flxSysProcess
 <member name="M:FLEXYGO.Office.SendOfficeContacts(System.Collections.Generic.List{FLEXYGO.OfficeResourceTypes.Contact},FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Object)">
  <summary>
  It sends contacts to office 365 with a batch request
+ </summary>
+ <param name="Contacts">Collection of contacts</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Office.DeleteOfficeContacts(System.Collections.Generic.List{FLEXYGO.OfficeResourceTypes.Contact},FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Object)">
+ <summary>
+ It delete contacts to office 365 with a batch request
  </summary>
  <param name="Contacts">Collection of contacts</param>
  <param name="Ret">A process helper with return information</param>
@@ -557,6 +827,14 @@ flxSysProcess
  <param name="Ret">A process helper with return information</param>
  <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
 </member>
+<member name="M:FLEXYGO.Office.DeleteOfficeEvents(System.Collections.Generic.List{FLEXYGO.OfficeResourceTypes.OfficeEvent},FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Object)">
+ <summary>
+ It delete calendar events to office 365
+ </summary>
+ <param name="Events">Collection of calendar events</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
 <member name="M:FLEXYGO.Office.GetOfficeApiError(RestSharp.IRestResponse)">
  <summary>
  It gets office error
@@ -564,7 +842,7 @@ flxSysProcess
  <param name="response">IRestResponse obtained after office api call</param>
  <returns>the error.</returns>
 </member>
-<member name="M:FLEXYGO.Office.ReadToken(System.String,System.Object,System.String@,System.String@)">
+<member name="M:FLEXYGO.Office.ReadToken(System.String,System.Object,System.String@,System.String@,FLEXYGO.Configuration.Tokens.ConfToken)">
  <summary>
  Token is read from DB, It's refreshed when it's expired
  </summary>
@@ -1330,7 +1608,7 @@ flxSysProcess
  The Date And time that the response was returned. It uses ISO 8601 format And Is always In UTC time
  </summary>
 </member>
-<member name="M:FLEXYGO.Offline.GetAppConfig(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+<member name="M:FLEXYGO.Offline.sysOfflineSendTable(FLEXYGO.Objects.EntityObject,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  Gets app offline configuration
  </summary>
@@ -1339,7 +1617,25 @@ flxSysProcess
  <param name="Ret">A process helper with return information</param>
  <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
 </member>
-<member name="M:FLEXYGO.Offline.SyncData(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+<member name="M:FLEXYGO.Offline.GetAppConfig(FLEXYGO.Objects.EntityObject,System.String,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Gets app offline configuration
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="AppName">App name to get current config</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SyncDataCollection(FLEXYGO.Objects.EntityCollection,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Boolean)">
+ <summary>
+ Sync data collection to application
+ </summary>
+ <param name="Entity">Collection of syncs data</param>
+ <param name="Ret">A process helper with return information</param>
+ <param name="OnlyDocs">Indicates if you want to sync only documents and images</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SyncData(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Boolean)">
  <summary>
  Sync data to application
  </summary>
@@ -1364,7 +1660,7 @@ flxSysProcess
  Error inserting notice users
  </exception>
 </member>
-<member name="M:FLEXYGO.Offline.SendPushMessage(System.String,System.String,System.Int32,System.String,System.String,System.Object,System.Boolean,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+<member name="M:FLEXYGO.Offline.SendPushMessage(System.String,System.String,System.String,System.String,System.String,System.Object,System.Boolean,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  Sends a push message to the API.
  </summary>
@@ -1387,6 +1683,181 @@ flxSysProcess
  <param name="Entity">Offline File entity</param>
  <param name="Ret">A process helper with return information</param>
  <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SetRecognitionImage(FLEXYGO.Objects.EntityObject,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Sets the recognition image
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="ObjectName">Name of the object with recogintion image relation</param>
+ <param name="ObjectId">Id od the object to set the image</param>
+ <param name="Name">Name of the image</param>
+ <param name="Base64">Base64 of the image</param>
+ <param name="ImageClassId">Class of the image</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Offline.SendLocationData(System.Object,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Gets location data from offline
+ </summary>
+ <param name="Locations">JSON as a String with every location recorded</param>
+ <param name="UserId">Id of the user which registered the locations</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="P:FLEXYGO.FormRecognizer.HeaderApi.Name">
+ <summary>
+ Name of Header
+ </summary>
+</member>
+<member name="P:FLEXYGO.FormRecognizer.HeaderApi.Value">
+ <summary>
+ Value of header
+ </summary>
+</member>
+<member name="P:FLEXYGO.FormRecognizer.ParamApi.Name">
+ <summary>
+ Name of Param
+ </summary>
+</member>
+<member name="P:FLEXYGO.FormRecognizer.ParamApi.Value">
+ <summary>
+ Value of Param
+ </summary>
+</member>
+<member name="P:FLEXYGO.FormRecognizer.ParamApi.ValueBytes">
+ <summary>
+ Value of Param Byte()
+ </summary>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.CreateAndReadDocument(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Object,System.Object,RestSharp.IRestResponse@)">
+ <summary>
+ Function to create and read document with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetJsonDocument(System.Object,System.Object,RestSharp.IRestResponse@,System.String,System.String,System.String,System.String,System.String,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Function to create and read document with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.APIActions(System.String,System.Collections.Generic.List{FLEXYGO.FormRecognizer.HeaderApi},System.Collections.Generic.List{FLEXYGO.FormRecognizer.ParamApi},System.String)">
+ <summary>
+ Function to call API
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.ReadDocument(System.String,System.String,System.String,RestSharp.IRestResponse@,System.String)">
+ <summary>
+ Function to read document with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.ReadDocumentTypeInvoice(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,RestSharp.IRestResponse@,System.String)">
+ <summary>
+ Function to read document with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.ReadDocumentWithModelId(System.String,System.String,System.String,System.String,RestSharp.IRestResponse@,System.String)">
+ <summary>
+ Function to read document with Model Id with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.TrainModel(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,RestSharp.IRestResponse@,System.String,System.Boolean)">
+ <summary>
+ Function to train new model with Azure Form Recognizer
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetListOfModels(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,RestSharp.IRestResponse@,System.String)">
+ <summary>
+ Function to get list of models
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.CreateFileInAzureStorage(System.Byte[],System.String,System.String,System.String,System.String,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ Function to create document in Azure Storage
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.DeleteFileInAzureStorage(System.String,System.String,System.String,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ Function to delete document in Azure Storage
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetFilesOfAzureStorage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ Function to get list of document of Azure Storage
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetContainersOfAzureStorage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,RestSharp.IRestResponse@)">
+ <summary>
+ Function to get list of containers of Azure Storage
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetFileOfAzureStorage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,System.String,RestSharp.IRestResponse@,System.Boolean)">
+ <summary>
+ Function to get info of document of Azure Storage
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetSharedKey(System.String,System.String,System.String,System.String,System.String,System.String)">
+ <summary>
+ Function to get a Shared Key to make an API call
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetSignFormat(System.String,System.Object,System.Object,System.String,System.String)">
+ <summary>
+ Function to get signature format string to generate Shared Key
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.FormRecognizer.GetSASToken(System.String,System.String,System.String,System.String)">
+ <summary>
+ Function to get signature info to get file path
+ </summary>
+ <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+</member>
+<member name="T:FLEXYGO.Passbook">
+ <summary>
+ Class Passbook.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Passbook.#ctor(System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.String,System.String,System.String,System.Byte[],System.String,System.String,System.String,System.String,System.Collections.Generic.KeyValuePair{System.String,System.String},System.Byte[],System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Collections.Generic.List{System.Collections.Generic.KeyValuePair{System.String,System.String}},System.Byte[])">
+ <summary>
+ Initializes a new instance of the <see cref="T:FLEXYGO.Passbook"/> class.
+ </summary>
+ <param name="PrimaryField">Primary fields on passbook.</param>
+ <param name="BackgroundColor">Background color of passbook</param>
+ <param name="ForegroundColor">Foreground color of passbook</param>
+ <param name="LabelColor">Foreground color of passbook</param>
+ <param name="Icon">Icon for passbook</param>
+ <param name="Description">Description for passbook</param>
+ <param name="OrganizationName">OrganizationName of passbook</param>
+ <param name="LogoText">LogoText of passbook</param>
+ <param name="Barcode">Barcode of passbook</param>
+ <param name="HeaderField">Header of passbook</param>
+ <param name="Logo">Logo for passbook</param>
+ <param name="SecondaryField">Secondary fields on passbook</param>
+ <param name="AuxiliaryField">Auxiliary fields on passbook</param>
+ <param name="BackField">Back fields on passbook</param>
+ <param name="Thumbnail">Thumbnail of passbook</param>
+</member>
+<member name="M:FLEXYGO.Passbook.generatePassbook">
+ <summary>
+ Generate generic passbook.
+ </summary>
+ <returns><c>array of bytes</c> if success, <c>nothing</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Error generating passbook</exception>
 </member>
 <member name="M:FLEXYGO.ScriptJob.Insert(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
  <summary>
@@ -1447,14 +1918,281 @@ flxSysProcess
  <param name="Entity">User Entity object with all info</param>
  <param name="Ret">ProcessHelper for returning results</param>
 </member>
+<member name="P:FLEXYGO.SendinBlue.HeaderApi.Name">
+ <summary>
+ Name of Header
+ </summary>
+</member>
+<member name="P:FLEXYGO.SendinBlue.HeaderApi.Value">
+ <summary>
+ Value of header
+ </summary>
+</member>
+<member name="P:FLEXYGO.SendinBlue.ParamApi.Name">
+ <summary>
+ Name of Param
+ </summary>
+</member>
+<member name="P:FLEXYGO.SendinBlue.ParamApi.Value">
+ <summary>
+ Value of Param
+ </summary>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetContacts(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,Newtonsoft.Json.Linq.JObject)">
+ <summary>
+ It gets contacts
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="options">Options params request</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.CreateOrUpdateContact(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,FLEXYGO.SendinBlueResourcesTypes.SBContact)">
+ <summary>
+ Create or update contact
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="nContact">Data of contact</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.DeleteContact(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.String,System.String)">
+ <summary>
+ Create or update contact
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="contactEmail">Mail of contact</param>
+ <param name="contactId">Id of contact</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetTemplates(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,Newtonsoft.Json.Linq.JObject)">
+ <summary>
+ Get templates
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="options">Options params request</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetLists(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,Newtonsoft.Json.Linq.JObject,System.Nullable{System.Int32})">
+ <summary>
+ Get all list if not filter by FolderId
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="options">Options params request</param>
+ <param name="folderId">Folder Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.CreateList(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.String,System.Int32)">
+ <summary>
+ Create list
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="listName">List Name</param>
+ <param name="folderId">Folder Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.UpdateList(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,System.String,System.Int32)">
+ <summary>
+ Update list
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="listId">List Id</param>
+ <param name="newListName">New List Name</param>
+ <param name="newFolderId">New Folder Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.DeleteList(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32)">
+ <summary>
+ Delete list
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="listId">List Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.AddContactsToList(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,FLEXYGO.SendinBlueResourcesTypes.SBContactIds,FLEXYGO.SendinBlueResourcesTypes.SBContactEmails)">
+ <summary>
+ Add Contacts to List
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="listId">List Id</param>
+ <param name="IdsContacts">List Of Ids Contacts</param>
+ <param name="emailsContacts">List Of emails Contacts</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.DeleteContactsFromList(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,FLEXYGO.SendinBlueResourcesTypes.SBContactIds,FLEXYGO.SendinBlueResourcesTypes.SBContactEmails,System.Boolean)">
+ <summary>
+ Delete Contacts from List
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="listId">List Id</param>
+ <param name="IdsContacts">List Of Ids Contacts</param>
+ <param name="emailsContacts">List Of emails Contacts</param>
+ <param name="deleteAll">Check if you want delete all contacts of list</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetContactAttributes(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@)">
+ <summary>
+ It gets contact attributes
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.CreateContactAttribute(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.String,System.String,FLEXYGO.SendinBlueResourcesTypes.SBContactAttribute)">
+ <summary>
+ Create contact attribute
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="attributeCategory">Attribute Category</param>
+ <param name="attributeName">Attribute Name</param>
+ <param name="attributeOptions">Attribute Options</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetSenders(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@)">
+ <summary>
+ It gets senders
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetEmailCampaigns(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,Newtonsoft.Json.Linq.JObject)">
+ <summary>
+ It gets Email Campaigns
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="options">Options params request</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.GetEmailCampaignsReport(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32)">
+ <summary>
+ It gets Email Campaigns Report
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="campaignId">Campaign Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.CreateEmailCampaign(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,FLEXYGO.SendinBlueResourcesTypes.SBEmailCampaign)">
+ <summary>
+ Create Email Campaign
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="nEmailCampaign">Email Campaign data</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.UpdateEmailCampaign(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,FLEXYGO.SendinBlueResourcesTypes.SBEmailCampaign)">
+ <summary>
+ Update Email Campaign
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="emailCampaignId">Email Campaign Id</param>
+ <param name="nEmailCampaign">Email Campaign data</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.UpdateEmailCampaignStatus(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,System.String)">
+ <summary>
+ Update Email Campaign Status
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="emailCampaignId">Email Campaign Id</param>
+ <param name="status">Email Campaign Status</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.EmailCampaignSendNow(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32)">
+ <summary>
+ Sent Email Campaign Now
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="emailCampaignId">Email Campaign Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.DeleteEmailCampaign(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32)">
+ <summary>
+ Delete Email Campaign
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="emailCampaignId">Email Campaign Id</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.SendEmailCampaignReport(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,System.Int32,FLEXYGO.SendinBlueResourcesTypes.SBSendReport)">
+ <summary>
+ Send Email Report
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="campaignId">Campaign Id</param>
+ <param name="emails">Dest. Emails</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.SendTransactionalEmail(FLEXYGO.Processing.ProcessManager.ProcessHelper@,RestSharp.IRestResponse@,FLEXYGO.SendinBlueResourcesTypes.SBTransactionalEmail)">
+ <summary>
+ It gets contacts
+ </summary>
+ <param name="Ret">A process helper with return information</param>
+ <param name="response">Param to save response</param>
+ <param name="nTransactionalEmail">Transactional Email data</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.CheckApiKey(System.String@,System.String@)">
+ <summary>
+ Check Apikey and integration
+ </summary>
+ <param name="sbApiKey">Services type called</param>
+ <param name="errorMsg">Error message</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SendinBlue.APIActions(System.String,System.Collections.Generic.List{FLEXYGO.SendinBlue.HeaderApi},System.Collections.Generic.List{FLEXYGO.SendinBlue.ParamApi},System.String)">
+ <summary>
+ API Actions
+ </summary>
+ <param name="API_URL">API Url</param>
+ <param name="headers">Headers to request</param>
+ <param name="Params">Params to request</param>
+ <param name="MethodType">Method Type</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
 <member name="T:FLEXYGO.SysProcess">
  <summary>
  Class SysProcess.
  </summary>
 </member>
+<member name="M:FLEXYGO.SysProcess.SaveFlexygoAuth(FLEXYGO.Objects.EntityObject,System.String,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Gets app offline configuration
+ </summary>
+ <param name="Entity">Nothing</param>
+ <param name="Request">HTTP Web Request</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if success, <c>false</c> otherwise.</returns>
+</member>
 <member name="M:FLEXYGO.SysProcess.ReloadCache(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  Reloads the cache.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
+<member name="M:FLEXYGO.SysProcess.CloneObject(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+ <summary>
+ Cloen Object and opens the wizard of the object
  </summary>
  <param name="Entity">The entity.</param>
  <param name="Ret">Returns a Process Helper.</param>
@@ -1490,6 +2228,15 @@ flxSysProcess
  <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could not reload Cache</exception>
 </member>
+<member name="M:FLEXYGO.SysProcess.ChangeCurrentUserMode(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Changes current user mode (dark light).
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Ret">Returns a Process Helper.</param>
+ <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
+ <exception cref="T:System.Exception">Could not reload Cache</exception>
+</member>
 <member name="M:FLEXYGO.SysProcess.TranslateTo(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.Int32)">
  <summary>
  Translates to a given language using google translator.
@@ -1509,6 +2256,14 @@ flxSysProcess
  <param name="Lang">The language.</param>
  <param name="Ret">The ret.</param>
  <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.InsertOrUpdateProcess(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Creates all process parameters.
+ </summary>
+ <param name="Entity">Process EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns><c>true</c> if Created, <c>false</c> otherwise.</returns>
 </member>
 <member name="M:FLEXYGO.SysProcess.CreateProcessParameters(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
@@ -1537,6 +2292,29 @@ flxSysProcess
  Update Image From ImageManager.
  </summary>
  <param name="Entity">The EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns>a Boolean indicating completion of process</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.RemoveImage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an object image.
+ </summary>
+ <param name="Entity">The EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns>a Boolean indicating completion of process</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.RemoveDocument(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an object image.
+ </summary>
+ <param name="Entity">The EntityObject</param>
+ <param name="Ret">A process helper with return information</param>
+ <returns>a Boolean indicating completion of process</returns>
+</member>
+<member name="M:FLEXYGO.SysProcess.SendSelectedDocuments(FLEXYGO.Processing.ProcessManager.ProcessHelper@,System.String,System.String,System.String,System.String,System.String,System.String,System.Object)">
+ <summary>
+ Send mail with selected documents.
+ </summary>
  <param name="Ret">A process helper with return information</param>
  <returns>a Boolean indicating completion of process</returns>
 </member>
@@ -1577,7 +2355,7 @@ flxSysProcess
  <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
  <exception cref="T:System.Exception">Could not erase AhoraSession</exception>
 </member>
-<member name="M:FLEXYGO.SysProcess.ScriptDatabase(FLEXYGO.Objects.IEntity,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+<member name="M:FLEXYGO.SysProcess.ScriptDatabase(FLEXYGO.Objects.IEntity,System.Object,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
  Generate merges from active origin id
  </summary>
@@ -1595,18 +2373,6 @@ flxSysProcess
  <param name="Body">The body</param>
  <param name="Ret">The ret.</param>
  <returns><c>true</c> if succes, <c>false</c> otherwise.</returns>
-</member>
-<member name="M:FLEXYGO.SysProcess.DownloadDataToExcel(FLEXYGO.Objects.EntityObject,System.String,System.String,System.Object,System.Object,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
- <summary>
- Downloads data info on to excel file
- </summary>
- <param name="Entity">The entity.</param>
- <param name="ConnString">Data connection string Name</param>
- <param name="Sentence">SQL Sentence</param>
- <param name="XSLFilePath">Optional XSL file path</param>
- <param name="XSLFileName">Optional XSL file name</param>
- <param name="Ret">Returns a Process Helper.</param>
- <returns><c>true</c> if no error, <c>false</c> otherwise.</returns>
 </member>
 <member name="M:FLEXYGO.SysProcess.UnlockKeyFieldsLoadProcess(FLEXYGO.Processing.ProcessManager.FormSender,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
  <summary>
@@ -1694,21 +2460,55 @@ Enable offline requirements
  <returns>List(Of FormAction) with actions to do with properties.</returns>
  <exception cref="T:System.Exception">Returns error</exception>
 </member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
+<member name="M:FLEXYGO.SysProcess.ChangePhoto(FLEXYGO.Objects.EntityObject,System.String,FLEXYGO.Processing.ProcessManager.ProcessHelper@)">
+ <summary>
+ Change profile photo.
+ </summary>
+ <param name="Entity">The entity.</param>
+ <param name="Photo">The path of the updated photo.</param>
+ <param name="Ret">Returns a Process Helper.</param>
 </member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
+<member name="M:FLEXYGO.SysProcess.UpdateUser(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an user.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
 </member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
+<member name="M:FLEXYGO.SysProcess.InsertImportSetting(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Insert an import setting.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.SysProcess.UpdateImportSetting(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an import setting.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.SysProcess.DeleteImportSetting(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an import setting.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.SysProcess.UpdateLocalStorage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Update an local storage.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
+</member>
+<member name="M:FLEXYGO.SysProcess.DeleteLocalStorage(FLEXYGO.Objects.EntityObject,FLEXYGO.Processing.ProcessManager.ProcessHelper)">
+ <summary>
+ Delete an local storage.
+ </summary>
+ <param name="Entity">User Entity object with all info</param>
+ <param name="Ret">ProcessHelper for returning results</param>
 </member>
 </members>
 </doc>

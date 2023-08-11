@@ -21,6 +21,7 @@ var flexygo;
                 CustomProperty: 'Custom Property Dep.',
                 save: 'Desa',
                 addmore: 'Afegeix més propietats depenents',
+                addmorefilter: 'Afegir més filtres dependents',
                 sqlvalue: 'Valor SQL',
                 sqlclass: 'Classe SQL',
                 sqlcombofilter: 'Filtre combo SQL',
@@ -39,7 +40,8 @@ var flexygo;
                 CusPropertyName: 'Nom Custom Control',
                 SQLCustomProperty: 'SQL Custom Property',
                 connectionstrings: 'Cadenas de conexión',
-                connStringvalues: 'valores de conexión'
+                connStringvalues: 'valores de conexión',
+                relateddep: 'Dependències relacionades'
             };
             caes.develop = {
                 developer: 'Desenvolupador',
@@ -67,6 +69,8 @@ var flexygo;
                 objectpropertysecurity: 'Seguretat de la propietat',
                 pageSettings: 'Configuració de pàgina',
                 chatter: 'Chatter',
+                users: 'Usuaris',
+                roles: 'Rols',
             };
             caes.history = {
                 historyempty: 'Historial de la navegació buit',
@@ -82,6 +86,8 @@ var flexygo;
                 reports: 'Informes',
                 noelements: 'Element no existent',
                 popupwarning: 'Pop-up windows bloquejades pel navegador. Per favor, canvia paràmetres',
+                reportmaxrows: 'This report uses {0} rows to filter and exceed the {1} limit. Please apply a restrictive filter first.',
+                scrolltop: 'Anar a dalt'
             };
             caes.flxfilter = {
                 searchplaceholder: 'Cecar per: ',
@@ -102,6 +108,7 @@ var flexygo;
                 appendwarning: 'Selecciona un tipus de camp i un nom de camp',
                 createfields: 'Create new table fields',
                 enterfieldname: 'Field Name',
+                reserveword: 'és una paraula reservada',
                 selecttype: 'Selecciona el tipus de dades',
                 seedependencies: 'Veure dependències',
                 templates: 'Plantilles',
@@ -129,6 +136,11 @@ var flexygo;
                 propertylabel: 'Etiqueta de la propietat',
                 adddetachedproperty: 'Afegir propietat separada ',
                 loadmore: 'Desplaça\'t per carregar-ne més',
+                hasdependencies: 'Llança dependències',
+                hasdependingproperties: 'Afectada per dependències',
+                withchangeprocess: 'Amb procés de canvi',
+                throwto: 'Llança a',
+                affectedby: 'Afectada per'
             };
             caes.flxeditgrid = {
                 addrow: 'Afegeix fila',
@@ -250,13 +262,22 @@ var flexygo;
                 add: 'Afegir',
                 errornofilter: 'Afegeix un filtre nou primer.',
                 errornofields: 'Afegeix alguns camps primer.',
+                fieldnotappend: 'No s\'ha pogut afegir la següent propietat perquè ja existeix una amb el mateix nom:',
+                fieldsnotappend: 'No s\'han pogut afegir les següents propietats perquè ja existeix una amb el mateix nom:',
                 save: 'Desa',
                 delete: 'Esborrar',
+                hasfilterdependencies: 'Llança dependències',
+                hasfilterdependingproperties: 'Afectada per dependències',
+                throwto: 'Llança a',
+                affectedby: 'Afectada per'
             };
             caes.sortmanager = {
                 sort: 'Ordenar',
+                fields: 'Camps',
                 apply: 'Aplicar',
                 clean: 'Netejar',
+                groups: 'Grups',
+                applied: 'Aplicats'
             };
             caes.flxlist = {
                 noentriesfound: 'No s’han trobat entrades.',
@@ -280,6 +301,10 @@ var flexygo;
                 mindate: 'Data  mínima',
                 maxdate: 'Data  máxima',
                 unseen: 'Només no llegits',
+                sync: 'Sincronitzant',
+                waitsync: 'Espereu que finalitzi la sincronització.',
+                nomail: 'No s’ha trobat el correu.',
+                nomailalert: 'No s’ha trobat el correu al servidor.',
             };
             caes.flxmodule = {
                 delete: 'Esborrar',
@@ -288,6 +313,8 @@ var flexygo;
                 edit: 'Editar',
                 view: 'Vista',
                 print: 'Imprimir',
+                printpage: 'Imprimir pàgina',
+                printmodule: 'Imprimir mòdul',
                 help: 'Ajuda',
                 settings: 'Configuració',
                 process: 'Procés',
@@ -306,6 +333,7 @@ var flexygo;
                 uniqueBagError: 'Camp d&#39;identificador únic sense definir.',
                 nofieldBagError: 'No es pot trobar el camp <b> {0} </b> a la fila actual. Afegiu-la per consultar o eliminar el botó de selecció..',
                 noItemsSelected: 'Primer seleccioneu alguns elements de la llista.',
+                currentlyViewing: 'Veient actualment'
             };
             caes.flxnav = {
                 notimplemented: 'El node d&#39;acció no s&#39;ha implementat',
@@ -334,6 +362,7 @@ var flexygo;
                 infotostart: 'Explora o arrossega una imatge per iniciar',
                 errorfilename: 'La imatge no té nom',
                 errorrootpath: 'Root Path',
+                extension: 'No s’accepta l’extensió de fitxer.',
             };
             caes.documentmanager = {
                 upload: 'Carregar',
@@ -364,6 +393,10 @@ var flexygo;
                 view: 'veure',
                 downloadall: 'Descarrega&#39;t tots els documents',
                 nodocuments: 'No hi ha documents per descarregar',
+                msgremove: 'Esteu segur que voleu eliminar el document?',
+                sendselection: 'Enviar selecció',
+                noselection: 'No hi ha documents seleccionats',
+                filterdocs: 'Filtrar documents',
             };
             caes.imagemanager = {
                 upload: 'Carregar',
@@ -388,16 +421,19 @@ var flexygo;
                 uploaded: 'Carregat',
                 error: 'Error de càrrega ',
                 info: 'Arrossegueu per carregar',
+                extension: 'No s’accepta l’extensió de fitxer.',
             };
             caes.file = {
                 saved: 'S&#39;ha desat el fitxer ;)',
                 errorsaving: 'Error en desar el fitxer :(',
                 resultbase64: '1 fitxer a base64',
+                extension: 'No s’accepta l’extensió de fitxer.',
             };
             caes._export = {
                 success: 'S&#39;ha exportat correctament les dades ;)',
                 error: 'S&#39;ha produït un error al exportar dades :(',
                 exportinglist: 'Exportant la llista',
+                exportlimit: 'S&#39ha superat el nombre màxim de registres a exportar, si us plau utilitza un filtre més restrictiu',
             };
             caes.menumanager = {
                 deleteMenu: 'Esborrar menu',
@@ -411,6 +447,7 @@ var flexygo;
                 edit: 'Editar',
                 submenus: 'Submenús',
                 newsubmenu: 'Submenú nou',
+                menuSecurity: 'Seguretat dels menús',
             };
             caes.modulemanager = {
                 save: 'Desa',
@@ -439,6 +476,7 @@ var flexygo;
                 deletenode: 'Eliminar el node',
                 deletenodequestion: 'Esteu segur que voleu eliminar aquest node?',
                 addfields: 'Afegir camps',
+                cloneDependencies: 'Clonar dependències dels objectes'
             };
             caes.objectmanager = {
                 selecticon: 'Seleccionar la icona',
@@ -483,6 +521,7 @@ var flexygo;
                 end: 'Acabar',
                 colproperties: 'Editar les propietats de la graella (opcional)',
                 save: 'Desa',
+                filtersettings: 'Configuració de filtres',
             };
             caes.flxpropertymanager = {
                 addfields: 'Feu clic al botó "afegir camps" per començar.',
@@ -556,9 +595,16 @@ var flexygo;
                 errornosql: 'El camp SQL no pot estar en blanc.',
                 validate: 'Validar',
                 errorduplicateprop: 'El camp {0} ja existeix',
+                save: 'Desa',
+                cancel: 'Cancel·la',
+                viewwizard: 'Assistent de vistes',
+                selectobject: 'Per favor, seleccioneu un nom d\'objecte',
+                openwizard: 'Obrir l\'assistant',
+                saved: 'Canvis desats :)',
             };
             caes.templates = {
                 addnewtemplate: 'Afegeix una plantilla nova',
+                openiconlist: "Obrir llista d'icones",
             };
             caes.flxscheduler = {
                 objects: 'Objectes',
@@ -589,12 +635,17 @@ var flexygo;
                 search: 'Cercar...',
                 pleasewrite: 'Escriviu el text per cercar',
                 speak: 'Parla ara...',
+                pleaseobject: 'Si us plau, seleccioneu abans un objecte',
+                searchnode: 'Cerca',
             };
             caes.text = {
                 map: 'Feu clic al mapa',
                 errormap: 'No s&#39;ha trobat l’adreça',
                 api: 'No s&#39;ha trobat la Google API Key.',
                 apihelp: 'Vegeu la nostra ajuda per saber com aconseguir-ho.',
+                nophone: 'Introdueix un telèfon',
+                nomail: 'Introdueix una adreça de correu',
+                seeMap: 'Veure al google maps'
             };
             caes.flxfunnel = {
                 data: 'No hi ha informació',
@@ -653,6 +704,8 @@ var flexygo;
                 composerplaceholder: 'Escriu alguna cosa',
                 sendbutton: 'Registrar',
                 startinfo: 'Primer ha de configurar el chatter',
+                deleteconfirm: '¿Està segur d\'eliminar el missatge?',
+                saveButton: 'Guardar',
             };
             caes.offline = {
                 createobjecttitle: 'Afegeix un nou objecte a l\'App',
@@ -664,6 +717,105 @@ var flexygo;
             caes.offlineemulator = {
                 ios: 'Commuta el mode iOS',
                 md: 'Commuta el mode Android',
+            };
+            caes.combobuilder = {
+                datasource: 'Origen de dades',
+                fromtable: 'Taula',
+                fromview: 'Vista',
+                selectcnnstring: 'Seleccioneu la cadena de connexió',
+                validcnnstring: 'Ha de seleccionar una cadena de connexió',
+                selecttable: 'Seleccioneu un origen',
+                validorigin: 'Indiqui un origen vàlid',
+                viewkeyfields: 'Campos clau de la vista',
+                saved: 'Guardat',
+                save: 'Guardar',
+                cancel: 'Cancel·lar',
+                selectvaluefield: 'Seleccioneu el camp a guardar',
+                selectdisplayfield: 'Seleccioneu el camp a mostrar',
+                selectadditionalfield: 'Seleccioneu camps addicionals',
+                selectorderfield: 'Seleccioneu el camp per a ordenar els resultats',
+                comboassistant: 'Assistent',
+                cnnstring: 'Cadena de connexió',
+                origin: 'Origen',
+                sqlsentence: 'Sentència SQL',
+                valuefield: 'Camp a guardar',
+                displayfield: 'Camp a mostrar',
+                additionalfield: 'Camps addicionals',
+                orderfield: 'Camp per a ordenar',
+                validvaluefield: 'Indiqueu un camp a guardar',
+                validdisplayfield: 'Indiqueu un camp a mostrar',
+                validorderfield: 'Indiqueu un camp per a ordenar',
+                validsqlsentence: 'La sentència SQL no és vàlida',
+            };
+            caes.formatsmanager = {
+                formatassistant: 'Assistent',
+                field: 'Camp',
+                selectfield: 'Selecciona el camp',
+                validfield: 'Selecciona un camp vàlid',
+                validformat: 'Selecciona un tipus de format vàlid',
+                selectformat: 'Selecciona un tipus de format',
+                formattype: 'Tipus de format',
+                saved: 'Guardat',
+                nosaved: 'No s\'ha guardat ningú format',
+                decimal: 'Format decimal',
+                isdate: 'Format de data',
+                translate: 'Traduir text',
+                save: 'Guardar',
+                cancel: 'Cancel·lar',
+                casetrue: 'Si és cert',
+                casefalse: 'Si és fals',
+                boolformat: 'Format booleà',
+                isnull: 'El valor és nul',
+                numdecimals: 'Nombre de decimals',
+                switchformat: 'Switch case',
+                casenotnull: 'El valor no és nul',
+                stringformat: 'Text per a formatar',
+                stringtype: 'Tipus de format de text',
+                validstringformat: 'Selecciona un tipus de format de text vàlid',
+                uppercase: 'Majúscules',
+                lowercase: 'Minúscules',
+                characternumber: 'Nombre de caràcters a mostrar',
+                addoption: 'Afegeix una opció',
+                addelse: 'Afegeix una opció per defecte',
+                dateformat: 'Tipus de format de data',
+                selectdateformat: 'Selecciona un tipus de format de data',
+                validdateformat: 'Selecciona un tipus de format de data vàlid',
+                dateLT: '19:05',
+                dateLTS: '19:05:57',
+                dateL: '13/07/2021',
+                datel: '13/7/2021',
+                dateLL: 'el 13 de juliol de 2021',
+                datell: '13 jul. 2021',
+                dateLLL: 'el 13 de juliol de 2021 a les 19:05',
+                datelll: '13 jul. 2021, 19:05',
+                dateLLLL: 'el dimarts 13 de juliol de 2021 a les 19:05',
+                datellll: 'dt. 13 jul. 2021, 19:05',
+                translatesentence: 'Text a traduir',
+                option: 'Opció',
+                result: 'Resultat',
+                elseoption: 'Per defecte',
+                requiredobject: 'Primer heu de seleccionar un objecte',
+            };
+            caes.imports = {
+                template: 'Fitxer de plantilla',
+            };
+            caes.htmlreport = {
+                generate: 'Generant informe',
+            };
+            caes.skin = {
+                darkmode: 'Mode Fosc',
+                lightmode: 'Mode Clar'
+            };
+            caes.flxBarcode = {
+                noCamera: 'No s\'ha trobat una càmera disponible',
+                IOSerr: 'Aquesta funcionalitat no està disponible a IOS',
+                noCode: 'No es pot trobar cap codi en aquesta imatge.'
+            };
+            caes.abhSign = {
+                save: 'Guardar',
+                title: 'Seleccioneu un document',
+                help: 'Ajuda Abh Sign',
+                lastPage: 'Última pàgina'
             };
         })(caes = culture.caes || (culture.caes = {}));
     })(culture = flexygo.culture || (flexygo.culture = {}));

@@ -29,6 +29,25 @@
     color: #EDEFF3;
 }
 
+.deNegroAVerde {
+    color: #333;
+    cursor: pointer;
+}
+
+    .deNegroAVerde:hover {
+        color: green;
+    }
+
+.deNegroARojo {
+    color: #333;
+    cursor: pointer;
+}
+
+    .deNegroARojo:hover {
+        color: red;
+    }
+
+
 
 
 /* ENTORNO */
@@ -74,7 +93,7 @@ flx-nav[mode=nav] li > .active {
 
 /* Estilos Globales */
 #dvVelo {
-    z-index: 9999;
+    z-index: 99999;
     position: fixed;
     width: 100%;
     height: 100%;
@@ -90,11 +109,10 @@ flx-nav[mode=nav] li > .active {
     padding: 20px;
     margin: auto;
     border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    max-height:600px;
+    overflow:hidden;
+    overflow-y:auto;
 }
 
 .w100 {
@@ -889,6 +907,7 @@ table {
         padding: 5px;
         border: 1px solid #ccc;
         box-sizing: border-box;
+        vertical-align:top;
     }
 
     .tbFrm th {
@@ -961,7 +980,7 @@ table {
     }
 
     .tbStd tr:hover {
-        background: #E0F2F7 !important;
+        background: #D9FFD5 !important;
         cursor: pointer;
         color: #666;
     }
@@ -1125,7 +1144,51 @@ table {
     cursor: pointer;
 }
 
+.tbHover:hover {
+    background: #16C79A;
+    cursor:pointer;
+}
 
+.tbVersioning tr, .tbVersioning td {
+    vertical-align:top;
+}
+.tbVersioning .vTR {
+    height: 20px;
+    border-top: 2px solid #FFF;
+}
+.tbVersioning .vTitulo {
+    font: bold 14px arial;
+    color: #FFF;
+    background: #11698E;
+    padding: 10px;
+}
+.tbVersioning .trPunto .vPunto,
+.tbVersioning .trPunto .vDescripcion {
+    padding: 10px;
+    font: 14px arial;
+    color: #333;
+}
+.tbVersioning .trPunto .vPunto {
+    font: bold 16px arial;
+    text-align:center;
+    vertical-align:middle;
+    color: #11698E;
+}
+.tbVersioning .trPunto:nth-child(even) {
+    background: #ffffff;
+}
+.tbVersioning .trPunto:nth-child(odd) {
+    background: #f2f2f2;
+}
+.tbVersioning tr:nth-child(odd) td:first-child {
+    border-right: 1px solid #ffffff;
+}
+.tbVersioning tr:nth-child(even) td:first-child {
+    border-right: 1px solid #f2f2f2;
+}
+.tbVersioning .vTituloPunto {
+    background: #11698E;
+}
 
 #dvCalendarioEJG {
     background: rgb(240,240,240);
@@ -1259,3 +1322,14 @@ table {
         color: #333;
         background: #C9D9E3;
     }
+
+
+/*
+		Media
+*/
+@media print {
+  .MI_noImp , #mainNav { display: none !important;  }
+  
+  #tbListadosTV.tbStd th { font: bold 11px arial; }
+  #tbListadosTV.tbStd td { font: 11px arial; }
+}

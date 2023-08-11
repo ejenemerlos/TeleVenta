@@ -43,13 +43,6 @@ var flexygo;
                     }
                 }
                 /**
-              * Array of observed attributes.
-              * @property observedAttributes {Array}
-              */
-                static get observedAttributes() {
-                    return ['modulename', 'value'];
-                }
-                /**
                * Fires when the attribute value of the element is changed.
                * @method attributeChangedCallback
                */
@@ -80,6 +73,7 @@ var flexygo;
                     let ctx = this;
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     ctx.me.append('<div class="schedulerView" ></div>');
                     let parentModule = me.closest('flx-module');
                     let wcModule = parentModule[0];
@@ -290,27 +284,35 @@ var flexygo;
                     $(outer).attr('currentdate', day.format('YYYYMMDD'));
                     if ($(outer).attr("class") != 'day other') {
                         $(outer).click(function () {
-                            ctx.openDay(this);
-                            let ev = {
-                                class: "module",
-                                type: "selected",
-                                sender: ctx,
-                                masterIdentity: $(this).attr('currentdate'),
-                                detailIdentity: null
-                            };
-                            flexygo.events.trigger(ev);
+                            if (!$(outer).hasClass('daySelected')) {
+                                $(outer).closest('div.month').find('div.day.daySelected').removeClass('daySelected');
+                                $(outer).addClass('daySelected');
+                                ctx.openDay(this);
+                                let ev = {
+                                    class: "module",
+                                    type: "selected",
+                                    sender: ctx,
+                                    masterIdentity: $(this).attr('currentdate'),
+                                    detailIdentity: null
+                                };
+                                flexygo.events.trigger(ev, $(this));
+                            }
                         });
                     }
                     else {
                         $(outer).click(function () {
-                            let ev = {
-                                class: "module",
-                                type: "selected",
-                                sender: ctx,
-                                masterIdentity: $(this).attr('currentdate'),
-                                detailIdentity: null
-                            };
-                            flexygo.events.trigger(ev);
+                            if (!$(outer).hasClass('daySelected')) {
+                                $(outer).closest('div.month').find('div.day.daySelected').removeClass('daySelected');
+                                $(outer).addClass('daySelected');
+                                let ev = {
+                                    class: "module",
+                                    type: "selected",
+                                    sender: ctx,
+                                    masterIdentity: $(this).attr('currentdate'),
+                                    detailIdentity: null
+                                };
+                                flexygo.events.trigger(ev, $(this));
+                            }
                         });
                     }
                     //Day Name
@@ -407,41 +409,47 @@ var flexygo;
                     var wrapper = ctx.createElement('div', 'events in' + (currentWrapper ? ' new' : ''), '', '');
                     var addNew = ctx.createElement('i', 'clickable padding-right-l addnew icon-15x flx-icon icon-add-icon txt-notify', '', '');
                     $(addNew).click(function () {
-                        if (ctx.me.conf.length > 1) {
-                            let myButtons = new Object();
-                            let buttons = '';
-                            for (var i = 0; i < ctx.me.conf.length; i++) {
-                                myButtons[ctx.me.conf[i].ObjectName] = {
-                                    ObjectName: ctx.me.conf[i].ObjectName,
-                                    StartDateField: ctx.me.conf[i].StartDateField,
-                                    Icon: ctx.me.conf[i].Icon,
-                                    Target: ctx.me.conf[i].Target
-                                };
-                                if (ctx.me.conf[i].CanInsert) {
-                                    buttons += '<a style="padding: 0.7em;margin-right: 3%;margin-bottom: 3%;" class="btn btn-default bg-outstanding modalButton"><i style="margin-right:4px;" class="' + ctx.me.conf[i].Icon + '"></i>' + ctx.me.conf[i].ObjectName + '</a>';
-                                }
-                            }
-                            if (buttons != '') {
-                                $.sweetModal({
-                                    title: flexygo.localization.translate('flxscheduler.chooseobjects'),
-                                    content: '<div>' + buttons + '</div>',
-                                    theme: $.sweetModal.THEME_MIXED,
-                                    width: '31%'
-                                });
-                                $(".modalButton").click(function () {
-                                    let object = myButtons[this.text];
-                                    let defaults = {};
-                                    defaults[ctx.me.conf[0].StartDateField] = defaultDate.substring(0, 4) + '-' + defaultDate.substring(4, 6) + '-' + defaultDate.substring(6, 8);
-                                    flexygo.nav.openPage('edit', object.ObjectName, null, JSON.stringify(defaults), object.Target, false, $(this));
-                                    $('.sweet-modal-overlay').remove();
-                                });
-                            }
+                        if (!flexygo.utils.isBlank(ctx.me.conf[0].OnClickDayJS)) {
+                            var func = new Function('date', 'jsEvent', 'view', ctx.me.conf[0].OnClickDayJS);
+                            func.call(this, moment.utc(defaultDate));
                         }
                         else {
-                            if (ctx.me.conf[0].CanInsert) {
-                                let defaults = {};
-                                defaults[ctx.me.conf[0].StartDateField] = defaultDate.substring(0, 4) + '-' + defaultDate.substring(4, 6) + '-' + defaultDate.substring(6, 8);
-                                flexygo.nav.openPage('edit', ctx.me.conf[0].ObjectName, null, JSON.stringify(defaults), ctx.me.conf[0].Target, false, $(this));
+                            if (ctx.me.conf.length > 1) {
+                                let myButtons = new Object();
+                                let buttons = '';
+                                for (var i = 0; i < ctx.me.conf.length; i++) {
+                                    myButtons[ctx.me.conf[i].ObjectName] = {
+                                        ObjectName: ctx.me.conf[i].ObjectName,
+                                        StartDateField: ctx.me.conf[i].StartDateField,
+                                        Icon: ctx.me.conf[i].Icon,
+                                        Target: ctx.me.conf[i].Target
+                                    };
+                                    if (ctx.me.conf[i].CanInsert) {
+                                        buttons += '<a style="padding: 0.7em;margin-right: 3%;margin-bottom: 3%;" class="btn btn-default bg-outstanding modalButton"><i style="margin-right:4px;" class="' + ctx.me.conf[i].Icon + '"></i>' + ctx.me.conf[i].ObjectName + '</a>';
+                                    }
+                                }
+                                if (buttons != '') {
+                                    $.sweetModal({
+                                        title: flexygo.localization.translate('flxscheduler.chooseobjects'),
+                                        content: '<div>' + buttons + '</div>',
+                                        theme: $.sweetModal.THEME_MIXED,
+                                        width: '31%'
+                                    });
+                                    $(".modalButton").click(function () {
+                                        let object = myButtons[this.text];
+                                        let defaults = {};
+                                        defaults[ctx.me.conf[0].StartDateField] = defaultDate.substring(0, 4) + '-' + defaultDate.substring(4, 6) + '-' + defaultDate.substring(6, 8);
+                                        flexygo.nav.openPage('edit', object.ObjectName, null, JSON.stringify(defaults), object.Target, false, $(this));
+                                        $('.sweet-modal-overlay').remove();
+                                    });
+                                }
+                            }
+                            else {
+                                if (ctx.me.conf[0].CanInsert) {
+                                    let defaults = {};
+                                    defaults[ctx.me.conf[0].StartDateField] = defaultDate.substring(0, 4) + '-' + defaultDate.substring(4, 6) + '-' + defaultDate.substring(6, 8);
+                                    flexygo.nav.openPage('edit', ctx.me.conf[0].ObjectName, null, JSON.stringify(defaults), ctx.me.conf[0].Target, false, $(this));
+                                }
                             }
                         }
                     });
@@ -455,9 +463,15 @@ var flexygo;
                                 flexygo.nav.openPage(ev.pageType, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), null, ev.target, false, $(this));
                             });
                         }
-                        if (ev.pageType == "view" && ev.canView) {
+                        else if (ev.pageType == "view" && ev.canView) {
                             $(div).click(function () {
                                 flexygo.nav.openPage(ev.pageType, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), null, ev.target, false, $(this));
+                            });
+                        }
+                        else if (ev.pageType == "generic") {
+                            $(div).click(function () {
+                                var func = new Function('objectname', 'objectwhere', 'calEvent', 'jsEvent', 'view', ev.OnClickJS);
+                                func.call(this, ev.calendar, ctx.getObjectWhere(ev.table, ev.key, ev.id), ev);
                             });
                         }
                         $(div).append(square);
@@ -542,7 +556,7 @@ var flexygo;
                         day = '0' + day;
                     return [year, month, day].join('');
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 startLoading() {
@@ -556,6 +570,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+          * Array of observed attributes.
+          * @property observedAttributes {Array}
+          */
+            FlxSchedulerViewElement.observedAttributes = ['modulename', 'value'];
             wc.FlxSchedulerViewElement = FlxSchedulerViewElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

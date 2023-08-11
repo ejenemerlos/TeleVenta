@@ -1,15 +1,52 @@
-import { r as registerInstance, j as h } from './index-76f52202.js';
-import { u as util, C as ConftokenProvider, s as sql } from './messages-50a67881.js';
-import { j as jquery } from './jquery-4ed57fb2.js';
-import { p as parser } from './parser-90867b5f.js';
+import { r as registerInstance, j as h } from './index-86ac49ff.js';
+import './ionic-global-0f98fe97.js';
+import { W as Webapi, b as storage } from './webapi-c55d139d.js';
+import { i as flxSync, h as gps, t as tracking, n as nav, m as msg, u as util, C as ConftokenProvider, s as sql } from './conftoken-5bf7991f.js';
+import { j as jquery } from './jquery-5df58adb.js';
+import './utils-16079bfd.js';
+import './helpers-719f4c54.js';
+import './animation-10ea33c3.js';
+import './index-7173f7a2.js';
+import './ios.transition-95375ac9.js';
+import './md.transition-6d74e584.js';
+import './cubic-bezier-93f47170.js';
+import './index-7fe827c3.js';
+import './index-b40d441b.js';
+import './hardware-back-button-aacf3d12.js';
+import './index-50651ccc.js';
+import './overlays-5302658e.js';
+import { p as parser } from './parser-6f9bc4c3.js';
 
-const flxHomeCss = "";
+const flxHomeCss = "#menuIonTitle{position:absolute;left:0;right:0;margin-left:auto;margin-right:auto;top:0;height:100%}";
 
 const FlxHome = class {
     constructor(hostRef) {
         registerInstance(this, hostRef);
     }
-    componentWillLoad() {
+    componentDidLoad() {
+        this.createLogsTable();
+        jquery('#loadingSpinnerModule').css('visibility', 'hidden');
+        flxSync.checkSendErrors();
+        if (window.cordova)
+            this.activateTracking();
+    }
+    async activateTracking() {
+        let auth = await (new Webapi()).getAuth();
+        storage.get('confToken').then((token) => {
+            if (auth.b64 && token && token.tracking && token.tracking.active)
+                gps.showActivationMsg(true, true);
+            else
+                tracking.clean();
+        });
+    }
+    async componentWillLoad() {
+        if (!await this.didUserSync())
+            nav.goSync();
+        let data = await storage.get('confToken');
+        if (data !== null && data.profile && data.profile.mustChangePsw) {
+            msg.changePassword(!data.profile.mustChangePsw);
+        }
+        jquery('#loadingSpinnerModule').css('visibility', 'visible');
         this.title = '';
         this.body = '';
         this.header = '';
@@ -93,10 +130,29 @@ const FlxHome = class {
         }
         return rendered;
     }
+    async didUserSync() {
+        const token = await storage.get('confToken');
+        if (token && token.lastSync)
+            return true;
+        return false;
+    }
+    async createLogsTable() {
+        let creationScript = `CREATE TABLE IF NOT EXISTS ErrorsLogs (
+      LogId int PRIMARY KEY,
+      Message string,
+      PageType string,
+      PageObject string,
+      PageName string,
+      _insertDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );`;
+        await sql.execSQL(creationScript);
+    }
     render() {
         return [
-            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, h("ion-menu-button", { color: "outstanding" })), h("ion-title", null, h("span", { id: "menuTitle" }, this.title)))),
-            h("ion-content", null, h("ion-refresher", { slot: "fixed", id: "refresher", onIonRefresh: (ev) => { this.refresh(ev); } }, h("ion-refresher-content", null)), h("div", { id: "mainHeader", innerHTML: this.header }), h("div", { id: "mainBody", innerHTML: this.body }), h("div", { id: "mainHeader", innerHTML: this.footer }))
+            h("ion-header", null, h("ion-toolbar", { color: "header", class: "ion-text-center" }, h("ion-buttons", { slot: "start" }, h("ion-menu-button", { color: "outstanding" }), h("ion-icon", { name: "alert-circle", color: "danger", class: "stack sendError flx-hide" })), h("ion-title", { id: "menuIonTitle" }, h("span", { id: "menuTitle" }, this.title)))),
+            h("ion-header", { innerHTML: this.header }),
+            h("ion-content", null, h("ion-refresher", { slot: "fixed", id: "refresher", onIonRefresh: (ev) => { this.refresh(ev); } }, h("ion-refresher-content", null)), h("div", { id: "mainBody", innerHTML: this.body })),
+            h("ion-footer", { innerHTML: this.footer })
         ];
     }
 };

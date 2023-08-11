@@ -25,13 +25,6 @@ var flexygo;
                     this.moduleName = null;
                 }
                 /**
-                    * Array of observed attributes.
-                    * @property observedAttributes {Array}
-                    */
-                static get observedAttributes() {
-                    return ['modulename'];
-                }
-                /**
                 * Fires when element is attached to DOM
                 * @method connectedCallback
                 */
@@ -75,6 +68,7 @@ var flexygo;
                 init() {
                     let me = $(this);
                     me.removeAttr('manualInit');
+                    $(this).closest('flx-module').find('.flx-noInitContent').remove();
                     me.html('');
                     let params = {
                         ObjectName: me.attr('ObjectName'),
@@ -93,7 +87,7 @@ var flexygo;
                         }
                     }, null, () => { this.stopLoading(); }, () => { this.startLoading(); });
                 }
-                translate(str) {
+                flxTranslate(str) {
                     return flexygo.localization.translate(str);
                 }
                 startLoading() {
@@ -107,6 +101,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+                * Array of observed attributes.
+                * @property observedAttributes {Array}
+                */
+            FlxRssElement.observedAttributes = ['modulename'];
             wc.FlxRssElement = FlxRssElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

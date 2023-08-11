@@ -1,13 +1,14 @@
-﻿html {
+﻿body, form {
     background: url('../../Merlos/images/Fondo.jpg') no-repeat center fixed;
     background-size: cover;
-    color: #4985D6;
+    color: #dddddd;
     height: 100%;
     font-family: 'latolight','Helvetica, Arial','sans-serif';
 }
 
 a {
-    color: #666666;
+    background: #333333;
+    color: #dddddd;
     text-decoration: none;
 }
 
@@ -26,6 +27,15 @@ a {
 
 .error {
     color: red;
+}
+
+.azureSignInButton {
+    background-color: #1c1c1c;
+    border-radius: 10px;
+}
+
+.azureSignInButton:hover {
+    background-color: black;
 }
 
 .login {
@@ -56,8 +66,24 @@ a {
     border-radius: 10px;
 }
 
+    .divlogin .flip-card, #license .flip-card {
+        margin: 0 auto;
+        width: 320px;
+        height: 100px;
+    }
+
+    .divlogin .flip-card-front, #license .flip-card-front {
+        width: 320px;
+        height: 100px;
+    }
+
+    .divlogin .flip-card-back, #license .flip-back {
+        width: 320px;
+        height: 100px;
+    }
+
 .logo {
-    background-image: url('../../Merlos/images/logo.png');
+    background-image: url('../../img/logo.png');
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center top;
@@ -95,7 +121,7 @@ a {
 .login input[type='text'], .login input[type='password'] {
     font-size: 1.5em;
     background: transparent;
-    color: #666666;
+    color: #dddddd;
     border: none;
     border-bottom: solid 1px #dddddd;
     width: 255px;
@@ -131,6 +157,8 @@ a {
 }
 
 #pass-status {
-    position: absolute !important;
-    padding-top: 10px !important;
+   position: relative;
+   float: right;
+   top: -20px;
+   left: -10px;
 }

@@ -17,6 +17,16 @@ var flexygo;
             class FlxImageManagerElement extends HTMLElement {
                 constructor() {
                     super();
+                    /**
+                    * Default image class
+                    * @property imageClassId {string}
+                    */
+                    this.imageClassId = null;
+                    /**
+                    * Additional image filter
+                    * @property additionalWhere {string}
+                    */
+                    this.additionalWhere = null;
                 }
                 /**
                 * Fires when element is attached to DOM
@@ -48,7 +58,7 @@ var flexygo;
                 * Monitor the list of observed attribute for changes.
                 * @property observedAttributes
                 */
-                static get observedAttributes() {
+                observedAttributes() {
                     return ['modulename', 'objectname', 'objectwhere', 'objectid', 'singleimage', 'empty', 'mode'];
                 }
                 /**
@@ -101,14 +111,37 @@ var flexygo;
                     try {
                         let me = $(this);
                         me.removeAttr('manualInit');
+                        $(this).closest('flx-module').find('.flx-noInitContent').remove();
                         var defString;
                         var defObject;
                         defString = flexygo.history.getDefaults(this.objectName, me);
                         defObject = JSON.parse(flexygo.utils.parser.replaceAll(defString, "'", '"'));
                         let wcModule = me.closest('flx-module')[0];
-                        this.rObjectName = (this.objectName && this.objectId) ? this.objectName : (defObject) ? defObject.ObjectName : (wcModule.objectdefaults) ? wcModule.objectdefaults.ObjectName : '';
-                        this.rObjectId = (this.objectName && this.objectId) ? this.objectId : (defObject) ? defObject.ObjectId : (wcModule.objectdefaults) ? wcModule.objectdefaults.ObjectId : '';
-                        this.render();
+                        this.rObjectName = (this.objectName && this.objectId) ? this.objectName : (defObject && defObject.ObjectName) ? defObject.ObjectName : (wcModule.objectdefaults) ? wcModule.objectdefaults.ObjectName : '';
+                        this.rObjectId = (this.objectName && this.objectId) ? this.objectId : (defObject && defObject.ObjectId) ? defObject.ObjectId : (wcModule.objectdefaults) ? wcModule.objectdefaults.ObjectId : '';
+                        if (defObject && defObject.additionalWhere) {
+                            this.additionalWhere = defObject.additionalWhere;
+                        }
+                        else if (wcModule.objectdefaults && wcModule.objectdefaults.additionalWhere) {
+                            this.additionalWhere = wcModule.objectdefaults.additionalWhere;
+                        }
+                        if (defObject && defObject.ImageClassId) {
+                            this.imageClassId = defObject.ImageClassId;
+                        }
+                        else if (wcModule.objectdefaults && wcModule.objectdefaults.ImageClassId) {
+                            this.imageClassId = wcModule.objectdefaults.ImageClassId;
+                        }
+                        if ($(me).closest('.flx-slide.flx-slide-loading').length == 0) {
+                            this.render();
+                        }
+                        else {
+                            var loadSlideModal = setInterval(() => {
+                                if ($(me).closest('.flx-slide.flx-slide-fullLoaded').length > 0) {
+                                    this.render();
+                                    clearInterval(loadSlideModal);
+                                }
+                            }, 200);
+                        }
                     }
                     catch (ex) {
                         console.log(ex);
@@ -153,7 +186,13 @@ var flexygo;
                                 
                             </div>`;
                         }
-                        rendered += '<div class="im-pry-container im-wall im-transition"></div>';
+                        rendered += `<div class="im-pry-container im-wall im-transition im-background-container">`;
+                        if (!(this.mode.toLowerCase() == "view")) {
+                            rendered += `<span class="background-elements">
+                                    <i class="flx-icon icon-upload-1"></i> ${flexygo.localization.translate('upload.info')}
+                             </span>`;
+                        }
+                        rendered += `</div>`;
                         me.html(rendered);
                         me.find('label[method="upload"]').tooltip({ title: flexygo.localization.translate('imagemanager.upload'), placement: 'bottom', trigger: 'hover' });
                         me.find('button[method="downloadall"]').tooltip({ title: flexygo.localization.translate('imagemanager.downloadall'), placement: 'bottom', trigger: 'hover' });
@@ -181,36 +220,54 @@ var flexygo;
                 * @param {boolean} Main Image.
                 * @param {number} Order Number.
                 * @param {string} Path.
+                * @param {number} faceEncoding Number.
+                * @param {string} lastError String.
                 */
-                renderImage(imageId, name, descrip, classId, classDescrip, mainImage, orderNumber, path) {
+                renderImage(imageId, name, descrip, classId, classDescrip, mainImage, orderNumber, path, faceEncoding = 1, lastError = '') {
                     try {
                         let me = $(this);
                         var rendered;
                         var iconSize;
                         var iconEdit;
+                        var iconFaceEncoding;
+                        var error = 'Cant find any face on this picture yet';
+                        if (me.attr('mode')) {
+                            iconFaceEncoding = '';
+                            if (faceEncoding == 0) {
+                                if (lastError.length > 0) {
+                                    error = lastError;
+                                }
+                                iconFaceEncoding = '<div title="' + error + '" class="padding-left-s padding-top-s"><i class="flx-icon icon-warning txt-danger"> </i></div>';
+                            }
+                        }
+                        else {
+                            iconFaceEncoding = '';
+                        }
                         iconSize = (me.find('div.im-pry-container').width() > 250) ? 'icon-3x' : 'icon-2x';
                         iconEdit = (this.singleImage && mainImage) ? 'fa fa-image' : 'flx-icon icon-pencil';
                         rendered = `<div imageId="` + imageId + `" order="` + orderNumber + `" class="im-item im-transition" style="${this.mode.toLowerCase() == "view" ? 'cursor: initial' : ''}">
                                 <div method="" class="im-data im-transition">
-                                    <div method="mainimage" value="` + mainImage + `" class="ignore-drag im-mainimage im-transition">
+                                    <div method="mainimage" value="` + (mainImage ? mainImage : '') + `" class="ignore-drag im-mainimage im-transition ${this.mode.toLowerCase() == "recognition" ? 'hidden' : ''}">
                                         <i class="flx-icon icon-star im-item-corner-icon im-transition" flx-fw=""></i>
                                         <div class="im-item-corner im-transition"></div>
                                     </div>
                                     <div method="removeimage" class="ignore-drag im-removeimage im-transition ${this.mode.toLowerCase() == "view" ? 'hidden' : ''}">
                                         <i class="flx-icon flx-icon icon-document-remove" flx-fw=""></i>
+                                        
                                     </div>
+                                                ${iconFaceEncoding}
                                     <div class="im-data-container im-data-descrip im-transition">
                                         <span class="im-name im-data-item im-data-name im-transition size-l">` + name.toUpperCase() + `</span>
                                         <hr class="im-transition">
-                                        <span class="im-descrip im-data-item im-transition size-xs"><small>` + classDescrip.toUpperCase() + `</small></span>
+                                        <span class="im-descrip im-data-item im-transition size-xs"><small>` + (classDescrip ? classDescrip.toUpperCase() : '') + `</small></span>
                                     </div>
                                     <div  method="preview" class="ignore-drag im-data-container im-data-container-action im-data-preview im-transition"
-                                    ${this.mode.toLowerCase() == "view" ? 'style="margin: 15px calc(25%)"' : ''}
-                                     data-src="` + flexygo.utils.resolveUrl(path) + `" data-sub-html="<h3>` + name.toUpperCase() + `</h3><p>` + descrip + `</p>" >
+                                    ${this.mode.toLowerCase() == "view" || this.mode.toLowerCase() == "recognition" ? 'style="margin: 15px calc(25%)"' : ''}
+                                     data-src="` + flexygo.utils.resolveUrl(path) + `" data-sub-html="<h3>` + name.toUpperCase() + `</h3><p>` + (descrip ? descrip : '') + `</p>" >
                                         <img style="display:none;" src="` + flexygo.utils.resolveUrl(path) + `" />
                                         <i class="flx-icon icon-eye ` + iconSize + ` im-transition im-data-icon im-data-item" flx-fw=""></i>
                                     </div>
-                                    <div  method="edit" class="ignore-drag im-data-container im-data-container-action im-data-edit im-transition ${this.mode.toLowerCase() == "view" ? 'hidden' : ''}">
+                                    <div  method="edit" class="ignore-drag im-data-container im-data-container-action im-data-edit im-transition ${this.mode.toLowerCase() == "view" || this.mode.toLowerCase() == "recognition" ? 'hidden' : ''}">
                                         <i class="` + iconEdit + ` ` + iconSize + ` im-transition im-data-icon im-data-item" flx-fw=""></i>
                                     </div>
                                 </div>
@@ -256,7 +313,29 @@ var flexygo;
                 mainEvents() {
                     try {
                         let me = $(this);
-                        var dragDropZone;
+                        if (!(this.mode.toLowerCase() == "view")) {
+                            var dragDropZone = me.find('div.im-pry-container');
+                            dragDropZone.on('dragover', (ev) => {
+                                if (ev.originalEvent && ev.originalEvent.dataTransfer) {
+                                    ev.originalEvent.dataTransfer.dropEffect = 'copy';
+                                }
+                                dragDropZone.css('background-color', 'rgba(0,0,0,0.5)');
+                                dragDropZone.find('.dtc-container, .dtc-btn-container button').css('background-color', 'rgba(0,0,0,0.5)');
+                            }).on('dragleave', (ev) => {
+                                dragDropZone.css('background-color', '');
+                                dragDropZone.find('.dtc-container, .dtc-btn-container button').css('background-color', '');
+                            }).on('drop', (ev) => {
+                                ev.preventDefault();
+                                dragDropZone.css('background-color', '');
+                                dragDropZone.find('.dtc-container, .dtc-btn-container button').css('background-color', '');
+                                let dEvent = ev.originalEvent;
+                                for (var i = 0; i < dEvent.dataTransfer.files.length; i++) {
+                                    this.imagesPreRender = [];
+                                    this.imagesLength = dEvent.dataTransfer.files.length;
+                                    this.imageReader(dEvent.dataTransfer.files[i]);
+                                }
+                            });
+                        }
                         this.wall = new Freewall(me.find('div.im-wall'));
                         this.wall.reset({
                             selector: '.im-item',
@@ -308,6 +387,7 @@ var flexygo;
                                     this.closest('flx-imagemanager').orderImage(this);
                                 }, 700);
                             },
+                            //onGapFound: function () {}
                         });
                         this.wall.fitWidth();
                         this.wall.sortBy(function (a, b) {
@@ -322,6 +402,8 @@ var flexygo;
                             if ($(element).attr('type') === 'file' && method === 'upload') {
                                 if (element[0].files) {
                                     for (let fl of element[0].files) {
+                                        this.imagesPreRender = [];
+                                        this.imagesLength = element[0].files.length;
                                         this.imageReader(fl);
                                     }
                                     $(element).val('');
@@ -337,7 +419,12 @@ var flexygo;
                             value = $(element).attr('value');
                             if (method === 'opensettings' && value === 'settings') {
                                 if (this.rObjectName) {
-                                    flexygo.nav.openPage('edit', 'sysObjectImageSetting', "ObjectName = '" + this.rObjectName + "'", null, 'modal900x500', false, me);
+                                    if (this.mode == 'recognition') {
+                                        flexygo.nav.openPage('edit', 'sysObjectImageRecognitionSetting', "ObjectName = '" + this.rObjectName + "'", null, 'modal900x500', false, me);
+                                    }
+                                    else {
+                                        flexygo.nav.openPage('edit', 'sysObjectImageSetting', "ObjectName = '" + this.rObjectName + "'", null, 'modal900x500', false, me);
+                                    }
                                 }
                             }
                             if ($(this).find('div[imageid]').length <= 0 && (method === 'downloadall' || method === 'deleteall')) {
@@ -386,8 +473,14 @@ var flexygo;
                                 params = {
                                     'ObjectId': this.rObjectId,
                                     'ObjectName': this.rObjectName,
+                                    'AdditionalWhere': this.additionalWhere,
+                                    'ImageClassId': this.imageClassId,
                                 };
-                                flexygo.ajax.post('~/api/ImageManager', 'GetImages', params, (response) => {
+                                let url = '~/api/ImageManager';
+                                if (this.mode == 'recognition') {
+                                    url = '~/api/ImageRecognitionManager';
+                                }
+                                flexygo.ajax.post(url, 'GetImages', params, (response) => {
                                     if (response[0] && !response[0].imageError) {
                                         for (let image of response) {
                                             me.find('div[imageid="' + image.imageId + '"]').attr('order', image.orderNumber);
@@ -505,11 +598,21 @@ var flexygo;
                                 'ObjectId': this.rObjectId,
                                 'Name': name,
                                 'Base64': base64,
+                                'ImageClassId': this.imageClassId,
                             };
-                            flexygo.ajax.post('~/api/ImageManager', 'SetImage', params, (response) => {
+                            let url = '~/api/ImageManager';
+                            if (this.mode == 'recognition') {
+                                url = '~/api/ImageRecognitionManager';
+                            }
+                            flexygo.ajax.post(url, 'SetImage', params, (response) => {
                                 if (response && !response.imageError) {
-                                    this.renderImage(response.imageId, response.name, response.descrip, response.classId, response.classDescrip, response.mainImage, response.orderNumber, response.path);
-                                    flexygo.msg.success('imagemanager.uploaded');
+                                    this.imagesPreRender.push(response);
+                                    if (this.imagesLength === this.imagesPreRender.length) {
+                                        for (let file of this.imagesPreRender) {
+                                            this.renderImage(file.imageId, file.name, file.descrip, file.classId, file.classDescrip, file.mainImage, file.orderNumber, file.path, file.haveFaceEncoding, file.lastError);
+                                            flexygo.msg.success('imagemanager.uploaded');
+                                        }
+                                    }
                                 }
                                 else {
                                     if (!response.permissionError) {
@@ -540,11 +643,17 @@ var flexygo;
                                 'ObjectId': this.rObjectId,
                                 'ObjectName': this.rObjectName,
                                 'ImageId': imageId,
+                                'AdditionalWhere': this.additionalWhere,
+                                'ImageClassId': this.imageClassId,
                             };
-                            flexygo.ajax.post('~/api/ImageManager', 'GetImages', params, (response) => {
+                            let url = '~/api/ImageManager';
+                            if (this.mode == 'recognition') {
+                                url = '~/api/ImageRecognitionManager';
+                            }
+                            flexygo.ajax.post(url, 'GetImages', params, (response) => {
                                 if (response[0] && !response[0].imageError) {
                                     for (let image of response) {
-                                        this.renderImage(image.imageId, image.name, image.descrip, image.classId, image.classDescrip, image.mainImage, image.orderNumber, image.path);
+                                        this.renderImage(image.imageId, image.name, image.descrip, image.classId, image.classDescrip, image.mainImage, image.orderNumber, image.path, image.haveFaceEncoding, image.lastError);
                                     }
                                 }
                                 else {
@@ -593,7 +702,11 @@ var flexygo;
                             'OrderNumber': orderNumber,
                             'ObjectName': objectName,
                         };
-                        flexygo.ajax.post('~/api/ImageManager', 'UpdateImage', params, (response) => {
+                        let url = '~/api/ImageManager';
+                        if (this.mode == 'recognition') {
+                            url = '~/api/ImageRecognitionManager';
+                        }
+                        flexygo.ajax.post(url, 'UpdateImage', params, (response) => {
                             if (response && !response.imageError) {
                                 me.find('div.im-item div.im-data div.im-mainimage').attr('value', 'false').removeClass('im-mi-mainimage').find('div.im-item-corner').removeClass('im-mi-item-corner');
                                 me.find('div[imageid="' + response.imageId + '"]').find('div.im-data div.im-mainimage').attr('value', 'true').addClass('im-mi-mainimage').find('div.im-item-corner').addClass('im-mi-item-corner');
@@ -664,7 +777,11 @@ var flexygo;
                             'ImageId': imageId,
                             'ObjectName': objectName,
                         };
-                        flexygo.ajax.post('~/api/ImageManager', 'RemoveImage', params, (response) => {
+                        let url = '~/api/ImageManager';
+                        if (this.mode == 'recognition') {
+                            url = '~/api/ImageRecognitionManager';
+                        }
+                        flexygo.ajax.post(url, 'RemoveImage', params, (response) => {
                             if (response && !response.imageError) {
                                 me.find('div[imageid="' + imageId + '"]').remove();
                                 this.wall.fitWidth();
@@ -704,8 +821,14 @@ var flexygo;
                         params = {
                             'ObjectName': objectName,
                             'ObjectId': objectId,
+                            'AdditionalWhere': this.additionalWhere,
+                            'ImageClassId': this.imageClassId,
                         };
-                        flexygo.ajax.post('~/api/ImageManager', 'RemoveAllImages', params, (response) => {
+                        let url = '~/api/ImageManager';
+                        if (this.mode == 'recognition') {
+                            url = '~/api/ImageRecognitionManager';
+                        }
+                        flexygo.ajax.post(url, 'RemoveAllImages', params, (response) => {
                             if (response && !response.imageError) {
                                 me.find('div[class="im-pry-container"]').empty();
                                 this.wall.fitWidth();
@@ -740,13 +863,18 @@ var flexygo;
                 */
                 downloadAllImages(objectName, objectId) {
                     try {
-                        let me = $(this);
                         var params;
                         params = {
                             'ObjectName': objectName,
                             'ObjectId': objectId,
+                            'AdditionalWhere': this.additionalWhere,
+                            'ImageClassId': this.imageClassId,
                         };
-                        flexygo.ajax.post('~/api/ImageManager', 'DownloadAllImages', params, (response) => {
+                        let url = '~/api/ImageManager';
+                        if (this.mode == 'recognition') {
+                            url = '~/api/ImageRecognitionManager';
+                        }
+                        flexygo.ajax.post(url, 'DownloadAllImages', params, (response) => {
                             if (response && !response.imageError) {
                                 flexygo.utils.execDynamicCode(response.javacode);
                             }
@@ -775,13 +903,75 @@ var flexygo;
                         var reader;
                         reader = new FileReader();
                         reader.onload = (e) => {
-                            this.setImage(file.name, reader.result);
+                            var tempImage = new Image();
+                            tempImage.onload = (ev) => {
+                                let imgWidth, imgHeight;
+                                imgWidth = tempImage.naturalWidth;
+                                imgHeight = tempImage.naturalHeight;
+                                var imgConf = new flexygo.obj.Entity('sysObjectImageSetting', 'ObjectName = \'' + this.rObjectName + '\'');
+                                imgConf.read();
+                                let cnfHeight, cnfWidth, ratio;
+                                cnfWidth = (imgConf.data['MaxWidth'].Value ? imgConf.data['MaxWidth'].Value : imgWidth);
+                                cnfHeight = (imgConf.data['MaxHeight'].Value ? imgConf.data['MaxHeight'].Value : imgHeight);
+                                ratio = Math.min(cnfWidth / imgWidth, cnfHeight / imgHeight);
+                                ratio = (ratio > 1 ? 1 : ratio);
+                                var canvas = document.createElement('canvas');
+                                canvas.width = imgWidth * ratio;
+                                canvas.height = imgHeight * ratio;
+                                let ctx = canvas.getContext('2d');
+                                ctx.drawImage(tempImage, 0, 0, canvas.width, canvas.height);
+                                let cnfCompression = this.setCompression(imgConf.data['Compression'].Value, file.type, canvas, ctx);
+                                this.setImage(file.name, canvas.toDataURL(file.type, cnfCompression));
+                            };
+                            tempImage.src = reader.result;
                         };
                         reader.readAsDataURL(file);
                     }
                     catch (ex) {
                         console.log(ex);
                     }
+                }
+                setCompression(compression, fileType, canvas, ctx) {
+                    if (!compression || compression === 0)
+                        return null;
+                    if (fileType === 'image/png') {
+                        let optionsgRgb = {};
+                        switch (compression) {
+                            //Low
+                            case 1:
+                                optionsgRgb.colors = 192;
+                                break;
+                            //Medium
+                            case 2:
+                                optionsgRgb.colors = 128;
+                                break;
+                            //High
+                            case 3:
+                                optionsgRgb.colors = 64;
+                                break;
+                        }
+                        let rgbQuant = new RgbQuant(optionsgRgb);
+                        rgbQuant.sample(canvas);
+                        let img = rgbQuant.reduce(canvas);
+                        let uint = new Uint8ClampedArray(img.buffer);
+                        let imageData = new ImageData(uint, canvas.width, canvas.height);
+                        ctx.putImageData(imageData, 0, 0);
+                        canvas.getContext('2d').drawImage(canvas, 0, 0, canvas.width, canvas.height);
+                    }
+                    else {
+                        switch (compression) {
+                            //Low
+                            case 1:
+                                return 0.75;
+                            //Medium
+                            case 2:
+                                return 0.50;
+                            //High
+                            case 3:
+                                return 0.25;
+                        }
+                    }
+                    return null;
                 }
                 /**
                * Get image classification.
@@ -815,6 +1005,8 @@ var flexygo;
                             thumbnail: true,
                             animateThumb: true,
                             share: false,
+                            rotate: true,
+                            rotateLeft: false,
                             //showThumbByDefault: false,
                             preload: 2
                         });
@@ -822,6 +1014,73 @@ var flexygo;
                     catch (ex) {
                         console.log(ex);
                     }
+                }
+                /**
+                * Find faces in picture and try yo recognice it with known faces.
+                * @method showFaces
+                * @param {string} file.
+                * @param {string} objectname.
+                * @param {number} tolerance.
+                * @param {string} filterids.
+                * @param {boolean} isb64.
+                * @param {Jquery} e.
+                */
+                showFaces(file, objectname, tolerance, filterids, isb64, e) {
+                    let processName = 'FindFaces';
+                    if (isb64) {
+                        processName = 'FindFacesB64';
+                    }
+                    let p = new flexygo.Process(processName);
+                    let params = [];
+                    params.push({ Key: 'File', Value: file });
+                    params.push({ Key: 'ObjectName', Value: objectname });
+                    params.push({ Key: 'Tolerance', Value: tolerance });
+                    params.push({ Key: 'FilterIds', Value: filterids });
+                    p.run(params, (r) => {
+                        let histObj = new flexygo.nav.FlexygoHistory();
+                        histObj.targetid = 'popup';
+                        let modal = flexygo.targets.createContainer(histObj, true, e);
+                        if (!modal) {
+                            return;
+                        }
+                        modal.empty();
+                        modal.closest('.ui-dialog').find('.ui-dialog-title').html(r.Data.Faces.length + ' faces found.');
+                        let canvas = $('<canvas></canvas>')[0];
+                        let context = canvas.getContext('2d');
+                        var img = new Image;
+                        img.onload = function () {
+                            canvas.width = img.width;
+                            canvas.height = img.height;
+                            context.drawImage(img, 0, 0);
+                            let colorIndex = 0;
+                            r.Data.Faces.forEach(function (face) {
+                                if (colorIndex >= flexygo.utils.colors.length) {
+                                    colorIndex = 0;
+                                }
+                                context.strokeStyle = flexygo.utils.hexToRgbA(flexygo.utils.colors[colorIndex], '1');
+                                context.lineWidth = 3;
+                                context.strokeRect(face.Left, face.Top, face.Right - face.Left, face.Bottom - face.Top);
+                                context.fillStyle = flexygo.utils.hexToRgbA(flexygo.utils.colors[colorIndex], '0.6');
+                                context.fillRect(face.Left, face.Top, face.Right - face.Left, face.Bottom - face.Top);
+                                let faceItm = $('<div style="float:left;margin-right:10px;"/>');
+                                faceItm.css('border', 'solid 2px ' + flexygo.utils.hexToRgbA(flexygo.utils.colors[colorIndex], '1'));
+                                faceItm.css('background-color', flexygo.utils.hexToRgbA(flexygo.utils.colors[colorIndex], '0.6'));
+                                faceItm.data(face);
+                                if (face.MostPosibleObject) {
+                                    faceItm.html(face.MostPosibleObject.ObjectName + ' ' + face.MostPosibleObject.ObjectId + '<br/> Dist: ' + face.MostPosibleObject.Distance);
+                                }
+                                else {
+                                    faceItm.html('Unknown');
+                                }
+                                modal.append(faceItm);
+                                colorIndex += 1;
+                            });
+                            let imgH = $('<img style="width:100%;margin-top:10px"/>');
+                            imgH.attr('src', canvas.toDataURL());
+                            modal.append(imgH);
+                        };
+                        img.src = flexygo.utils.resolveUrl(file);
+                    });
                 }
             }
             wc.FlxImageManagerElement = FlxImageManagerElement;

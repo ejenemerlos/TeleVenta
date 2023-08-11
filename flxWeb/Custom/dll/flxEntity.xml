@@ -6,6 +6,22 @@ flxEntity
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
 <member name="T:FLEXYGO.Objects.ICollection">
  <summary>
  Interface ICollection
@@ -218,6 +234,14 @@ flxEntity
  <param name="str">The string.</param>
  <returns>System.String formatted with invariant culture.</returns>
 </member>
+<member name="M:FLEXYGO.Objects.EntityCollection.ParseWithDefaults(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parses the string {{property}} against default values and object properties.
+ " The {{ObjectName}} is ok " would result in "The Client is ok"
+ </summary>
+ <param name="sqlSentence">The string.</param>
+ <returns>System.String formatted with invariant culture.</returns>
+</member>
 <member name="M:FLEXYGO.Objects.EntityCollection.Properties">
  <summary>
  Gets the Property secured collection.
@@ -233,21 +257,21 @@ flxEntity
  </summary>
  <value>The get object token.</value>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.ProcessCollection">
+<member name="M:FLEXYGO.Objects.EntityCollection.ProcessCollection(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the EntityCollection process collection.
  </summary>
  <returns>The ObjectProcessCollection.</returns>
  <exception cref="T:System.Exception">Error Obtaining processes.</exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.NavigationNodes(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType)">
+<member name="M:FLEXYGO.Objects.EntityCollection.NavigationNodes(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets Navigation Nodes Based on Reports, Process, Related Objects and actions.
  </summary>
  <param name="NodeType">A Node Type (Action, Process, Report, Object)</param>
  <returns>NavigationNodes.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.Reports">
+<member name="M:FLEXYGO.Objects.EntityCollection.Reports(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the EntityCollection Reports collection.
  </summary>
@@ -417,7 +441,7 @@ Returns Where Keys String.
  </summary>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetToolBar(FLEXYGO.Environment.ModuleToolbar)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetToolBar(FLEXYGO.Environment.ModuleToolbar,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Process Toolbar with Object Values
  </summary>
@@ -445,7 +469,7 @@ Returns Where Keys String.
  </summary>
  <returns>The SQL Data Sentence.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetPageData(System.Int32,System.Int32,System.Boolean,System.String,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetPageData(System.Int32,System.Int32,System.Boolean,System.String,System.Boolean,System.Boolean)">
  <summary>
  Gets indicated page DataTable based on page and page size.
  </summary>
@@ -457,7 +481,7 @@ Returns Where Keys String.
  </summary>
  <returns>a DataTable.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetPageData(System.Int32,System.Int32,System.String,System.Boolean,System.String,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetPageData(System.Int32,System.Int32,System.String,System.Boolean,System.String,System.Boolean,System.Boolean)">
  <summary>
  Gets the data based on page, page size and where sentence.
  </summary>
@@ -469,7 +493,7 @@ Returns Where Keys String.
  </summary>
  <returns>a DataTable.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetPageSQL(System.String,System.Boolean,System.String,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetPageSQL(System.String,System.Boolean,System.String,System.Boolean,System.Boolean)">
  <summary>
  Gets the SQL based on where sentence and order by
  </summary>
@@ -545,7 +569,7 @@ Returns Where Keys String.
  <param name="TemplateType">Type of the template.</param>
  <returns>Template.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetTemplateType(System.String,System.Int32,System.Int32,System.String,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetTemplateType(System.String,System.Int32,System.Int32,System.String,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder},System.String,System.Boolean,System.Collections.Generic.Dictionary{System.String,FLEXYGO.Objects.Settings.TemplateGroup})">
  <summary>
  Gets a template based on the TemplateType.
  If object does not have a template for that mode it will get a system default template definition
@@ -572,7 +596,7 @@ Returns Where Keys String.
  <returns>Template.</returns>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection.GetTemplate(System.String,System.Boolean,System.Int32,System.Int32,System.String,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder}@)">
+<member name="M:FLEXYGO.Objects.EntityCollection.GetTemplate(System.String,System.Boolean,System.Int32,System.Int32,System.String,System.Collections.Generic.List{FLEXYGO.Objects.Settings.PropertyOrder}@,System.Collections.Generic.Dictionary{System.String,FLEXYGO.Objects.Settings.TemplateGroup})">
  <summary>
  Gets a template based on the Template Id.
  </summary>
@@ -641,14 +665,14 @@ Returns Where Keys String.
  <param name="aFilterSettings">a filer settings.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection._buildSQL(System.String,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection._buildSQL(System.String,System.Boolean,System.Boolean,System.Boolean)">
  <summary>
  Builds the SQL Sentence.
  </summary>
  <param name="aWhere">a Where sentence.</param>
  <param name="withDescripts">Add left join with combo SQL for get Descrip data.</param>
 </member>
-<member name="M:FLEXYGO.Objects.EntityCollection._buildSQLCollection(System.Boolean,System.Boolean,System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityCollection._buildSQLCollection(System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
  <summary>
  Builds the SQL collection.
  </summary>
@@ -805,7 +829,7 @@ Returns Where Keys String.
  </summary>
  <value>The item.</value>
 </member>
-<member name="M:FLEXYGO.Objects.IEntity.Reports">
+<member name="M:FLEXYGO.Objects.IEntity.Reports(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the reports collection.
  </summary>
@@ -817,7 +841,7 @@ Returns Where Keys String.
  </summary>
  <returns>A collection of ToolBar buttons .</returns>
 </member>
-<member name="M:FLEXYGO.Objects.IEntity.ProcessCollection">
+<member name="M:FLEXYGO.Objects.IEntity.ProcessCollection(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the Process collection.
  </summary>
@@ -829,7 +853,7 @@ Returns Where Keys String.
  </summary>
  <value>The parent object defaults.</value>
 </member>
-<member name="M:FLEXYGO.Objects.IEntity.NavigationNode(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType)">
+<member name="M:FLEXYGO.Objects.IEntity.NavigationNode(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets Navigation Nodes Based on Reports, Process, Related Objects and actions.
  </summary>
@@ -867,7 +891,14 @@ Returns Where Keys String.
  <param name="str">The string.</param>
  <returns>System.String formatted with invariant culture.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.IEntity.GetToolBar(FLEXYGO.Environment.ModuleToolbar)">
+<member name="M:FLEXYGO.Objects.IEntity.ParseWithDefaults(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parses the string {{property}} against default values of page.
+ </summary>
+ <param name="str">The string.</param>
+ <returns>System.String formatted with invariant culture.</returns>
+</member>
+<member name="M:FLEXYGO.Objects.IEntity.GetToolBar(FLEXYGO.Environment.ModuleToolbar,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Process Toolbar with Object Values
  </summary>
@@ -1341,6 +1372,14 @@ Returns JSon string from entityObject DataTable.
  <param name="str">The string.</param>
  <returns>System.String formatted with invariant culture.</returns>
 </member>
+<member name="M:FLEXYGO.Objects.EntityObject.ParseWithDefaults(System.String,FLEXYGO.Utilities.General.KeyValuePairs[])">
+ <summary>
+ Parse sql sentence with defaults of page.
+ </summary>
+ <param name="sqlSentence">Sql sentence to parser.</param>
+ <param name="Defaults">The defaults.</param>
+ <returns>String.</returns>
+</member>
 <member name="M:FLEXYGO.Objects.EntityObject.Fields">
  <summary>
  Gets the Fields Collection.
@@ -1364,7 +1403,7 @@ Returns JSon string from entityObject DataTable.
  <param name="IncludeHasDefinition">To include only properties with property definition in object_Properties Table</param>
  <return>ObjectPropertyCollection.</return>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.Reports">
+<member name="M:FLEXYGO.Objects.EntityObject.Reports(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the object reports collection.
  </summary>
@@ -1378,14 +1417,14 @@ Returns JSon string from entityObject DataTable.
  <returns>The actions collection.</returns>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.ProcessCollection">
+<member name="M:FLEXYGO.Objects.EntityObject.ProcessCollection(FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets the object process collection.
  </summary>
  <returns>The object process collection.</returns>
  <exception cref="T:System.Exception">Error Obtaining processes.</exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.NavigationNodes(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType)">
+<member name="M:FLEXYGO.Objects.EntityObject.NavigationNodes(FLEXYGO.User.Interface.UserNavigateNodes.eNodeType,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Gets Navigation Nodes Based on Reports, Process, Related Objects and actions.
  </summary>
@@ -1400,7 +1439,7 @@ Returns JSon string from entityObject DataTable.
  <exception cref="T:System.Exception">Found more then one Object for the same read condition. </exception>
  <exception cref="T:System.Exception">Error Reading object. </exception>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.Insert(System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityObject.Insert(System.Boolean,System.String,System.String)">
  <summary>
  Performs an insert.
  </summary>
@@ -1423,7 +1462,7 @@ Returns JSon string from entityObject DataTable.
  logs every time an object is viewed.
  </summary>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.Update(System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityObject.Update(System.Boolean,System.String,System.String)">
  <summary>
  Runs the update process.
  </summary>
@@ -1464,6 +1503,15 @@ gets SQL sentence for saving changes into log
  <param name="UpdateProcessName">The Update Process Id.</param>
  <returns><c>true</c> if updated, <c>false</c> otherwise.</returns>
 </member>
+<member name="M:FLEXYGO.Objects.EntityObject.UpdateProcessTable(FLEXYGO.Objects.Settings.ObjectSettings.eUpdateType,System.String,System.String)">
+ <summary>
+ Runs update establishing the update method we wanto to use. enables to override default update method
+ </summary>
+ <param name="UpdateType">Update Type.</param>
+ <param name="UpdateProcessName">The Update Process Id.</param>
+ <param name="TableName">The table for update.</param>
+ <returns><c>true</c> if updated, <c>false</c> otherwise.</returns>
+</member>
 <member name="M:FLEXYGO.Objects.EntityObject.UpdateWithLastValues">
  <summary>
  Updates with last values.
@@ -1479,7 +1527,7 @@ gets SQL sentence for saving changes into log
  <param name="DeleteProcessName">The Delete Process Name.</param>
  <returns><c>true</c> if deleted, <c>false</c> otherwise.</returns>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.Delete(System.Boolean)">
+<member name="M:FLEXYGO.Objects.EntityObject.Delete(System.Boolean,System.String,System.String)">
  <summary>
  Runs delete Process
  </summary>
@@ -1634,7 +1682,7 @@ gets SQL sentence for saving changes into log
  Reloads the related objects.
  </summary>
 </member>
-<member name="M:FLEXYGO.Objects.EntityObject.GetToolBar(FLEXYGO.Environment.ModuleToolbar)">
+<member name="M:FLEXYGO.Objects.EntityObject.GetToolBar(FLEXYGO.Environment.ModuleToolbar,FLEXYGO.Utilities.General.KeyValuePairs[])">
  <summary>
  Process Toolbar with Object Values
  </summary>
@@ -1655,6 +1703,17 @@ gets SQL sentence for saving changes into log
  or
  Report formula {0}
  </exception>
+</member>
+<member name="M:FLEXYGO.Objects.EntityObject.GetCrystalReportDocumentStream(System.String,System.String,FLEXYGO.Reporting.eReportModes,System.Collections.Generic.List{FLEXYGO.Utilities.General.KeyValuePairs})">
+ <summary>
+ Gets a crystal report document stream linked to the object.
+ </summary>
+ <param name="ReportName">Name of the report.</param>
+ <param name="ReportSelectionFormula">The report selection formula.</param>
+ <param name="ReportMode">A report mode.</param>
+ <param name="ReportParams">The report parameters.</param>
+ <returns>System.IO.Stream.</returns>
+ <exception cref="T:FLEXYGO.Exceptions.LocalizedException"></exception>
 </member>
 <member name="M:FLEXYGO.Objects.EntityObject._setFilters">
  <summary>
@@ -1699,6 +1758,13 @@ runs insert process.
  <param name="DeleteProcessName">The delete process Name.</param>
  <param name="aIgnoreSec">if set to <c>true</c> security will be ignored.</param>
  <returns><c>true</c> if delete works correctly, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Objects.EntityObject.configTimeout(System.String)">
+ <summary>
+ Sets the configured timeout
+ </summary>
+ <param name="ProcessName">Process Name.</param>
+ <exception cref="T:System.Exception"></exception>
 </member>
 <member name="M:FLEXYGO.Objects.EntityObject._read(System.String,System.String)">
  <summary>
@@ -2926,22 +2992,6 @@ Create a clone of this VarsElement object
  Class GipeStepConfiguration
  </summary>
 </member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member>
 <member name="T:FLEXYGO.Processing.ProcessManager">
  <summary>
  Class ProcessManager.
@@ -2980,7 +3030,21 @@ Create a clone of this VarsElement object
  <returns>ProcessHelper.</returns>
  <exception cref="T:System.Exception"></exception>
 </member>
-<member name="M:FLEXYGO.Processing.ProcessManager.GetParamList(FLEXYGO.Utilities.General.BaseCollection)">
+<member name="M:FLEXYGO.Processing.ProcessManager.runProcessChain(FLEXYGO.Objects.IEntity,FLEXYGO.Utilities.General.KeyValuePairs[],System.String)">
+ <summary>
+ Runs the process and every related subprocess.
+ </summary>
+ <returns>ProcessHelper.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.Processing.ProcessManager.runProcessChainFromUntil(FLEXYGO.Objects.IEntity,FLEXYGO.Utilities.General.KeyValuePairs[],System.String,System.String)">
+ <summary>
+ Runs the process and every related subprocess until the UntilProcess which isn't executed.
+ </summary>
+ <returns>ProcessHelper.</returns>
+ <exception cref="T:System.Exception"></exception>
+</member>
+<member name="M:FLEXYGO.Processing.ProcessManager.GetParamList(FLEXYGO.Utilities.General.BaseCollection,System.String)">
  <summary>
  Gets the process parameter list.
  </summary>
@@ -3002,7 +3066,7 @@ Create a clone of this VarsElement object
  <param name="ParameterTypeName">The parameter type.</param>
  <returns>System.String.</returns>
 </member>
-<member name="M:FLEXYGO.Processing.ProcessManager._getDllProcessParams(FLEXYGO.Utilities.General.BaseCollection@)">
+<member name="M:FLEXYGO.Processing.ProcessManager._getDllProcessParams(FLEXYGO.Utilities.General.BaseCollection@,System.String)">
  <summary>
  Gets the DLL process parameters.
  </summary>
@@ -3179,6 +3243,26 @@ Create a clone of this VarsElement object
  JSCode to execute
  </summary>
 </member>
+<member name="F:FLEXYGO.Processing.ProcessManager.FilterAction.PropertyName">
+ <summary>
+ The Propert yName
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.FilterAction.changeSQL">
+ <summary>
+ Flag for change SQL
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.FilterAction.newSQL">
+ <summary>
+ The new SQL
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.FilterAction.newSqlItems">
+ <summary>
+ The new SQL items
+ </summary>
+</member>
 <member name="T:FLEXYGO.Processing.ProcessManager.ProcessHelper">
  <summary>
  Class ProcessHelper.
@@ -3202,6 +3286,21 @@ Create a clone of this VarsElement object
 <member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.LastException">
  <summary>
  The last exception
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.LastAfterProcessName">
+ <summary>
+ Tells the last executed process that comes after having already done an insertion/update/delete
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.LastProcessName">
+ <summary>
+ Tells the last executed process
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.MoreProcesses">
+ <summary>
+ Tells if the process ended to execute more processes by js
  </summary>
 </member>
 <member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.JSCode">
@@ -3232,6 +3331,11 @@ Create a clone of this VarsElement object
 <member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.ConfToken">
  <summary>
  configuration token.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Processing.ProcessManager.ProcessHelper.LastExecutedProcess">
+ <summary>
+ Lasst executed process of a js proceess cahin
  </summary>
 </member>
 </members>

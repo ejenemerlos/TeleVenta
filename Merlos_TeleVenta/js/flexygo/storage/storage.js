@@ -17,6 +17,14 @@ var flexygo;
         selection.getArray = getArray;
         function setArray(object, selArr) {
             flexygo.storage.local.add('selection-' + object.toLowerCase(), selArr);
+            let ev = {
+                class: "selection",
+                type: "changed",
+                sender: null,
+                masterIdentity: object,
+                detailIdentity: selArr
+            };
+            flexygo.events.trigger(ev);
             return true;
         }
         selection.setArray = setArray;
@@ -32,7 +40,7 @@ var flexygo;
         }
         selection.add = add;
         function appendArray(object, selArr) {
-            let newArr = flexygo.selection.getArray(object).concat(selArr);
+            let newArr = selArr;
             //remove duplicates
             for (var i = 0; i < newArr.length; ++i) {
                 for (var j = i + 1; j < newArr.length; ++j) {
@@ -55,6 +63,14 @@ var flexygo;
         }
         selection.remove = remove;
         function clear(object) {
+            let ev = {
+                class: "selection",
+                type: "changed",
+                sender: null,
+                masterIdentity: object,
+                detailIdentity: null
+            };
+            flexygo.events.trigger(ev);
             flexygo.storage.local.remove('selection-' + object.toLowerCase());
         }
         selection.clear = clear;

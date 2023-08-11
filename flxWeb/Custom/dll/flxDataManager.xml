@@ -6,6 +6,75 @@ flxDataManager
 </name>
 </assembly>
 <members>
+<member name="T:FLEXYGO.My.Resources.Resources">
+<summary>
+  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
+<summary>
+  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
+</summary>
+</member>
+<member name="P:FLEXYGO.My.Resources.Resources.Culture">
+<summary>
+  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
+  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
+</summary>
+</member>
+<member name="P:FLEXYGO.Extends.LinkedServers">
+ <summary>
+ Gets the application settings.
+ </summary>
+ <value>The application settings.</value>
+</member>
+<member name="T:FLEXYGO.Extends.LinkedServer">
+ <summary>
+ Class Setting.
+ </summary>
+</member>
+<member name="F:FLEXYGO.Extends.LinkedServer.ConnectionStringName">
+ <summary>
+ The Setting identifier
+ </summary>
+</member>
+<member name="T:FLEXYGO.Extends.LinkedServerCollection">
+ <summary>
+ Settings Class.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Extends.LinkedServerCollection.#ctor">
+ <summary>
+ Initializes a new instance of the <see cref="T:FLEXYGO.Extends.LinkedServerCollection"/> class.
+ </summary>
+</member>
+<member name="M:FLEXYGO.Extends.LinkedServerCollection.Add(FLEXYGO.Extends.LinkedServer)">
+ <summary>
+ Adds the Setting object to the Collection using SettingId as  Key.
+ </summary>
+ <param name="Server">A LinkedServer.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Extends.LinkedServerCollection.Remove(FLEXYGO.Extends.LinkedServer)">
+ <summary>
+ Removes the Setting object from the Collection using SettingId as Key.
+ </summary>
+ <param name="Server">A LinkedServer.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Extends.LinkedServerCollection.Contains(System.String)">
+ <summary>
+ Checks  if Setting object exists in Collection using SettingName.
+ </summary>
+ <param name="ConnectionStringName">The Connection String Name Name.</param>
+ <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
+</member>
+<member name="M:FLEXYGO.Extends.LinkedServerCollection._loadSettings">
+ <summary>
+ loads the Settings.
+ </summary>
+ <exception cref="T:System.Exception">Error Loading Settings.</exception>
+</member>
 <member name="P:FLEXYGO.Data.OracleConnector.ParameterNamePrefix">
  <summary>
  Returns a prefix string for parameter names
@@ -454,6 +523,11 @@ flxDataManager
  The _ keep open
  </summary>
 </member>
+<member name="F:FLEXYGO.Data.DataManager._ParseLinkedServers">
+ <summary>
+ The _ParseLinkedServers
+ </summary>
+</member>
 <member name="F:FLEXYGO.Data.DataManager._SQLInstructions">
  <summary>
  The _ SQL instructions
@@ -535,11 +609,17 @@ flxDataManager
  </summary>
  <value><c>true</c> if [keep open]; otherwise, <c>false</c>.</value>
 </member>
+<member name="P:FLEXYGO.Data.DataManager.ParseLinkedServers">
+ <summary>
+ Parse Linked servers in SQL Statement
+ </summary>
+ <value><c>true</c> if [parse linked server]; otherwise, <c>false</c>.</value>
+</member>
 <member name="P:FLEXYGO.Data.DataManager.Timeout">
  <summary>
- Gets or sets the timeout.
+ Gets or sets the timeout in seconds.
  </summary>
- <value>The timeout.</value>
+ <value>The timeout in seconds.</value>
 </member>
 <member name="P:FLEXYGO.Data.DataManager.CurrentDataAdapter">
  <summary>
@@ -2279,22 +2359,6 @@ Obtains a Data reader based on a SQL sentence.
  </summary>
  <param name="UserConnStringId">The UserConnStringId.</param>
  <returns><c>true</c> if ok, <c>false</c> otherwise.</returns>
-</member>
-<member name="T:FLEXYGO.My.Resources.Resources">
-<summary>
-  Clase de recurso fuertemente tipado, para buscar cadenas traducidas, etc.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.ResourceManager">
-<summary>
-  Devuelve la instancia de ResourceManager almacenada en caché utilizada por esta clase.
-</summary>
-</member>
-<member name="P:FLEXYGO.My.Resources.Resources.Culture">
-<summary>
-  Reemplaza la propiedad CurrentUICulture del subproceso actual para todas las
-  búsquedas de recursos mediante esta clase de recurso fuertemente tipado.
-</summary>
 </member>
 </members>
 </doc>

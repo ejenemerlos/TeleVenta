@@ -36,13 +36,13 @@ var flexygo;
                     this.additionalWhere = null;
                     this.cnnString = null;
                     this.timer = null;
+                    this.scrollTopPosition = null;
                 }
                 /**
                * Fires when element is attached to DOM
                * @method connectedCallback
                */
                 connectedCallback() {
-                    this.connected = true;
                     let element = $(this);
                     let propName = element.attr('property');
                     if (propName && flexygo.utils.isBlank(this.options)) {
@@ -89,6 +89,97 @@ var flexygo;
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.SQLDisplayField = SQLDisplayField;
+                    }
+                    let AllowNewObject = element.attr('AllowNewObject');
+                    if (AllowNewObject && AllowNewObject !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.AllowNewObject = AllowNewObject;
+                    }
+                    let AllowNewReturnFields = element.attr('AllowNewReturnFields');
+                    if (AllowNewReturnFields && AllowNewReturnFields !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.AllowNewReturnFields = AllowNewReturnFields;
+                    }
+                    let AllowNewFunction = element.attr('AllowNewFunction');
+                    if (AllowNewFunction && AllowNewFunction !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.AllowNewFunction = AllowNewFunction;
+                    }
+                    let AllowNewDefaults = element.attr('AllowNewDefaults');
+                    if (AllowNewDefaults && AllowNewDefaults !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.AllowNewDefaults = AllowNewDefaults;
+                    }
+                    let ObjNameLink = element.attr('ObjNameLink');
+                    if (ObjNameLink && ObjNameLink !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.ObjNameLink = ObjNameLink;
+                    }
+                    let ObjWhereLink = element.attr('ObjWhereLink');
+                    if (ObjWhereLink && ObjWhereLink !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.ObjWhereLink = ObjWhereLink;
+                    }
+                    let ObjModeLink = element.attr('ObjModeLink');
+                    if (ObjModeLink && ObjModeLink !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.ObjModeLink = ObjModeLink;
+                    }
+                    let PageNameLink = element.attr('PageNameLink');
+                    if (PageNameLink && PageNameLink !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.PageNameLink = PageNameLink;
+                    }
+                    let TargetIdLink = element.attr('TargetIdLink');
+                    if (TargetIdLink && TargetIdLink !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.TargetIdLink = TargetIdLink;
+                    }
+                    let SearchCollection = element.attr('SearchCollection');
+                    if (SearchCollection && SearchCollection !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.SearchCollection = SearchCollection;
+                    }
+                    let SearchReturnFields = element.attr('SearchReturnFields');
+                    if (SearchReturnFields && SearchReturnFields !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.SearchReturnFields = SearchReturnFields;
+                    }
+                    let SearchWhere = element.attr('SearchWhere');
+                    if (SearchWhere && SearchWhere !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.SearchWhere = SearchWhere;
+                    }
+                    let SearchFunction = element.attr('SearchFunction');
+                    if (SearchFunction && SearchFunction !== '') {
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.SearchFunction = SearchFunction;
                     }
                     if (typeof element.attr('Required') !== 'undefined') {
                         if (!this.options) {
@@ -148,6 +239,23 @@ var flexygo;
                         }
                         this.options.Template = Template.html();
                         Template.remove();
+                    }
+                    let Items = element.find('option');
+                    if (Items.length > 0) {
+                        let arr = [];
+                        for (let opt = 0; opt < Items.length; opt++) {
+                            let obj = {};
+                            if ($(Items[opt]).attr('value')) {
+                                obj[element.attr('SQLValueField')] = $(Items[opt]).attr('value');
+                            }
+                            obj[element.attr('SQLDisplayField')] = $(Items[opt]).html();
+                            arr.push(obj);
+                        }
+                        if (!this.options) {
+                            this.options = new flexygo.api.ObjectProperty();
+                        }
+                        this.options.DropDownValues = arr;
+                        Items.remove();
                     }
                     let HelpId = element.attr('HelpId');
                     if (HelpId && HelpId !== '') {
@@ -216,6 +324,7 @@ var flexygo;
                     if (Value && Value !== '') {
                         this.setValue(Value, Text);
                     }
+                    this.connected = true;
                 }
                 disconnectedCallback() {
                     let element = $(this);
@@ -224,13 +333,6 @@ var flexygo;
                         element.html('<template/>');
                         element.find('template').html(this.options.Template);
                     }
-                }
-                /**
-               * Array of observed attributes.
-               * @property observedAttributes {Array}
-               */
-                static get observedAttributes() {
-                    return ['type', 'property', 'objectname', 'viewname', 'sqlvaluefield', 'sqldisplayfield', 'required', 'disabled', 'requiredmessage', 'style', 'class', 'placeholder', 'iconclass', 'template', 'helpid', 'hide', 'additionalwhere', 'sqlfilter', 'pagesize', 'validatormessage', 'cnnstring'];
                 }
                 /**
                * Fires when the attribute value of the element is changed.
@@ -304,19 +406,21 @@ var flexygo;
                             this.input.prop('disabled', this.options.Locked);
                             element.find('div.input-group-btn .flx-caret').hide();
                             element.find('div.input-group-btn .flxallownew').hide();
+                            element.find('div.input-group-btn .flx-icon.icon-search').parent().hide();
                             if (element.find('div.input-group-btn .btn:visible').length == 0) {
                                 if (!element.find('span.input-group-addon').length) {
                                     element.find('div').first().removeClass('input-group');
                                 }
-                                else {
-                                    this.input.css({ 'border-top-right-radius': '3px', 'border-bottom-right-radius': '3px' });
-                                }
+                                //else {
+                                //    this.input.css({ 'border-top-right-radius': '3px', 'border-bottom-right-radius': '3px' });
+                                //}
                             }
                         }
                         else {
                             this.options.Locked = false;
                             element.find('div.input-group-btn .flx-caret').show();
                             element.find('div.input-group-btn .flxallownew').show();
+                            element.find('div.input-group-btn .flx-icon.icon-search').parent().show();
                             element.find('div').first().addClass('input-group');
                             this.input.css({ 'border-top-right-radius': '', 'border-bottom-right-radius': '' });
                         }
@@ -340,14 +444,17 @@ var flexygo;
                             this.refresh();
                         }
                     }
-                    if (attrName.toLowerCase() === 'class' && newVal && newVal !== '') {
+                    if (attrName.toLowerCase() === 'class' && element.attr('Control-Class') !== newVal && newVal != oldVal) {
                         if (!this.options) {
                             this.options = new flexygo.api.ObjectProperty();
                         }
                         this.options.CssClass = newVal;
                         if (element.attr('Control-Class') !== this.options.CssClass) {
-                            element.attr('Control-Class', this.options.CssClass);
-                            element.attr('Class', '');
+                            if (newVal != '') {
+                                element.attr('Control-Class', this.options.CssClass);
+                                element.attr('Class', this.options.CssClass);
+                            }
+                            //element.attr('Class', '');
                             this.refresh();
                         }
                     }
@@ -434,10 +541,37 @@ var flexygo;
                         iconsRight = $('<div class="input-group-btn" />');
                         let icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', () => {
                             if (this.getValue()) {
-                                flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
-                            }
-                            else {
-                                flexygo.msg.warning('flxedit.emptyproperty');
+                                let propObjNameLink = this.options.ObjNameLink;
+                                let propObjWhereLink = this.options.ObjWhereLink;
+                                if (editCtl) {
+                                    if (propObjNameLink) {
+                                        propObjNameLink = editCtl.parseEditString(this.options.ObjNameLink);
+                                        if (propObjWhereLink) {
+                                            propObjWhereLink = editCtl.parseEditString(this.options.ObjWhereLink);
+                                        }
+                                    }
+                                    else {
+                                        let obj = new Object();
+                                        obj[this.options.SQLValueField] = this.getValue();
+                                        obj[this.options.SQLDisplayField] = this.getText();
+                                        if (propObjNameLink) {
+                                            propObjNameLink = flexygo.utils.parser.compile(obj, propObjNameLink);
+                                        }
+                                        if (propObjWhereLink) {
+                                            propObjWhereLink = flexygo.utils.parser.compile(obj, propObjWhereLink);
+                                        }
+                                    }
+                                    if (this.options.ObjModeLink == 'Other') {
+                                        flexygo.nav.openPageName(this.options.PageNameLink, propObjNameLink, propObjWhereLink, null, this.options.TargetIdLink, true);
+                                    }
+                                    else {
+                                        flexygo.nav.openPage(this.options.ObjModeLink, propObjNameLink, propObjWhereLink, null, this.options.TargetIdLink);
+                                    }
+                                    //flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink), editCtl.parseEditString(this.options.ObjWhereLink), null, this.options.TargetIdLink);
+                                }
+                                else {
+                                    flexygo.msg.warning('flxedit.emptyproperty');
+                                }
                             }
                         });
                         iconsRight.append(icon1);
@@ -476,14 +610,16 @@ var flexygo;
                         let control = $('<div class="input-group">');
                         let input = $('<input type="search" class="form-control" />');
                         let inputval = $('<input type="text" style="display:none" />');
+                        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream)
+                            input.css('-webkit-appearance', 'none');
                         let datalist = $('<ul style="display:none" class="comboOptions" />');
-                        if (flexygo.utils.isSizeMobile()) {
+                        if (flexygo.utils.isSizeMobile() || flexygo.utils.isTactilModeActive()) {
                             datalist.addClass('mobile');
                             let mobileInputDiv = $('<div class="mobileinputdiv input-group"/>').appendTo(datalist);
                             this.mobileInput = $('<input type="search" class="mobileinputdiv form-control mobileinput" autocomplete="off" />').appendTo(mobileInputDiv);
                             $(`<label class="mobileinputdiv input-group-btn">
                           <label class="mobileinputdiv btn">
-                            <i class="mobileinputdiv flx-icon icon-arrow-2 icon-flip-horizontal" />
+                            <i title="${flexygo.localization.translate('msg.confirm')}" class="mobileinputdiv flx-icon icon-checked" />
                           </label>
                        </label>`).appendTo(mobileInputDiv);
                             this.mobileInput.off('keyup').on('keyup', (e) => {
@@ -494,18 +630,14 @@ var flexygo;
                                     this.input.val(this.mobileInput.val());
                                     this.input.trigger('keyup');
                                 }
+                                if (e.key === 'Enter') {
+                                    this.hideMobileInput();
+                                }
                             }).off('search').on('search', (e) => {
                                 this.input.val($(e.currentTarget).val());
                                 this.input.trigger('search');
                             }).off('blur').on('blur', () => {
-                                if (this.open) {
-                                    var itms = this.datalist.children('.selected');
-                                    if (itms.length > 0 && itms.attr('data-value') != this.inputval.val()) {
-                                        itms.trigger("mousedown");
-                                    }
-                                    this.input.trigger('blur');
-                                    this.hideOptions();
-                                }
+                                this.hideMobileInput();
                             });
                         }
                         this.input = input;
@@ -531,8 +663,8 @@ var flexygo;
                         }).off('keydown').on('keydown', (e) => {
                             var up = 38;
                             var down = 40;
-                            //var enter = 13;
-                            //var tab = 9;
+                            var enter = 13;
+                            const tab = 9;
                             if (e.keyCode == down) {
                                 if (this.open) {
                                     if (this.datalist.children('li').length > 0) {
@@ -581,28 +713,38 @@ var flexygo;
                                 e.preventDefault();
                                 return false;
                             }
+                            else if (e.keyCode == enter || e.keyCode == tab) {
+                                if (this.open) {
+                                    var itms = this.datalist.children('.selected');
+                                    if (itms.length > 0 && itms.attr('data-value') != this.inputval.val()) {
+                                        itms.trigger("mousedown");
+                                    }
+                                    this.hideOptions();
+                                }
+                            }
                         }).off('change').on('change', (e) => {
+                            me.attr('value', this.getValue());
                             e.stopPropagation();
                             e.preventDefault();
                         });
-                        if (!flexygo.utils.isSizeMobile()) {
+                        if (!flexygo.utils.isSizeMobile() && !flexygo.utils.isTactilModeActive()) {
                             $('#mainContent, main.pageContainer').on('scroll.dbcombo', (e) => {
                                 this.hideOptions();
                             });
                         }
-                        $(window, me.closest('div.ui-dialog')).resize(() => {
-                            if (!flexygo.utils.isSizeMobile()) {
+                        /*$((<any>window), me.closest('div.ui-dialog')).resize(() => {
+                            if (!flexygo.utils.isSizeMobile() && !flexygo.utils.isTactilModeActive()) {
                                 this.hideOptions();
+                            } else {
+                               // this.datalist.css({ 'max-height': window.innerHeight - 5 })
                             }
-                            else {
-                                // this.datalist.css({ 'max-height': window.innerHeight - 5 })
-                            }
-                        });
+                        })*/
                         input.on('keyup', (e) => {
                             var up = 38;
                             var down = 40;
                             var tab = 9;
-                            if (e.keyCode != up && e.keyCode != down && e.keyCode != tab) {
+                            var enter = 13;
+                            if (e.keyCode != up && e.keyCode != down && e.keyCode != tab && e.keyCode != enter) {
                                 if (this.timer) {
                                     clearTimeout(this.timer);
                                     this.timer = null;
@@ -659,7 +801,7 @@ var flexygo;
                 }
                 showOptions() {
                     let me = $(this);
-                    if (!this.open && !this.input.prop('readonly')) {
+                    if (!this.open && !this.input.prop('readonly')) { //!this.datalist.is(':visible')
                         if (!this.mobileInput) {
                             let winHeight;
                             let dialogTop;
@@ -688,7 +830,11 @@ var flexygo;
                             this.datalist.slideDown(250);
                         }
                         else {
-                            this.datalist.css({ position: 'fixed', top: 3, left: 5, width: "calc(100% - 10px)", 'max-height': (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) ? '48%' : '98%', 'padding-top': 30, 'box-shadow': '0 -6px 20px 4px rgba(0, 0, 0, 0.15), 0 -2px 10px 0px rgba(0, 0, 0, 0.20)' });
+                            const isIphone = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+                            this.scrollTopPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                            this.datalist.css({ position: 'fixed', top: 3, left: 5, width: "calc(100% - 10px)", 'max-height': (isIphone) ? '48%' : (flexygo.utils.isTactilModeActive ? '50%' : '98%'), 'padding-top': 30, 'box-shadow': '0 -6px 20px 4px rgba(0, 0, 0, 0.15), 0 -2px 10px 0px rgba(0, 0, 0, 0.20)' });
+                            if (isIphone)
+                                $(document).scrollTop(-innerHeight);
                             this.mobileInput.val(this.input.val());
                             me.append('<div class="mobilebackground"/>');
                             this.datalist.fadeIn(250);
@@ -713,6 +859,19 @@ var flexygo;
                                 this.mobileInput.blur();
                             }
                         }
+                        if (/iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream) {
+                            window.scrollTo(0, this.scrollTopPosition);
+                        }
+                    }
+                }
+                hideMobileInput() {
+                    if (this.open) {
+                        var itms = this.datalist.children('.selected');
+                        if (itms.length > 0 && itms.attr('data-value') != this.inputval.val()) {
+                            itms.trigger("mousedown");
+                        }
+                        this.input.trigger('blur');
+                        this.hideOptions();
                     }
                 }
                 loadValues(page, autoselect, fromvalue, value, append) {
@@ -793,10 +952,20 @@ var flexygo;
                             else {
                                 elm = this.getListItem(data[i][this.options.SQLValueField], data[i][this.options.SQLDisplayField], data[i][this.options.SQLDisplayField]);
                             }
+                            if (!flexygo.utils.isBlank(this.input.val()) && i == 0) {
+                                elm.addClass("selected");
+                            }
                             this.datalist.append(elm);
                         }
                         if (this.datalist.find(' > li').length >= (this.options.PageSize || flexygo.profiles.defaultDropDownRows) && data.length > 0) {
-                            this.datalist.append(`<div class="load-more txt-muted"><span>${flexygo.localization.translate('flxedit.loadmore')}</span><i class="fa fa-angle-down"></div>`);
+                            this.datalist.append(`<div class="load-more txt-muted clickable"><span>${flexygo.localization.translate('flxedit.loadmore')}</span><i class="fa fa-angle-down"></div>`);
+                            $('.load-more').on('mousedown.load-more', (e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                if (this.datalist[0].offsetHeight <= this.datalist[0].scrollHeight) {
+                                    this.loadValues(this.page + 1, false, false, null, true);
+                                }
+                            });
                         }
                     }
                     if (this.datalist.children('li').length == 1 && this.input.val().toString().toLowerCase() == this.datalist.children('li').text().toString().toLowerCase().trim() && autoselect) {
@@ -828,10 +997,32 @@ var flexygo;
                                 }
                             });
                         }
+                        else {
+                            let params = {
+                                ObjectName: this.options.ObjectName,
+                                ViewName: this.options.ViewName,
+                                ValueField: this.options.SQLValueField,
+                                Value: value
+                            };
+                            flexygo.ajax.syncPost('~/api/Edit', 'GetComboTextByView', params, (response) => {
+                                if (response) {
+                                    value = response[0][this.options.SQLDisplayField];
+                                }
+                            });
+                        }
                     }
                     return value;
                 }
                 getListItem(value, text, template) {
+                    if (value && value.toString().indexOf('/Date(') > -1) {
+                        value = moment.utc(value).format('YYYY-MM-DD[T]HH:mm');
+                    }
+                    if (text && text.toString().indexOf('/Date(') > -1) {
+                        text = moment.utc(text).format('YYYY-MM-DD[T]HH:mm');
+                    }
+                    if (template && template.toString().indexOf('/Date(') > -1) {
+                        template = moment.utc(template).format('YYYY-MM-DD[T]HH:mm');
+                    }
                     if (!text && text != '0') {
                         text = value;
                     }
@@ -867,7 +1058,19 @@ var flexygo;
                     if (this.options && (this.options.SearchCollection || this.options.SearchFunction) && !this.options.Locked) {
                         icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-search" /></button>').on('click', () => {
                             if (this.options.SearchFunction) {
-                                flexygo.utils.execDynamicCode.call(this, editCtl.parseEditString(this.options.SearchFunction, editCtl, this));
+                                let propSearchFunction = this.options.SearchFunction;
+                                if (editCtl) {
+                                    flexygo.utils.execDynamicCode.call(this, editCtl.parseEditString(this.options.SearchFunction, editCtl, this));
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (propSearchFunction) {
+                                        propSearchFunction = flexygo.utils.parser.compile(obj, propSearchFunction);
+                                    }
+                                    flexygo.utils.execDynamicCode.call(this, propSearchFunction);
+                                }
                             }
                             if (this.options.SearchCollection && this.options.SearchCollection !== '') {
                                 flexygo.events.on(this, "entity", "selected", (e) => {
@@ -883,7 +1086,37 @@ var flexygo;
                                     this.triggerDependencies();
                                     $(document).find('flx-search[objectname="' + this.options.SearchCollection + '"]').closest(".ui-dialog").remove();
                                 });
-                                flexygo.nav.openPage('search', editCtl.parseEditString(this.options.SearchCollection, editCtl, this), editCtl.parseEditString(this.options.SearchWhere, editCtl, this), null, 'modal');
+                                let PropSearchCollection = this.options.SearchCollection;
+                                let PropSearchWhere = this.options.SearchWhere;
+                                if (editCtl) {
+                                    flexygo.nav.openPage('search', editCtl.parseEditString(this.options.SearchCollection, editCtl, this), editCtl.parseEditString(this.options.SearchWhere, editCtl, this), null, 'modal');
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (PropSearchCollection) {
+                                        PropSearchCollection = flexygo.utils.parser.compile(obj, PropSearchCollection);
+                                    }
+                                    if (PropSearchWhere) {
+                                        PropSearchWhere = flexygo.utils.parser.compile(obj, PropSearchWhere);
+                                    }
+                                    flexygo.nav.openPage('search', PropSearchCollection, PropSearchWhere, null, 'modal');
+                                }
+                                let propSearchFunction = this.options.SearchFunction;
+                                if (editCtl) {
+                                    if (propSearchFunction) {
+                                        propSearchFunction = editCtl.parseEditString(this.options.SearchFunction, editCtl, this);
+                                    }
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (propSearchFunction) {
+                                        propSearchFunction = flexygo.utils.parser.compile(obj, propSearchFunction);
+                                    }
+                                }
                             }
                         });
                         ret.append(icon1);
@@ -891,7 +1124,40 @@ var flexygo;
                     if (this.options && this.options.ObjNameLink && this.options.ObjWhereLink) {
                         icon1 = $('<button class="btn btn-default" type="button"><i class="flx-icon icon-link" /></button>').on('click', () => {
                             if (this.getValue()) {
-                                flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
+                                let propObjNameLink = this.options.ObjNameLink;
+                                let propObjWhereLink = this.options.ObjWhereLink;
+                                if (editCtl) {
+                                    if (propObjNameLink) {
+                                        propObjNameLink = editCtl.parseEditString(this.options.ObjNameLink, editCtl, this);
+                                    }
+                                    if (propObjWhereLink) {
+                                        propObjWhereLink = editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this);
+                                    }
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (propObjWhereLink) {
+                                        propObjNameLink = flexygo.utils.parser.compile(obj, propObjNameLink);
+                                    }
+                                    if (propObjWhereLink) {
+                                        propObjWhereLink = flexygo.utils.parser.compile(obj, propObjWhereLink);
+                                    }
+                                }
+                                if (this.options.ObjModeLink == 'Other') {
+                                    flexygo.nav.openPageName(this.options.PageNameLink, propObjNameLink, propObjWhereLink, null, this.options.TargetIdLink, true);
+                                }
+                                else {
+                                    if (!this.options.ObjModeLink) {
+                                        this.options.ObjModeLink = 'view';
+                                    }
+                                    if (!this.options.TargetIdLink) {
+                                        this.options.TargetIdLink = 'popup';
+                                    }
+                                    flexygo.nav.openPage(this.options.ObjModeLink, propObjNameLink, propObjWhereLink, null, this.options.TargetIdLink);
+                                }
+                                //flexygo.nav.openPage('view', editCtl.parseEditString(this.options.ObjNameLink, editCtl, this), editCtl.parseEditString(this.options.ObjWhereLink, editCtl, this), null, this.options.TargetIdLink);
                             }
                             else {
                                 flexygo.msg.warning('flxedit.emptyproperty');
@@ -902,7 +1168,21 @@ var flexygo;
                     if (this.options && (this.options.AllowNewFunction || this.options.AllowNewObject) && !this.options.Locked) {
                         icon1 = $('<button class="btn btn-default flxallownew" type="button"><i class="fa fa-plus" /></button>').on('click', () => {
                             if (this.options.AllowNewFunction) {
-                                flexygo.utils.execDynamicCode.call(this, editCtl.parseEditString(this.options.AllowNewFunction, editCtl, this));
+                                let propAllowNewFunction = this.options.AllowNewFunction;
+                                if (editCtl) {
+                                    if (propAllowNewFunction) {
+                                        propAllowNewFunction = editCtl.parseEditString(this.options.AllowNewFunction, editCtl, this);
+                                    }
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (propAllowNewFunction) {
+                                        propAllowNewFunction = flexygo.utils.parser.compile(obj, propAllowNewFunction);
+                                    }
+                                }
+                                flexygo.utils.execDynamicCode.call(this, propAllowNewFunction);
                             }
                             else if (this.options.AllowNewObject && this.options.AllowNewObject !== '') {
                                 flexygo.events.on(this, "entity", "inserted", (e) => {
@@ -923,7 +1203,28 @@ var flexygo;
                                         $(document).find('flx-edit[objectname="' + this.options.AllowNewObject + '"]').closest(".ui-dialog").remove();
                                     }
                                 });
-                                flexygo.nav.openPage('edit', editCtl.parseEditString(this.options.AllowNewObject, editCtl, this), null, editCtl.parseEditString(this.options.AllowNewDefaults, editCtl, this), 'modal');
+                                let propAllowNewObject = this.options.AllowNewObject;
+                                let propAllowNewDefaults = this.options.AllowNewDefaults;
+                                if (editCtl) {
+                                    if (propAllowNewObject) {
+                                        propAllowNewObject = editCtl.parseEditString(this.options.AllowNewObject, editCtl, this);
+                                    }
+                                    if (propAllowNewDefaults) {
+                                        propAllowNewDefaults = editCtl.parseEditString(this.options.AllowNewDefaults, editCtl, this);
+                                    }
+                                }
+                                else {
+                                    let obj = new Object();
+                                    obj[this.options.SQLValueField] = this.getValue();
+                                    obj[this.options.SQLDisplayField] = this.getText();
+                                    if (propAllowNewObject) {
+                                        propAllowNewObject = flexygo.utils.parser.compile(obj, propAllowNewObject);
+                                    }
+                                    if (propAllowNewDefaults) {
+                                        propAllowNewDefaults = flexygo.utils.parser.compile(obj, propAllowNewDefaults);
+                                    }
+                                }
+                                flexygo.nav.openPage('edit', propAllowNewObject, null, propAllowNewDefaults, 'modal');
                             }
                         });
                         ret.append(icon1);
@@ -958,9 +1259,9 @@ var flexygo;
                                 if (!me.find('span.input-group-addon').length) {
                                     me.find('div').first().removeClass('input-group');
                                 }
-                                else {
-                                    this.input.css({ 'border-top-right-radius': '3px', 'border-bottom-right-radius': '3px' });
-                                }
+                                //else {
+                                //    this.input.css({ 'border-top-right-radius': '3px', 'border-bottom-right-radius': '3px' });
+                                //}
                             }
                         }
                         else {
@@ -990,7 +1291,8 @@ var flexygo;
                     if (this.options && this.options.ValidatorMessage && this.options.ValidatorMessage !== '') {
                         this.input.attr('data-msg-sqlvalidator', this.options.ValidatorMessage);
                     }
-                    if (this.options && (this.options.CauseRefresh || this.options.SQLValidator)) {
+                    const module = me.closest('flx-module')[0];
+                    if ((this.options && (this.options.CauseRefresh || this.options.SQLValidator)) || (module && module.moduleConfig && module.moduleConfig.PropsEventDependant && module.moduleConfig.PropsEventDependant.includes(this.property))) {
                         this.inputval.on('change', () => {
                             //$(document).trigger('refreshProperty', [this.inputval.closest('flx-edit'), this.options.Name]);
                             let ev = {
@@ -999,7 +1301,7 @@ var flexygo;
                                 sender: this,
                                 masterIdentity: this.property
                             };
-                            flexygo.events.trigger(ev);
+                            flexygo.events.trigger(ev, me);
                         });
                     }
                     if (this.options && this.options.Hide) {
@@ -1019,6 +1321,9 @@ var flexygo;
                     }
                 }
                 setValue(value, text, template) {
+                    if (value && value.toString().indexOf('/Date(') > -1) {
+                        value = moment.utc(value).format('YYYY-MM-DD[T]HH:mm');
+                    }
                     let me = $(this);
                     if (me.attr('mode') && me.attr('mode').toLowerCase() === 'view') {
                         if (value !== 'null' && value !== null && !text && value !== '') {
@@ -1063,8 +1368,10 @@ var flexygo;
                 }
                 setValueView(value) {
                     this.value = value;
-                    let input = $(this).find('label');
-                    input.html(value);
+                    $(this).find('label').text(value);
+                    if (value !== null) {
+                        $(this).find('label').attr('title', value);
+                    }
                 }
                 getValue() {
                     let me = $(this);
@@ -1098,6 +1405,11 @@ var flexygo;
                     return $(this);
                 }
             }
+            /**
+           * Array of observed attributes.
+           * @property observedAttributes {Array}
+           */
+            FlxDbComboElement.observedAttributes = ['type', 'property', 'objectname', 'viewname', 'sqlvaluefield', 'sqldisplayfield', 'required', 'disabled', 'requiredmessage', 'style', 'class', 'placeholder', 'iconclass', 'template', 'helpid', 'hide', 'additionalwhere', 'sqlfilter', 'pagesize', 'validatormessage', 'cnnstring'];
             wc.FlxDbComboElement = FlxDbComboElement;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));

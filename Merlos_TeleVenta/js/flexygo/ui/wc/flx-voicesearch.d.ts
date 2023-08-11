@@ -32,7 +32,7 @@ declare namespace flexygo.ui.wc {
         * Monitor the list of observed attribute for changes.
         * @property observedAttributes
         */
-        static readonly observedAttributes: string[];
+        observedAttributes(): string[];
         /**
         * Fires when the attribute value of the element is changed.
         * @method attributeChangedCallback
@@ -49,15 +49,20 @@ declare namespace flexygo.ui.wc {
         */
         refresh(): void;
         /**
+         *
+         Closes screen of search
+         */
+        closeSearch(): void;
+        /**
         * Execute search based on user input
         * @method refresh
         */
         search(objectname?: string): void;
-        private loadSearchOptions();
-        private SearchOptionsMenu(ret);
-        private updateCheck(item);
-        private saveOrderOptions(OrderedObjects);
-        private restartTimer();
-        private clearTimer();
+        private loadSearchOptions;
+        private SearchOptionsMenu;
+        private updateCheck;
+        private saveOrderOptions;
+        private restartTimer;
+        private clearTimer;
     }
 }

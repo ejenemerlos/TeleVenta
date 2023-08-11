@@ -41,22 +41,22 @@ var flexygo;
                     this.sortableList = null;
                     //Nota: para que el metodo toArray del nestedsortable devuelva valores correctamente, los elementos de la lista deben tener un id con _
                     this.template = `<li id="fgnsli_{{MenuId}}" strType="{{TypeId}}">
-            <div>
                 <div>
-                    <i class="flx-icon {{IconClass|isnull:icon-menu,{{IconClass}}}}"/>
-                    <span>{{Title}} <small>({{strType}})</small></span>
+                    <div>
+                        <i class="flx-icon {{IconClass|isnull:icon-menu,{{IconClass}}}}"/>
+                        <span>{{Title}} <small>({{strType}})</small></span>
+                    </div>
+                    <div class="btn-panel reduced">
+                        <i class="flx-icon icon-plus {{strType}}" data-action="add" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.newsubmenu')}"/>
+                        <i class="flx-icon icon-order-down-2 {{strType}}" data-action="toggle" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.submenus')}"/>
+                        <i class="flx-icon icon-pencil" data-action="edit" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.edit')}"/>
+                        <i class="flx-icon icon-delete-2" data-action="del" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.delete')}"/>
+                        <i class="flx-icon icon-more" data-action="more" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.moreoptions')}"/>
+                    </div>
                 </div>
-                <div class="btn-panel reduced">
-                    <!--i class="flx-icon icon-plus" data-action="add" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.newsubmenu')}"/-->
-                    <!--i class="flx-icon icon-order-down-2" data-action="toggle" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.submenus')}"/-->
-                    <i class="flx-icon icon-pencil" data-action="edit" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.edit')}"/>
-                    <i class="flx-icon icon-delete-2" data-action="del" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.delete')}"/>
-                    <i class="flx-icon icon-more" data-action="more" data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.moreoptions')}"/>
-                </div>
-            </div>
-            <div class="row editMenu collapse" id="Menu{{MenuId}}" MenuId="{{MenuId}}"/>
-            <!--{{getChildMenus(json)}}-->
-        </li>`;
+                <div class="row editMenu collapse" id="Menu{{MenuId}}" MenuId="{{MenuId}}"/>
+                <!--{{getChildMenus(json)}}-->
+            </li>`;
                     this.emptyTemplate = `<div class="empty-info">
             <span>${flexygo.localization.translate('menumanager.empty')}</span>
             <i class="flx-icon icon-arrow-3"></i>
@@ -122,8 +122,9 @@ var flexygo;
                     let newbutton = `<div class="managerbuttons">
                                         <span><i class="flx-icon icon-clear"/>${flexygo.localization.translate('menumanager.menus')}</span>
                                         <div>
-                                        <i data-action="refresh" class="flx-icon icon-refresh"  data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.refresh')}"/>
-                                        <i data-action="addnew" class="flx-icon icon-plus-1"  data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.new')}"/>
+                                        <i data-action="viewMenuSecurity" class="flx-icon icon-centinel"  data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.menuSecurity')}"></i>
+                                        <i data-action="refresh" class="flx-icon icon-refresh"  data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.refresh')}"></i>
+                                        <i data-action="addnew" class="flx-icon icon-plus-1"  data-toggle="tooltip" title="${flexygo.localization.translate('menumanager.new')}"></i>
                                         </div>
                                     </div>`;
                     me.find('.managerpanel').append(newbutton);
@@ -170,6 +171,9 @@ var flexygo;
                             me.find('[data-action="add"]').removeClass('active');
                         }
                         this.showEdit($(e.target).closest('li').children('.editMenu'), false);
+                    });
+                    me.find('[data-action="viewMenuSecurity"]').on('click', (e) => {
+                        flexygo.nav.openPageName('syspage-generic-objectsecurity', 'sysObject', "Objectname='sysOfflineMenu'", 'null', 'popup', false);
                     });
                     me.find('[data-action="refresh"]').on('click', (e) => {
                         this.loadMenus();
@@ -221,14 +225,21 @@ var flexygo;
                     });
                     let timeout;
                     me.find('[data-action="more"]').on('click', (e) => {
+                        let subMenuButtons = $(e.currentTarget).closest('div').find('i.Text');
                         if ($(e.currentTarget).hasClass('active')) {
                             $(e.currentTarget).removeClass('active');
-                            $(e.currentTarget).closest('.btn-panel').removeClass('show-all');
+                            if (subMenuButtons.length > 0)
+                                $(e.currentTarget).closest('.btn-panel').removeClass('show-all');
+                            else
+                                $(e.currentTarget).closest('.btn-panel').removeClass('show-half');
                             clearTimeout(timeout);
                         }
                         else {
                             $(e.currentTarget).addClass('active');
-                            $(e.currentTarget).closest('.btn-panel').addClass('show-all');
+                            if (subMenuButtons.length > 0)
+                                $(e.currentTarget).closest('.btn-panel').addClass('show-all');
+                            else
+                                $(e.currentTarget).closest('.btn-panel').addClass('show-half');
                             timeout = setTimeout(function () {
                                 $(e.currentTarget).removeClass('active');
                                 $(e.currentTarget).closest('.btn-panel').removeClass('show-all');

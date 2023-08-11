@@ -17,6 +17,7 @@ declare namespace flexygo.ui.wc {
        */
         connected: boolean;
         moduleName: string;
+        moduleButtons: flexygo.api.Toolbar;
         /**
        * Fires when element is attached to DOM
        * @method connectedCallback
@@ -34,7 +35,7 @@ declare namespace flexygo.ui.wc {
         attributeChangedCallback(attrName: any, oldVal: any, newVal: any): void;
         refresh(): void;
         init(): void;
-        translate(str: string): string;
+        flxTranslate(str: string): string;
         startLoading(): void;
         stopLoading(): void;
     }

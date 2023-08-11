@@ -25,13 +25,6 @@ var flexygo;
                     this.timelineRanges = { Hour: 18E5, Day: 432E5, Week: 3024E5, Month: 1296E6, Year: 158112E5 };
                 }
                 /**
-                * Array of observed attributes. REQUIRED
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['ModuleName', 'ObjectName', 'ObjectWhere'];
-                }
-                /**
                 * Init the webcomponent. REQUIRED.
                 * @method init
                 */
@@ -39,6 +32,7 @@ var flexygo;
                     try {
                         let me = $(this);
                         me.removeAttr('manualInit');
+                        $(this).closest('flx-module').find('.flx-noInitContent').remove();
                         this.filterValues = null;
                         this.activeFilter = null;
                         this.wcParentModule = me.closest('flx-module')[0];
@@ -556,6 +550,7 @@ var flexygo;
                              return (<any>vis).moment(date).utc();
                          },*/
                         /*margin: {axis: 20, item: { horizontal: 10, vertical: 10}},*/
+                        margin: { item: { horizontal: -1 } },
                         max: moment().add('years', 25).format(),
                         /*maxHeight: none*/
                         /*maxMinorChars: 7,*/
@@ -657,6 +652,16 @@ var flexygo;
                             new Function('item', `return new Promise((resolve, reject) => { try {${this.timelineSetting.OnMovingFunction}} catch (ex) { reject(ex); } });`).call(this, item).then(function (data) { callback(data); }, function (error) { callback(item); console.error('FlexyGo Timeline', 'onMovingFunction', error); });
                         };
                     }
+                    if (this.timelineSetting.Advanced && !flexygo.utils.isBlank(this.timelineSetting.OnMoveFunction)) {
+                        visOptions.onMove = (item, callback) => {
+                            new Function('item', `return new Promise((resolve, reject) => { try {${this.timelineSetting.OnMoveFunction}} catch (ex) { reject(ex); } });`).call(this, item).then(function (data) { callback(data); }, function (error) { callback(item); console.error('FlexyGo Timeline', 'onMoveFunction', error); });
+                        };
+                    }
+                    if (this.timelineSetting.Advanced && !flexygo.utils.isBlank(this.timelineSetting.OnAddFunction)) {
+                        visOptions.onAdd = (item, callback) => {
+                            new Function('item', `return new Promise((resolve, reject) => { try {${this.timelineSetting.OnAddFunction}} catch (ex) { reject(ex); } });`).call(this, item).then(function (data) { callback(data); }, function (error) { callback(item); console.error('FlexyGo Timeline', 'onAddFunction', error); });
+                        };
+                    }
                     if (this.timelineSetting.Advanced && !flexygo.utils.isBlank(this.timelineSetting.ItemVisibleFrameTemplate)) {
                         visOptions.visibleFrameTemplate = (item, element) => {
                             return (item && item.data) ? flexygo.utils.parser.recursiveCompile(item.data, this.timelineSetting.ItemVisibleFrameTemplate) : '';
@@ -705,7 +710,7 @@ var flexygo;
                 buildVisGroup(data, order) {
                     return (data) ? {
                         value: order,
-                        id: data[this.timelineSetting.GroupIdField] || data[this.timelineSetting.PropertyGroup],
+                        id: ((typeof data[this.timelineSetting.GroupIdField] != 'undefined' && data[this.timelineSetting.GroupIdField] != null) ? data[this.timelineSetting.GroupIdField] : data[this.timelineSetting.PropertyGroup]),
                         content: (this.timelineSetting.GroupContentTemplate) ? flexygo.utils.parser.recursiveCompile(data, this.timelineSetting.GroupContentTemplate) : data[this.timelineSetting.GroupDescripField] || data[this.timelineSetting.PropertyGroup],
                         //title: data[this.timelineSetting.GroupDescripField] || data[this.timelineSetting.PropertyGroup],
                         className: (this.timelineSetting.Advanced) ? data[this.timelineSetting.GroupClassNameField] : null,
@@ -744,6 +749,12 @@ var flexygo;
                                         if (objectEntity.read()) {
                                             $.extend(true, objectEntity.data, { [this.timelineSetting.PropertyGroup]: this.timelineSetting.WithGroups && this.timelineSetting.PropertyGroup ? { Value: object.group } : undefined, [this.timelineSetting.PropertyStartDate]: { Value: moment(object.start).format("YYYY-MM-DD HH:mm") }, [this.timelineSetting.PropertyEndDate]: this.timelineSetting.PropertyEndDate ? { Value: object.end ? moment(object.end).format("YYYY-MM-DD HH:mm") : object.end } : undefined });
                                             if ((action === 'insert') ? objectEntity.insert() : objectEntity.update()) {
+                                                if (objectEntity.jsCode) {
+                                                    flexygo.utils.execDynamicCode.call(this, objectEntity.jsCode);
+                                                }
+                                                if (objectEntity.warningMessage) {
+                                                    flexygo.msg.warning(objectEntity.warningMessage);
+                                                }
                                                 objectEntity.objectName = this.timelineSetting.EntityConfiguration.CollectionName;
                                                 resolve(this.buildVisItem(objectEntity.getView((this.timelineSetting.Advanced) ? this.timelineSetting.ItemViewName : null, null, null, null, null, null, true)[0]));
                                             }
@@ -788,7 +799,7 @@ var flexygo;
                 openObjectEdit(object, objectEntity) {
                     return new Promise((resolve, reject) => {
                         try {
-                            flexygo.nav.openPage('edit', objectEntity.objectName, objectEntity.objectWhere, JSON.stringify(Object.assign(this.defaults, { [this.timelineSetting.PropertyStartDate]: moment(object.start).format("YYYY-MM-DD HH:mm"), [this.timelineSetting.PropertyEndDate]: this.timelineSetting.PropertyEndDate ? object.end ? moment(object.end).format("YYYY-MM-DD HH:mm") : object.end : undefined, [this.timelineSetting.PropertyGroup]: this.timelineSetting.WithGroups && this.timelineSetting.PropertyGroup ? object.group : undefined })), 'modal');
+                            flexygo.nav.openPage(this.timelineSetting.EventPageTypeId, objectEntity.objectName, objectEntity.objectWhere, JSON.stringify(Object.assign(this.defaults, { [this.timelineSetting.PropertyStartDate]: moment(object.start).format("YYYY-MM-DD HH:mm"), [this.timelineSetting.PropertyEndDate]: this.timelineSetting.PropertyEndDate ? object.end ? moment(object.end).format("YYYY-MM-DD HH:mm") : object.end : undefined, [this.timelineSetting.PropertyGroup]: this.timelineSetting.WithGroups && this.timelineSetting.PropertyGroup ? object.group : undefined })), 'modal');
                             flexygo.events.on(this, 'entity', 'all', (e) => {
                                 if (this === e.context && e.sender.objectName === objectEntity.objectName) {
                                     flexygo.events.off(this, 'entity', 'all');
@@ -962,6 +973,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+            * Array of observed attributes. REQUIRED
+            * @property observedAttributes {Array}
+            */
+            FlxTimelineElement.observedAttributes = ['ModuleName', 'ObjectName', 'ObjectWhere'];
             wc.FlxTimelineElement = FlxTimelineElement;
             /**
             * Library for the FlxTimelineProgressBar
@@ -979,13 +995,6 @@ var flexygo;
                     * @property connected {boolean}
                     */
                     this.connected = false;
-                }
-                /**
-                * Array of observed attributes. REQUIRED
-                * @property observedAttributes {Array}
-                */
-                static get observedAttributes() {
-                    return ['color', 'percentage'];
                 }
                 /**
                 * Init the webcomponent. REQUIRED.
@@ -1045,6 +1054,11 @@ var flexygo;
                     }
                 }
             }
+            /**
+            * Array of observed attributes. REQUIRED
+            * @property observedAttributes {Array}
+            */
+            FlxTimelineProgressBar.observedAttributes = ['color', 'percentage'];
             wc.FlxTimelineProgressBar = FlxTimelineProgressBar;
         })(wc = ui.wc || (ui.wc = {}));
     })(ui = flexygo.ui || (flexygo.ui = {}));
