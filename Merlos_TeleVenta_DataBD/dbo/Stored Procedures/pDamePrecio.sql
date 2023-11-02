@@ -1,10 +1,10 @@
 ﻿
--- ================================================================
+
+-- =============================================
 -- Author:		Lluis Caballero
 -- Create date: 30/08/27
 -- Description:	Proceso para devolver el precio de forma estandard
--- ================================================================
-
+-- =============================================
 CREATE PROCEDURE [dbo].[pDamePrecio]
 	(
 		@ARTICULO VARCHAR(20),

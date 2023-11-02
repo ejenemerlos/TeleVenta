@@ -22,11 +22,11 @@ BEGIN TRY
 
 	-- harold, esto es para ciertas empresas poder cambiar la creación de una vista por algo exclusivo
 	-- Tomo por defecto SI EXISTE LA BASE DE DATOS EUROLOEE
-		declare @NOMEMP		varchar(50)
-		EXEC('select nombre into ##emp from '+@GESTION+'.[dbo].empresa where codigo='''+@EMPRESA+''' ')
-		set @NOMEMP=(select nombre from ##emp)
-		drop table ##emp
-		select  'Empresa vistas: '+ @NOMEMP
+		--declare @NOMEMP		varchar(50)
+		--EXEC('select nombre into ##emp from '+@GESTION+'.[dbo].empresa where codigo='''+@EMPRESA+''' ')
+		--set @NOMEMP=(select nombre from ##emp)
+		--drop table ##emp
+		--select  'Empresa vistas: '+ @NOMEMP
 		IF ISNULL(DB_ID(@BDENVCLI),'')=''
 		begin
 			set @BDENVCLI = ''
@@ -35,45 +35,132 @@ BEGIN TRY
 	-- ======================================================================================================================
 	--	Variables TOTALDOC
 		--declare @totalDoc varchar(max)
-		declare @tdoc int
-		--24/10/2019 harold
-		--esto no sirve, lo dejo para que se note una instrucción fallida que no aporta la solución real contra una que sí.
-		--EXEC ('select case when exists (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = ''TOTALDOC''
-		--							AND TABLE_NAME ='''+@GESTION+'.[dbo].c_presuv'')
-		--							then 1 else 0 end as TOTALDOC into ##totaldoc')
-		EXEC('select case when COL_LENGTH('''+@GESTION+'.dbo.c_presuv'', ''totaldoc'') is null then 0 else 1 end as totaldoc into ##totaldoc')
-		set @tdoc = (select TOTALDOC from ##totaldoc)
-		drop table ##totaldoc
+		--declare @tdoc int
+		----24/10/2019 harold
+		----esto no sirve, lo dejo para que se note una instrucción fallida que no aporta la solución real contra una que sí.
+		----EXEC ('select case when exists (SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE COLUMN_NAME = ''TOTALDOC''
+		----							AND TABLE_NAME ='''+@GESTION+'.[dbo].c_presuv'')
+		----							then 1 else 0 end as TOTALDOC into ##totaldoc')
+		--EXEC('select case when COL_LENGTH('''+@GESTION+'.dbo.c_presuv'', ''totaldoc'') is null then 0 else 1 end as totaldoc into ##totaldoc')
+		--set @tdoc = (select TOTALDOC from ##totaldoc)
+		--drop table ##totaldoc
 
 		----23/10/2019 HAROLD, ESTO NUNCA VA A OCURRIR PORQUE LA BD ACTIVA ES LA DEL PORTAL Y INFORMATION_SCHEMA.COLUMNS TIRA DE ALLI
 		--SET @tdoc=1
 	-- ======================================================================================================================
 
-	
 
-	-- Vista vBarras
-	IF EXISTS (select * FROM sys.views where name = 'vBarras')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[vBarras]   as       
-       select row_number() over(partition by articulo order by articulo) as linia, articulo, barras, unidades from '+@GESTION+'.[DBO].barras
+
+				-- Vista vArticulosVentasAgrupadas
+	IF EXISTS (select * FROM sys.views where name = 'vArticulosVentasAgrupadas')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 	
+
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vArticulosVentasAgrupadas]
+	AS '
+
+	set @controlAnys = 0
+	if @NumEjer>0 BEGIN
+		SET @Sentencia=@Sentencia + 'WITH LatestPrices AS ('
+		while @controlAnys<@NumEjer BEGIN
+			set @controlAnys = @controlAnys + 1
+			set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
+			set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
+
+			if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
+				set @Sentencia = @Sentencia +'
+					SELECT  asd.ARTICULO, asd.precio, ROW_NUMBER() OVER(PARTITION BY asd.ARTICULO ORDER BY b.FECHA DESC) AS rn
+					FROM ' + @GESTIONAnt + ' .dbo.d_pedive asd
+					INNER JOIN  ' + @GESTIONAnt + ' .dbo.c_pedive b  ON  b.EMPRESA = asd.EMPRESA AND b.NUMERO = asd.NUMERO AND b.LETRA = asd.LETRA
+					UNION ALL 
+
+				'
+			end
+		end
+		set @Sentencia=@Sentencia + '
+		
+				SELECT  asd.ARTICULO, asd.precio, ROW_NUMBER() OVER(PARTITION BY asd.ARTICULO ORDER BY b.FECHA DESC) AS rn
+				FROM ' + @GESTION + ' .dbo.d_pedive asd
+				INNER JOIN  ' + @GESTION + ' .dbo.c_pedive b  ON  b.EMPRESA = asd.EMPRESA AND b.NUMERO = asd.NUMERO AND b.LETRA = asd.LETRA
+				where asd.articulo<>''''
+		
+		)'
+	end
+	else
+		begin
+			set @Sentencia= @Sentencia + '
+				WITH LatestPrices AS 
+				(				
+					SELECT  asd.ARTICULO, asd.precio, ROW_NUMBER() OVER(PARTITION BY asd.ARTICULO ORDER BY b.FECHA DESC) AS rn
+					FROM ' + @GESTION + ' .dbo.d_pedive asd
+					INNER JOIN  ' + @GESTION + ' .dbo.c_pedive b  ON  b.EMPRESA = asd.EMPRESA AND b.NUMERO = asd.NUMERO AND b.LETRA = asd.LETRA
+					where asd.articulo<>''''
+				)
+		
+			'
+		end
+set @controlAnys = 0
+	if @NumEjer>0 BEGIN		
+		while @controlAnys<@NumEjer BEGIN
+			set @controlAnys = @controlAnys + 1
+			set @GESTIONAnt = CONCAT('[',@elEJER-@controlAnys,@LETRA,']')   
+			set @EJERCICIOAnt =  CAST(@elEJER-@controlAnys  as varchar(4))
+
+			if DB_ID(replace(replace(@GESTIONAnt,'[',''),']','')) is not null BEGIN
+				set @Sentencia = @Sentencia +'
+					SELECT  a.articulo, a.DEFINICION, SUM(a.unidades) as unidades,a.empresa, a.cliente, b.FECHA, lp.precio
+					FROM  ' + @GESTIONAnt + ' .dbo.d_pedive a
+					INNER JOIN ' + @GESTIONAnt + ' .dbo.c_pedive b ON  b.EMPRESA = a.EMPRESA AND b.NUMERO = a.NUMERO AND b.LETRA = a.LETRA
+					LEFT JOIN LatestPrices lp ON a.articulo = lp.ARTICULO AND lp.rn = 1
+					WHERE A.ARTICULO<>''''
+					GROUP BY a.articulo,a.DEFINICION,a.unidades, a.empresa,a.cliente, b.FECHA, lp.precio
+					UNION ALL
+
+				'
+			end
+		end
+		set @Sentencia=@Sentencia + '
+		
+				SELECT  a.articulo, a.DEFINICION, SUM(a.unidades) as unidades,a.empresa, a.cliente, b.FECHA, lp.precio
+				FROM  ' + @GESTION + ' .dbo.d_pedive a
+				INNER JOIN ' + @GESTION + ' .dbo.c_pedive b ON  b.EMPRESA = a.EMPRESA AND b.NUMERO = a.NUMERO AND b.LETRA = a.LETRA
+				LEFT JOIN LatestPrices lp ON a.articulo = lp.ARTICULO AND lp.rn = 1
+				WHERE A.ARTICULO<>''''
+				GROUP BY a.articulo,a.DEFINICION,a.unidades, a.empresa,a.cliente, b.FECHA, lp.precio
+		
+		'
+	end
+	else
+		begin
+			set @Sentencia=@Sentencia + '
+				SELECT  a.articulo, a.DEFINICION, SUM(a.unidades) as unidades,a.empresa, a.cliente, b.FECHA, lp.precio
+				FROM  ' + @GESTION + ' .dbo.d_pedive a
+				INNER JOIN ' + @GESTION + ' .dbo.c_pedive b ON  b.EMPRESA = a.EMPRESA AND b.NUMERO = a.NUMERO AND b.LETRA = a.LETRA
+				LEFT JOIN LatestPrices lp ON a.articulo = lp.ARTICULO AND lp.rn = 1
+				WHERE A.ARTICULO<>''''
+				GROUP BY a.articulo,a.DEFINICION,a.unidades, a.empresa,a.cliente, b.FECHA, lp.precio
+		
+			'
+		end
+			
+	EXEC(@Sentencia)
+	select  'vArticulosVentasAgrupadas'
+
+	-- Vista vPedidos_Basic
+	IF EXISTS (select * FROM sys.views where name = 'vPedidos_Basic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+' VIEW [dbo].[vPedidos_Basic] as 	
+		--SELECT
+		--	  CONCAT(''+@EJERCICIOAnt+'',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
+		--	, LETRA, NUMERO
+		--FROM [+@GESTIONAnt+].dbo.c_pedive
+				
+		--UNION
+				
+		SELECT
+				CONCAT('''+@EJERCICIO+''',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
+			, LETRA, NUMERO
+		FROM '+@GESTION+'.dbo.c_pedive
 	'
 	exec(@Sentencia)
-	select  'vBarras'
-
-
-
-
-	-- Vista [vArticulosBasic]
-	IF EXISTS (select * FROM sys.views where name = 'vArticulosBasic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-	set @Sentencia = '
-	'+@AlterCreate+' VIEW [dbo].[vArticulosBasic]   as       
-		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].articulo where BAJA=0
-	'
-	exec(@Sentencia)
-	select 'vArticulosBasic'
-
-
-
+	select  'vPedidos_Basic'
 
 	-- Vista vClientes  --  también en Script.PreDeployment1.sql
 	IF EXISTS (select * FROM sys.views where name = 'vClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
@@ -129,7 +216,7 @@ BEGIN TRY
 	LEFT JOIN '+@GESTION+'.dbo.tipo_iva tiva ON tiva.CODIGO = C.TIPO_IVA 
 	LEFT JOIN '+@COMUN+'.dbo.PAISES PAIS ON PAIS.CODIGO  = C.PAIS 
 	left join '+@GESTION+'.dbo.rutas r on r.CODIGO=C.RUTA
-	LEFT JOIN '+@GESTION+'.DBO.vendedor v on v.CODIGO=C.VENDEDOR
+	LEFT JOIN '+@GESTION+'.DBO.vendedor v on RIGHT(''0000'' + ltrim(rtrim(v.CODIGO)), 4)=RIGHT(''0000'' + ltrim(rtrim(c.VENDEDOR)), 4)
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLat ON mLat.CODIGO=C.CODIGO and mLat.FICHERO=''CLIENTES'' and mLat.CAMPO=''LAT''
 	LEFT JOIN '+@GESTION+'.DBO.multicam mLon ON mLon.CODIGO=C.CODIGO and mLon.FICHERO=''CLIENTES'' and mLon.CAMPO=''LGT''
 	LEFT JOIN clientes_adi ca on ca.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
@@ -138,6 +225,75 @@ BEGIN TRY
 	'
 	exec(@Sentencia)
 	select  'vClientes'
+
+
+	
+	-- Vista vExportarListadoTV
+	IF EXISTS (select * FROM sys.views where name = 'vExportarListadoTV')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+' VIEW vExportarListadoTV AS
+			select id, cliente, isnull(horario,'''') as horario, isnull(idpedido,'''') as idpedido, isnull(ltrim(rtrim(pedido)),'''') as pedido, isnull(subtotal,0.00) as subtotal
+			, isnull(importe,0.00) as importe, isnull(serie,'''') as serie
+			, completado, FechaInsertUpdate, IdDoc 
+			, vc.RCOMERCIAL as RCOMERCIAL
+			, vc.TELEFONO as TELEFONO
+				from [TeleVentaDetalle] 
+				inner join vClientes vc on vc.CODIGO collate Modern_Spanish_CS_AI=[TeleVentaDetalle].cliente		
+	'
+	exec(@Sentencia)
+	select  'vExportarListadoTV'
+
+	-- Vista vListadosLlamadasImprimir
+	IF EXISTS (select * FROM sys.views where name = 'vListadosLlamadasImprimir')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+'  VIEW vListadosLlamadasImprimir AS
+			select a.* , vc.NOMBRE as nombre, vc.POBLACION as poblacion
+			from TeleVentaListados  a
+			inner join vClientes vc on vc.CODIGO collate Modern_Spanish_CS_AI=a.cliente			
+	'
+	exec(@Sentencia)
+	select  'vListadosLlamadasImprimir'
+
+	
+	-- Vista vListadosLlamadas
+	IF EXISTS (select * FROM sys.views where name = 'vListadosLlamadas')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = @AlterCreate+'  VIEW vListadosLlamadas AS
+				select distinct TL.id, TL.nombreListado, ISNULL(TL.gestor,'''') AS gestor,
+				(select min(fecha) from TeleVentaListados where id=id) as fecha,
+				ISNULL(TL.hasta,'''')AS hasta,
+				(select min(horario) from TeleVentaListados where id=id) as horario,
+				(select concat(min(ltrim(rtrim(cliente))),''-'',min(ltrim(rtrim(vcc.NOMBRE))))
+				from TeleVentaListados tll
+				left join vClientes vcc on vcc.CODIGO collate database_default=tll.cliente where id=id) as cliente 
+				from TeleVentaListados TL
+	'
+	exec(@Sentencia)
+	select  'vListadosLlamadas'
+
+
+	-- Vista vBarras
+	IF EXISTS (select * FROM sys.views where name = 'vBarras')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = '
+	'+@AlterCreate+' VIEW [dbo].[vBarras]   as       
+       select row_number() over(partition by articulo order by articulo) as linia, articulo, barras, unidades from '+@GESTION+'.[DBO].barras
+	'
+	exec(@Sentencia)
+	select  'vBarras'
+
+
+
+
+	-- Vista [vArticulosBasic]
+	IF EXISTS (select * FROM sys.views where name = 'vArticulosBasic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	set @Sentencia = '
+	'+@AlterCreate+' VIEW [dbo].[vArticulosBasic]   as       
+		select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].articulo where BAJA=0
+	'
+	exec(@Sentencia)
+	select 'vArticulosBasic'
+
+
+
+
+	
 
 
 
@@ -380,7 +536,7 @@ BEGIN TRY
 	FROM '+@GESTION+'.dbo.c_pedive CAV
 	'
 	exec(@Sentencia)
-	select  'vPedidos'
+	select  'vPedidos_Cabecera'
 
 
 	
@@ -538,7 +694,7 @@ BEGIN TRY
 			, art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
 			, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, art.DTO2,	art.DTO3, coalesce(pvp.pvp,0.00) as pvp
 			, isnull(SUM(st.StockVirtual),0) as StockVirtual
-			, isnull(SUM(st.StockReal),0) as StockReal
+			, isnull(SUM(st.StockReal),0) as StockReal,art.IMAGEN
 	from '+@GESTION+'.[DBO].articulo art
 	left join vStock st on st.ARTICULO=art.CODIGO
 	left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
@@ -549,7 +705,7 @@ BEGIN TRY
 			, art.MAXIMO, art.AVISO, art.BAJA, art.INTERNET
 			, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
 			, art.CARAC, art.UNICAJA, art.peso, art.litros, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
-			, art.COST_ESCAN, art.TIPO_ESCAN, art.IVALOT, art.DTO1, art.DTO2, art.DTO3,pvp.pvp
+			, art.COST_ESCAN, art.TIPO_ESCAN, art.IVALOT, art.DTO1, art.DTO2, art.DTO3,pvp.pvp,ART.IMAGEN
 	' 
 	exec(@Sentencia)
 	select  'vArticulos'
@@ -988,7 +1144,7 @@ BEGIN TRY
 	AS
 	SELECT '''+@EJERCICIO+''' + D.empresa + cast(D.letra as char(2)) + D.numero + CAST(D.linia as varchar) AS IDPEDIDOLIN, 
 	CONCAT('''+@EJERCICIO+''',D.empresa,replace(D.LETRA,space(1),''0''),replace(LEFT(D.NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI AS IDPEDIDO, 
-	'''+@EJERCICIO+''' AS EJER, cast(D.letra as char(2))+d.numero as PEDIDO, D.CLIENTE, D.ARTICULO, D.DEFINICION, D.UNIDADES, D.cajas, 
+	'''+@EJERCICIO+''' AS EJER, cast(D.letra as char(2))+d.numero as PEDIDO, D.CLIENTE, D.ARTICULO, replace(D.DEFINICION,''"'','''') as DEFINICION, D.UNIDADES, D.cajas, 
 	isnull(D.PRECIO,0.00) as PRECIO,  
 	case when D.PRECIO>0 then 
 		replace(replace(replace(convert(varchar, cast(D.PRECIO as money),1),''.'',''_''),'','',''.''),''_'','','')+'' €'' else '''' end as PRECIOf, 
@@ -1279,45 +1435,29 @@ BEGIN TRY
 
 
 
-	-- Vista vPedidos_Basic
-	IF EXISTS (select * FROM sys.views where name = 'vPedidos_Basic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
-	set @Sentencia = @AlterCreate+' VIEW [dbo].[vPedidos_Basic] as 	
-		SELECT
-			  CONCAT('''+@EJERCICIOAnt+''',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
-			, LETRA, NUMERO
-		FROM ['+@GESTIONAnt+'].dbo.c_pedive
-				
-		UNION
-				
-		SELECT
-				CONCAT('''+@EJERCICIO+''',empresa,replace(LETRA,space(1),''0''),replace(LEFT(NUMERO,10),space(1),''0''))  collate Modern_Spanish_CI_AI as  IDPEDIDO
-			, LETRA, NUMERO
-		FROM ['+@GESTION+'].dbo.c_pedive
-	'
-	exec(@Sentencia)
-	select  'vPedidos_Basic'
+	
 
-
+	
 
 
 	-- Vista vIncidenciasArticulos
 	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasArticulos')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasArticulos] as 	
-		select i.* 
+			select i.* 
 		, i.FechaInsertUpdate as Fecha
 		, convert(varchar(10),i.FechaInsertUpdate,103) as laFecha
 		, g.nombre as nGestor
 		, ia.nombre as nIncidencia
 		, cli.nombre as nCliente
-		, cpv.LETRA
-		, ltrim(rtrim(cpv.NUMERO)) as pedido
+		, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
 		, art.NOMBRE as nArticulo
+		,cpv.LETRA AS LETRA
 		from TeleVentaIncidencias i
 		left join gestores g on g.codigo=i.gestor
 		left join inci_art ia on ia.codigo=i.incidencia
-		left join (select CODIGO, NOMBRE from vClientes) cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
-		left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
-		left join (select CODIGO, NOMBRE from vArticulos) art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
+		left join vClientes cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
+		left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+		left join vArticulos art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
 		where i.tipo=''Articulo''
 	'
 	exec(@Sentencia)
@@ -1329,20 +1469,18 @@ BEGIN TRY
 	-- Vista vIncidenciasClientes
 	IF EXISTS (select * FROM sys.views where name = 'vIncidenciasClientes')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
 	set @Sentencia = @AlterCreate+' VIEW [dbo].[vIncidenciasClientes] as 	
-	select i.id, i.idpedido, i.tipo, i.articulo, i.observaciones
-		, i.FechaInsertUpdate
-		, format(i.FechaInsertUpdate,''dd-MM-yyyy'') as laFecha
-		, i.gestor
-		, i.incidencia
-		, i.cliente
-		, cli.NOMBRE as nCliente
-		, icli.nombre as nIncidencia
-		, cpv.LETRA
-		, ltrim(rtrim(cpv.NUMERO)) as pedido
+	select i.* 
+			, i.FechaInsertUpdate as Fecha
+			, convert(varchar(10),i.FechaInsertUpdate,103) as laFecha
+			, g.NOMBRE as nGestor
+			, cli.NOMBRE as nCliente
+			, icli.nombre as nIncidencia
+			, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
 	from TeleVentaIncidencias i
+	left join vGestores g on g.CODIGO=i.gestor
 	left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=i.cliente
 	left join inci_cli icli on icli.codigo=i.incidencia
-	left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+	left join vPedidos cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
 	where i.tipo=''Cliente''
 	'
 	exec(@Sentencia)
@@ -1358,6 +1496,31 @@ BEGIN TRY
 	select * from '+@GESTION+'.dbo.vaca_cli
 	')
 	select  'vVacacionesClientes'
+
+
+
+
+	-- Vista vClientes_Basic
+	IF EXISTS (select * FROM sys.views where name = 'vClientes_Basic')  set @AlterCreate='ALTER' else set @AlterCreate='CREATE' 
+	EXEC( @AlterCreate+' view vClientes_Basic as
+		SELECT C.CODIGO, 
+		RTRIM(replace(C.NOMBRE,''"'',''-'')) collate database_default AS NOMBRE 
+		, replace(C.NOMBRE2,''"'',''-'') AS RCOMERCIAL,
+		C.CIF, cast(RTRIM(replace(C.DIRECCION,''"'',''-'')) as varchar(40))  collate Modern_Spanish_CI_AI  AS DIRECCION
+		, C.CODPOST AS CP, 
+		replace(C.POBLACION,''"'',''-'')  collate Modern_Spanish_CI_AI  AS POBLACION,
+		replace(C.PROVINCIA,''"'',''-'')  collate Modern_Spanish_CI_AI  as provincia, replace(ISNULL(PAIS.NOMBRE,''''),''"'',''-'') AS PAIS, 
+		cast(C.EMAIL as varchar(255)) as EMAIL, 
+		cast(C.EMAIL_F as varchar(255)) as EMAIL_F, 
+		COALESCE(tc.TELEFONO, SPACE(15)) AS TELEFONO
+
+		FROM '+@GESTION+'.DBO.CLIENTES C 
+		LEFT JOIN (select CLIENTE, MAX(telefono) as telefono from '+@GESTION+'.dbo.telf_cli where cliente!='''' and ORDEN=1 group by cliente) tc ON tc.CLIENTE = C.CODIGO
+		LEFT JOIN '+@COMUN+'.dbo.PAISES PAIS ON PAIS.CODIGO  = C.PAIS
+		WHERE LEFT(C.CODIGO,2)=''43'' and C.FECHA_BAJ is null and C.BLOQ_CLI=0
+	')
+	select  'vClientes_Basic'
+
 
 
 

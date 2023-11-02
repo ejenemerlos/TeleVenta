@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pClientesADI] @modo varchar(50), @elJS varchar(max)=''
+﻿
+CREATE PROCEDURE [dbo].[pClientesADI] @modo varchar(50), @elJS varchar(max)=''
 AS
 BEGIN TRY
 

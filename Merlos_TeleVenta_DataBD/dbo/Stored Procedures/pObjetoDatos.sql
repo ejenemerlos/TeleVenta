@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pObjetoDatos] @elJS nvarchar(max)=''
+﻿
+CREATE PROCEDURE [dbo].[pObjetoDatos] @elJS nvarchar(max)=''
 AS
 BEGIN TRY
 	declare   @objeto varchar(50) = (select JSON_VALUE(@elJS,'$.objeto'))

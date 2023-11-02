@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pBDEW] @gestion varchar(50), @comun varchar(50)
+﻿
+CREATE PROCEDURE [dbo].[pBDEW] @gestion varchar(50), @comun varchar(50)
 AS
 BEGIN TRY		
 	DECLARE @existe int = 0	

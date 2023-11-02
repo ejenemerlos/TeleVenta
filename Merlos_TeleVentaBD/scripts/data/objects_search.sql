@@ -4,7 +4,10 @@ BEGIN TRY
 
 MERGE INTO [Objects_Search] AS Target
 USING (VALUES
-  (N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Clientes',N'Cliente',0,0,N'Text',1,NULL,N'( EXISTS (
+  (N'302F15D5-17EB-48F6-AA74-26E32C15D4E3',N'ListadosLlamadas',N'Propiedades',0,0,N'Properties',1,NULL,NULL,1)
+ ,(N'3341E759-D561-46BF-991A-3A4CA21C768E',N'ExportarListadosTV',N'Propiedades',0,0,N'Properties',1,NULL,NULL,1)
+ ,(N'1E5A5B69-56A8-4E6B-AC38-3E5E0FE7D44F',N'ListadosVentas',N'Propiedades',0,0,N'Properties',1,NULL,NULL,1)
+ ,(N'BBEDC13A-57C3-4352-8A90-4C93A3904ED8',N'Clientes',N'Cliente',0,0,N'Text',1,NULL,N'( EXISTS (
  SELECT * FROM vClientes FlxTblFilter 
 
  WHERE ( [vClientes].[Código Cliente]  LIKE {~@Param1|0|52|FindString~} 
@@ -20,6 +23,7 @@ USING (VALUES
 
 ))
 ',1)
+ ,(N'F662F27A-71AF-4CE3-ACC4-4CFE13783243',N'inciCLIs',N'Incidencias Clientes',0,0,N'Properties',1,NULL,NULL,1)
  ,(N'FFE29BE5-BCD5-46DB-ABB8-52F076910A36',N'Pedidos',N'Pedidos',0,0,N'Text',1,NULL,N'( EXISTS (
  SELECT * FROM vPedidos FlxTblFilter 
 
@@ -36,8 +40,10 @@ USING (VALUES
 
 ))
 ',1)
+ ,(N'C54F3013-706E-4E75-B3CA-6303B5C11630',N'Merlos_Cliente_Articulos',N'Cliente_Articulos',0,0,N'Properties',1,NULL,NULL,1)
  ,(N'C70909D0-5749-4A5E-9043-6473BB71CBC4',N'inciCLIs',N'inciCLI',0,0,N'Properties',1,NULL,NULL,1)
  ,(N'1F2FD612-2541-4E30-AD70-A9219B157348',N'inciARTs',N'inciArts',0,0,N'Properties',1,NULL,NULL,1)
+ ,(N'8BC5CC26-DF23-4DB5-8E4A-D38310EC1FC6',N'ListadosLlamadasImprimir',N'Propiedades',0,0,N'Properties',1,NULL,NULL,1)
 ) AS Source ([SearchId],[ObjectName],[Name],[Generic],[IsDefault],[Type],[Order],[UserId],[SQLSentence],[OriginId])
 ON (Target.[SearchId] = Source.[SearchId])
 WHEN MATCHED AND (

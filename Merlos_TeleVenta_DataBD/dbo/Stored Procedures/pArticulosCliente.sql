@@ -1,7 +1,9 @@
-﻿CREATE PROCEDURE [dbo].[pArticulosCliente]  ( @parametros varchar(max) )
+﻿
+
+CREATE PROCEDURE [dbo].[pArticulosCliente]  ( @parametros varchar(max) )
 AS
 BEGIN TRY
-	
+	insert into Merlos_Log (accion) values (concat('[pArticulosCliente] ''',@parametros,''''))
 	declare   @MesesConsumo int 
 			, @desde smalldatetime
 			, @cliente varchar(20) = (select JSON_VALUE(@parametros,'$.cliente'))
@@ -29,7 +31,7 @@ BEGIN TRY
 	set @ejercicioAnt = isnull(cast(@ejercicio as int)-1,'')
 	set @gestionAnt = isnull(concat(@ejercicioAnt,@letra), '')
 
-
+	--print 'INICIO CURSORES'
 	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo='Marca') BEGIN
 		DECLARE elCursor CURSOR FOR
 			select marca from marca_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV
@@ -89,7 +91,7 @@ BEGIN TRY
 		WITH VENTAS (FECHA, CLIENTE, ARTICULO, DEFINICION, CAJAS, UDS, PESO, PRECIO, DTO1, IMPORTE)
 		AS
 		(
-			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, ART.NOMBRE AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio, dav.dto1, dav.importe 
+			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, replace(art.NOMBRE,''"'','''') AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio, dav.dto1, dav.importe 
 			FROM ['+@gestion+'].DBO.C_ALBVEN CAV 
 			INNER JOIN ['+@gestion+'].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
 			INNER JOIN ['+@gestion+'].DBO.CLIENTES CLI ON CLI.CODIGO=CAV.CLIENTE
@@ -101,7 +103,7 @@ BEGIN TRY
 
 			UNION ALL
 
-			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, ART.NOMBRE AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio
+			SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, replace(art.NOMBRE,''"'','''') AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, dav.precio
 			, dav.dto1, dav.importe 
 			FROM ['+@gestionAnt+'].DBO.C_ALBVEN CAV 
 			INNER JOIN ['+@gestionAnt+'].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
@@ -125,7 +127,7 @@ BEGIN TRY
 			)
 		,''[]'') AS JAVASCRIPT
 		'
-		exec(@consulta)
+		EXEC(@consulta)
 		return -1
 	END
 
@@ -143,8 +145,8 @@ BEGIN TRY
 	WITH VENTAS (FECHA, CLIENTE, ARTICULO, DEFINICION, CAJAS, UDS, PESO, /*PVP,*/ UNICAJA, PesoArticulo)
 	AS
 	(
-		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, ART.NOMBRE AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO,/*PVP.PVP
-		,*/ ART.UNICAJA, ART.PESO as PesoArticulo
+		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, replace(art.NOMBRE,''"'','''') AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO
+		,/*PVP.PVP,*/ ART.UNICAJA, ART.PESO as PesoArticulo
 		FROM ['+@gestion+'].DBO.C_ALBVEN CAV 
 		INNER JOIN ['+@gestion+'].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
 		INNER JOIN ['+@gestion+'].DBO.CLIENTES CLI ON CLI.CODIGO=CAV.CLIENTE
@@ -156,7 +158,7 @@ BEGIN TRY
 
 		UNION ALL
 
-		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, ART.NOMBRE AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, /*PVP.PVP 
+		SELECT CAV.FECHA, CAV.CLIENTE, DAV.ARTICULO, replace(art.NOMBRE,''"'','''') AS DEFINICION, DAV.CAJAS, DAV.UNIDADES, DAV.PESO, /*PVP.PVP 
 		,*/ ART.UNICAJA, ART.PESO as PesoArticulo
 		FROM ['+@gestionAnt+'].DBO.C_ALBVEN CAV 
 		INNER JOIN ['+@gestionAnt+'].DBO.D_ALBVEN DAV ON DAV.EMPRESA=CAV.EMPRESA AND DAV.LETRA=CAV.LETRA AND DAV.NUMERO=CAV.NUMERO
@@ -170,22 +172,41 @@ BEGIN TRY
 
 	select isnull(
 	( 
-		SELECT V1.CLIENTE, V1.ARTICULO as CODIGO, replace(V1.DEFINICION,''"'',''-'') as NOMBRE
-		, V1.CAJAS, V1.UDS, V1.PESO, /*V1.PVP,*/ V1.UNICAJA, V1.PesoArticulo
-		, SUM(STC.StockVirtual) AS StockVirtual    
-		, SUM(STC.StockReal) AS StockReal 
-		FROM VENTAS V1 
-		INNER JOIN 
-		(SELECT MAX(FECHA) AS FECHA, CLIENTE, ARTICULO FROM VENTAS GROUP BY CLIENTE, ARTICULO ) V2 
-		ON V2.FECHA=V1.FECHA AND V2.CLIENTE=V1.CLIENTE AND V2.ARTICULO=V1.ARTICULO
-		LEFT JOIN vStock STC ON STC.ARTICULO=V1.ARTICULO 
-		GROUP BY  V1.FECHA, V1.CLIENTE, V1.ARTICULO, V1.DEFINICION, V1.CAJAS, V1.UDS, V1.PESO, /*V1.PVP,*/ V1.UNICAJA, V1.PesoArticulo
-		ORDER BY V1.CLIENTE, V1.ARTICULO
+		select * from 
+		(
+			SELECT V1.CLIENTE, V1.ARTICULO as CODIGO, replace(V1.DEFINICION,''"'',''-'') as NOMBRE
+			, V1.CAJAS, V1.UDS, V1.PESO, /*V1.PVP,*/ V1.UNICAJA, V1.PesoArticulo
+			, SUM(STC.StockVirtual) AS StockVirtual    
+			, SUM(STC.StockReal) AS StockReal
+			, 0 as Incluido
+			FROM VENTAS V1 
+			INNER JOIN (SELECT MAX(FECHA) AS FECHA, CLIENTE, ARTICULO FROM VENTAS GROUP BY CLIENTE, ARTICULO ) V2 ON V2.FECHA=V1.FECHA AND V2.CLIENTE=V1.CLIENTE AND V2.ARTICULO=V1.ARTICULO
+			LEFT JOIN vStock STC ON STC.ARTICULO=V1.ARTICULO 		
+		
+			-- excluir artículos
+			where V1.ARTICULO collate SQL_Latin1_General_CP1_CI_AS not in (select articulo from Clientes_Articulos where Cliente collate SQL_Latin1_General_CP1_CI_AS=V1.CLIENTE and IncluirExcluir=2)
+
+			GROUP BY  V1.FECHA, V1.CLIENTE, V1.ARTICULO, V1.DEFINICION, V1.CAJAS, V1.UDS, V1.PESO, /*V1.PVP,*/ V1.UNICAJA, V1.PesoArticulo
+
+			UNION ALL
+
+			-- incluir artículos
+			select '''+@cliente+''' as CLIENTE, cliArt.Articulo collate Modern_Spanish_CS_AI as CODIGO, replace(art.NOMBRE,''"'','''') as NOMBRE
+				,	0 as CAJAS, 0 as UDS, 0.00 as PESO
+				,	ART.UNICAJA, ART.PESO as PesoArticulo
+				,	0 as StockVirtual
+				,	0 as StockReal
+				,	1 as Incluido
+			from Clientes_Articulos cliArt
+			INNER JOIN ['+@gestion+'].DBO.ARTICULO ART ON ART.CODIGO collate Modern_Spanish_CS_AI=cliArt.Articulo AND ART.BAJA=0
+			where cliArt.Cliente collate Modern_Spanish_CS_AI='''+@cliente+''' and IncluirExcluir=1
+
+		) losArticulos 
+		ORDER BY CLIENTE, CODIGO
 		FOR JSON AUTO, INCLUDE_NULL_VALUES
 	),''[]'')  as JAVASCRIPT 	
 	'
-	-- select @consulta  
-	exec(@consulta)
+	EXEC(@consulta)
 
 	RETURN -1
 END TRY
@@ -195,4 +216,3 @@ BEGIN CATCH
 	RAISERROR(@CatchError,12,1)
 	RETURN 0
 END CATCH
-

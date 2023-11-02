@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pClientesDirecciones] @parametros varchar(max)
+﻿
+CREATE PROCEDURE [dbo].[pClientesDirecciones] @parametros varchar(max)
 AS
 SET NOCOUNT ON
 BEGIN TRY	

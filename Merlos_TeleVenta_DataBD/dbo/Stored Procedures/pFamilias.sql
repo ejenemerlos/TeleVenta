@@ -1,4 +1,13 @@
 ﻿
+
+-- ===========================================================
+--	Author:			Elías Jené
+--	Create date:	05/07/2019
+--	Description:	Obtener Familias de Artículos
+-- ===========================================================
+
+-- exec [pFamilias] 'lista'
+
 CREATE PROCEDURE [dbo].[pFamilias] @modo char(50)=''
 AS
 BEGIN TRY

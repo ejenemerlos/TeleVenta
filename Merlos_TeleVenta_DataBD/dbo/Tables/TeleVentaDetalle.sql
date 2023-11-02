@@ -8,6 +8,8 @@
 	[importe] NUMERIC(15, 6) NULL DEFAULT 0,
 	[serie] [varchar](2) NULL,
 	[completado] [int] NULL,
+	[fechaLlamada] varchar(10) NULL,
+	[IdDoc] [int] IDENTITY(1,1) NOT NULL,
 	[FechaInsertUpdate] [datetime] NOT NULL    
 ) ON [PRIMARY]
 GO

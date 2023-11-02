@@ -1,0 +1,217 @@
+﻿<div class="CliArt_dvMenu CliArt_dv">
+    <span class="MIbotonGreen esq05" style="margin:10px;" onclick="CliArt_NuevoRegistro_Click()">Nuevo Registro</span>
+</div>
+<div id="CliArt_dvListado" class=" CliArt_dv" style="padding:10px;"></div>
+<div id="CliArt_dvArticulos" class=" CliArt_dv" style="padding:10px; display:none;"></div>
+
+<div style="display:none;">
+    <input type="text" id="inpClienteCodigo" value="{{CODIGO}}" />
+</div>
+
+
+<script>
+    var CliArt_ClienteCodigo = $.trim($("#inpClienteCodigo").val());
+
+    CliArt_CargarArticulos();
+
+    function CliArt_CargarArticulos() {
+        var contenido = "";
+        var parametros = {
+            "ClienteCodigo": CliArt_ClienteCodigo,
+            "jsUser": jsUser
+        };
+        flexygo.nav.execProcess('pPers_CliArt_CargarArticulos', '', null, null, [{
+            key: 'parametros',
+            value: JSON.stringify(parametros)
+        }], 'current', false, $(this), function(ret) {
+            if (ret) {
+                console.log(ret.JSCode);
+                var js = JSON.parse(ret.JSCode);
+                if (js.error === "") {
+                    jsr = js.respuesta;
+                    if (jsr.length > 0) {
+                        contenido = `
+                            <div style="display:flex; gap:10px;">
+                                <input type="text" id="CliArt_inpArtBuscadorPrincipal" placeholder="buscar"
+                                style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                                onkeyup="buscarEnGrid(this.id,'CliArt_dvListaDeArticulosPrincipal')">
+                            </div>
+                            <div style="margin-top:10px; display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px; border-bottom:1px solid #CCC;">
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Artículo</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Descripción</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Incluir</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Excluir</div>
+                            </div>
+                            <div id="CliArt_dvListaDeArticulosPrincipal" style="border-bottom:2px solid #CCC; max-height:300px; overflow:hidden; overflow-y:auto;">
+                        `;
+                        for (var i in jsr) {
+                            var incluir_Ckeck_Color = "#333";
+                            var excluir_Ckeck_Color = "#333";
+                            var incluir_Ckeck = icoCheckO;
+                            var excluir_Ckeck = icoCheckO;
+                            if (jsr[i].IncluirExcluir === 1) {
+                                incluir_Ckeck = icoCheckI;
+                                incluir_Ckeck_Color = "green";
+                            }
+                            if (jsr[i].IncluirExcluir === 2) {
+                                excluir_Ckeck = icoCheckI;
+                                excluir_Ckeck_Color = "green";
+                            }
+
+                            contenido += `
+                                <div class="dvTR2 buscarEnGridTR" style="display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px;"
+                                data-buscar="${$.trim(jsr[i].Articulo)} ${$.trim(jsr[i].Descripcion)}">
+                                    <div class="codigo" style="padding:4px;">${$.trim(jsr[i].Articulo)}</div>
+                                    <div style="padding:4px;">${$.trim(jsr[i].Descripcion)}</div>
+                                    <div class="incluir" style="padding:4px; text-align:center; color:${incluir_Ckeck_Color};" onclick="CliArt_IncluirExcluir(this)">${incluir_Ckeck}</div>
+                                    <div class="excluir" style="padding:4px; text-align:center; color:${excluir_Ckeck_Color};" onclick="CliArt_IncluirExcluir(this)">${excluir_Ckeck}</div>
+                                </div>
+                            `;
+                        }
+                        contenido += "</div>";
+                    } else {
+                        contenido = "Sin resultados!";
+                    }
+                } else {
+                    contenido = js.error;
+                }
+                $("#CliArt_dvListado").html(contenido);
+            }
+        }, false);
+    }
+
+    function CliArt_NuevoRegistro_Click() {
+        $("#CliArt_dvListado").hide();
+        $("#CliArt_dvArticulos").html(`
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar"
+                style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                onkeyup="CliArt_NuevoRegistro_Buscar()">
+                <i class="flx-icon icon-close" style="cursor:pointer; font-size:20px;" 
+                onclick="CliArt_CargarArticulos(); $('#CliArt_dvListado').show(); $('#CliArt_dvArticulos').hide();"></i>
+            </div>
+        `).slideDown();
+
+        if (dameValorJSON(flexygo.context.MerlosConfiguracion, "CargaArtDef") === "1") {
+            CliArt_NuevoRegistro_Buscar("todos");
+        }
+    }
+
+    function CliArt_NuevoRegistro_Buscar(todos) {
+        if (event.key === "Enter" || todos) {
+            var buscar = $.trim($("#CliArt_inpArtBuscador").val());
+            if (buscar == "") {
+                buscar = "todos";
+            }
+            if (todos) {
+                CliArt_ClienteCodigo = todos;
+            } else {
+                CliArt_ClienteCodigo = $.trim($("#inpClienteCodigo").val());
+            }
+            if (buscar !== "" || todos) {
+                var parametros = {
+                    "ClienteCodigo": CliArt_ClienteCodigo,
+                    "buscar": buscar,
+                    "jsUser": jsUser
+                };
+                flexygo.nav.execProcess('pPers_Articulos', '', null, null, [{
+                    key: 'parametros',
+                    value: JSON.stringify(parametros)
+                }], 'current', false, $(this), function(ret) {
+                    if (ret) {
+                        var datos = "";
+                        var js = JSON.parse(ret.JSCode);
+                        if (js.error === "") {
+                            jsr = js.respuesta;
+                            if (jsr.length > 0) {
+                                contenido = `  
+                                    <div style="display:flex; gap:10px;">
+                                        <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar"
+                                        style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                                        onkeyup="CliArt_NuevoRegistro_Buscar()">
+                                        <i class="flx-icon icon-close" style="cursor:pointer; font-size:20px;" 
+                                        onclick="CliArt_CargarArticulos(); $('#CliArt_dvListado').show(); $('#CliArt_dvArticulos').hide();"></i>
+                                    </div>
+                                    <div style="margin-top:10px; display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px; border-bottom:1px solid #CCC;">
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Artículo</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Descripción</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Incluir</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Excluir</div>
+                                    </div>
+                                    <div id="CliArt_dvListaDeArticulos" style="border-bottom:2px solid #CCC; max-height:300px; overflow:hidden; overflow-y:auto;">
+                                `;
+                                for (var i in jsr) {
+                                    var incluir_Ckeck = icoCheckO;
+                                    var excluir_Ckeck = icoCheckO;
+                                    if (jsr[i].IncluirExcluir === 1) {
+                                        incluir_Ckeck = icoCheckI;
+                                    }
+                                    if (jsr[i].IncluirExcluir === 2) {
+                                        excluir_Ckeck = icoCheckI;
+                                    }
+
+                                    contenido += `
+                                        <div class="dvTR2 buscarEnGridTR" style="display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px;"
+                                        data-buscar="${$.trim(jsr[i].CODIGO)} ${$.trim(jsr[i].NOMBRE)}">
+                                            <div class="codigo" style="padding:4px;">${$.trim(jsr[i].CODIGO)}</div>
+                                            <div style="padding:4px;">${$.trim(jsr[i].NOMBRE)}</div>
+                                            <div class="incluir" style="padding:4px; text-align:center;" onclick="CliArt_IncluirExcluir(this)">${incluir_Ckeck}</div>
+                                            <div class="excluir" style="padding:4px; text-align:center;" onclick="CliArt_IncluirExcluir(this)">${excluir_Ckeck}</div>
+                                        </div>
+                                    `;
+                                }
+                                contenido += "</div>";
+                            } else {
+                                contenido = "Sin resultados!";
+                            }
+                        } else {
+                            contenido = js.error;
+                        }
+                        $("#CliArt_dvArticulos").html(contenido);
+                    }
+                }, false);
+            }
+        }
+    }
+
+    function CliArt_IncluirExcluir(elem) {
+        var estado = 0;
+        var claseClick = $(elem).attr("class");
+        var elemICO = $(elem).html();
+        var incluirValor = 0;
+        var excluirValor = 0;
+        var articulo = $(elem).closest('.dvTR2').find('.codigo').text();
+
+        if (elemICO === icoCheckO) {
+            $(elem).html(icoCheckI).css("color", "green");
+            estado = 1;
+        } else {
+            $(elem).html(icoCheckO).css("color", "#333");
+        }
+
+        if (claseClick === "incluir" && estado === 1) {
+            incluirValor = 1;
+            $(elem).closest('.dvTR2').find('.excluir').html(icoCheckO).css("color", "#333");
+        }
+        if (claseClick === "excluir" && estado === 1) {
+            excluirValor = 1;
+            $(elem).closest('.dvTR2').find('.incluir').html(icoCheckO).css("color", "#333");
+        }
+
+        var parametros = {
+            "ClienteCodigo": CliArt_ClienteCodigo,
+            "articulo": articulo,
+            "incluirValor": incluirValor,
+            "excluirValor": excluirValor,
+            "jsUser": jsUser
+        };
+        flexygo.nav.execProcess('pPers_ClientesArticulos', '', null, null, [{
+            key: 'parametros',
+            value: JSON.stringify(parametros)
+        }], 'current', false, $(this), function(ret) {
+            if (ret) {
+
+            }
+        }, false);
+    }
+</script>

@@ -1,4 +1,18 @@
-﻿CREATE PROCEDURE [dbo].[pCalcularImp]
+﻿
+
+
+-- ========================================================================
+-- Author: Albert Rodriguez
+-- ALTER date: 29/08/17
+-- Revision: 
+-- Description: Procedimiento que calcula los importes
+-- ========================================================================
+
+/*
+exec [dbo].[pCalcularImp] '01', 'SF', '   1901239', '4300000000014', 3
+*/
+
+CREATE PROCEDURE [dbo].[pCalcularImp]
 	@EMPRESA CHAR(2)
 	, @LETRA CHAR(2)
 	, @NUMERO char(10)
@@ -16,7 +30,7 @@ BEGIN TRY
 	-- 1.0 Asignación valor variables
 
 	-- Nombre BBDD Comunes (único campo variable para cada cliente)
-	SET @COMUNES = (SELECT '['+LTRIM(rTRIM(COMUN))+']' FROM [TELEVENTA].DBO.CONFIGURACION_SQL)
+	SET @COMUNES = (SELECT '['+LTRIM(rTRIM(COMUN))+']' FROM CONFIGURACION_SQL)
 
 	-- Nombre BBDD Ejercicio
 	SET @cSQL = N'	SELECT @GESTIONout=''[''+LTRIM(RTRIM(RUTA))+'']'' FROM '+@COMUNES+'.DBO.EJERCICI WHERE PREDET=1';
@@ -104,6 +118,17 @@ BEGIN TRY
 	WHERE C.EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(C.NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND C.LETRA='''+@LETRA+'''  
 
 	-- Calcular TOTALDOC
+	UPDATE '+@GESTION+'.DBO.C_PEDIVE SET TOTALDOC=D.TOTALDOC FROM '+@GESTION+'.DBO.C_PEDIVE C INNER JOIN (SELECT A.EMPRESA, A.NUMERO, A.LETRA, coalesce(CONVERT(DECIMAL(16,2),sum(totimpiva)),0.00)  AS TOTALDOC
+	from (SELECT C.EMPRESA, C.NUMERO, C.LETRA, sum( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) ) +
+		round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(COALESCE(IVA.IVA,0.00)/100)),2) +
+		round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(CASE WHEN CLI.RECARGO=1 THEN COALESCE(IVA.RECARG,0.00)/100 ELSE 0 END)),2) as totimpiva, IVA.iva
+		FROM '+@GESTION+'.DBO.D_PEDIVE D 
+		JOIN '+@GESTION+'.DBO.C_PEDIVE C ON D.EMPRESA=C.EMPRESA AND D.LETRA=C.LETRA AND LTRIM(RTRIM(D.NUMERO))=LTRIM(RTRIM(C.NUMERO))
+		LEFT JOIN '+@GESTION+'.DBO.TIPO_IVA IVA ON IVA.CODIGO=D.TIPO_IVA 
+		LEFT JOIN '+@GESTION+'.DBO.CLIENTES CLI ON CLI.CODIGO=C.CLIENTE
+		WHERE D.EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(D.NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND D.LETRA='''+@LETRA+'''  group by c.empresa, c.numero, c.letra, IVA.iva) a GROUP BY A.EMPRESA, A.NUMERO, A.LETRA) D ON D.EMPRESA=C.EMPRESA AND D.NUMERO=C.NUMERO AND D.LETRA=C.LETRA
+
+/*
 	SELECT @TOTALDOC = coalesce(CONVERT(DECIMAL(16,2),sum(totimpiva)),0.00) from (SELECT sum( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) ) +
 	round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(COALESCE(IVA.IVA,0.00)/100)),2) +
 	round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(CASE WHEN CLI.RECARGO=1 THEN COALESCE(IVA.RECARG,0.00)/100 ELSE 0 END)),2) as totimpiva, IVA.iva
@@ -113,6 +138,7 @@ BEGIN TRY
 
 	UPDATE '+@GESTION+'.DBO.'+@TABLECAB+' SET TOTALDOC=@TOTALDOC 
 	WHERE EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND LETRA='''+@LETRA+'''
+	*/
 	'
 	--print @cSQL1
 	exec (@cSQL+@cSQL1)

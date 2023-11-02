@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pConfiguracion] ( @parametros varchar(max) = '' )
+﻿
+CREATE PROCEDURE [dbo].[pConfiguracion] ( @parametros varchar(max) = '' )
 AS
 BEGIN TRY	
 
@@ -35,37 +36,7 @@ BEGIN TRY
 
 	--	RECONFIGURAR - eliminamos datos de la aplicación
 		if @modo='reconfigurar' BEGIN
-			TRUNCATE TABLE [dbo].[config_telev]
-			TRUNCATE TABLE [dbo].[config_user]
-			TRUNCATE TABLE [dbo].[Configuracion]
-			TRUNCATE TABLE [dbo].[Configuracion_ADI]
-			TRUNCATE TABLE [dbo].[Configuracion_SQL]
-			TRUNCATE TABLE [dbo].[cliente_gestor]
-			TRUNCATE TABLE [dbo].[config_telev]
-			TRUNCATE TABLE [dbo].[familia_user]
-			TRUNCATE TABLE [dbo].[gestor_user]
-			TRUNCATE TABLE [dbo].[gestores]
-			TRUNCATE TABLE [dbo].[inci_art]
-			TRUNCATE TABLE [dbo].[inci_cli]
-			TRUNCATE TABLE [dbo].[inci_CliArt]
-			TRUNCATE TABLE [dbo].[inci_CliPed]
-			TRUNCATE TABLE [dbo].[llamadas]
-			TRUNCATE TABLE [dbo].[llamadas_user]
-			TRUNCATE TABLE [dbo].[llamadasOD]
-			TRUNCATE TABLE [dbo].[marca_user]
-			TRUNCATE TABLE [dbo].[ObservacionesInternas]
-			TRUNCATE TABLE [dbo].[Pedidos_Contactos]
-			TRUNCATE TABLE [dbo].[Pedidos_Familias]
-			TRUNCATE TABLE [dbo].[ruta_user]
-			TRUNCATE TABLE [dbo].[serie_user]
-			TRUNCATE TABLE [dbo].[subfam_user]
-			TRUNCATE TABLE [dbo].[TeleVentaCab]
-			TRUNCATE TABLE [dbo].[TeleVentaCliente]
-			TRUNCATE TABLE [dbo].[TeleVentaDetalle]
-			TRUNCATE TABLE [dbo].[TeleVentaFiltros]
-			TRUNCATE TABLE [dbo].[TeleVentaIncidencias]
-			TRUNCATE TABLE [dbo].[vend_user]
-			TRUNCATE TABLE [dbo].[VendSubVend]
+			TRUNCATE TABLE Configuracion_SQL
 			return -1
 		END
 

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pEnUso] ( @parametros varchar(max) )
+﻿
+CREATE PROCEDURE [dbo].[pEnUso] ( @parametros varchar(max) )
 AS
 BEGIN
 	SET NOCOUNT ON;

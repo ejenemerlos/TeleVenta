@@ -1,5 +1,8 @@
 ﻿CREATE PROCEDURE [dbo].[pPedido_Nuevo] @Values XML OUTPUT, @ContextVars as XML, @RetValues as XML OUTPUT
 AS
+	insert into Merlos_Log (accion) values (CONCAT('[pPedido_Nuevo] ''',cast(@ContextVars as varchar(max)),''' ', '''',cast(@RetValues as varchar(max)),''''))
+
+
 -- =============================================
 --	Author:			Elías Jené
 --	Create date:	16/05/2019
@@ -52,7 +55,6 @@ AS
 			, @QuitarEnProduccion smallint=0
 
 	declare @vret_pMerlos_LOG smallint = 0
-
 	
 	/**/ -- Log Merlos
 	/**/ declare @MerlosLog varchar(max)=''
@@ -266,6 +268,13 @@ BEGIN TRY
 	-- eliminar EN_USO
 	delete EnUso where Clave=@Clave and Objeto='pPedido_Nuevo' and Estado=1	
 
+	-- enviar email del pedido
+	begin try
+		declare @pmail varchar(1000) = concat('{"empresa":"',@EMPRESA,'","numero":"',@codigo,'","letra":"',@letra,'","usuarioJS":{"UserLogin":"',@UserLogin,'","UserID":"',@UserID,'","UserName":"',@UserName,'","currentReference":"',@currentReference,'"}}') 
+		EXEC [pPedido_EnviarEmail] @pmail 
+	END TRY
+	begin catch insert into Merlos_Log (error, Usuario) values ( concat('Error SP: ', OBJECT_NAME(@@PROCID),' - [pPedido_EnviarEmail] ::: ERROR_MESSAGE(): ',ERROR_MESSAGE()), @UserLogin) end catch
+
 	COMMIT TRANSACTION pedidoNuevo
 END TRY
 BEGIN CATCH
@@ -280,29 +289,9 @@ BEGIN CATCH
 		, char(13), ERROR_LINE()
 	)
 	RAISERROR(@CatchError,12,1)
-
-	declare @accion varchar(max) = CONCAT('ERROR SP: pPedidoNuevo !!! - ' 
-								,char(13), '@UserLogin: ' , @UserLogin
-								,char(13), '@EMPRESA: ' , @EMPRESA
-								,char(13), '@codigo: ' , @codigo
-								,char(13), '@FECHA: ' , @FECHA
-								,char(13), '@CLIENTE: ' , @CLIENTE
-								,char(13), '@env_cli: ' , @env_cli
-								,char(13), '@ENTREGA: ' , @ENTREGA
-								,char(13), '@Vendedor: ' , @Vendedor
-								,char(13), '@ruta: ' ,  @ruta
-								,char(13), '@PRONTO: ' , @PRONTO
-								,char(13), '@divisa: ' , @divisa
-								,char(13), '@fpag: ' , @fpag
-								,char(13), '@letra: ' , @letra
-								,char(13), '@getdate: ' , convert(varchar(10),getdate(),105)
-								,char(13), '@almacen: ' , @almacen
-								,char(13), '@OBSERVACIO: ' , @OBSERVACIO
-								,char(13), '@NoCobrarPortes: ' , @NoCobrarPortes
-								,char(13), '@VerificarPedido: ' , @VerificarPedido
-	)
 	
-	BEGIN TRY EXEC [pMerlos_LOG] @accion=@accion, @error=@CatchError END TRY BEGIN CATCH END CATCH
+	insert into Merlos_Log (error, Usuario) values ( concat('Error SP: ', OBJECT_NAME(@@PROCID),' ::: ERROR_MESSAGE(): ',ERROR_MESSAGE()), @UserLogin)
+
 	BEGIN TRY
 		-- Enviar correo
 		DECLARE @EMAILMENSAJE NVARCHAR(max), @EMAILASUNTO NVARCHAR(50)	

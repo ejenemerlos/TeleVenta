@@ -1,20 +1,16 @@
-﻿CREATE PROCEDURE [dbo].[pCalculosPV] (@parametros varchar(max))
+﻿
+CREATE PROCEDURE [dbo].[pCalculosPV] (@parametros varchar(max))
 AS
 SET NOCOUNT ON
 BEGIN TRY	
 	-- Parámetros JSON
 	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,'$.modo')),'')
 		,	@NUMERO varchar(20) = isnull((select JSON_VALUE(@parametros,'$.numero')),'')
-		,	@LINEA varchar(20) = isnull((select JSON_VALUE(@parametros,'$.linea')),'')
-		,	@LETRA char(2) = isnull((select JSON_VALUE(@parametros,'$.letra')),'')
-		,	@ARTICULO varchar(50) = isnull((select JSON_VALUE(@parametros,'$.articulo')),'')
-		,	@UNIDADES numeric(15,6) = cast(isnull((select JSON_VALUE(@parametros,'$.uds')),'0.00') as numeric(15,6))
-		,	@PRECIO numeric(15,6) = cast(isnull((select JSON_VALUE(@parametros,'$.precio')),'0.00') as numeric(15,6))
-		,	@PESO varchar(20) = isnull((select JSON_VALUE(@parametros,'$.peso')),'0.00')
-		,	@TARIFA varchar(10) = isnull((select JSON_VALUE(@parametros,'$.tarifa')),'')    
+		,	@LETRA char(2) = isnull((select JSON_VALUE(@parametros,'$.letra')),'')   
 
 	-- variables
 	declare @Sentencia varchar(max) = ''
+		,	@Sentencia2 varchar(max) = ''
 		,	@TOTALDOC numeric(15,6)
 		,	@PVERDECLI bit
 		,	@GESTION varchar(10)
@@ -22,7 +18,12 @@ BEGIN TRY
 		,	@empresa char(2)
 
 	select @GESTION=Gestion, @empresa=Empresa from Configuracion_SQL
-	select top 1 @CLIENTE=cliente from [2022YB].dbo.c_pedive where concat(empresa,numero,letra)=concat(@empresa,@NUMERO,@LETRA) 
+
+	declare @jsonTemp TABLE (js varchar(max))
+	INSERT @jsonTemp 
+	EXEC('select(select top 1 cliente from ['+@GESTION+'].dbo.c_pedive where concat(empresa,numero,letra)=concat('''+@empresa+''','''+@NUMERO+''','''+@LETRA+''') for JSON AUTO, INCLUDE_NULL_VALUES)')	
+	SELECT @CLIENTE=JSON_VALUE((select js FROM @jsonTemp),'$[0].cliente')		
+	delete @jsonTemp
 	
 	-- Calcular Precios líneales
 	set @Sentencia = '
@@ -69,7 +70,8 @@ BEGIN TRY
 					-(((CASE WHEN PESO=0.00 THEN UNIDADES*PREDIVIVA ELSE PESO*PREDIVIVA END)
 					-(CASE WHEN PESO=0.00 THEN UNIDADES*PREDIVIVA ELSE PESO*PREDIVIVA END)*(DTO1/100))*(DTO2/100)),2)
 	WHERE EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND LETRA='''+@LETRA+''' 
-	
+	'
+	set @Sentencia2='
 	-- ACTUALIZAR PVERDE
 	select @pverdecli=PVERDE from ['+@GESTION+'].dbo.clientes WHERE CODIGO='''+@CLIENTE+'''
 	IF @PVERDECLI=0
@@ -89,6 +91,18 @@ BEGIN TRY
 	WHERE C.EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(C.NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND C.LETRA='''+@LETRA+'''  
 
 	-- Calcular TOTALDOC
+	UPDATE ['+@GESTION+'].DBO.C_PEDIVE SET TOTALDOC=D.TOTALDOC FROM ['+@GESTION+'].DBO.C_PEDIVE C INNER JOIN (SELECT A.EMPRESA, A.NUMERO, A.LETRA, coalesce(CONVERT(DECIMAL(16,2),sum(totimpiva)),0.00)  AS TOTALDOC
+	from (SELECT C.EMPRESA, C.NUMERO, C.LETRA, sum( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) ) +
+		round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(COALESCE(IVA.IVA,0.00)/100)),2) +
+		round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(CASE WHEN CLI.RECARGO=1 THEN COALESCE(IVA.RECARG,0.00)/100 ELSE 0 END)),2) as totimpiva, IVA.iva
+		FROM ['+@GESTION+'].DBO.D_PEDIVE D 
+		JOIN ['+@GESTION+'].DBO.C_PEDIVE C ON D.EMPRESA=C.EMPRESA AND D.LETRA=C.LETRA AND LTRIM(RTRIM(D.NUMERO))=LTRIM(RTRIM(C.NUMERO))
+		LEFT JOIN ['+@GESTION+'].DBO.TIPO_IVA IVA ON IVA.CODIGO=D.TIPO_IVA 
+		LEFT JOIN ['+@GESTION+'].DBO.CLIENTES CLI ON CLI.CODIGO=C.CLIENTE
+		WHERE D.EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(D.NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND D.LETRA='''+@LETRA+'''  group by c.empresa, c.numero, c.letra, IVA.iva) a GROUP BY A.EMPRESA, A.NUMERO, A.LETRA) D ON D.EMPRESA=C.EMPRESA AND D.NUMERO=C.NUMERO AND D.LETRA=C.LETRA
+
+	/*
+	-- Calcular TOTALDOC
 	SELECT @TOTALDOC = coalesce(CONVERT(DECIMAL(16,2),sum(totimpiva)),0.00) from (SELECT sum( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) ) +
 	round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(COALESCE(IVA.IVA,0.00)/100)),2) +
 	round( sum(( (D.IMPORTE+D.PVERDE)-((D.IMPORTE+D.PVERDE)*(C.PRONTO/100)) )*(CASE WHEN CLI.RECARGO=1 THEN COALESCE(IVA.RECARG,0.00)/100 ELSE 0 END)),2) as totimpiva, IVA.iva
@@ -98,10 +112,15 @@ BEGIN TRY
 
 	UPDATE ['+@GESTION+'].DBO.C_PEDIVE SET TOTALDOC=@TOTALDOC 
 	WHERE EMPRESA='''+@empresa+''' AND LTRIM(RTRIM(NUMERO))=LTRIM(RTRIM('''+@NUMERO+''')) AND LETRA='''+@LETRA+'''
+	*/
 	'
 
 	/**/ -- print @Sentencia return -1
-	exec (@Sentencia)
+	-- Log, bloqueo SQL
+	insert into aaa (datos)
+	values (@Sentencia+@Sentencia2)
+	exec (@Sentencia+@Sentencia2)
+
 	RETURN -1
 END TRY
 BEGIN CATCH	

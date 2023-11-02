@@ -1,14 +1,17 @@
 ﻿CREATE PROCEDURE [dbo].[pOperadorConfig] @elJS nvarchar(max)=''
 AS
 BEGIN TRY
+
+	insert into Merlos_Log (accion) values (concat('[pOperadorConfig] ''',@elJS,''''))			--		select * from Merlos_Log order by fechainsertupdate desc
+	
 	BEGIN TRAN
 		declare   @modo varchar(50)		= (select JSON_VALUE(@elJS,'$.modo'))
 				, @nombreTV varchar(100)= (select JSON_VALUE(@elJS,'$.nombreTV'))
-				, @fecha varchar(10)	= (select JSON_VALUE(@elJS,'$.fecha'))
+				, @fecha varchar(max)	= (select JSON_VALUE(@elJS,'$.fecha'))
 				, @rol varchar(20)		= (select JSON_VALUE(@elJS,'$.paramStd[0].currentRole'))
 				, @usuario varchar(20)	= (select JSON_VALUE(@elJS,'$.paramStd[0].currentReference'))
+				, @fechaLect VARCHAR(10)
 
-				-- insert into aaa (datos) values ( CONCAT('@fecha: ',@fecha) )     --   select * from aaa      --   delete aaa
 
 		declare @fechaMesDia char(4) = CONCAT(substring(@fecha,4,2), substring(@fecha,1,2))
 	
@@ -16,23 +19,26 @@ BEGIN TRY
 
 		declare @idTV varchar(50) = 
 		replace(replace(replace(replace(replace(convert(varchar,getdate(),121),' ',''),'/',''),':',''),'.',''),'-','') 
-		
+
 
 		if @modo='guardar' or @modo='recargar' BEGIN
 			--	comprobar que no exista el nombreTV
-			if @modo='guardar' and exists (select * from [TeleVentaCab] where usuario=@usuario and nombre=@nombreTV and fecha=@fecha) begin 
+			/*if @modo='guardar' and exists (select * from [TeleVentaCab] where usuario=@usuario and nombre=@nombreTV and fecha=@fecha)
+			begin 
 				select 'nombreTV_Existe!' as JAVASCRIPT 
 				COMMIT TRAN
 				return -1 
-			end			
+			end	*/		
 		
-			if @modo='recargar' BEGIN
+			if @modo='recargar'
+			BEGIN
 				set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)				
 			END
 
 			declare @i int, @valor varchar(1000) 
 		
-			if @modo='guardar' BEGIN
+			if @modo='guardar'
+			BEGIN
 				declare cur CURSOR for select [key], [value] from openjson(@elJS,'$.Gestor')
 				OPEN cur FETCH NEXT FROM cur INTO @i, @valor
 				WHILE (@@FETCH_STATUS=0) BEGIN
@@ -84,9 +90,7 @@ BEGIN TRY
 
 				-- Insertar el registro
 				insert into [TeleVentaCab] (id,usuario,fecha,nombre) values (@idTV,@usuario,@fecha,@nombreTV)
-			END
-
-
+			END			
 
 			--	obtener llamadas según criterios
 				declare   @nDia varchar(10)
@@ -105,8 +109,11 @@ BEGIN TRY
 					set @cnt = @cnt+1
 				FETCH NEXT FROM cur INTO @valor END 
 			CLOSE cur deallocate cur
+
+
 			if @gestores is null set @gestores='' 
-			ELSE set @gestores=' and ('+replace(@gestores,''' a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ',''' OR a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')+') '
+			ELSE set @gestores=' and ('+replace(@gestores,''' a.cliente in (select cliente from cliente_gestor 
+			where gestor='''+@valor+''') ',''' OR a.cliente in (select cliente from cliente_gestor where gestor='''+@valor+''') ')+') '
 
 			-- -- montar where rutas
 			declare cur CURSOR for select valor from [TeleVentaFiltros] where id=@idTV and tipo='Ruta'
@@ -128,114 +135,100 @@ BEGIN TRY
 			if @vendedores is null set @vendedores='' 
 			ELSE set @vendedores=' and ('+replace(@vendedores,''' cli.VENDEDOR',''' OR cli.VENDEDOR')+') '
 
-			set @nDia = replace(replace( lower(DATENAME(dw,@fecha)),'á','a' ),'é','e' )
+			declare cursorFecha cursor for select value from string_split(@fecha,'|')
+			open cursorFecha fetch next from cursorFecha into @fechaLect
+			while (@@FETCH_STATUS=0) begin
+
+				set @nDia = replace(replace( lower(DATENAME(dw,@fechaLect)),'á','a' ),'é','e' )
 	
-			declare @sql varchar(max) = 'insert into [TeleVentaDetalle] (id,cliente,horario)
-					select '''+@idTV+''' as id, a.cliente, a.hora_'+@nDia+' as horario
-					from clientes_adi a
-					inner join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
-					where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
-					and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
-					and a.cliente not in (
-						select CLIENTE collate SQL_Latin1_General_CP1_CI_AS from vVacacionesClientes
-						where (
-								cast((CONCAT(substring('''+@fecha+''',4,2), substring('''+@fecha+''',1,2))) as bigint)
-								>=
-								cast((concat(substring(INICIO,4,2),substring(INICIO,1,2))) as bigint)
-							  )
-							  and
-							  (
-								cast((CONCAT(substring('''+@fecha+''',4,2), substring('''+@fecha+''',1,2))) as bigint)
-								<=
-								cast((concat(substring(FINAL,4,2),substring(FINAL,1,2))) as bigint)
-							  )
-					)
-			'
-			--insert into aaa (datos) values ('principal: '+@sql) --  select * from aaa    --   delete aaa
-			EXEC(@sql)
-
-
-			-- Eliminar registros que no tocan (quincenales, mensuales a cada n días)																						
-			declare @fechaBIG bigint = cast(FORMAT(cast(@fecha as smalldatetime),'yyyyMMdd') as bigint)	
-			declare elCursor CURSOR for
-				select a.cliente, isnull(a.idpedido,''), b.tipo_llama
-				from TeleVentaDetalle a
-				inner join clientes_adi b on a.cliente collate SQL_Latin1_General_CP1_CI_AS=b.cliente and b.tipo_llama in (3,4,5)
-				where a.id=@IdTV
-
-			declare @cli varchar(50), @tipo_llama int, @IdPedidoTV varchar(50)
-			OPEN elCursor FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
-			WHILE (@@FETCH_STATUS=0) BEGIN				
-				declare @UltimaLlamada varchar(10)				
-				select top 1 @UltimaLlamada=convert(varchar(10),FechaInsertUpdate,105)
-				from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc
-				
-				if (	-- quincenal
-						(@tipo_llama=3 and (DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fecha) or DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fecha)-1))															
-						-- mensual
-						or (@tipo_llama=4 and MONTH(@UltimaLlamada)=MONTH(@fecha))
-					
-						-- cada n días
-						or (
-							@tipo_llama=5 and (cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),cast(@fecha as smalldatetime)),'yyyyMMdd') as bigint))
-							= 
-							(select top 1 cast(FORMAT(isnull(cast(FechaInsertUpdate as smalldatetime),'01-01-1900'),'yyyyMMdd') as bigint) 
-							from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc)
+				declare @sql varchar(max) = 'insert into [TeleVentaDetalle] (id,cliente,horario,fechaLlamada)
+						select '''+@idTV+''' as id, a.cliente, a.hora_'+@nDia+' as horario,'''+@fechaLect+''' as fechaLlamada
+						from clientes_adi a
+						inner join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=a.cliente
+						where '+@nDia+'=1 '+@gestores+' '+@rutas+' '+@vendedores+' 
+						and a.cliente not in (select cliente from TeleVentaDetalle where id='''+@idTV+''')
+						and a.cliente not in (
+							select CLIENTE collate SQL_Latin1_General_CP1_CI_AS from vVacacionesClientes
+							where (
+									cast((CONCAT(substring('''+@fechaLect+''',4,2), substring('''+@fechaLect+''',1,2))) as bigint)
+									>=
+									cast((concat(substring(INICIO,4,2),substring(INICIO,1,2))) as bigint)
+									)
+									and
+									(
+									cast((CONCAT(substring('''+@fechaLect+''',4,2), substring('''+@fechaLect+''',1,2))) as bigint)
+									<=
+									cast((concat(substring(FINAL,4,2),substring(FINAL,1,2))) as bigint)
+									)
 						)
-					-- que se haya hecho un pedido en la última llamada
-					) and @IdPedidoTV <> ''
-				BEGIN 
-					delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
-					--insert into aaa (datos) 
-					--values (CONCAT('cliente eliminado: ',@cli,' - @tipo_llama: ',@tipo_llama,' - @UltimaLlamada: ',@UltimaLlamada,' - @fecha: ',@fecha
-					--		,' - @IdTeleVenta: ',@idTV,' - @IdPedidoTV: <<',@IdPedidoTV,'>>')
-					--) 
-				END	
+				'
+				insert into Merlos_Log (accion) values (concat('[pOperadorConfig] @sql: ',@sql))	--		select * from Merlos_Log order by fechainsertupdate desc
+				EXEC(@sql)
+
+
+				-- Eliminar registros que no tocan (quincenales, mensuales a cada n días)																						
+				declare @fechaBIG bigint = cast(FORMAT(cast(@fechaLect as smalldatetime),'yyyyMMdd') as bigint)	
+				declare elCursor CURSOR for
+					select a.cliente, isnull(a.idpedido,''), b.tipo_llama
+					from TeleVentaDetalle a
+					inner join clientes_adi b on a.cliente collate SQL_Latin1_General_CP1_CI_AS=b.cliente and b.tipo_llama in (3,4,5)
+					where a.id=@IdTV
+
+				declare @cli varchar(50), @tipo_llama int, @IdPedidoTV varchar(50)
+				OPEN elCursor FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
+				WHILE (@@FETCH_STATUS=0) BEGIN				
+					declare @UltimaLlamada varchar(10)				
+					select top 1 @UltimaLlamada=convert(varchar(10),FechaInsertUpdate,105)
+					from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc
 				
-				FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
-			END	CLOSE elCursor deallocate elCursor
+					if (	-- quincenal
+							(@tipo_llama=3 and (DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fechaLect) or DATEPART(ISO_WEEK,@UltimaLlamada)=DATEPART(ISO_WEEK, @fechaLect)-1))															
+							-- mensual
+							or (@tipo_llama=4 and MONTH(@UltimaLlamada)=MONTH(@fechaLect))
+					
+							-- cada n días
+							or (
+								@tipo_llama=5 and (cast(FORMAT(dateadd(day,-(select dias_period from clientes_adi where cliente=@cli),@fechaLect),'yyyyMMdd') as bigint))
+								= 
+								(select top 1 cast(FORMAT(isnull(cast(FechaInsertUpdate as smalldatetime),'01-01-1900'),'yyyyMMdd') as bigint) 
+								from TeleVentaDetalle where cliente=@cli order by FechaInsertUpdate desc)
+							)
+						-- que se haya hecho un pedido en la última llamada
+						) and @IdPedidoTV <> ''
+					BEGIN 
+						delete TeleVentaDetalle where id=@IdTV and cliente=@cli	
+					END	
+				
+					FETCH NEXT FROM elCursor INTO @cli, @IdPedidoTV, @tipo_llama
+				END	CLOSE elCursor deallocate elCursor
 
-			-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
-			set @sql = '
-			insert into [TeleVentaDetalle] (id,cliente,horario)
-				select '''+@idTV+''' as id
-					,   cliente
-					,   LEFT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
-						+'' - ''
-						+RIGHT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
-						as horario
-				from llamadasOD
-				where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(isnull(@gestores,''),'a.','')+' 
-						and (gestor='''+@usuario+''' or gestor is NULL) 
-						and insertada=0 
-			update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' '+replace(isnull(@gestores,''),'a.','')+'
-			'
-			EXEC(@sql)
-			
-		END
+				-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
+				set @sql = concat('
+					insert into [TeleVentaDetalle] (id,cliente,horario,fechaLlamada)
+						select ''',@idTV,''' as id
+							,   cliente
+							,   LEFT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+								+'' - ''
+								+RIGHT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
+								as horario
+							,   ''',@fechaLect,''' as fechaLlamada
+						from llamadasOD
+						where format(fechaHora,''dd/MM/yyyy'')=''', @fechaLect,''' ' + replace(isnull(@gestores,''),'a.','') ,' 
+							  and (gestor=''',@usuario,''' or gestor is NULL) 
+							  and insertada=0 
+
+					update llamadasOD set insertada=1 where format(fechaHora,''dd/MM/yyyy'')=''',@fechaLect,''' ',replace(isnull(@gestores,''),'a.',''),'
+				')
+				EXEC(@sql)
+				
+
+				fetch next from cursorFecha into @fechaLect
+			end
+			close cursorFecha deallocate cursorFecha
+			END
 
 
-
-		set @idTV = (select id from [TeleVentaCab] where usuario=@usuario and fecha=@fecha and nombre=@nombreTV)
-
-		-- comprobar [Llamar otro día] y añadir al televenta si coinciden las fechas
-		declare @sqlR varchar(max) = '
-		insert into [TeleVentaDetalle] (id,cliente,horario)
-			select '''+@idTV+''' as id
-				,   cliente
-				,   LEFT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
-					+'' - ''
-					+RIGHT(cast(convert(varchar(10),fechaHora,108) as varchar(5)),2)
-					as horario
-			from llamadasOD
-			where convert(varchar(10),fechaHora,105)='''+@fecha+''' 
-					and (gestor='''+@usuario+''' or gestor is NULL)  
-					and insertada=0 
-		update llamadasOD set insertada=1 where convert(varchar(10),fechaHora,105)='''+@fecha+''' and (gestor='''+@usuario+''' or gestor is NULL)  
-		'
-		EXEC(@sqlR)
-
-		--  devolución de filtros
+			--  devolución de filtros
 			declare @gestor varchar(max) = 
 			(select ltrim(rtrim(u.valor))+' - '+ltrim(rtrim(v.NOMBRE)) collate Modern_Spanish_CS_AI as gestor 
 			from [TeleVentaFiltros] u
@@ -287,15 +280,15 @@ BEGIN TRY
 			if @subfamilia='' or @subfamilia is null set @subfamilia = '[]'
 
 			declare @serieActiva char(2) = isnull(
-					(select valor from TeleVentaFiltros where id=@idTV and tipo='Serie')
-					,(select TVSerie from Configuracion_SQL))
+			(select valor from TeleVentaFiltros where id=@idTV and tipo='Serie')
+			,(select TVSerie from Configuracion_SQL))
 
 			declare @llamUser int = (select count(id) from [TeleVentaDetalle] where id=@idTV)
 			if @llamUser=0 begin 
 				delete [TeleVentaCab] where id=@idTV 
 				delete [TeleVentaFiltros] where id=@idTV 
-			end
 
+			end
 			select   '{"gestor":'+@gestor+',"ruta":'+@ruta+',"vendedor":'+@vendedor+',"serie":'+@serie+',"marca":'+@marca+',"familia":'+@familia
 					+',"subfamilia":'+@subfamilia+',"fecha":"'+isnull(@fecha,'')+'","llamUserReg":"'+cast(@llamUser as varchar(10))+'"'
 					+',"serieActiva":"'+@serieActiva+'"}' as JAVASCRIPT

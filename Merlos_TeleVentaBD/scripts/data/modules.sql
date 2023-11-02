@@ -167,486 +167,8 @@ function cargarDatosCliente(){
 
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Clientes_Listado',N'flx-objectlist',N'system',N'Clientes',N'{{ObjectWhere}}',N'Lisado de Clientes',N'{{ObjectDescrip}}',N'default',0,0,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'sysobjecticon',N'syspager-listboth',25,NULL,N'systb-search',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
- ,(N'Configuracion',N'flx-html',N'project',NULL,NULL,N'Configuracion',N'Configuracion',N'none',1,1,1,0,NULL,NULL,N'<style>
-	#tbConfigMenu tr th {padding:2px 6px;}
-	.separador { width:30px;}
-
-	.tPersP{ font: bold 14px arial; color:#333; }
-	.tPersP:hover{ color:#A9C5EB; cursor:pointer; }
-
-	#tbConfigBBDD th, #tbConfigBBDD td {padding:4px;}
-	#tbConfigBBDD th {font:14px arial; color:#333; }
-	#tbConfigBBDD td input { width:130px; text-align:center; border:1px solid #ccc; }
-</style>
-
-<script>
-	if(flexygo.context.currentRole!=="Admins"){ flexygo.nav.openPageName(''TeleVenta'','''','''',null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this)); }
-</script>
-
-<div id="dvConfiguracion" class="esq10 configSeccion inv" style="padding:20px; background:rgb(240,240,240);">
-	<div id="dvNombreEmpresa" style="text-align:center; font:bold 16px arial; color:#323f4b;">Ejercicio {{Ejercicio}} - Empresa: {{NombreEmpresa}}</div>
-	<br>
-	<div class="tCnfT">Configuración de la aplicación</div>
-	<table id="tbConfiguracion">
-		<tr>
-			<th style="width:25%;">Reconfigurar el Portal</th>
-			<td>				
-				&nbsp;&nbsp;<span class="MIbotonGreen esq05" onclick="reconfigurar_Click()">reconfigurar</span>
-			</td>
-		</tr>
-		<tr>
-			<tr>
-			<th>Meses de consumo</th>
-			<td>
-				&nbsp;&nbsp;
-				<input type="text" id="inpMesesConsumo" class="C esq05" style="width:30px; font:bold 14px arial;" value="1" readonly>
-				&nbsp;&nbsp;
-				&nbsp;<div class="icoMenos img20" onclick="masmenos(false,''inpMesesConsumo'',1,12)"></div>
-				&nbsp;<div class="icoMas img20" onclick="masmenos(true,''inpMesesConsumo'',1,12)"></div>
-				&nbsp;&nbsp;<span class="MIbotonGreen esq05" onclick="asignarMesesConsumo()">asignar</span>
-				<span id="spanAsignacionAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
-			</td>
-		</tr>
-			<th>Serie Pedidos</th>
-			<td>
-				&nbsp;&nbsp;
-				<input type="text" id="inpSerie" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click(''Serie''); event.stopPropagation();" readonly>
-				<div id="dvSerieListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionSerieAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
-			</td>
-		</tr>		
-		<tr>
-			<th>Tarifa mínima</th>
-			<td>
-				&nbsp;&nbsp;
-				<input type="text" id="inpTarifaMinima" class="C esq05" style="width:80px; font:bold 14px arial;" onclick="inpDatos_Click(''TarifaMinima''); event.stopPropagation();" readonly>
-				<div id="dvTarifaMinimaListado" class="dvListaDatos"></div>
-				<span id="spanAsignacionTarifaMinimaAviso" class="inv" style="font:bold 14px arial; color:green;">&nbsp;&nbsp; asignación correcta!</span>
-			</td>
-		</tr>
-		<tr>
-			<th></th>
-			<td></td>
-		</tr>
-		<tr>
-			<th style="height:20px;"></th>
-			<td>
-				<img src="./Merlos/images/BtnDesO.png" id="imgNoCobrarPortes" class="OpcionIO"> No Cobrar Portes
-				&nbsp;&nbsp;&nbsp;
-				<img src="./Merlos/images/BtnDesO.png" id="imgVerificarPedido" class="OpcionIO"> Verificar Pedidos
-				&nbsp;&nbsp;&nbsp;
-				<img src="./Merlos/images/BtnDesO.png" id="imgMostrarStockVirtual" class="OpcionIO"> Mostrar Stock Virtual
-			</td>
-		</tr>
-	</table>
-	<br><br>
-	
-	<div class="esq10" style="background:#E1E3E7;">
-		<div class="tCnfT">Configuración Email principal de la aplicación</div>
-		<div style="padding:20px;">
-			<table id="tbConfigEmail">
-				<tr>
-					<td>
-						Cuenta<br><input type="text" class="esq05" id="configEmailCuenta">
-					</td>
-					<td>
-						Servidor SMTP<br><input type="text" class="esq05" id="configEmailSMTP">
-					</td>
-					<td>
-						Puerto<br><input type="text" class="esq05" id="configEmailPuerto">
-					</td>					
-					<td>
-						usuario<br><input type="text" class="esq05" id="configEmailUsuario">
-					</td>
-					<td>
-						Contraseña<br><input type="password" class="esq05" id="configEmailPswrd">
-					</td>
-					<td>
-						<br><span style="cursor:pointer;"><img src="./Merlos/images/BtnDesO.png" id="imgConfigEmailSSL" class="OpcionIO"> SSL</span>
-					</td>
-				</tr>
-				<tr>
-					<td colspan="6" style="text-align:center;">
-						<br>
-						<span class="MIboton esq05" style="padding:10px;" onclick="flexygo.nav.openPage(''edit'',''sysMail_Template'',''Name=\''confirm\'''',''null'',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this))">Plantilla</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail(''probarConfiguracion'')">probar configuración</span>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<span class="MIboton esq05" style="padding:10px;" onclick="configurarCtaEmail()">guardar</span>
-					</td>
-				</tr>				
-			</table>
-		</div>
-		<br>
-	</div>
-</div>
-
-<div id="dvBBDD" class="esq10 configSeccion inv" style="margin-top:10px; padding:20px; background:rgb(240,240,240);">
-	<div class="tCnfT">Configuración Bases de Datos</div>
-	<div id="dvBBDD01" class="C">
-		<br>
-		Selecciona la base de datos de comunes <select id="selComun" class="esq05" style="padding:5px;" onchange="cargarEmpresas()"></select> 
-		<br><br>
-		Selecciona la empresa <select id="selEmpresas" class="esq05" style="padding:5px;"></select> 
-		<br><br>
-		Ejercicio actual + <select id="selNumEjercicios" class="esq05" style="padding:5px;">
-								<option>0</option>
-								<option>1</option>
-								<option>2</option>
-								<option>3</option>
-								<option>4</option>
-								<option>5</option>
-							</select> años atrás
-		<br><br><br>
-		<span class="MIbotonGreen esq05" style="padding:10px;" onclick="configurarElPortal_Click()">Configurar el Portal</span>
-	</div>
-</div>
-<br><br>
-
-
-
-<script>	
-	var veloContenido = 
-		 ''<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">''
-		+''<br><br><span class="info">cargando datos, espera, por favor...</span>'';
-	abrirVelo(veloContenido,400);
-	
-	var SeriesCargadas = false;
-	var TarifasCargadas = false;
-	var elementosDIV = ["dvSerieListado","dvTarifaMinimaListado"];
-	
-	' + convert(nvarchar(max),NCHAR(36)) + N'(document).on("click",function(e) {
-		for(var i in elementosDIV){
-			var container = ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+elementosDIV[i]);
-			if (!container.is(e.target) && container.has(e.target).length === 0) { ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+elementosDIV[i]).stop().slideUp(); }
-		}
-	});
-	
-	' + convert(nvarchar(max),NCHAR(36)) + N'(".OpcionIO").off().on("click",function(){
-		var v = ' + convert(nvarchar(max),NCHAR(36)) + N'(this).attr("id");
-		var nombre = v.split("img")[1];
-		
-		if(window["Conf"+nombre]===0){window["Conf"+nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesI); }else{window["Conf"+nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#"+v).attr("src",BtnDesO); }
-		if(nombre==="ConfigEmailSSL"){}
-		else{ ConfiguracionDelPortal(''actualizar'',nombre,eval(window["Conf"+nombre])); }		
-	});
-	
-	// Comprobar que exista una configuración de BBDD de Datos
-	flexygo.nav.execProcess(''pConfigPrimeraBBDD'','''',null,null, [{''Key'':''modo'',''Value'':''verificar''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){ 
-		if(ret){
-			if(ret.JSCode.trim()!==""){
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show();
-				cargarConfiguracion();
-			}else{
-				// -- si no existe mostramos el formulario para entrar los datos
-				cerrarVelo(); 
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").hide();
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#dvBBDD").fadeIn();
-				cargarComunes();
-			}
-		}else{ alert(''Error S.P. pConfigPrimeraBBDD!!!\n''+JSON.stringify(ret)); } 			
-	}, false);
-	
-	function cargarComunes(){
-		var contenido = "<option value=''''></option>";
-		var elC = "red";
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#selComun").html("<option value=''''>cargando comunes...</option>").css("color",elC);
-		flexygo.nav.execProcess(''pComunes'','''',null,null, 
-		[{''Key'':''modo'',''Value'':''lista''}]
-		, ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){ if(ret){ 
-			var elJS = JSON.parse(limpiarCadena(ret.JSCode));
-			if(elJS.comunes.length>0){ 
-				for(var i in elJS.comunes){
-					contenido += "<option value=''"+elJS.comunes[i].nombre+"''>"+elJS.comunes[i].nombre+"</option>";
-				}
-				elC = "#333";
-			}else{ contenido = "<option value=''''>Sin resultados!</option>";}
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#selComun").html(contenido).css("color",elC);
-		} }, false);
-	}
-	
-	function cargarEmpresas(){
-		var contenido = "<option value=''''></option>";
-		var elC = "red";
-		var bdComunes = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#selComun").val());
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#selEmpresas").html("<option value=''''>cargando empresas...</option>").css("color",elC);
-		flexygo.nav.execProcess(''pEmpresas'','''',null,null, 
-		[{''Key'':''modo'',''Value'':''lista''},{''Key'':''comun'',''Value'':bdComunes}]
-		, ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){ if(ret){ 
-			var elJS = JSON.parse(limpiarCadena(ret.JSCode));
-			if(elJS.empresas.length>0){ 
-				for(var i in elJS.empresas){
-					contenido += "<option value=''"+elJS.empresas[i].codigo+"''>"+elJS.empresas[i].codigo+" - "+elJS.empresas[i].nombre+"</option>";
-				}
-				elC = "#333";
-			}else{ contenido = "<option value=''''>Sin resultados!</option>";}
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#selEmpresas").html(contenido).css("color",elC);
-		} }, false);
-	}	
-	
-	function configuracionAviso(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvBBDD01").fadeIn();	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfigBBDD").hide(); }
-
-	function lanzarConfiguracion(paso){	
-		var comun    = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#selComun").val()); 
-		var empresa  = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#selEmpresas").val()); 
-		var nEmpresa = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'(''select[id="selEmpresas"] option:selected'').text()); 
-		var numEjer  = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'(''#selNumEjercicios'').val()); 
-		if(!paso){ verificarVersionEW(comun); return; }
-		
-		veloContenido =  "<img src=''./Merlos/images/icoCarga.png'' class=''rotarR'' width=''30''><br><br>configurando el portal, por favor, espera...";
-		abrirVelo(veloContenido,400);
-		
-		flexygo.nav.execProcess(''pConfiguracionLanzar'','''',null,null
-		, [{''Key'':''comun'',''Value'':comun},{''Key'':''empresa'',''Value'':empresa}]
-		, ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){ 
-			if(ret){ 
-				var elJS = JSON.parse(limpiarCadena(ret.JSCode));		
-				var ejercicio = elJS.ejercicio;
-				var letra     = elJS.letra;
-				var gestion   = elJS.gestion;
-				var comun     = elJS.comun;
-				var campos    = elJS.campos;
-				flexygo.nav.execProcess(''pConfigBBDD'','''',null,null, 
-					[
-					 {''Key'':''modo'',''Value'':''actualizar''}
-					,{''Key'':''accion'',''Value'':''todo''}
-					,{''Key'':''ejercicio'',''Value'':ejercicio}
-					,{''Key'':''gestion'',''Value'':gestion}
-					,{''Key'':''letra'',''Value'':letra}
-					,{''Key'':''comun'',''Value'':comun}
-					,{''Key'':''campos'',''Value'':campos}
-					,{''Key'':''empresa'',''Value'':empresa}
-					,{''Key'':''nEmpresa'',''Value'':nEmpresa}
-					,{''Key'':''numEjer'',''Value'':numEjer}
-					]
-					, ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){
-					if(ret){ 
-						' + convert(nvarchar(max),NCHAR(36)) + N'(".configSeccion").hide(); ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfiguracion").fadeIn(); 
-						if(ret.JSCode!==""){ alert(ret.JSCode); }
-						else{ cerrarVelo(); }
-						GblLimpiarLaCache();
-						//' + convert(nvarchar(max),NCHAR(36)) + N'("#mainNav").show();
-						flexygo.nav.execProcess(''GoHome'','''','''',null,null,''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));
-					}else{ alert(''Error S.P. pConfigBBDD!!!\n''+ret); } }, false);					
-			}else{ alert(''Error S.P. pConfiguracionLanzar!!!\n''+ret); } 			
-		}, false);
-	}
-	
-	function verificarVersionEW(comun){
-		/***** */ lanzarConfiguracion(true); return; /****** */
-		flexygo.nav.execProcess(''pVersiones'','''',null,null, 
-		[
-		 {''Key'':''modo'',''Value'':''EW''}
-		,{''Key'':''comun'',''Value'':comun}
-		]
-		, ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){
-		if(ret){ 
-			var version = parseInt(ret.JSCode.split(".")[2]);
-			if(parseInt(version)>=7502){ lanzarConfiguracion(true); }
-			else{ 
-				alert("Esta versión de Eurowin\n"
-					 +"no es compatible con este producto!"); 
-			}
-		}else{ alert(''Error S.P. pVersiones!!!\n''+ret); } }, false);
-	}		
-		
-	function tAhora() {	var d = new Date();	var n = d.getTime(); return n; }	
-	
-	function configurarElPortal_Click(){
-		veloContenido =  "El portal se va a configurar"
-						+"<br>con los datos seleccionados."
-						+"<br><br><br>"
-						+"<span class=''MIbotonOrange'' onclick=''lanzarConfiguracion(false)''>configurar</span>"
-						+"&nbsp;&nbsp;&nbsp;<span class=''MIbotonRed'' onclick=''cerrarVelo()''>cancelar</span>";
-		abrirVelo(veloContenido,400);
-	}
-	
-	function reconfigurar_Click(){
-		veloContenido =  "Se eliminará la base de datos actual"
-						+"<br>y se pedirán de nuevo los datos"
-						+"<br>de configuración."
-						+"<br><br><br>"
-						+"<span class=''MIbotonOrange'' onclick=''reconfigurarElPortal()''>reconfigurar</span>"
-						+"&nbsp;&nbsp;&nbsp;<span class=''MIbotonRed'' onclick=''cerrarVelo()''>cancelar</span>";
-		abrirVelo(veloContenido,400);
-	}
-	
-	function inpDatos_Click(inp){
-		' + convert(nvarchar(max),NCHAR(36)) + N'(".dvListaDatos").hide();
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#dv"+inp+"Listado").stop().slideDown();
-	}
-	
-	function asignarMesesConsumo(){
-		MesesConsumo = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val();
-		var parametros = ''{"modo":"MesesConsumo","valor":"''+' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val()+''"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-			cargarConfiguracion(); 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeIn(); setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionAviso").fadeOut(); },2000);
-		}else{ alert(''Error S.P. pConfiguracion - MesesConsumo!!!\n''+ret); } }, false);
-	}
-	
-	function cargarConfiguracion(){
-		var parametros = ''{"modo":"lista"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-			var js = JSON.parse(limpiarCadena(ret.JSCode));
-			esperarCargaSeries(js.ConfSQL[0].TVSerie);
-			esperarCargaTarifas(js.ConfSQL[0].TVTarifa);
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpMesesConsumo").val(js.ConfSQL[0].MesesConsumo); 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvConfiguracion").fadeIn();
-			cargarSeries();
-			cargarTarifas();
-			// Interruptores
-			for(var i in js.IO){
-				if(parseInt(js.IO[i].valor)===0){window["Conf"+js.IO[i].nombre]=0; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesO); }
-				else{window["Conf"+js.IO[i].nombre]=1; ' + convert(nvarchar(max),NCHAR(36)) + N'("#img"+js.IO[i].nombre).attr("src",BtnDesI); }
-			}
-			if(ConfNoCobrarPortes===1 || window["ConfNoCobrarPortes"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spNoCobrarPortes").hide(); }
-			if(ConfVerificarPedido===1 || window["ConfVerificarPedido"]===1){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").show(); }else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spVerificarPedido").hide(); }
-			// Configuración de Email
-			for(var i in js.ConfigEmail){					
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailCuenta").val(js.ConfigEmail[i].Cuenta);
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailSMTP").val(js.ConfigEmail[i].ServidorSMTP);
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPuerto").val(js.ConfigEmail[i].Puerto);
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailUsuario").val(js.ConfigEmail[i].Usuario);
-				' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPswrd").val(js.ConfigEmail[i].Password); 
-				if(js.ConfigEmail[i].SSL===true){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgConfigEmailSSL").attr("src",BtnDesI); }
-				else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#imgConfigEmailSSL").attr("src",BtnDesO); }
-			}
-			cerrarVelo();
-			GblLimpiarLaCache();
-		}else{ alert("Error SP: pConfiguracion - lista!!!\n"+ret); }}, false);
-	}
-	
-	function reconfigurarElPortal(){
-		veloContenido =  ''<img src="./Merlos/images/icoCarga.png" class="rotarR" width="30">''
-						+''<br><br><span class="info">reconfigurando, espera, por favor...</span>'';
-		abrirVelo(veloContenido,400);
-		var parametros = ''{"modo":"reconfigurar"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-			if(ret){ location.reload();  }
-		}, false);
-	}
-	
-	
-	function cargarSeries(){
-		var contenido = "";
-		flexygo.nav.execProcess(''pSeries'','''',null,null,[{''Key'':''modo'',''Value'':''Serie''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
-			var js = JSON.parse(ret.JSCode);
-			if(js.length>0){
-				for(var i in js){ contenido += "<div class=''dvLista'' onclick=''asignarSerie(\""+js[i].codigo+"\")''>"+js[i].codigo+" - "+js[i].nombre+"</div>"; }
-			}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieListado").html(contenido);
-			SeriesCargadas=true;
-		}else{ alert(''Error S.P. pSeries!!!\n''+ret); } }, false);
-	}
-	function esperarCargaSeries(serie){
-		if(SeriesCargadas){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpSerie").val(serie); }
-		else{ setTimeout(function(){ esperarCargaSeries(serie); },200); }
-	}
-	function asignarSerie(serie){
-		SERIE = serie;
-		var parametros = ''{"modo":"TVSerie","valor":"''+serie+''"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpSerie").val(serie);
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieListado").stop().slideUp();
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeIn(); 
-			GblLimpiarLaCache();
-			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionSerieAviso").fadeOut(); },2000);
-		}else{ alert("Error SP: pConfiguracion - TVSerie!!!\n"+ret); }}, false);
-	}
-	
-	function cargarTarifas(){
-		var contenido = "";
-		flexygo.nav.execProcess(''pObjetoDatos'','''',null,null,[{''Key'':''elJS'',''Value'':''{"objeto":"Tarifas"}''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
-			var js = JSON.parse(ret.JSCode);
-			if(js.length>0){
-				for(var i in js){ contenido += "<div class=''dvLista'' onclick=''asignarTarifa(\""+js[i].CODIGO+"\")''>"+js[i].CODIGO+" - "+js[i].NOMBRE+"</div>"; }
-			}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvTarifaMinimaListado").html(contenido);
-			TarifasCargadas=true;
-		}else{ alert(''Error S.P. pTarifas!!!\n''+ret); } }, false);
-	}
-	function esperarCargaTarifas(tarifa){
-		if(TarifasCargadas){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpTarifaMinima").val(tarifa); }
-		else{ setTimeout(function(){ esperarCargaTarifas(tarifa); },200); }
-	}
-	function asignarTarifa(tarifa){
-		TARIFA = tarifa;
-		var parametros = ''{"modo":"TVTarifa","valor":"''+tarifa+''"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpTarifaMinima").val(tarifa);
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#dvTarifaMinimaListado").stop().slideUp();
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeIn(); 
-			GblLimpiarLaCache();
-			setTimeout(function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#spanAsignacionTarifaAviso").fadeOut(); },2000);
-		}else{ alert("Error SP: pConfiguracion - TVTarifa!!!\n"+ret); }}, false);
-	}
-	
-	function ConfiguracionDelPortal(modo,nombre,valor){
-		var parametros = ''{"modo":"actualizar","nombre":"''+nombre+''","valor":"''+valor+''"}'';
-		flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{''Key'':''parametros'',''Value'':limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){
-			cargarConfiguracion(); 
-		}else{ alert(''Error S.P. pConfiguracion -actualizar !!!\n''+ret); } }, false);
-	}
-	
-	function configurarCtaEmail(modo,lanzar){
-		var configEmailCuenta = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailCuenta").val());
-		var configEmailSMTP = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailSMTP").val());
-		var configEmailPuerto = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPuerto").val());
-		var configEmailUsuario = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailUsuario").val());
-		var configEmailPswrd = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#configEmailPswrd").val());
-		var configEmailSSL = 0;
-		if(' + convert(nvarchar(max),NCHAR(36)) + N'("#imgConfigEmailSSL").attr("src")===BtnDesI){ configEmailSSL=1; }
-		
-		if(configEmailCuenta==="" || configEmailSMTP==="" || configEmailPuerto==="" || configEmailUsuario==="" || configEmailPswrd===""){ 
-			alert("Faltan datos por especificar en la cuenta de correo!"); 
-			return; 
-		}
-		
-		if(!modo){ 
-			abrirVelo(icoCarga20+" Actualizando los datos..."); 
-			setTimeout(()=>{
-				var parametros = ''{"modo":"configEmail","configEmailCuenta":"''+configEmailCuenta+''","configEmailSMTP":"''+configEmailSMTP+''"''
-								+'',"configEmailPuerto":"''+configEmailPuerto+''","configEmailUsuario":"''+configEmailUsuario+''","configEmailPswrd":"''+configEmailPswrd+''"''
-								+'',"configEmailSSL":"''+configEmailSSL+''"}''; 
-				flexygo.nav.execProcess(''pConfiguracion'','''',null,null,[{key:''parametros'',value:limpiarCadena(parametros)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-					if(ret.JSCode==="configEmail_OK"){ 
-						abrirVelo(icoCarga20+" modificando la configuración...",500,true);
-						setTimeout(()=>{
-							var parametros = ''{"modo":"ConfigEmailPrincipal"}'';
-							flexygo.nav.execProcess(''MerlosDLL'',''sysJob'','''',null,[{key:''Parametros'',value:limpiarCadena(parametros)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-								abrirVelo(icoCarga20+" reiniciando la aplicación...",500,true);
-								setTimeout(()=>{GblLimpiarLaCache(); location.reload();},500);		
-							}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
-						},500);						
-					}else{ alert("Ups! Ha ocurrido un error al actualizar los datos!"); }
-				}else{ alert("Error SP pConfiguracion - configEmail!\n"+JSON.stringify(ret)); }},false);
-			},500);
-		}else if(modo==="probarConfiguracion"){ 
-			if(!lanzar){
-				abrirVelo("introduce una dirección de correo para enviar la prueba"
-				+"<br><input type=''text'' id=''inpEmailDir''>"
-				+"<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' "
-				+"onclick=''configurarCtaEmail(\"probarConfiguracion\",true)''>lanzar prueba</span>"
-				+"&nbsp;&nbsp;&nbsp;<span class=''MIboton esq05'' style=''padding:10px;'' "
-				+"onclick=''cerrarVelo()''>cancelar</span>"); 
-			}else{
-				var parametros = ''{"modo":"probarConfiguracion","configEmailCuenta":"''+configEmailCuenta+''","configEmailSMTP":"''+configEmailSMTP+''"''
-									+'',"configEmailPuerto":"''+configEmailPuerto+''","configEmailUsuario":"''+configEmailUsuario+''","configEmailPswrd":"''+configEmailPswrd+''"''
-									+'',"configEmailSSL":"''+configEmailSSL+''","inpEmailDir":"''+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpEmailDir").val())+''"}''; 
-				abrirVelo(icoCarga20+" probando la configuración de correo..."); 
-				setTimeout(()=>{					
-					flexygo.nav.execProcess(''MerlosDLL'',''sysJob'','''',null,[{key:''Parametros'',value:limpiarCadena(parametros)}],''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){if(ret){ 
-						if(ret.SuccessMessage==="probarConfiguracion_OK"){ 
-							abrirVelo("Prueba de email correcta!<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' onclick=''cerrarVelo()''>aceptar</span>"); 
-						}else{abrirVelo("Falló la prueba de email<br>Verifica los datos de configuración,<br>el email destino o prueba de nuevo más tarde."
-										+"<br><br><br><span class=''MIboton esq05'' style=''padding:10px;'' onclick=''cerrarVelo()''>aceptar</span>");}
-					}else{ alert("Error MerlosDLL - ConfigEmailPrincipal!\n"+JSON.stringify(ret)); }},false);	
-				},500);		
-			}
-		}		
-	}
-</script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Configuracion',N'flx-html',N'project',NULL,NULL,N'Configuracion',N'Configuracion',N'none',1,1,1,0,NULL,NULL,N'<div id="dvMerlosConfiguracion"></div>
+<script> ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvMerlosConfiguracion").load("./Merlos/html/MerlosConfiguracion.html"); </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'Contactos',N'flx-sqllist',N'project',N'Contactos',N'CLIENTE=''{{CODIGO}}''',N'Contactos',N'Contactos',N'default',1,0,1,0,N'select * from vContactos where CLIENTE=''{{CODIGO}}''',N'<div id="dvContactosBotonera" style="padding:10px;">
   <span class="MIbotonGreen esq05" style="margin:10px;"
      onclick="' + convert(nvarchar(max),NCHAR(36)) + N'(''#dvContactosBotonera'').hide();' + convert(nvarchar(max),NCHAR(36)) + N'(''#dvContactosCampos'').slideDown();">Nuevo</span>
@@ -741,63 +263,234 @@ function guardarContacto(io){
 
 ' + convert(nvarchar(max),NCHAR(36)) + N'("flx-module[modulename=''Contactos''] .icon-minus").click();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'contacts-2',NULL,10,N'DataConnectionString',NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'inciCLIlistado',N'flx-objectlist',N'project',N'{{ObjectName}}',N'{{ObjectWhere}}',N'Incidencias de Clientes',N'Incidencias de Clientes',N'default',1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'accepted-2',N'syspager-listheader',100,NULL,N'systb-list',N'systb-row',NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
- ,(N'Merlos_Version',N'flx-html',N'project',NULL,NULL,N'Merlos_Version',N'Versioning',N'none',0,0,0,0,NULL,NULL,N'<div>
-	<table class="tbVersioning">
-		<tr>
-			<td class="vTituloPunto"></td>
-			<th class="vTitulo">Versión v.3.3.1.3 | 07-08-2023</th>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">1</td>
-			<td class="vDescripcion">
-				Actualización del NuGet por incompatibilidad con Flexygo.
-			</td>
-		</tr>
-		<tr><td colspan="2" class="vTR"></td></tr>
+ ,(N'Merlos_Clientes_Articulos',N'flx-html',N'project',NULL,NULL,N'Merlos_Clientes_Articulos',N'Inclusión/Exclusión de artículos en pedidos',N'default',0,0,1,0,NULL,NULL,N'<div class="CliArt_dvMenu CliArt_dv">
+    <span class="MIbotonGreen esq05" style="margin:10px;" onclick="CliArt_NuevoRegistro_Click()">Nuevo Registro</span>
+</div>
+<div id="CliArt_dvListado" class=" CliArt_dv" style="padding:10px;"></div>
+<div id="CliArt_dvArticulos" class=" CliArt_dv" style="padding:10px; display:none;"></div>
 
-		<tr>
-			<td class="vTituloPunto"></td>
-			<th class="vTitulo">Versión v.3.3.1.2 | 04-08-2023</th>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">1</td>
-			<td class="vDescripcion">
-				Visualización de la versión de la aplicación en el menú superior y acceso a las versiones.
-			</td>
-		</tr>
-		<tr><td colspan="2" class="vTR"></td></tr>
+<div style="display:none;">
+    <input type="text" id="inpClienteCodigo" value="{{CODIGO}}" />
+</div>
 
-		<tr>
-			<td class="vTituloPunto"></td>
-			<th class="vTitulo">Versión v.3.3.1.1 | 04-08-2023</th>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">1</td>
-			<td class="vDescripcion">
-				Se ha incluido un botón de cesta global.<br />
-				Con este botón se añaden todas las líneas (que se hayan indicado unidades) a la vez, sin tener que añadir línea a línea.
-			</td>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">2</td>
-			<td class="vDescripcion">Se ha corregido la eliminación de varias líneas del mismo artículo. Ahora se elimina únicamente la línea especificada.</td>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">3</td>
-			<td class="vDescripcion">
-				Se ha modificado el proceso de inserción de las observaciones de las líneas.<br />
-				Cada línea insertada aparecerá como una nueva línea en Eurowin.
-			</td>
-		</tr>
-		<tr class="trPunto">
-			<td class="vPunto">4</td>
-			<td class="vDescripcion">
-				Se ha corregido la funcionalidad de visualización de la ficha de cliente desde la generación de pedidos para la modificación de horarios de llamadas.
-			</td>
-		</tr>
-		<tr><td colspan="2" class="vTR"></td></tr>
-	</table>
-</div>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+
+<script>
+    var CliArt_ClienteCodigo = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpClienteCodigo").val());
+
+    CliArt_CargarArticulos();
+
+    function CliArt_CargarArticulos() {
+        var contenido = "";
+        var parametros = { "ClienteCodigo": CliArt_ClienteCodigo, "jsUser": jsUser };
+        flexygo.nav.execProcess(''pPers_CliArt_CargarArticulos'', '''', null, null, [{ key: ''parametros'', value: JSON.stringify(parametros) }], ''current'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function (ret) {
+            if (ret) {console.log(ret.JSCode);
+                var js = JSON.parse(ret.JSCode);
+                if (js.error === "") {
+                    jsr = js.respuesta;
+                    if (jsr.length > 0) {
+                        contenido = `
+                            <div style="display:flex; gap:10px;">
+                                <input type="text" id="CliArt_inpArtBuscadorPrincipal" placeholder="buscar"
+                                style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                                onkeyup="buscarEnGrid(this.id,''CliArt_dvListaDeArticulosPrincipal'')">
+                            </div>
+                            <div style="margin-top:10px; display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px; border-bottom:1px solid #CCC;">
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Artículo</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Descripción</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Incluir</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Excluir</div>
+                            </div>
+                            <div id="CliArt_dvListaDeArticulosPrincipal" style="border-bottom:2px solid #CCC; max-height:300px; overflow:hidden; overflow-y:auto;">
+                        `;
+                        for (var i in jsr) {
+                            var incluir_Ckeck_Color = "#333";
+                            var excluir_Ckeck_Color = "#333";
+                            var incluir_Ckeck = icoCheckO;
+                            var excluir_Ckeck = icoCheckO;
+                            if (jsr[i].IncluirExcluir === 1) { incluir_Ckeck = icoCheckI; incluir_Ckeck_Color = "green"; }
+                            if (jsr[i].IncluirExcluir === 2) { excluir_Ckeck = icoCheckI; excluir_Ckeck_Color = "green"; }
+
+                            contenido += `
+                                <div class="dvTR2 buscarEnGridTR" style="display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px;"
+                                data-buscar="' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].Articulo)} ' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].Descripcion)}">
+                                    <div class="codigo" style="padding:4px;">' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].Articulo)}</div>
+                                    <div style="padding:4px;">' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].Descripcion)}</div>
+                                    <div class="incluir" style="padding:4px; text-align:center; color:' + convert(nvarchar(max),NCHAR(36)) + N'{incluir_Ckeck_Color};" onclick="CliArt_IncluirExcluir(this)">' + convert(nvarchar(max),NCHAR(36)) + N'{incluir_Ckeck}</div>
+                                    <div class="excluir" style="padding:4px; text-align:center; color:' + convert(nvarchar(max),NCHAR(36)) + N'{excluir_Ckeck_Color};" onclick="CliArt_IncluirExcluir(this)">' + convert(nvarchar(max),NCHAR(36)) + N'{excluir_Ckeck}</div>
+                                </div>
+                            `;
+                        }
+                        contenido += "</div>";
+                    } else { contenido = "Sin resultados!"; }
+                } else { contenido = js.error; }
+                ' + convert(nvarchar(max),NCHAR(36)) + N'("#CliArt_dvListado").html(contenido);
+            }
+        }, false);
+    }
+
+    function CliArt_NuevoRegistro_Click() {
+        ' + convert(nvarchar(max),NCHAR(36)) + N'("#CliArt_dvListado").hide();
+        ' + convert(nvarchar(max),NCHAR(36)) + N'("#CliArt_dvArticulos").html(`
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar"
+                style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                onkeyup="CliArt_NuevoRegistro_Buscar()">
+                <i class="flx-icon icon-close" style="cursor:pointer; font-size:20px;" 
+                onclick="CliArt_CargarArticulos(); ' + convert(nvarchar(max),NCHAR(36)) + N'(''#CliArt_dvListado'').show(); ' + convert(nvarchar(max),NCHAR(36)) + N'(''#CliArt_dvArticulos'').hide();"></i>
+            </div>
+        `).slideDown();  
+        
+        if(dameValorJSON(flexygo.context.MerlosConfiguracion,"CargaArtDef")==="1"){ CliArt_NuevoRegistro_Buscar("todos"); }
+    }
+
+    function CliArt_NuevoRegistro_Buscar(todos){
+        if(event.key==="Enter" || todos){
+            var buscar = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#CliArt_inpArtBuscador").val());
+            if(buscar==""){buscar="todos";}
+            if(todos){ CliArt_ClienteCodigo=todos; }else{CliArt_ClienteCodigo=' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpClienteCodigo").val());}
+            if(buscar!=="" || todos){
+                var parametros = { "ClienteCodigo": CliArt_ClienteCodigo, "buscar": buscar, "jsUser": jsUser };
+                flexygo.nav.execProcess(''pPers_Articulos'', '''', null, null, [{ key: ''parametros'', value: JSON.stringify(parametros) }], ''current'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function (ret) {
+                    if (ret) {
+                        var datos = "";
+                        var js = JSON.parse(ret.JSCode);
+                        if (js.error === "") {
+                            jsr = js.respuesta;
+                            if (jsr.length > 0) {
+                                contenido = `  
+                                    <div style="display:flex; gap:10px;">
+                                        <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar"
+                                        style="flex:1;padding:5px; outline:none; border:none; background:#f2f2f2;"
+                                        onkeyup="CliArt_NuevoRegistro_Buscar()">
+                                        <i class="flx-icon icon-close" style="cursor:pointer; font-size:20px;" 
+                                        onclick="CliArt_CargarArticulos(); ' + convert(nvarchar(max),NCHAR(36)) + N'(''#CliArt_dvListado'').show(); ' + convert(nvarchar(max),NCHAR(36)) + N'(''#CliArt_dvArticulos'').hide();"></i>
+                                    </div>
+                                    <div style="margin-top:10px; display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px; border-bottom:1px solid #CCC;">
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Artículo</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Descripción</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Incluir</div>
+                                        <div style="padding:5px; background:#999; font:16px arial; color:#FFF; text-align:center;">Excluir</div>
+                                    </div>
+                                    <div id="CliArt_dvListaDeArticulos" style="border-bottom:2px solid #CCC; max-height:300px; overflow:hidden; overflow-y:auto;">
+                                `;
+                                for (var i in jsr) {
+                                    var incluir_Ckeck = icoCheckO;
+                                    var excluir_Ckeck = icoCheckO;
+                                    if (jsr[i].IncluirExcluir === 1) { incluir_Ckeck = icoCheckI; }
+                                    if (jsr[i].IncluirExcluir === 2) { excluir_Ckeck = icoCheckI; }
+
+                                    contenido += `
+                                        <div class="dvTR2 buscarEnGridTR" style="display:grid; grid-template-columns: 2fr 5fr 1fr 1fr; gap:1px;"
+                                        data-buscar="' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].CODIGO)} ' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].NOMBRE)}">
+                                            <div class="codigo" style="padding:4px;">' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].CODIGO)}</div>
+                                            <div style="padding:4px;">' + convert(nvarchar(max),NCHAR(36)) + N'{' + convert(nvarchar(max),NCHAR(36)) + N'.trim(jsr[i].NOMBRE)}</div>
+                                            <div class="incluir" style="padding:4px; text-align:center;" onclick="CliArt_IncluirExcluir(this)">' + convert(nvarchar(max),NCHAR(36)) + N'{incluir_Ckeck}</div>
+                                            <div class="excluir" style="padding:4px; text-align:center;" onclick="CliArt_IncluirExcluir(this)">' + convert(nvarchar(max),NCHAR(36)) + N'{excluir_Ckeck}</div>
+                                        </div>
+                                    `;
+                                }
+                                contenido += "</div>";
+                            } else { contenido = "Sin resultados!"; }
+                        } else { contenido = js.error; }
+                        ' + convert(nvarchar(max),NCHAR(36)) + N'("#CliArt_dvArticulos").html(contenido);
+                    }
+                }, false);
+            }
+        }
+    }
+
+    function CliArt_IncluirExcluir(elem) {
+        var estado = 0;
+        var claseClick = ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).attr("class");
+        var elemICO = ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).html();
+        var incluirValor = 0;
+        var excluirValor = 0;
+        var articulo = ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).closest(''.dvTR2'').find(''.codigo'').text();        
+
+        if (elemICO === icoCheckO) { ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).html(icoCheckI).css("color", "green"); estado = 1; } else { ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).html(icoCheckO).css("color", "#333"); }
+
+        if (claseClick === "incluir" && estado === 1) { incluirValor = 1; ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).closest(''.dvTR2'').find(''.excluir'').html(icoCheckO).css("color", "#333"); }
+        if (claseClick === "excluir" && estado === 1) { excluirValor = 1; ' + convert(nvarchar(max),NCHAR(36)) + N'(elem).closest(''.dvTR2'').find(''.incluir'').html(icoCheckO).css("color", "#333"); }
+
+        var parametros = { "ClienteCodigo": CliArt_ClienteCodigo, "articulo": articulo, "incluirValor": incluirValor, "excluirValor": excluirValor, "jsUser": jsUser };
+        flexygo.nav.execProcess(''pPers_ClientesArticulos'', '''', null, null, [{ key: ''parametros'', value: JSON.stringify(parametros) }], ''current'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function (ret) {
+            if (ret) {
+
+            }
+        }, false);
+    }
+    
+</script>
+',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'articles',NULL,20,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Merlos_Clientes_Articulos_Masivo',N'flx-html',N'project',NULL,NULL,N'Merlos_Clientes_Articulos_Masivo',N'Clientes-Artículos Masivo',N'default',0,0,1,0,NULL,NULL,N'<div id="dvMerlos_Clientes_Articulos_Masivo"></div>
+<script> ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvMerlos_Clientes_Articulos_Masivo").load("./Merlos/html/Merlos_Clientes_Articulos_Masivo.html"); </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'articles',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Merlos_Listados',N'flx-html',N'project',NULL,NULL,N'Merlos_Listados',N'Listados',N'default',0,0,1,0,NULL,NULL,N'<div id="dvConfiguracionTeleVenta" class="mi-module ListadoSeccion">
+    <table id="tbConfiguracionOperador" class="tbFrm">
+        <tr>
+            <th>Nombre del listado</th>
+            <th class="tbHover" onclick="listadosGestores()">Gestor <span class=''flR''>&#9660;</span></th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td><input type="text" id="inpNombreListado" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;"></td>
+            <td style="position:relative;">
+                <div id="dvListadoGestores" class="sombra" style="z-index:2; position:absolute; margin-top:-10px; padding:10px; background:#f2f2f2; border:1px solid #CCC; display:none;"></div>
+                <div id="dvListadoTDGestores"></div>
+            </td>
+            <td class="taC"><input type="text" id="ListadosDesde" placeholder="dd-mm-aaaa" onfocus="(this.type=''date'')" onblur="(this.type=''text''); ListadosComprobarFechas();" style="width:90%; text-align:center;"></td>
+            <td class="taC"><input type="text" id="ListadosHasta" placeholder="dd-mm-aaaa" onfocus="(this.type=''date'')" onblur="(this.type=''text''); ListadosComprobarFechas();" style="width:90%; text-align:center;"></td>
+            <td class="taC"><input type="button" class="MIbotonGreen" value="GENERAR" style="width:90%; text-align:center;" onclick="ListadosGenerar();"></td>
+        </tr>
+    </table>
+    <br>
+</div>
+
+
+<div id="dvBtnImp " class="ListadoSeccion inv MI_noImp " style="padding:20px; text-align:center; ">
+    <span class="MIbotonGreen " onclick="window.print() ">IMPRIMIR</span>
+    <span class="MIbotonGreen " style="margin-left:12px; " onclick="ListadosVolver() ">volver</span>
+</div>
+
+
+<div id="dvListadosSeccion " class="ListadoSeccion inv">
+    <div style="background:#68CDF9; padding:5px; ">Listado</div>
+    <div class="inp-fecha-agrup ">
+        <input type="text " class="inpFechaDesdeListados" id="ListadoLlamadasDesde" placeholder="dd-mm-aaaa " onfocus="(this.type=''date'' ) " onblur="(this.type=''text'' ); " style="width:90%; text-align:center; ">
+        <input type="text " class="inpFechaHastaListados" id="ListadosLlamadasHasta" placeholder="dd-mm-aaaa " onfocus="(this.type=''date'' ) " onblur="(this.type=''text'' ); " style="width:90%; text-align:center; ">
+        <input type="button" readonly class="MIbotonGreen " onclick="listadosLlamadasBuscarEntreFechas(); " value="Buscar " style="width:20%; text-align:center; ">
+    </div>
+    <div id="dvBuscList ">
+        <input type="text " id="dvBuscadorListadosListado " placeholder="Buscar por cualquiera de los campos " style="width:100%; box-sizing:border-box; " onkeyup="buscarEnTabla(this.id, ''tbListadosListado''); ">
+    </div>
+    <div id="dvListadosListado"></div>
+    <br>
+</div>
+
+
+<div id="dvRegistrosTV " class="ListadoSeccion inv">
+    <div style="background:#68CDF9; padding:5px; ">Registros TeleVenta</div>
+    <div class="inp-fecha-agrup ">
+        <input type="text " class="inpFechaDesdeListados" id="ListadoLlamadasDesdeReg" placeholder="dd-mm-aaaa " onfocus="(this.type=''date'' ) " onblur="(this.type=''text'' ); " style="width:90%; text-align:center; ">
+        <input type="text " class="inpFechaHastaListados" id="ListadosLlamadasHastaReg" placeholder="dd-mm-aaaa " onfocus="(this.type=''date'' ) " onblur="(this.type=''text'' ); " style="width:90%; text-align:center; ">
+        <input type="button " readonly class="MIbotonGreen " onclick="listadosLlamadasRegBuscarEntreFechas(); " value="Buscar " style="width:20%; text-align:center; ">
+    </div>
+    <div id="dvBusc ">
+        <input type="text " id="dvBuscadorListados " placeholder="Buscar por cualquiera de los campos " style="width:100%; box-sizing:border-box; " onkeyup="buscarEnTabla(this.id, ''tbListadosTV''); ">
+    </div>
+    <div id="dvListadosTVListado"></div>
+    <br>
+</div>
+
+<!-- <script>
+    cargarListadosListado();
+    cargarListadoTV();
+</script> -->',NULL,NULL,NULL,N'    cargarListadosListado();
+    cargarListadoTV();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'bullet-list',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'Merlos_Version',N'flx-html',N'project',NULL,NULL,N'Merlos_Version',N'Versioning',N'none',0,0,0,0,NULL,NULL,N'<div id="dvMerlosVersioning"></div>
+<script> ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvMerlosVersioning").load("./Merlos/html/MerlosVersion.html"); </script>',NULL,NULL,NULL,N'Merlos_Inicio();',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
+ ,(N'MI_ListadosLlamadas',N'flx-objectlist',N'project',N'ListadosLlamadas',NULL,N'Listados llamadas',N'Llamadas',N'default',1,1,1,0,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,N'List toolbar Merlos',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_Cliente',N'flx-html',N'project',NULL,NULL,N'TV_Cliente',N'TV_Cliente',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Cliente <span class=''MIbotonP FR esq05'' onclick=''verFichaDeCliente()''>Ver Cliente</span></div>
 <div id="dvDatosDelCliente" style="border:1px solid #323f4b; padding:10px; border-sizing:border-box;"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'moduloTV inv',NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
@@ -812,16 +505,40 @@ function guardarContacto(io){
 <div id="dvLlamadasTeleVenta" class="mi-module"></div>
 ',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'flx-phone',N'syspager-listheader',20,NULL,N'systb-search',NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_OpcionesLlamada',N'flx-html',N'project',NULL,NULL,N'TV_OpcionesLlamada',N'TV_OpcionesLlamada',N'none',1,1,1,0,NULL,NULL,N'<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
+    <table id="tbOpciones">
+        <tr>
+            <td style="width:200px;">
+                <div id="dvFechaTV" class="esq10" style="float:left; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9;"></div>
+            </td>
+            <td>
+                <div id="dvSerieTV" class="esq10" style="float:left; position:relative; margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
+            </td>
+            <td>
+                <div style="float:right; display:flex; align-items:center; justify-content:flex-end; gap:5px;">
+                    <div id="btnTerminar" class="MIbotonW FR vaM inv" onclick=''terminarLlamada()'' style="white-space:nowrap;">Terminar Llamada</div>
+                    <div id="btnPedido" class="MIbotonW FR vaM inv" onclick=''pedidoTV()''>Pedido</div>
+                    <div id="btnClientes" class="MIbotonW FR vaM inv" onclick=''cargarClientes()''>Clientes</div>
+                    <div id="btnConfiguracion" class="MIbotonW FR vaM inv" onclick=''configurarTeleVenta()''>Configuración</div>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                <div style="margin-top:10px;">
+                    <div id="dvEstTV" class="vaM" style="padding:0;white-space:nowrap; font:bold 16px arial; color:#FFF;"></div>
+                    <div id="dvFiltrosTV" class="vaM" style="padding:0;margin-top:8px;font:14px arial; color:#666;"></div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+
+<!--
+<div id="dvOpcionesTV" class="tvTitulo esq1100" style="padding:10px; box-sizing:border-box;">
 	<div id="tbOpciones" style="overflow:hidden;">
 		<div id="dvFechaTV" class="esq10" style="float:left; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9;"></div>
-		
-		<div id="dvSerieGl" style="float:left; margin-left:15px; position:relative;">
-			<div id="dvSerieTV" class="esq10" style="margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
-			<div id="dvSerieTVCont" class="esq10" style="z-index:9999; position:absolute; background:yellow; padding:10px;">
-				registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro<br>registro
-			</div>
-		</div>
-		
+		<div id="dvSerieTV" class="esq10" style="float:left; position:relative; margin-left:15px; background:#FFF; padding:5px 10px; white-space:nowrap; font:bold 32px arial; color:#68CDF9; vertical-align:middle;"></div>
 		<div style="float:right; display:flex; align-items:center; justify-content:flex-end; gap:5px;">
 			<div id="btnTerminar" class="MIbotonW FR vaM inv" onclick=''terminarLlamada()'' style="white-space:nowrap;">Terminar Llamada</div>
 			<div id="btnPedido" class="MIbotonW FR vaM inv" onclick=''pedidoTV()''>Pedido</div>
@@ -830,213 +547,66 @@ function guardarContacto(io){
 		</div>
 	</div>
 	<div style="margin-top:10px;">
-		<div id="dvEstTV" class="vaM" style="padding:0;white-space:nowrap; font:bold 16px arial; color:#FFF;" ></div>
-		<div id="dvFiltrosTV" class="vaM" style="padding:0;margin-top:8px;font:14px arial; color:#666;" ></div>
+		<div id="dvEstTV" class="vaM" style="padding:0;white-space:nowrap; font:bold 16px arial; color:#FFF;"></div>
+		<div id="dvFiltrosTV" class="vaM" style="padding:0;margin-top:8px;font:14px arial; color:#666;"></div>
 	</div>
 </div>
+-->
 
 <div id="dvConfiguracionTeleVenta" class="mi-module">
-	<table id="tbConfiguracionOperador" class="tbFrm">
-		<tr>
-			<th colspan="2" class="thO" style="vertical-align:middle; text-align:left;">Nombre registro llamadas</th>
-			<td colspan="6" id="inputDatosNombreTV">
-				<input type="text" id="inpNombreTV" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;">
-			</td>
-			<td style="vertical-align:middle; text-align:center;">
-				<div class=''img30 icoRecarga'' onclick="resetFrm(''OpcionesTV'')"></div>
-			</td>
-		</tr>
-		<tr>			
-			<th style="width:11%;">Gestor &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:11%;">Ruta &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th>Vendedor &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:11%;">Serie &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:11%;">Marca &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:11%;">Familia &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:11%;">Subfamilia &nbsp;<span class=''img16 icoDownC''></span></th>
-			<th style="width:100px;text-align:center" class="thO">Fecha</th>
-			<th style="width:80px;text-align:center" class="thO"></th>
-		</tr>
-		<tr>			
-			<td id="inputDatosGestor"></td>
-			<td id="inputDatosRuta"></td>
-			<td id="inputDatosVendedor"></td>
-			<td id="inputDatosSerie"></td>
-			<td id="inputDatosMarca"></td>
-			<td id="inputDatosFamilia"></td>
-			<td id="inputDatosSubfamilia"></td>
-			<td id="inputDatosFecha">
-				<input type="text" id="inpFechaTV" style="width:100%; text-align:center; color:#333;" 
-				onkeyup="calendarioEJGkeyUp(this.id,this.value)" 
-				onclick="mostrarElCalendarioEJG(this.id,false);event.stopPropagation();">
-			</td>
-			<td style="padding-top:10px;text-align:center;" ><span class="MIboton" onclick="guardarTeleVenta(true)">Guardar</span></td>
-		</tr>
-	</table>
+    <table id="tbConfiguracionOperador" class="tbFrm">
+        <tr>
+            <th colspan="2" class="thO" style="vertical-align:middle; text-align:left;">Nombre registro llamadas</th>
+            <td colspan="6" id="inputDatosNombreTV">
+                <input type="text" id="inpNombreTV" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;">
+            </td>
+            <td style="vertical-align:middle; text-align:center;">
+                <div class=''img30 icoRecarga'' onclick="resetFrm(''OpcionesTV'')"></div>
+            </td>
+        </tr>
+        <tr>
+            <th style="width:11%;">Gestor &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:11%;">Ruta &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th>Vendedor &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:11%;">Serie &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:11%;">Marca &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:11%;">Familia &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:11%;">Subfamilia &nbsp;<span class=''img16 icoDownC''></span></th>
+            <th style="width:100px;text-align:center" class="thO">Fecha</th>
+            <th style="width:100px;text-align:center" class="thO"></th>
+            <th style="width:80px;text-align:center" class="thO"></th>
+        </tr>
+        <tr>
+            <td id="inputDatosGestor"></td>
+            <td id="inputDatosRuta"></td>
+            <td id="inputDatosVendedor"></td>
+            <td id="inputDatosSerie"></td>
+            <td id="inputDatosMarca"></td>
+            <td id="inputDatosFamilia"></td>
+            <td id="inputDatosSubfamilia"></td>
+            <!-- <td id="inputDatosFecha">
+                <input type="text" id="inpFechaTV" style="width:100%; text-align:center; color:#333;" onkeyup="calendarioEJGkeyUp(this.id,this.value)" onclick="mostrarElCalendarioEJG(this.id,false);event.stopPropagation();">
+            </td> -->
+            <td id="inputDatosFecha">
+                <!-- <input type="text" id="inpFechaTV" style="width: 120px; background: #DAFFE4; border-radius: 3px; border: 1px solid #ccc; padding: 5px; text-align: center;" onkeydown="capturarUltimaTeclaPresionada(event,this.value);" onclick="capturarClick();" onchange="eventosFechaMultiselect(this.value);"> -->
+                <input type="date" id="inpFechaTV" placeholder="dd/mm/aaaa" style="width: 120px; background: #DAFFE4; border-radius: 3px; border: 1px solid #ccc; padding: 5px; text-align: center;" onchange="fechasMultifechaOpciones();">
+            </td>
+            <td><span id="inpLlamada_MultiseleccionValores" style="background:#f2f2f2; padding:3px;"></span></td>
+            <td class="inv" id="tdFechasTeleventa"></td>
+            <td style="padding-top:10px;text-align:center;"><span class="MIboton" onclick="guardarTeleVenta(true)">Guardar</span></td>
+        </tr>
+    </table>
 </div>
+
 
 
 <script>
-if(FechaTeleVenta!==""){
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val(FechaTeleVenta);
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(FechaTeleVenta).show();
-}else{ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").hide(); }
-' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img20 icoDownC" style="vertical-align:middle;" onclick="seriesTV()"></span>'');
-
-' + convert(nvarchar(max),NCHAR(36)) + N'("#tbConfiguracionOperador th").on("click",function(){ inputTbDatos((' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).split(" ")[0]); event.stopPropagation(); });
-
-function cargarTbConfigOperador(modo,comprobar){
-	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val()); 
-	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());	
-	
-	var elJS = ''{"modo":"'' + modo + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''",'' + paramStd + ''}'';
-	
-	if(modo==="guardar" || modo==="recargar"){
-		var objetos = ["Gestor","Ruta","Vendedor","Serie","Marca","Familia","Subfamilia"];
-		for(var o in objetos){
-			var tr = "";
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+objetos[o]).find("div").each(function(){
-				tr += ''{"''+objetos[o]+''":"''+(' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()).split(" - ")[0]+''"}''; 
-			});
-			window["op"+objetos[o]] = ''"''+objetos[o]+''":[''+tr.replace(/}{/g,"},{")+'']'';
-		}
-		
-		elJS = ''{"modo":"'' + modo + ''","comprobar":"'' + comprobar + ''","IdTeleVenta":"'' + IdTeleVenta + ''","nombreTV":"'' + nombre + ''","fecha":"'' + fecha + ''"''
-			 + '',''+window["opGestor"]+'',''+window["opRuta"]+'',''+window["opVendedor"]+'',''+window["opSerie"]+'',''+window["opMarca"]+''''
-			 +'',''+window["opFamilia"]+'',''+window["opSubfamilia"]+'','' + paramStd + ''}'';
-	}
-
-	// Obtener Vendedor, Serie, Marca, Familia y Subfamilia
-	flexygo.nav.execProcess(''pOperadorConfig'','''',null,null,[{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}],''modal640x480'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this),function(ret){
-		if (ret) {
-			if(ret.JSCode==="nombreTV_Existe!"){ alert("El nombre ya existe en la base de datos!"); return; }
-			
-            var js = JSON.parse(limpiarCadena(ret.JSCode));   
-			SERIE = js.serieActiva; 
-
-			var gestores = "";
-			for(var i in js.gestor){ gestores += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Gestor\",\""+js.gestor[i].gestor+"\")''>"+js.gestor[i].gestor+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosGestor").html(gestores);
-			
-			var rutas = "";
-			for(var i in js.ruta){ rutas += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Ruta\",\""+js.ruta[i].ruta+"\")''>"+js.ruta[i].ruta+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosRuta").html(rutas);
-			
-			var vendedores = "";
-			for(var i in js.vendedor){ vendedores += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Vendedor\",\""+js.vendedor[i].vendedor+"\")''>"+js.vendedor[i].vendedor+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosVendedor").html(vendedores);
-
-			var series = "";
-			for(var i in js.serie){ series += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Serie\",\""+js.serie[i].serie+"\")''>"+js.serie[i].serie+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosSerie").html(series);		
-
-			var marcas = "";
-			for(var i in js.marca){ marcas += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Marca\",\""+js.marca[i].marca+"\")''>"+js.marca[i].marca+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosMarca").html(marcas);
-
-			var familias = "";
-			for(var i in js.familia){ familias += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Familia\",\""+js.familia[i].familia+"\")''>"+js.familia[i].familia+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosFamilia").html(familias);
-
-			var subfamilias = "";
-			for(var i in js.subfamilia){ subfamilias += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\"Subfamilia\",\""+js.subfamilia[i].subfamilia+"\")''>"+js.subfamilia[i].subfamilia+"</div>"; }
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatosSubfamilia").html(subfamilias);
-
-			if(modo==="guardar"){ 
-				cargarTeleVentaLlamadas("listaGlobal"); 
-				if(js.llamUserReg==="0"){
-					' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV, #inpFechaTV").val("");
-					alert("No se han encontrado llamadas con los parámetros seleccionados!");
-				}
-			}	
-			if(modo==="recargar"){ recargarTVLlamadas(); }
-        } else { alert(''Error S.P. pOperadorConfig!\n'' + JSON.stringify(ret)); }
-    }, false);
-}
-
-function inputTbDatos(id){
-	if(id==="Fecha" || id==="Nombre" || id===""){ return; }
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").remove();
-	' + convert(nvarchar(max),NCHAR(36)) + N'("body").prepend("<div id=''dvinputDatosTemp'' class=''dvTemp''>"+icoCargando16 + "cargando datos...</div>");
-	var y = (' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos" + id).offset()).top;
-	var x = (' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).offset()).left;
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").offset({top:y,left:x}).stop().fadeIn();	
-	
-	var contenido = "";
-    var modo = id.toLowerCase().replace(" ", "_").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    var elJS = ''{"modo":"'' + modo + ''",'' + paramStd + ''}'';
-	
-    flexygo.nav.execProcess(''pInpDatos'', '''', null, null, [{''Key'':''elJS'',''Value'':limpiarCadena(elJS)}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){
-        if (ret) {
-            var js = JSON.parse(limpiarCadena(ret.JSCode));
-            if (js.length > 0) {
-                for (var i in js) {
-                    contenido += "<div class=''dvLista'' onclick=''inputTbDatosAsignar(\""+id+"\",\""+js[i].codigo+" - "+' + convert(nvarchar(max),NCHAR(36)) + N'.trim(js[i].nombre)+"\")''>"
-                        + js[i].codigo + " - " + js[i].nombre
-                        + "</div>";
-                }
-            } else { contenido = "<div style=''color:red;''>Sin resultados!</div>"; }
-            ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").html( contenido);
-        } else { alert(''Error S.P. pInpDatos!\n'' + JSON.stringify(ret)); }
-    }, false);
-}
-function inputTbDatosAsignar(id,valor){
-	if((' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).html()).indexOf(valor)===-1){
-		var htmlVal = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).html();
-		if(id==="Serie"){ htmlVal=""; }
-		' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).html( htmlVal + "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\""+id+"\",\""+valor+"\")''>"+valor+"</div>");
-		if(' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val())===""){ autoNombreTV=true; }
-		if(autoNombreTV){ 
-			' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val( (' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val()).replace("+"+id,"").replace(id,"") +"+"+id);
-			var elNom = ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val();
-			if(Left(elNom,1)==="+"){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val(elNom.replace("+","")); }
-		}
-	}
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").fadeOut(300,function(){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#dvinputDatosTemp").remove(); });
-}
-function inputTbDatosEliminar(id,valor){
-	var contenido = "";
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).find("div").each(function(){
-		if(' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()!==valor){ 
-			contenido += "<div class=''dvSub'' onclick=''inputTbDatosEliminar(\""+id+"\",\""+' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()+"\")''>"+' + convert(nvarchar(max),NCHAR(36)) + N'(this).text()+"</div>"; 
-		}
-	});
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#inputDatos"+id).html(contenido);
-	if(autoNombreTV && contenido===""){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val( (' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val()).replace("+"+id,"").replace(id,"") ); }
-	if(Left(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val(),1)==="+"){ ' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val((' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val()).replace("+","")); }
-}
-
-function guardarTeleVenta(tf){ 
-	var nombre = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpNombreTV").val());
-	var fecha = ' + convert(nvarchar(max),NCHAR(36)) + N'.trim(' + convert(nvarchar(max),NCHAR(36)) + N'("#inpFechaTV").val());
-	if(nombre===""){ alert("El nombre para el registro de llamadas es obligatorio!"); return; }
-	if(fecha===""){ alert("La fecha es obligatoria!"); return; }
-	FechaTeleVenta=fecha;
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvFechaTV").html(fecha);
-	cargarTbConfigOperador("guardar",tf);
-}
-
-function seriesTV(){
-	abrirVelo(icoCargando16+" cargando series...");
-	var contenido = "";
-	flexygo.nav.execProcess(''pSeries'','''',null,null,[{''Key'':''modo'',''Value'':''Serie''}], ''modal640x480'', false, ' + convert(nvarchar(max),NCHAR(36)) + N'(this), function(ret){if(ret){
-		var js = JSON.parse(ret.JSCode);
-		if(js.length>0){
-			for(var i in js){ contenido += "<div class=''dvLista'' onclick=''asignarSerieGlobal(\""+js[i].codigo+"\")''>"+js[i].codigo+" - "+js[i].nombre+"</div>"; }
-		}else{ contenido="<div style=''color:red;''>Sin resultados!</div>"; }
-		abrirVelo(contenido);
-	}else{ alert(''Error S.P. pSeries!!!\n''+ret); } }, false);
-}
-
-function asignarSerieGlobal(laSerie){
-	SERIE = laSerie;
-	' + convert(nvarchar(max),NCHAR(36)) + N'("#dvSerieTV").html(SERIE + ''&nbsp;<span id="btnSerieGlobal" class="img20 icoDownC" style="vertical-align:middle;" onclick="seriesTV()"></span>'');
-	cerrarVelo();
-}
-
+    
+    initMultifechaOpciones();
+   
 </script>',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,N'noicon',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,NULL,NULL,NULL,NULL,0,0,0,NULL,0,NULL,NULL,0,0,NULL,0,1,1)
  ,(N'TV_Pedido',N'flx-html',N'project',NULL,NULL,N'TV_Pedido',N'TV_Pedido',N'none',1,1,1,0,NULL,NULL,N'<div class="tvTitulo esq1100">Pedido
-	<span class="flR">
+	<span id="PedidoBotonesPortesVerif" class="flR">
 		<span id="spNoCobrarPortes">
 		<img src="" id="imgPedidoNoCobrarPortes" style="width:30px; cursor:pointer;" onclick="PedidoNoPortes()">
 			&nbsp;<span style="font:14px arial; color:#333;">No Cobrar Portes</span>		
@@ -1075,10 +645,7 @@ function asignarSerieGlobal(laSerie){
 		<div style="overflow:hidden; max-height:300px; overflow-y:auto">
 			<table id="tbPersEP_Articulos"></table>		
 		</div>
-		<span id="spBtnAnyCont">
-			<br>
-			<span class="MIboton esq05" onclick="pedidoAnyadirDetalle()">añadir al pedido</span>
-		</span>
+		<span id="spBtnAnyCont"></span>
 		<div id="dvPedidoDetalle"></div>
 	</div>
 </div>

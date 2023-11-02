@@ -9,7 +9,7 @@ EXEC sp_MSforeachtable 'ALTER TABLE ? DISABLE TRIGGER all'
 --Application data
 :r .\data\aspnetprofiles.sql
 :r .\data\aspnetroles.sql
-:r .\data\aspnetusers.sql
+--:r .\data\aspnetusers.sql
 :r .\data\contextvars.sql
 :r .\data\interfaces.sql
 :r .\data\layouts.sql

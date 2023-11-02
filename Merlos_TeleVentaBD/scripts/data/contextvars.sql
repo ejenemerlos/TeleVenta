@@ -10,6 +10,7 @@ USING (VALUES
  ,(N'Ejercicio',N'select top 1 EJERCICIO FROM Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'EWtrabajaPeso',N'select peso from [vConfigEW] where empresa=(select top 1 Empresa collate Modern_Spanish_CS_AI FROM Configuracion_SQL)
 ',0,N'DataConnectionString',1)
+ ,(N'MerlosConfiguracion',N'select * from Configuracion for JSON AUTO, INCLUDE_NULL_VALUES',0,N'DataConnectionString',1)
  ,(N'MesesConsumo',N'select top 1 MesesConsumo from Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'NombreEmpresa',N'select top 1 NOMBRE_EMPRESA FROM Configuracion_SQL',0,N'DataConnectionString',1)
  ,(N'TeleVentaVersion',N'SELECT SettingValue FROM Settings where SettingName=''AutoUpdateLastVersion''',0,N'ConfConnectionString',1)

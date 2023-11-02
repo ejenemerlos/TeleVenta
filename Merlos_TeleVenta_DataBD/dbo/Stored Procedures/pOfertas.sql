@@ -1,18 +1,20 @@
-﻿CREATE PROCEDURE [dbo].[pOfertas] (@parametros varchar(max))
+﻿
+CREATE PROCEDURE [dbo].[pOfertas] (@parametros varchar(max))
 AS
 BEGIN TRY
 	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,'$.modo')),'')
-		,	@cliente varchar(50) = isnull((select JSON_VALUE(@parametros,'$.cliente')),'')
-		,	@articulo varchar(20) = (select JSON_VALUE(@parametros,'$.articulo'))
-		,	@fecha    smalldatetime = cast((select JSON_VALUE(@parametros,'$.fecha')) as smalldatetime)
+	declare @cliente varchar(50) = isnull((select JSON_VALUE(@parametros,'$.cliente')),'')
+	declare @articulo varchar(20) = (select JSON_VALUE(@parametros,'$.articulo'))
+	declare @fecha    smalldatetime = cast((select JSON_VALUE(@parametros,'$.fecha')) as smalldatetime)
 
-	declare @GESTION char(6)
-	declare @sql varchar(max) = ''
-
-	select @GESTION=GESTION from Configuracion_SQL
+	-- Parámetros de Configuración
+	declare @Ejercicio char(4), @Gestion char(6), @GestionAnt char(6), @Letra char(2), @Comun char(8), @Lotes char(8), @Campos char(8), @Empresa char(2), @Anys int
+	select @Ejercicio=EJERCICIO, @Gestion=GESTION, @Letra=LETRA, @Comun=COMUN, @Campos=CAMPOS, @Empresa=EMPRESA, @Anys=ANYS from [Configuracion_SQL]
+	set @GestionAnt=CONCAT(CAST(@Ejercicio as int)-1,@Letra)
+	declare @sentencia varchar(max)=''
 
 	if @modo='ofertasDelCliente' BEGIN
-		set @sql = CONCAT('
+		set @sentencia=CONCAT('
 			select isnull((
 				SELECT * FROM 
 					(
@@ -22,10 +24,10 @@ BEGIN TRY
 					, OFE.DESDE AS UNI_INI
 					, (CASE WHEN OFE.HASTA=0 THEN 999999.99 ELSE OFE.HASTA END) AS UNI_FIN, OFE.PVP, OFE.DESCUENTO AS DTO1
 					,  OFE.MONEDA, OFE.TARIFA 
-					FROM [',@GESTION,'].DBO.CLIENTES CLI 
-					INNER JOIN [',@GESTION,'].DBO.OFERTAS OFE ON 1=1 
-					INNER JOIN [',@GESTION,'].dbo.articulo art on OFE.ARTICULO=art.CODIGO
-					WHERE art.BAJA=0 and CLI.OFERTA=1 AND OFE.TARIFA='''' AND CLI.CODIGO=@cliente
+					FROM [',@GestionAnt,'].DBO.CLIENTES CLI 
+					INNER JOIN [',@GestionAnt,'].DBO.OFERTAS OFE ON 1=1 
+					INNER JOIN [',@GestionAnt,'].dbo.articulo art on OFE.ARTICULO=art.CODIGO
+					WHERE art.BAJA=0 and CLI.OFERTA=1 AND OFE.TARIFA='''' AND CLI.CODIGO=''',@cliente,'''
 					UNION ALL
 					SELECT CLI.CODIGO AS CLIENTE, OFE.ARTICULO
 					, convert(varchar(10),OFE.FECHA_IN,105) as FECHA_IN
@@ -33,14 +35,15 @@ BEGIN TRY
 					, OFE.DESDE AS UNI_INI
 					, (CASE WHEN OFE.HASTA=0 THEN 999999.99 ELSE OFE.HASTA END) AS UNI_FIN, OFE.PVP, OFE.DESCUENTO AS DTO1
 					,  OFE.MONEDA, OFE.TARIFA 
-					FROM [',@GESTION,'].DBO.CLIENTES CLI 
-					INNER JOIN [',@GESTION,'].DBO.OFERTAS OFE ON OFE.TARIFA=CLI.TARIFA 
-					INNER JOIN [',@GESTION,'].dbo.articulo art on OFE.ARTICULO=art.CODIGO
-					WHERE art.BAJA=0 and CLI.OFERTA=1 AND OFE.TARIFA='''' AND CLI.CODIGO=@cliente
+					FROM [',@Gestion,'].DBO.CLIENTES CLI 
+					INNER JOIN [',@Gestion,'].DBO.OFERTAS OFE ON OFE.TARIFA=CLI.TARIFA 
+					INNER JOIN [',@Gestion,'].dbo.articulo art on OFE.ARTICULO=art.CODIGO
+					WHERE art.BAJA=0 and CLI.OFERTA=1 AND OFE.TARIFA='''' AND CLI.CODIGO=''',@cliente,'''
 					) A
 				for JSON AUTO, INCLUDE_NULL_VALUES
 			),''[]'') as JAVASCRIPT
 		')
+		EXEC(@sentencia)
 		return -1
 	END
 

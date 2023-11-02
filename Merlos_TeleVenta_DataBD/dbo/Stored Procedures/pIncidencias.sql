@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pIncidencias] @parametros varchar(max) 
+﻿
+CREATE PROCEDURE [dbo].[pIncidencias] @parametros varchar(max) 
 AS
 BEGIN TRY
 

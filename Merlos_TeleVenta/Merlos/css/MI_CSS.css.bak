@@ -1,0 +1,1303 @@
+﻿/*	MERLOS CSS v.1.0.0.2 */
+
+/*  Colores */
+.colorNegro {
+    color: #333333;
+}
+
+.colorAzulOscuro {
+    color: #19456B;
+}
+
+.colorAzulMedio {
+    color: #11698E;
+}
+
+.colorAzulClaro {
+    color: #68CDF9;
+}
+
+.colorVerde {
+    color: #16C79A;
+}
+
+.colorGris {
+    color: #E1E3E7;
+}
+
+.colorGrisClaro {
+    color: #EDEFF3;
+}
+
+.deNegroAVerde {
+    color: #333;
+    cursor:pointer;
+}
+.deNegroAVerde:hover {
+    color: green;
+}
+
+
+
+/* ENTORNO */
+header {
+    background: #FFF !important;
+}
+
+#mainMenu span {
+    color: #333 !important;
+}
+
+#mainNav {
+    background: #EDEFF3 !important;
+}
+
+.cntHeader, .bg-module {
+    background: #68CDF9 !important;
+    font: bold 16px arial;
+    color: #333333 !important;
+}
+
+
+.active {
+    background: #11698E !important;
+    color: #FFF !important;
+}
+
+flx-nav[mode="nav"] li {
+    background: #FFFFFF !important;
+    color: #333333 !important;
+}
+
+flx-nav[mode=nav] li > span:hover {
+    background: #11698E !important;
+    color: #FFFFFF !important;
+}
+
+flx-nav[mode=nav] li > .active {
+    background: #16C79A !important;
+    color: #FFFFFF !important;
+}
+
+
+/* Estilos Globales */
+#dvVelo {
+    z-index: 9999;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background: rgba(240,240,240,.9);
+    padding-top: 100px;
+    box-sizing: border-box;
+}
+
+#dvVeloContenido {
+    background: #FFF;
+    padding: 20px;
+    margin: auto;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+.w100 {
+    width: 100%;
+}
+
+.w50 {
+    width: 50%;
+}
+
+.w25 {
+    width: 25%;
+}
+
+.L {
+    text-align: left !important;
+}
+
+.C {
+    text-align: center !important;
+}
+
+.R {
+    text-align: right !important;
+}
+
+.taL {
+    text-align: left !important;
+}
+
+.taC {
+    text-align: center !important;
+}
+
+.taR {
+    text-align: right !important;
+}
+
+.pl20 {
+    padding-left: 20px;
+}
+
+.ml20 {
+    margin-left: 20px;
+}
+
+.zi100 {
+    z-index: 100;
+    position: relative;
+}
+
+.flL {
+    float: left;
+}
+
+.flR {
+    float: right;
+}
+
+.bsbb {
+    box-sizing: border-box;
+}
+
+.S {
+    text-decoration: underline !important;
+}
+
+.c_Red {
+    color: red !important;
+}
+
+.c_Green {
+    color: green !important;
+}
+
+.c_Blue {
+    color: blue !important;
+}
+
+.c_Orange {
+    color: orange !important;
+}
+
+.c_Yellow {
+    color: yellow !important;
+}
+
+.c_Brown {
+    color: brown !important;
+}
+
+.info {
+    font: 14px arial;
+    color: dimgray;
+}
+
+.vaT {
+    vertical-align: top;
+}
+
+.vaM {
+    vertical-align: middle;
+}
+
+.vaB {
+    vertical-align: bottom;
+}
+
+.FL {
+    float: left;
+}
+
+.FR {
+    float: right;
+}
+
+.fL {
+    float: left;
+}
+
+.fR {
+    float: right;
+}
+
+.avTXT {
+    font: bold 14px arial;
+    color: green;
+}
+
+.dvImg20 {
+    display: inline;
+    width: 20px;
+    height: 20px;
+}
+
+.dvImg30 {
+    display: inline;
+    width: 30px;
+    height: 30px;
+}
+
+.brd {
+    border: 1px solid #999;
+}
+
+.brd0 {
+    border: 0;
+    background: red;
+}
+
+.pdng0 {
+    padding: 0px;
+}
+
+.pdng5 {
+    padding: 0px;
+}
+
+.curP {
+    cursor: pointer;
+}
+
+.esq05 {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.esq10 {
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+}
+
+.esq1100 {
+    border-radius: 10px 10px 0 0;
+    -moz-border-radius: 10px 10px 0 0;
+    -webkit-border-radius: 10px 10px 0 0;
+}
+
+.sombra {
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+.bsbb {
+    box-sizing: border-box;
+}
+
+.rotar-90 {
+    -webkit-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+}
+
+.active {
+    background: #E0F2F7 !important;
+    color: #4985D6 !important;
+}
+
+.tit {
+    background: #4985D6;
+    font: bold 16px arial;
+    color: #FFF;
+    padding: 5px 10px;
+}
+
+.vis {
+    display:;
+}
+
+.inv {
+    display: none;
+}
+
+.ovH {
+    overflow: hidden;
+}
+
+.ovY {
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.dvTemp {
+    z-index: 100;
+    position: absolute;
+    min-width: 300px;
+    max-height: 200px;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #fff;
+    overflow: hidden;
+    overflow-y: auto;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    display: none;
+}
+
+input {
+    width: 98%;
+    padding: 4px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.obligatorio {
+    font: bold 14px arial;
+    color: red;
+}
+
+.msj {
+    font: 14px arial;
+    color: #4985D6;
+}
+
+.img14 {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    vertical-align: middle;
+}
+
+.img16 {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
+}
+
+.img20 {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+.img30 {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+.azul2 {
+    color: #5DB5E6;
+}
+
+.azul3 {
+    color: #20719E;
+}
+
+.dvSub {
+    margin: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    background: #FFF;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+    .dvSub:hover {
+        background: #BAEEBB;
+    }
+
+.dvSubI {
+    margin: 4px;
+    padding: 4px;
+    box-sizing: border-box;
+    background: #FEAEAE;
+    cursor: pointer;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+    .dvSubI:hover {
+        background: #FFCC38;
+    }
+
+.dvListaDatos {
+    display: none;
+    z-index: 2;
+    position: absolute;
+    margin-top: -30px;
+    min-width: 200px;
+    background: #FFF;
+    padding: 10px;
+    max-height: 200px;
+    overflow: hidden;
+    overflow-y: auto;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.dvLista {
+    background: #EDEFF3;
+    padding: 4px;
+    margin: 2px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .dvLista:hover {
+        background: #dfeffc;
+        cursor: pointer;
+    }
+	
+.dvListaAzul {
+    background:#68CDF9;
+    padding:10px;
+    margin: 2px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.dvListaAzul:hover {
+        background: green;
+        cursor: pointer;
+    }
+
+.dvRiesgo {
+    background: #FFF;
+    padding: 3px 5px;
+}
+
+    .dvRiesgo:hover {
+        background: #CEFFC8;
+        cursor: pointer;
+    }
+
+.c_trID {
+    z-index: 2;
+    position: absolute;
+    width: 600px;
+    margin-left: 60px;
+    padding: 10px;
+    box-sizing: border-box;
+    background: #D7EDFF;
+    text-align: center;
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+}
+
+.mi-module {
+    border: 1px solid #b2b3b6;
+    background: #FFF;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+/*  BOTONES  */
+.MIboton {
+    padding: 5px;
+    background: #4985D6;
+    font: bold 14px arial;
+    color: #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIboton:hover {
+        background: #A9C5EB;
+        cursor: pointer;
+    }
+
+.MIbotonP {
+    padding: 3px;
+    background: #f2f2f2;
+    font: bold 12px arial;
+    color: #323f4b;
+}
+
+    .MIbotonP:hover {
+        background: #A9C5EB;
+        cursor: pointer;
+    }
+
+.MIbotonGreen {
+    padding: 5px;
+    background: #64D093;
+    font: bold 14px arial;
+    color: #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbotonGreen:hover {
+        background: #69EC3B;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbotonBlue {
+    padding: 5px;
+    background: #A9C5EB;
+    font: bold 14px arial;
+    color: #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbotonBlue:hover {
+        background: #E0F2F7;
+        cursor: pointer;
+        color: #4985D6;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbotonRed {
+    padding: 5px;
+    box-sizing: border-box;
+    background: #FD7474;
+    font: bold 14px arial;
+    color: #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbotonRed:hover {
+        background: #FF3B3B;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbotonOrange {
+    padding: 5px;
+    background: #FF7C00;
+    font: bold 14px arial;
+    color: #FFF;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbotonOrange:hover {
+        background: #FFB065;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbotonW {
+    padding: 5px;
+    background: #f2f2f2;
+    font: bold 14px arial;
+    color: #666;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbotonW:hover {
+        background: #4e86d0;
+        color: #FFF;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbtnV {
+    padding: 5px 10px;
+    background: #f2f2f2;
+    font: bold 14px arial;
+    color: #666;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbtnV:hover {
+        background: #4e86d0;
+        color: #FFF;
+        cursor: pointer;
+        -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+        box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    }
+
+.MIbtnF {
+    padding: 5px 10px;
+    box-sizing: border-box;
+    background: #19456B;
+    font: bold 14px arial;
+    color: #cedfe3;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+    .MIbtnF:hover {
+        background: #11698E;
+        color: #FFF;
+        cursor: pointer;
+        -webkit-box-shadow: 0 0 6px 2px rgba(80,110,130,0.5);
+        box-shadow: 0 0 6px 2px rgba(80,110,130,0.5);
+    }
+
+.OpcionIO {
+    width: 30px;
+    cursor: pointer;
+}
+
+
+
+
+/*  ICONOS */
+/* Ejemplo de uso: <div class='img20 icoRecarga' onclick="resetFrm('OpcionesTV')"></div> */
+.icoCarga {
+    background-image: url("../../Merlos/images/icoCarga.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.icoMas {
+    background-image: url("../../Merlos/images/icoMas.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoMas:hover {
+        background-image: url("../../Merlos/images/icoMas_I.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoMenos {
+    background-image: url("../../Merlos/images/icoMenos.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoMenos:hover {
+        background-image: url("../../Merlos/images/icoMenos_I.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoUp {
+    background-image: url("../../Merlos/images/icoUp.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoUp:hover {
+        background-image: url("../../Merlos/images/icoUp_I.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoDown {
+    background-image: url("../../Merlos/images/icoDown.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoDown:hover {
+        background-image: url("../../Merlos/images/icoDown_I.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoDownC {
+    background-image: url("../../Merlos/images/icoDownC.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoDownC:hover {
+        background-image: url("../../Merlos/images/icoDown_I.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoLeft {
+    background-image: url("../../Merlos/images/irLO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoLeft:hover {
+        background-image: url("../../Merlos/images/irLI.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoRight {
+    background-image: url("../../Merlos/images/irRO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoRight:hover {
+        background-image: url("../../Merlos/images/irRI.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: pointer;
+    }
+
+.icoCargando {
+    background-image: url("../../Merlos/images/cargando.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.icoRecarga {
+    background-image: url("../../Merlos/images/icoReCarga.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoRecarga:hover {
+        background-image: url("../../Merlos/images/icoReCargaI.png");
+        cursor: pointer;
+    }
+
+.icoRecargaAzul {
+    background-image: url("../../Merlos/images/icoReCargaAzul.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoRecargaAzul:hover {
+        background-image: url("../../Merlos/images/icoReCargaAzul_I.png");
+        cursor: pointer;
+    }
+
+.icoAspa {
+    background-image: url("../../Merlos/images/aspaO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoAspa:hover {
+        background-image: url("../../Merlos/images/aspaI.png");
+        cursor: pointer;
+    }
+
+.icoGuardar {
+    background-image: url("../../Merlos/images/icoGuardarO.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+    .icoGuardar:hover {
+        background-image: url("../../Merlos/images/icoGuardarI.png");
+        cursor: pointer;
+    }
+
+
+
+
+@keyframes fade {
+    from {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1.0;
+    }
+}
+
+@-webkit-keyframes fade {
+    from {
+        opacity: 1.0;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    to {
+        opacity: 1.0;
+    }
+}
+
+.fadeIO {
+    animation: fade 1000ms infinite;
+    -webkit-animation: fade 1000ms infinite;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.rotarR {
+    -webkit-animation: 1s rotate linear infinite;
+    animation: 1s rotate linear infinite;
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+}
+
+
+
+/*  TABLAS */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    table td, table th {
+        vertical-align: middle;
+    }
+
+.tbFrm {
+    width: 100%;
+    border-collapse: collapse;
+    box-sizing: border-box;
+}
+
+    .tbFrm th, .tbFrm td {
+        padding: 5px;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        vertical-align:top;
+    }
+
+    .tbFrm th {
+        background: #edeff3;
+    }
+
+    .tbFrm td {
+        background: #fff;
+    }
+
+#tbConfiguracion {
+    border-collapse: separate;
+    border-spacing: 1px;
+    border: 1px solid #E1E3E7;
+}
+
+    #tbConfiguracion th, #tbConfiguracion td {
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    #tbConfiguracion th {
+        background: #E1E3E7;
+        font: 14px arial;
+        color: #333;
+    }
+
+    #tbConfiguracion td {
+        background: #FFF;
+    }
+
+
+.dvTR:nth-child(odd) {
+    background: #e0e0e0;
+}
+
+.tbSobre {
+    font: bold 20px arial;
+    color: #999;
+    margin-bottom: 5px;
+}
+
+.tbStd {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 4px solid #68CDF9;
+    border: 1px solid #b2b3b6;
+}
+
+    .tbStd tr th {
+        border: 1px solid #CCC;
+        vertical-align: top;
+        text-align: left;
+        color: #333333;
+    }
+
+    .tbStd th {
+        padding: 10px;
+        font: bold 14px arial;
+        background: #EDEFF3;
+    }
+
+    .tbStd td {
+        padding: 10px;
+        font: 14px arial;
+    }
+
+    .tbStd tr:nth-child(odd) {
+        background-color: #EDEFF3;
+    }
+
+    .tbStd tr:hover {
+        background: #E0F2F7 !important;
+        cursor: pointer;
+        color: #666;
+    }
+
+#tbClienteDatosMin {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+    #tbClienteDatosMin th {
+        background: 0;
+        font:12px arial;
+        color:#666;
+    }
+    #tbClienteDatosMin td {
+        background: #EDEFF3;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+        #tbClienteDatosMin td:hover, #tbClienteDatosMin input:hover {
+            cursor: pointer;
+            background: #68CDF9;
+        }
+    #tbClienteDatosMin input {
+        border: 0;
+        border-bottom: #666;
+        padding: 0;
+        box-sizing: border-box;
+        background: 0;
+        outline: none;
+    }
+
+.tbStdC {
+    width: 100%;
+    border-collapse: collapse;
+    border: 0;
+}
+
+.tbStdP {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 4px solid #4985D6;
+}
+
+    .tbStdP tr th, .tbStdP tr td {
+        border: 1px solid #CCC;
+        vertical-align: top;
+        text-align: left;
+        padding: 2px;
+    }
+
+    .tbStdP th {
+        box-sizing: border-box;
+        font: 14px arial;
+        color: #FFF;
+        background: #999;
+    }
+
+    .tbStdP td {
+        padding: 2px;
+        box-sizing: border-box;
+        font: 14px arial;
+        color: #333;
+    }
+
+    .tbStdP tr:nth-child(odd) {
+        background: #FFF;
+    }
+
+    .tbStdP tr:hover {
+        background: #E0F2F7 !important;
+        cursor: pointer;
+        color: #C5FFC4;
+    }
+
+
+
+.tbBuscador {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tbS {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: 4px solid #4985D6;
+}
+
+    .tbS th {
+        font: 10px arial;
+        color: #666;
+    }
+
+#tbTablaDeLlamadas td {
+    vertical-align: middle;
+}
+
+#tbTablaDeLlamadas input {
+    text-align: center;
+    width: 100px;
+    padding: 3px;
+}
+
+#tbTablaDeLlamadas img {
+    width: 16px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+#tbTablaDeLlamadasPeriodo img {
+    width: 16px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+#tbPersEP_Articulos, #tbPersEP_ArticulosCab {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 1px;
+}
+
+    #tbPersEP_ArticulosCab th {
+        background: #999;
+        font: bold12px arial;
+        color: #FFF;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+
+    #tbPersEP_Articulos td {
+        font: 14px arial;
+        color: #333;
+        padding: 4px;
+        box-sizing: border-box;
+    }
+
+    #tbPersEP_Articulos tr:hover {
+        background: #90fee3;
+        cursor: pointer;
+    }
+
+    #tbPersEP_Articulos tr:nth-child(odd) {
+        background-color: #F2F2F2;
+    }
+
+    #tbPersEP_Articulos tr:nth-child(even) {
+        background-color: #FFF;
+    }
+
+    #tbPersEP_Articulos input {
+        text-align: center;
+    }
+
+#tbLlamadasBuscador input {
+    width: 100%;
+    padding: 2px;
+}
+
+#tbLlamadas tr:hover {
+    background: #d1ecff;
+    cursor: pointer;
+}
+
+.tbHover:hover {
+    background: #16C79A;
+	color:#FFF;
+    cursor:pointer;
+}
+
+
+
+
+
+#dvCalendarioEJG {
+    background: rgb(240,240,240);
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.2);
+}
+
+.calenarioEJGMesAny {
+    background: #666;
+    font: bold 14px arial;
+    color: #FFF;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#calendEJG, #calendEJG caption {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+#dvCalendarioEJG #calendEJG thead tr th {
+    background: #999;
+    text-align: center;
+    font: 12px arial;
+    color: #FFF;
+    padding: 5px 0px;
+    box-sizing: border-box;
+}
+
+#dvCalendarioEJG #calendEJG tbody tr td {
+    text-align: center;
+    font: bold 14px arial;
+    color: #333;
+    padding: 5px 0px;
+    box-sizing: border-box;
+}
+
+    #dvCalendarioEJG #calendEJG tbody tr td:hover {
+        cursor: pointer;
+        background: #d6e9d7;
+    }
+
+.calendarioEJGHoy {
+    background: #4985D6;
+    color: #FFF !important;
+}
+
+.calendarioEJGAnt {
+    background: #999;
+    color: #FFF !important;
+}
+
+
+#dvRelojEJG {
+    background: #FFF;
+    padding: 10px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.5);
+}
+
+#tbRelojEJG td {
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #CCC;
+    padding: 3px;
+}
+
+#tbRelojEJG th {
+    font: 12px arial;
+    color: #323f4b;
+    padding: 3px;
+}
+
+#tbRelojEJG td:hover {
+    border: 1px solid green;
+    background: green;
+    color: #FFF !important;
+    cursor: pointer;
+}
+
+#tbRelojEJG td.h {
+    font: bold 12px arial;
+    color: #1e91e2;
+}
+
+#tbRelojEJG td.m {
+    font: bold 12px arial;
+    color: #e2761e;
+}
+
+
+.tCnfT {
+    padding: 5px;
+    background: #68CDF9;
+    font: 16px arial;
+    color: #333333;
+    margin-bottom: 2px;
+}
+
+
+
+
+.tvTitulo {
+    background: #68CDF9;
+    padding: 6px;
+    font: 16px arial;
+    color: #333333;
+}
+
+.tbTV {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 2px;
+}
+
+    .tbTV th, .tbTV td {
+        padding: 4px;
+    }
+
+    .tbTV th {
+        font: 14px arial;
+        color: #323f4b;
+        background: #E9F6FF;
+    }
+
+    .tbTV td {
+        font: bold 14px arial;
+        color: #333;
+        background: #C9D9E3;
+    }
+
+
+
+/*
+		Media
+*/
+@media print {
+  .MI_noImp , #mainNav { display: none !important;  }
+  
+  #tbListadosTV.tbStd th { font: bold 11px arial; }
+  #tbListadosTV.tbStd td { font: 11px arial; }
+}

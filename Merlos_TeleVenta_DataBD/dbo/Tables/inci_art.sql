@@ -1,6 +1,9 @@
 ﻿CREATE TABLE [dbo].[inci_art](
-	[codigo] [char](2) NOT NULL,
-	[nombre] [char](50) NULL,
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[codigo] [varchar](50) NOT NULL,
+	[nombre] [varchar](100) NULL,
+	[usuario] [varchar](100) NULL DEFAULT (user_name()) ,
+	[FechaInsertUpdate] [datetime] NULL DEFAULT (getdate()),
 	CONSTRAINT [PK_inci_art] PRIMARY KEY CLUSTERED 
 (
 	[codigo] ASC

@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pClienteHorarioLlamadas]
+﻿
+CREATE PROCEDURE [dbo].[pClienteHorarioLlamadas]
 (
 	  @cliente char(20)
 	, @lunes bit

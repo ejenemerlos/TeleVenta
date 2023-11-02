@@ -1,0 +1,22 @@
+<table id="tbListadosListado" class="tbStd">
+    <tr>
+        <th>Nombre</th>
+        <th>Cliente</th>
+        <th>Gestor</th>
+        <th class="taC">Desde</th>
+        <th class="taC">Hasta</th>
+        <th>Hora</th>
+    </tr>
+
+
+    <tr class="trListadosListado" onclick="imprimirListado('{{id}}')">
+        <td>{{nombreListado}}</td>
+        <td>{{cliente}}</td>
+        <td>{{gestor}}</td>
+        <td class="taC fechaDesdeListadosListado">{{fecha}}</td>
+        <td class="taC fechaHastaListadosListado">{{hasta}}</td>
+        <td>{{horario}}</td>
+    </tr>
+
+
+</table>

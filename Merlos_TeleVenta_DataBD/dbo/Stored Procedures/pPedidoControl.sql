@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pPedidoControl] @parametros varchar(max)
+﻿
+CREATE PROCEDURE [dbo].[pPedidoControl] @parametros varchar(max)
 AS
 BEGIN TRY	
 	/**/  Insert into Merlos_Log (accion) values (CONCAT('[pPedidoControl] ''',@parametros,''''))

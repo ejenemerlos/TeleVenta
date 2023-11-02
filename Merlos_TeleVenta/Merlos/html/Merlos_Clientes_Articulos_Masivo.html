@@ -1,0 +1,211 @@
+﻿<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+    <div>
+        <div style="font: bold 14px arial; color: #2eafe7; border-bottom: 1px solid #2eafe7; ">Artículos</div>
+        <div id="CliArtMasivo_dvArticulos">
+            <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar" style="width:100%; padding:5px; box-sizing:border-box; outline:none; border:none; background:#EBFCFF;" onkeyup="CliArt_inpArtBuscador_KeyUp(this)">
+        </div>
+    </div>
+
+    <div>
+        <div style="font: bold 14px arial; color: #2eafe7; border-bottom: 1px solid #2eafe7; ">Clientes</div>
+        <div id="CliArtMasivo_dvClientes">
+            <input type="text" id="CliArt_inpCliBuscador" placeholder="buscar" style="width:100%; padding:5px; box-sizing:border-box; outline:none; border:none; background:#EBFCFF;" onkeyup="CliArt_inpCliBuscador_KeyUp(this)">
+        </div>
+    </div>
+</div>
+
+<div style="margin-top:20px; text-align:center;">
+    <span id="CliArtMasivo_EjecutarProcesoMasivoBt" class="MIbotonGreen" onclick="CliArtMasivo_EjecutarProcesoMasivo();">Ejecutar proceso masivo</span>
+    <span id="CliArtMasivo_EjecutarProcesoMasivoAV"></span>
+</div>
+
+
+<script>
+    var CliArtMasivo_Articulos = [];
+    var CliArtMasivo_Clientes = [];
+    var ArticulosMasivoBuscador = `
+        <input type="text" id="CliArt_inpArtBuscador" placeholder="buscar"
+        style="width:100%; padding:5px; box-sizing:border-box; outline:none; border:none; background:#EBFCFF;"
+        onkeyup="buscarEnGrid(this.id,'CliArtMasivo_dvListaDeArticulos'); CliArt_inpArtBuscador_KeyUp(this)">
+    `;
+    var ClientesMasivoBuscador = `
+        <input type="text" id="CliArt_inpCliBuscador" placeholder="buscar"
+        style="width:100%; padding:5px; box-sizing:border-box; outline:none; border:none; background:#EBFCFF;"
+        onkeyup="buscarEnGrid(this.id,'CliArtMasivo_dvListaDeClientes')">
+    `;
+
+    if (dameValorJSON(flexygo.context.MerlosConfiguracion, "CargaArtDef") === "1") {
+        cargarArticulosMasivo("todos");
+    }
+    if (dameValorJSON(flexygo.context.MerlosConfiguracion, "CargaCliDef") === "1") {
+        cargarClientesMasivo("todos");
+    }
+
+
+
+
+
+    function CliArtMasivo_IncluirExcluir(elem) {
+        var estado = 0;
+        var claseClick = $(elem).attr("class");
+        var elemICO = $(elem).html();
+        var incluirValor = 0;
+        var excluirValor = 0;
+        var articulo = $(elem).closest('.dvMasivo').find('.codigo').text();
+        var colorActivo = "green";
+        if (claseClick === "eliminar") {
+            colorActivo = "red";
+        }
+
+        if (elemICO === icoCheckO) {
+            $(elem).html(icoCheckI).css("color", colorActivo);
+            estado = 1;
+        } else {
+            $(elem).html(icoCheckO).css("color", "#333");
+        }
+
+        if (claseClick === "incluir" && estado === 1) {
+            incluirValor = 1;
+            $(elem).closest('.dvMasivo').find('.excluir , .eliminar').html(icoCheckO).css("color", "#333");
+        }
+        if (claseClick === "excluir" && estado === 1) {
+            excluirValor = 1;
+            $(elem).closest('.dvMasivo').find('.incluir , .eliminar').html(icoCheckO).css("color", "#333");
+        }
+        if (claseClick === "eliminar" && estado === 1) {
+            eliminar = 1;
+            $(elem).closest('.dvMasivo').find('.incluir , .excluir').html(icoCheckO).css("color", "#333");
+        }
+    }
+
+
+    function cargarClientesMasivo(cliente) {
+        $("#CliArtMasivo_dvClientes").html(`${icoCarga} cargando artículos...`);
+
+        var contenido = "";
+        var parametros = {
+            "cliente": cliente,
+            "jsUser": jsUser
+        };
+        flexygo.nav.execProcess('pPers_ArtCliMasivo_Clientes', '', null, null, [{
+            key: 'parametros',
+            value: JSON.stringify(parametros)
+        }], 'current', false, $(this), function(ret) {
+            if (ret) {
+                var datos = "";
+                var js = JSON.parse(ret.JSCode);
+                if (js.error === "") {
+                    jsr = js.respuesta;
+                    if (jsr.length > 0) {
+                        contenido = `
+                            ${ClientesMasivoBuscador}
+                            <div style="margin-top:10px; display:grid; grid-template-columns: 1fr 8fr 1fr; gap:1px; border-bottom:1px solid #CCC;">
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Código</div>
+                                <div style="padding:5px; background:#999; font:16px arial; color:#FFF;">Nombre</div>
+                                <div style="padding:5px; background:#999; font:12px arial; color:#FFF; text-align:center;">Selección</div>
+                            </div>
+                            <div id="CliArtMasivo_dvListaDeClientes" style="border-bottom:2px solid #CCC; max-height:300px; overflow:hidden; overflow-y:auto;">
+                        `;
+                        for (var i in jsr) {
+                            contenido += `
+                                <div class="dvMasivo buscarEnGridTR" style="display:grid; grid-template-columns: 1fr 8fr 1fr; gap:1px;"
+                                data-buscar="${jsr[i].CODIGO.trim()} ${jsr[i].NOMBRE.trim()}">
+                                    <div class="codigo" style="padding:4px;">${jsr[i].CODIGO.trim()}</div>
+                                    <div style="padding:4px;">${jsr[i].NOMBRE.trim()}</div>
+                                    <div class="seleccion" style="padding:4px; text-align:center;" onclick="CliArtMasivo_ClienteSeleccion(this)">${icoCheckO}</div>
+                                </div>
+                            `;
+                        }
+                        contenido += "</div>";
+                    } else {
+                        contenido = `${ClientesMasivoBuscador}<br><br>Sin resultados!`;
+                    }
+                } else {
+                    contenido = js.error;
+                }
+                $("#CliArtMasivo_dvClientes").html(contenido);
+            }
+        }, false);
+    }
+
+    function CliArtMasivo_ClienteSeleccion(elem) {
+        var elemICO = $(elem).html();
+        var cliente = $(elem).closest('.dvMasivo').find('.codigo').text();
+
+        if (elemICO === icoCheckO) {
+            $(elem).html(icoCheckI).css("color", "green");
+        } else {
+            $(elem).html(icoCheckO).css("color", "#333");
+        }
+    }
+
+    function CliArtMasivo_EjecutarProcesoMasivo() {
+        CliArtMasivo_Articulos = [];
+        CliArtMasivo_Clientes = [];
+
+        $("#CliArtMasivo_EjecutarProcesoMasivoBt").hide();
+        $("#CliArtMasivo_EjecutarProcesoMasivoAV").html(`${icoCarga} ejecutando el proceso...`).fadeIn();
+
+        $("#CliArtMasivo_dvListaDeArticulos").find(".dvMasivo").each(function() {
+            var articulo = $(this).find(".codigo").text();
+            var incluir = $(this).find(".incluir").html();
+            var excluir = $(this).find(".excluir").html();
+            var eliminar = $(this).find(".eliminar").html();
+            var IncluirExcluir = 0;
+            if (incluir === icoCheckI) {
+                IncluirExcluir = 1;
+            }
+            if (excluir === icoCheckI) {
+                IncluirExcluir = 2;
+            }
+            if (eliminar === icoCheckI) {
+                IncluirExcluir = 3;
+            }
+
+            if (IncluirExcluir !== 0) {
+                CliArtMasivo_Articulos.push({
+                    "articulo": articulo,
+                    "IncluirExcluir": IncluirExcluir
+                });
+            }
+        });
+
+        $("#CliArtMasivo_dvListaDeClientes").find(".dvMasivo").each(function() {
+            var cliente = $(this).find(".codigo").text();
+            var seleccion = $(this).find(".seleccion").html();
+
+            if (seleccion === icoCheckI) {
+                CliArtMasivo_Clientes.push({
+                    "cliente": cliente
+                });
+            }
+        });
+
+        if (CliArtMasivo_Articulos.length === 0 || CliArtMasivo_Clientes.length === 0) {
+            abrirVelo(`
+                Debes seleccionar tanto artículos como clientes!
+                <br><br><br><span class="MIbotonGreen" onclick="cerrarVelo();">aceptar</span>
+            `);
+            $("#CliArtMasivo_EjecutarProcesoMasivoBt , #CliArtMasivo_EjecutarProcesoMasivoAV").toggle();
+        } else {
+            var parametros = {
+                "Articulos": CliArtMasivo_Articulos,
+                "Clientes": CliArtMasivo_Clientes,
+                "jsUser": jsUser
+            };
+            flexygo.nav.execProcess('pPers_ArtCliMasivo', '', null, null, [{
+                key: 'parametros',
+                value: JSON.stringify(parametros)
+            }], 'current', false, $(this), function(ret) {
+                if (ret) {
+                    abrirVelo(`
+                        El proceso se ha ejecutado correctamente.
+                        <br><br><br><span class="MIbotonGreen" onclick="cerrarVelo();">aceptar</span>
+                    `);
+                    $(".incluir , .excluir, .eliminar , .seleccion").html(icoCheckO).css("color", "#333");
+                    $("#CliArtMasivo_EjecutarProcesoMasivoBt , #CliArtMasivo_EjecutarProcesoMasivoAV").toggle();
+                }
+            }, false);
+        }
+    }
+</script>

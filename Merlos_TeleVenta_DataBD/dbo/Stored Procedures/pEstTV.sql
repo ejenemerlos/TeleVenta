@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pEstTV] @parametros nvarchar(max)=''
+﻿
+CREATE PROCEDURE [dbo].[pEstTV] @parametros nvarchar(max)=''
 AS
 BEGIN TRY
 	declare  @IdTeleVenta varchar(50) = (select JSON_VALUE(@parametros,'$.IdTeleVenta'))

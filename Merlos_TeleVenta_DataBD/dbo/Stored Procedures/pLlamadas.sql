@@ -1,4 +1,6 @@
-﻿CREATE PROCEDURE [dbo].[pLlamadas] @parametros varchar(max) 
+﻿
+
+CREATE PROCEDURE [dbo].[pLlamadas] @parametros varchar(max) 
 AS
 BEGIN TRY
 	declare   @modo varchar(50) = (select JSON_VALUE(@parametros,'$.modo'))
@@ -29,8 +31,8 @@ BEGIN TRY
 	END
 
 	if @modo='llamarOtroDia' begin		
-		insert into [llamadasOD] (IdTeleVentaOrigen,cliente,fechaHora)
-		values (@IdTeleVenta,@cliente,@nuevaLlamada)
+		insert into [llamadasOD] (IdTeleVentaOrigen,cliente,gestor,fechaHora)
+		values (@IdTeleVenta,@cliente,@usuario,@nuevaLlamada)
 		return -1
 	END
 
@@ -39,7 +41,7 @@ BEGIN TRY
 		if exists (select * from TeleVentaDetalle where id=@IdTeleVenta	and cliente=@cliente) BEGIN 
 			select 'clienteExiste!' as JAVASCRIPT 
 		END ELSE begin
-			insert into TeleVentaDetalle (id,cliente) values (@IdTeleVenta,@cliente)
+			insert into TeleVentaDetalle (id,cliente,fechaLlamada) values (@IdTeleVenta,@cliente,@FechaTeleVenta)
 		END
 		return -1
 	END
@@ -97,16 +99,18 @@ BEGIN TRY
 		set @cliente = (select JSON_VALUE(@parametros,'$.cliente'))
 		set @pedido = (select JSON_VALUE(@parametros,'$.pedido'))		
 		declare @idpedido varchar(50) = CONCAT((select top 1 EJERCICIO from Configuracion_SQL),@empresa,@serie,replicate('0',10-len(@pedido)),@pedido) collate Modern_Spanish_CI_AI 
-		if @pedido='undefined' and (@incidenciaClienteDescrip is null or @incidenciaClienteDescrip='undefined' or @incidenciaClienteDescrip='')
-		begin set @incidenciaClienteDescrip='Sin Pedido!' end
+		if @pedido='undefined' and (@incidenciaClienteDescrip is null or @incidenciaClienteDescrip='undefined' or @incidenciaClienteDescrip='') set @incidenciaClienteDescrip='Sin Pedido!'
 		if @pedido='undefined' begin set @pedido=@incidenciaClienteDescrip set @serie='' set @idpedido='' end
+
+		declare @accion varchar(max) = '------ [pLlamadas] ----- TERMINAR LLAMADA : @usuario: '+@usuario+' - @pedido: '+@pedido+' - @cliente: '+@cliente
+		EXEC [pMerlos_LOG] @accion=@accion, @error=''
 
 		-- Incidencias
 		if (@incidenciaCliente is not null and @incidenciaCliente<>'') or (@observaciones is not null and @observaciones<>'') begin
 			insert into TeleVentaIncidencias (id,gestor,tipo,incidencia,cliente,idpedido,observaciones) 
 			values (@IdTeleVenta,@usuario,'Cliente',@incidenciaCliente,@cliente,@idpedido,@observaciones)
-		END		
-		
+		END
+
 		-- Obtener importe del pedido
 		EXEC('
 				declare @totalped numeric(15,6), @totaldoc numeric(15,6)
@@ -169,7 +173,7 @@ BEGIN TRY
 					and a.EMPRESA='''+@empresa+''' 
 
 				update TeleVentaCab 
-				set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, subtotal=@totalped, importe=@totaldoc 
+				set clientes=@clientes, llamadas=@llamadas, pedidos=@pedidos, subtotal=@totalped, importe=@totaldoc, Terminado=getdate() 
 				where id='''+@IdTeleVenta+''' 
 		')
 
@@ -180,25 +184,39 @@ BEGIN TRY
 	if @modo='listaGlobal' begin
 		if @rol='Admins' or @rol='AdminPortal' or @rol='VerTodosLosClientes'
 			select isnull(
-				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-					, clientes, llamadas, pedidos, t.importe
-					from [TeleVentaCab] t
-					inner join TeleVentaDetalle d on d.id=t.id
-					left join vPedidos p on p.idpedido=d.idpedido collate database_default
-					group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
-					order by cast(t.fecha as date) desc 
+				 (SELECT * FROM 
+					(
+						SELECT distinct t.id, t.nombre as nombreTV, t.fecha, t.fecha as fechaDT, t.usuario, clientes, llamadas, pedidos, t.importe
+						FROM [TeleVentaCab] t
+						INNER JOIN TeleVentaDetalle d ON d.id = t.id
+						GROUP BY t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
+					) AS SubQuery
+					ORDER BY 
+					  CASE 
+						WHEN CHARINDEX('|', fecha) > 0 THEN 
+						  CONVERT(DATE, SUBSTRING(fecha, CHARINDEX('|', fecha) + 1, 10), 103)
+						ELSE 
+						  CONVERT(DATE, fecha, 103)
+					  END DESC		
 				for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		else 
 			select isnull(
-				 (select distinct t.id, t.nombre as nombreTV, t.fecha, cast(t.fecha as date) as fechaDT, t.usuario
-					, clientes, llamadas, pedidos, t.importe
-				from [TeleVentaCab] t
-				inner join TeleVentaDetalle d on d.id=t.id
-				left join vPedidos p on p.idpedido=d.idpedido collate database_default
-				where t.usuario=@usuario 
-				group by t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
-				order by cast(t.fecha as date) desc 
+				(SELECT * FROM 
+					(
+						SELECT distinct t.id, t.nombre as nombreTV, t.fecha, t.fecha as fechaDT, t.usuario, clientes, llamadas, pedidos, t.importe
+						FROM [TeleVentaCab] t
+						INNER JOIN TeleVentaDetalle d ON d.id = t.id
+						GROUP BY t.id, t.nombre, t.fecha, t.usuario, clientes, llamadas, pedidos, t.importe
+					) AS SubQuery
+					where SubQuery.usuario=@usuario
+					ORDER BY 
+					  CASE 
+						WHEN CHARINDEX('|', fecha) > 0 THEN 
+						  CONVERT(DATE, SUBSTRING(fecha, CHARINDEX('|', fecha) + 1, 10), 103)
+						ELSE 
+						  CONVERT(DATE, fecha, 103)
+					  END DESC		
 				for JSON AUTO)
 			,'[]') as JAVASCRIPT
 		RETURN -1
@@ -230,15 +248,20 @@ BEGIN TRY
 		END
 	END
 
-	--	retornar llamadas (cargarLlamadas)
-		select isnull((select td.*
-		, cli.NOMBRE
-		, (	select top 1 convert(char(10),FECHA,105) from [vPedidos_Cabecera] 
-			where CLIENTE=CLI.CODIGO order by sqlFecha desc ) as ultimoPedido
-		from TeleVentaDetalle td 
-		left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=td.cliente
-		where td.id=@IdTeleVenta
-		order by td.completado asc, td.horario asc for JSON AUTO, INCLUDE_NULL_VALUES),'[]') as JAVASCRIPT
+	--	retornar llamadas (modo:cargarLlamadas)
+		select isnull(
+			(
+				select td.*
+				, cli.NOMBRE
+				, (	select top 1 convert(char(10),FECHA,105) from [vPedidos_Cabecera] 
+					where CLIENTE=CLI.CODIGO order by sqlFecha desc ) as ultimoPedido
+				from TeleVentaDetalle td 
+				left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=td.cliente
+				where td.id=@IdTeleVenta
+				order by td.completado asc, td.horario asc 
+				for JSON AUTO, INCLUDE_NULL_VALUES
+			)
+		,'[]') as JAVASCRIPT
 
 	RETURN -1
 END TRY

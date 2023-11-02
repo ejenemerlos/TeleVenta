@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pClientesBasic]	  @usuario varchar(50)=''
+﻿
+CREATE PROCEDURE [dbo].[pClientesBasic]	  @usuario varchar(50)=''
 										, @rol varchar(50)=''
 AS
 BEGIN TRY
@@ -6,12 +7,30 @@ BEGIN TRY
 
 	if @rol='MI_User_RUTA' BEGIN
 		set @respuesta = (
-		select CODIGO as codigo, replace(NOMBRE,'"','') as nombre from vClientes 
-		where RUTA=@usuario order by NOMBRE asc for JSON path,root('clientes') )
+			select	CODIGO as codigo, ltrim(rtrim(replace(NOMBRE,'"',''))) as nombre
+				,	ltrim(rtrim(replace(RCOMERCIAL,'"',''))) as nComercial
+				,	ltrim(rtrim(CIF)) as CIF
+				,	ltrim(rtrim(TELEFONO)) as TELEFONO
+				, LTRIM(RTRIM(DIRECCION)) AS DIRECCION
+				,	isnull((select ltrim(rtrim(isnull(TELEFONO,''))) as TELEFONO from vCliTelfs where CLIENTE=CODIGO and ISNULL(TELEFONO,'')<>'' for JSON AUTO, include_null_values),'[]') as TELEFONOS
+			from vClientes 
+			where RUTA=@usuario 
+			order by NOMBRE asc 
+			for JSON path,root('clientes') 
+		)
 	END
 	ELSE BEGIN
-		set @respuesta = (select CODIGO as codigo, replace(NOMBRE,'"','') as nombre 
-		from vClientes order by NOMBRE asc for JSON path,root('clientes'))
+		set @respuesta = (
+			select	CODIGO as codigo, ltrim(rtrim(replace(NOMBRE,'"',''))) as nombre
+				,	ltrim(rtrim(replace(RCOMERCIAL,'"',''))) as nComercial
+				,	ltrim(rtrim(CIF)) as CIF
+				,	ltrim(rtrim(TELEFONO)) as TELEFONO
+				, LTRIM(RTRIM(DIRECCION)) AS DIRECCION
+				,	isnull((select ltrim(rtrim(isnull(TELEFONO,''))) as TELEFONO from vCliTelfs where CLIENTE=CODIGO and ISNULL(TELEFONO,'')<>'' for JSON AUTO, include_null_values),'[]') as TELEFONOS
+			from vClientes 
+			order by NOMBRE asc 
+			for JSON path,root('clientes')
+		)
 	END
 	
 	select isnull(@respuesta,'[]') AS JAVASCRIPT

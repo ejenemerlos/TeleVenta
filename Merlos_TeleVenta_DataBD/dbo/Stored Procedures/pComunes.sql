@@ -13,9 +13,9 @@ BEGIN TRY
 		declare @exec1 varchar(1000) = '
 			declare @comunes varchar(max)=''''
 			if (select left(PRODUCTNAME,4) from ['+@nombre+'].dbo.codcom)=''SAGE''
-			set @comunes = @comunes + ''{"nombre":"'+isnull(@nombre,'')+'"}''
+			set @comunes = @comunes + ''{"nombre":"'+@nombre+'"}''
 		'
-		begin try exec (@exec1) end try begin catch end catch
+		exec (@exec1)
 
 	FETCH NEXT FROM elCursor INTO @nombre END Close elCursor Deallocate elCursor
 	

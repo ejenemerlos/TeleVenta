@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pEmpresas] @modo varchar(50)='lista', @comun varchar(10)
+﻿
+CREATE PROCEDURE [dbo].[pEmpresas] @modo varchar(50)='lista', @comun varchar(10)
 AS
 BEGIN TRY	
 

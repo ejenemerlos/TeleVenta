@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pInpDatos] @elJS nvarchar(max)=''
+﻿
+CREATE PROCEDURE [dbo].[pInpDatos] @elJS nvarchar(max)=''
 AS
 BEGIN TRY
 	declare   @modo varchar(50) = (select JSON_VALUE(@elJS,'$.modo'))

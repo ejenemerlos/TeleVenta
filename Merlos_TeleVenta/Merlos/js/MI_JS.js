@@ -20,7 +20,11 @@ var IdTeleVenta = "";
 var GestorTeleVenta = "";
 var FechaTeleVenta = "";
 var NombreTeleVenta = "";
-var opVendedor = ""; var opSerie = ""; var opMarca = ""; var opFamilia = ""; var opSubfamilia = "";
+var opVendedor = "";
+var opSerie = "";
+var opMarca = "";
+var opFamilia = "";
+var opSubfamilia = "";
 var TVvendedores = "";
 var TVseries = "";
 var TVmarcas = "";
@@ -42,6 +46,7 @@ var tfArticuloSeleccionado = "";
 var tfArticuloSeleccionadoI = 0;
 
 var paramStd = '"paramStd":[{"currentRole":"' + currentRole + '","currentRoleId":"' + currentRoleId + '","currentReference":"' + currentReference + '","currentSubreference":"' + currentSubreference + '","currentUserLogin":"' + currentUserLogin + '","currentUserId":"' + currentUserId + '","currentUserFullName":"' + currentUserFullName + '"}]';
+var jsUser = { "currentUserId": currentUserId, "currentReference": currentReference, "currentUserLogin": currentUserLogin, "currentRole": currentRole, "currentUserFullName": currentUserFullName };
 
 var nomMes = ["", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMPRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 var numMes = ["", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
@@ -52,10 +57,9 @@ var calendarioInput = "";
 var paginadorRegistros = 0;
 var paginadorResultados = 0;
 
-var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG"
-    , "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']", ".dvTemp", "#dvListadoGestores"];
+var ElementosClickOff = ["#dv-inci-cliente", "#dvLLBserieConfig", "#dvLLBserie", "#dvLLBvendedor", "#dvIncidenciasTemp", "#dvCalendarioEJG", "#dvinputDatosTemp", "#dvDatosTemp", "#trID", ".c_trID", "#veloClientes", "flx-module[modulename='usuariosTV']", ".dvTemp", "#dvListadoGestores"];
 
-$(document).click(function (e) { 
+$(document).click(function(e) {
     for (var i in ElementosClickOff) {
         var container = $(ElementosClickOff[i]);
         if (!container.is(e.target) && container.has(e.target).length === 0) { $(ElementosClickOff[i]).fadeOut(); }
@@ -80,52 +84,60 @@ var BtnDesI = "./Merlos/images/BtnDesI.png";
 var BtnDesO = "./Merlos/images/BtnDesO.png";
 var icoCarga20 = "<img src='./Merlos/images/icoCarga.png' class='rotarR' width='20'>";
 
+var icoCarga = "<i class='flx-icon icon-load icoCarga rotarR'></i>";
+var icoCheckO = `<i class="flx-icon icon-non-check-2 icoCheckO"></i>`;
+var icoCheckI = `<i class="flx-icon icon-accepted-2 icoCheckI"></i>`;
+
 
 /*
 	*************************
 		    Funciones
 	*************************
 */
-$(document).mousedown(function (e) { if (e.detail > 1) { e.preventDefault(); } });
+$(document).mousedown(function(e) { if (e.detail > 1) { e.preventDefault(); } });
 
-function GblLimpiarLaCache(){
-    if(currentRole!=="Admins"){ return; }
+function GblLimpiarLaCache() {
+    if (currentRole !== "Admins") { return; }
     flexygo.nav.execProcess('ReloadCache', '', '', null, null, 'current', false, $(this));
     GblCacheAutoClick();
-}	
-	
-function GblCacheAutoClick(){
-	var botonYes = $("body").find(".lobibox-btn-yes");
-	if(botonYes.is(":visible")){ botonYes.click(); }else{ setTimeout(GblCacheAutoClick,500); }
+}
+
+function GblCacheAutoClick() {
+    var botonYes = $("body").find(".lobibox-btn-yes");
+    if (botonYes.is(":visible")) { botonYes.click(); } else { setTimeout(GblCacheAutoClick, 500); }
 }
 
 function abrirVelo(contenido, ancho, mantener, aceptar) {
     if (ancho === null || !ancho || ancho === "") { ancho = 500; }
-    if(ancho==="todo"){ ancho = document.body.clientWidth - 40; }
-    if (aceptar) { contenido += "<br><br><br><span class='MIbotonGreen' onclick='cerrarVelo()'>aceptar</span><br>";  }
+    if (ancho === "todo") { ancho = document.body.clientWidth - 40; }
+    if (aceptar) { contenido += "<br><br><br><span class='MIbotonGreen' onclick='cerrarVelo()'>aceptar</span><br>"; }
     if (!mantener) {
         $("#dvVelo").remove();
         $("body").prepend("<div id='dvVelo' class='inv'><div id='dvVeloContenido' class='C' style='width:" + ancho + "px;'>" + contenido + "</div></div>");
         $("#dvVelo").stop().fadeIn();
     } else { $("#dvVeloContenido").html(contenido); }
 }
+
 function abrirAVT(contenido, ancho) {
-    if(!ancho){ ancho=500; }
-    if(ancho==="todo"){ ancho = document.body.clientWidth - 40; }
+    if (!ancho) { ancho = 500; }
+    if (ancho === "todo") { ancho = document.body.clientWidth - 40; }
     $("#dvAVT").remove();
     $("body").prepend("<div id='dvAVT' style='z-index:10; position:fixed; width:100%; height:1px; top:50px;'><div class='sombra C' style='width:" + ancho + "px; margin:auto; background:#FFF;padding:10px;'>" + contenido + "</div></div>");
     if (!$("#dvAVT").is("visible")) { $("#dvAVT").fadeIn(); }
 }
+
 function abrirIcoCarga() {
     $("#dvVelo").remove();
     $("body").prepend(
-        "<div id='dvVelo' class='dvVelo inv' style='text-align:center'>"
-        +"  <img src='./Merlos/images/icoCarga150.png' style='width:100px; margin-top:100px;' class='rotarR'>"
-        +"</div>"
+        "<div id='dvVelo' class='dvVelo inv' style='text-align:center'>" +
+        "  <img src='./Merlos/images/icoCarga150.png' style='width:100px; margin-top:100px;' class='rotarR'>" +
+        "</div>"
     );
     $("#dvVelo").stop().fadeIn();
 }
+
 function cerrarVelo() { $("#dvVelo").stop().fadeOut().html(""); }
+
 function cerrarAVT() { $("#dvAVT").stop().fadeOut().html(""); }
 
 function buscarEn(elInput, elDiv) {
@@ -134,27 +146,36 @@ function buscarEn(elInput, elDiv) {
     if (event.keyCode == 13) {
         if (elInput.substring(0, 11) === "inpArticulo") { cargarArticulos(elInput.split("inpArticulo")[1], buscar); }
         if (elInput === "inpdvMultiseleccionContenidoBuscador") { cargarArticulosMultiseleccion(buscar); }
-    }
-    else {
-        $("#" + elDiv).find("div").each(function () {
+    } else {
+        $("#" + elDiv).find("div").each(function() {
             var contenido = $.trim($(this).text()).toLowerCase();
             if (contenido.indexOf(buscar) !== -1) { $(this).removeClass("inv"); } else { $(this).addClass("inv"); }
         });
     }
 }
 
+function buscarEnGrid(elInput, elDiv) {
+    var buscar = $.trim($("#" + elInput).val()).toLowerCase();
+
+    $("#" + elDiv).find(".buscarEnGridTR").each(function() {
+        var contenido = $.trim($(this).attr("data-buscar")).toLowerCase();
+        console.log("contenido:", contenido, " - buscar:", buscar);
+        if (contenido.includes(buscar)) { $(this).show(); } else { $(this).hide(); }
+    });
+}
+
 function buscarEnTabla(elInput, laTabla) {
     var buscar = $.trim($("#" + elInput).val()).toLowerCase();
-    $("#" + laTabla).find("tr").each(function () {
+    $("#" + laTabla).find("tr").each(function() {
         var en = "";
-        $(this).find("td").each(function () { en += $(this).text().toLowerCase(); }); 
+        $(this).find("td").each(function() { en += $(this).text().toLowerCase(); });
         if (en.indexOf(buscar) !== -1) { $(this).removeClass("inv"); } else { $(this).addClass("inv"); }
     });
 }
 
 function buscarEnCampos(elInput, elDiv) {
     var buscar = $.trim($("#" + elInput).val()).toLowerCase();
-    $("#" + elDiv).find("div").each(function () {
+    $("#" + elDiv).find("div").each(function() {
         var contenido = $.trim($(this).attr("data-buscar")).toLowerCase();
         if (contenido.indexOf(buscar) !== -1) { $(this).removeClass("inv"); } else { $(this).addClass("inv"); }
     });
@@ -173,14 +194,14 @@ function soloNums(elID, elValor) { $('#' + elID).val(elValor.replace(/[^0-9]/, '
 
 function capitalizar(word) { return word[0].toUpperCase() + word.slice(1); }
 
-function ScrollBarWidth(){
-	var $outer = $('<div>').css({visibility: 'hidden', width: 100, overflow: 'scroll'}).appendTo('body'),
-		widthWithScroll = $('<div>').css({width: '100%'}).appendTo($outer).outerWidth();
-	$outer.remove();
-	return 100 - widthWithScroll;
+function ScrollBarWidth() {
+    var $outer = $('<div>').css({ visibility: 'hidden', width: 100, overflow: 'scroll' }).appendTo('body'),
+        widthWithScroll = $('<div>').css({ width: '100%' }).appendTo($outer).outerWidth();
+    $outer.remove();
+    return 100 - widthWithScroll;
 };
-			
-			
+
+
 
 function paginador(mm) {
     if (mm) { paginadorRegistros += 100; } else { paginadorRegistros -= 100; }
@@ -189,8 +210,11 @@ function paginador(mm) {
 
 function repintarZebra(tb, color) {
     var bg = color;
-    $("#" + tb).find("tr").each(function () {
-        if (bg === color) { bg = ""; } else { bg = color;PedidoNoCobrarPortes }
+    $("#" + tb).find("tr").each(function() {
+        if (bg === color) { bg = ""; } else {
+            bg = color;
+            PedidoNoCobrarPortes
+        }
         $(this).css("background", bg);
     });
 }
@@ -198,13 +222,13 @@ function repintarZebra(tb, color) {
 function resetFrm(frm) {
     if (frm === "OpcionesTV") {
         $("#inpNombreTV,#inpFechaTV").val("");
+        borrarFechasMultiselect();
         $("#inputDatosGestor0,#inputDatosGestor,#inputDatosRuta,#inputDatosVendedor,#inputDatosSerie,#inputDatosMarca,#inputDatosFamilia,#inputDatosSubfamilia").html("");
     }
 }
 
-function IsNull(dato,valor) {
-    if (dato === null || dato === undefined || dato === "null" || dato === "undefined") { return valor; }
-    else { return dato; }
+function IsNull(dato, valor) {
+    if (dato === null || dato === undefined || dato === "null" || dato === "undefined") { return valor; } else { return dato; }
 }
 
 
@@ -215,9 +239,9 @@ function IsNull(dato,valor) {
 */
 limpiarCookies();
 comprobarCargaMainMenu();
+
 function comprobarCargaMainMenu() {
-    if ($("#mainMenu").is(":visible")) { configuracionDeMenus(); }
-    else { setTimeout(function () { comprobarCargaMainMenu(); }, 300); }
+    if ($("#mainMenu").is(":visible")) { configuracionDeMenus(); } else { setTimeout(function() { comprobarCargaMainMenu(); }, 300); }
 }
 
 
@@ -240,6 +264,45 @@ function anyoActual() {
     return f.getFullYear();
 }
 
+function fechaCortaPrimeraAnyo(formato, separador = "-") {
+    // Obtener el año actual
+    var ahora = new Date();
+    var anoActual = ahora.getFullYear();
+    // Establecer la fecha al 1 de enero del próximo año
+    var f = new Date(anoActual, 0, 1);
+    // Retroceder un día para llegar al 31 de diciembre del año actual   
+    var dia = f.getDate();
+    var mes = f.getMonth() + 1;
+    var any = f.getFullYear();
+    var laFecha = "";
+
+    dia = dia < 10 ? "0" + (dia) : dia;
+    mes = mes < 10 ? "0" + (mes) : mes;
+
+    if (formato === "amd") { laFecha = any + separador + mes + separador + dia; } else { laFecha = dia + separador + mes + separador + any; }
+    return laFecha
+}
+
+function fechaCortaUltimaAnyo(formato, separador = "-") {
+    // Obtener el año actual
+    var ahora = new Date();
+    var anoActual = ahora.getFullYear();
+    // Establecer la fecha al 1 de enero del próximo año
+    var f = new Date(anoActual + 1, 0, 1);
+    // Retroceder un día para llegar al 31 de diciembre del año actual
+    f.setDate(f.getDate() - 1);
+    var dia = f.getDate();
+    var mes = f.getMonth() + 1;
+    var any = f.getFullYear();
+    var laFecha = "";
+
+    dia = dia < 10 ? "0" + (dia) : dia;
+    mes = mes < 10 ? "0" + (mes) : mes;
+
+    if (formato === "amd") { laFecha = any + separador + mes + separador + dia; } else { laFecha = dia + separador + mes + separador + any; }
+    return laFecha
+}
+
 function fechaCorta(formato, separador = "-") {
     var f = new Date();
     var dia = f.getDate();
@@ -250,8 +313,7 @@ function fechaCorta(formato, separador = "-") {
     dia = dia < 10 ? "0" + (dia) : dia;
     mes = mes < 10 ? "0" + (mes) : mes;
 
-    if (formato === "amd") { laFecha = any + separador + mes + separador + dia; }
-    else { laFecha = dia + separador + mes + separador + any; }
+    if (formato === "amd") { laFecha = any + separador + mes + separador + dia; } else { laFecha = dia + separador + mes + separador + any; }
     return laFecha
 }
 
@@ -286,6 +348,32 @@ function fechaDeHoy() {
     return (f.getDate() + " de " + Fmeses[f.getMonth()] + " de " + f.getFullYear());
 }
 
+function fechaDeHoyFormat(formato = "dma", simbolo = "-") {
+    var TuFecha = new Date();
+    TuFecha.setDate(TuFecha.getDate());
+    var dia = TuFecha.getDate();
+    var mes = TuFecha.getMonth() + 1;
+    var ano = TuFecha.getFullYear();
+    if (dia.toString().length == 1) { dia = "0" + dia; }
+    if (mes.toString().length == 1) { mes = "0" + mes; }
+    var laFecha = dia + simbolo + mes + simbolo + ano;
+    if (formato === "amd") { laFecha = ano + simbolo + mes + simbolo + dia; }
+    return laFecha;
+}
+
+function fechaDeAquiSemanaFormat(formato = "dma", simbolo = "-") {
+    var TuFecha = new Date();
+    TuFecha.setDate(TuFecha.getDate() + 7);
+    var dia = TuFecha.getDate();
+    var mes = TuFecha.getMonth() + 1;
+    var ano = TuFecha.getFullYear();
+    if (dia.toString().length == 1) { dia = "0" + dia; }
+    if (mes.toString().length == 1) { mes = "0" + mes; }
+    var laFecha = dia + simbolo + mes + simbolo + ano;
+    if (formato === "amd") { laFecha = ano + simbolo + mes + simbolo + dia; }
+    return laFecha;
+}
+
 function fechaDeAyer() {
     var TuFecha = new Date();
     TuFecha.setDate(TuFecha.getDate() - 1);
@@ -311,14 +399,34 @@ function fechaDeManyana(formato = "dma", simbolo = "-") {
 }
 
 function fechaCambiaFormato(fecha) {
-    var separador = "/"; if (fecha.includes("-")) { separador = "-"; }
+    var separador = "/";
+    if (fecha.includes("-")) { separador = "-"; }
     return fecha.split(separador)[2] + separador + fecha.split(separador)[1] + separador + fecha.split(separador)[0];
 }
 
+function fechaCambiaFormatoBarra(fecha) {
+    var separador2 = "/";
+    if (fecha.includes("-")) { separador = "-"; }
+    return fecha.split(separador)[2] + separador2 + fecha.split(separador)[1] + separador2 + fecha.split(separador)[0];
+}
+
+function fechaCambiaFormatoBarraTel(fecha) {
+    var separador2 = "/";
+    var fechaTotal = "";
+    if (!fecha.includes("/")) {
+        if (fecha.includes("-")) { separador = "-"; }
+        fechaTotal = fecha.split(separador)[0] + separador2 + fecha.split(separador)[1] + separador2 + fecha.split(separador)[2];
+    } else {
+        fechaTotal = fecha;
+    }
+
+    return fechaTotal;
+}
+
 function fechaFormato(fecha) {
-    var separador = "/"; if (fecha.includes("-")) { separador = "-"; }
-    if (Left(fecha,4).includes(separador)) { return fecha; }
-    else { return fecha.split(separador)[2] + separador + fecha.split(separador)[1] + separador + fecha.split(separador)[0]; }
+    var separador = "/";
+    if (fecha.includes("-")) { separador = "-"; }
+    if (Left(fecha, 4).includes(separador)) { return fecha; } else { return fecha.split(separador)[2] + separador + fecha.split(separador)[1] + separador + fecha.split(separador)[0]; }
 }
 
 function fechaConDia() {
@@ -351,6 +459,16 @@ function validarFechaMayorActual(fecha, separador = "-") {
     if (x >= today) { return true; } else { return false; }
 }
 
+function dameValorJSON(jsonStr, parametro) {
+    const arr = JSON.parse(jsonStr);
+    for (let obj of arr) {
+        if (obj.nombre === parametro) {
+            return obj.valor;
+        }
+    }
+    return null;
+}
+
 
 
 
@@ -360,7 +478,8 @@ function validarFechaMayorActual(fecha, separador = "-") {
 	******************
 */
 var actual = new Date();
-function mostrarCalendario(year, month, tf=false, elInput) {
+
+function mostrarCalendario(year, month, tf = false, elInput) {
     var now = new Date(year, month - 1, 1);
     var last = new Date(year, month, 0);
     var primerDiaSemana = (now.getDay() == 0) ? 7 : now.getDay();
@@ -387,10 +506,9 @@ function mostrarCalendario(year, month, tf=false, elInput) {
             var elOnClick = "onclick='verFecha(" + dia + "," + month + "," + year + ",\"" + elInput + "\")'";
             var calendAP = "";
             if (tf) {
-                if ((dia == actual.getDate() && month == actual.getMonth() + 1 && year == actual.getFullYear())
-                    || dia > actual.getDate() || month > actual.getMonth() + 1 || year > actual.getFullYear()
-                ) { elOnClick = "onclick='verFecha(" + dia + "," + month + "," + year + ",\""+elInput+"\")'"; }
-                else { calendAP = "calendarioEJGAnt"; }
+                if ((dia == actual.getDate() && month == actual.getMonth() + 1 && year == actual.getFullYear()) ||
+                    dia > actual.getDate() || month > actual.getMonth() + 1 || year > actual.getFullYear()
+                ) { elOnClick = "onclick='verFecha(" + dia + "," + month + "," + year + ",\"" + elInput + "\")'"; } else { calendAP = "calendarioEJGAnt"; }
             }
             if (dia == actual.getDate() && month == actual.getMonth() + 1 && year == actual.getFullYear()) {
                 resultado += "<td class='calendarioEJGHoy' " + elOnClick + ">" + dia + "</td>";
@@ -422,13 +540,13 @@ function mostrarCalendario(year, month, tf=false, elInput) {
     }
 
     document.getElementById("calendEJG").getElementsByTagName("caption")[0].innerHTML =
-        "<div class='calenarioEJGMesAny'>" + meses[month - 1] + " / " + year
-        + "     <span style='float:right;'> "
-        + "      <span class='curP' onclick='mostrarCalendario(" + prevYear + "," + prevMonth + "," + tf + "); event.stopPropagation();'>&#x2b9c;</span> "
-        + "      <span class='curP' onclick='mostrarCalendario(" + nextYear + "," + nextMonth + "," + tf + "); event.stopPropagation();'>&#x2b9e;</span>"
-        + "      <span style='margin-left:20px;cursor:pointer;' onclick='cerrarCalendarioEJG()'>&#x2bbe;</span>"
-        + "     </span>"
-        + "</div>";
+        "<div class='calenarioEJGMesAny'>" + meses[month - 1] + " / " + year +
+        "     <span style='float:right;'> " +
+        "      <span class='curP' onclick='mostrarCalendario(" + prevYear + "," + prevMonth + "," + tf + "); event.stopPropagation();'>&#x2b9c;</span> " +
+        "      <span class='curP' onclick='mostrarCalendario(" + nextYear + "," + nextMonth + "," + tf + "); event.stopPropagation();'>&#x2b9e;</span>" +
+        "      <span style='margin-left:20px;cursor:pointer;' onclick='cerrarCalendarioEJG()'>&#x2bbe;</span>" +
+        "     </span>" +
+        "</div>";
     document.getElementById("calendEJG").getElementsByTagName("tbody")[0].innerHTML = resultado;
 }
 
@@ -461,18 +579,18 @@ function mostrarElCalendarioEJG(elInput, tf = false, formato = "dma", separador 
     fechaAnterior = $("#" + elInput).val();
     $("#dvCalendarioEJG").remove();
     $("#" + elInput).select();
-    $("#" + elInput).off().on("keyup", function () { calendarioEJGkeyUp(elInput, $("#" + elInput).val(), separador); });
+    $("#" + elInput).off().on("keyup", function() { calendarioEJGkeyUp(elInput, $("#" + elInput).val(), separador); });
     calendarioInput = elInput;
     calendarioFormato = formato;
     var x = window.event.clientX - 200;
     var y = window.event.clientY - 100;
-    $("body").append('<div id="dvCalendarioEJG" style="z-index:10; position:absolute;top:' + y + 'px; left:' + x + 'px; width:300px;"> '
-        + '   <table id = "calendEJG" > '
-        + '    <caption></caption> '
-        + '    <thead><tr><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th></tr></thead> '
-        + '    <tbody></tbody> '
-        + '    </table > '
-        + '</div > '
+    $("body").append('<div id="dvCalendarioEJG" style="z-index:10; position:absolute;top:' + y + 'px; left:' + x + 'px; width:300px;"> ' +
+        '   <table id = "calendEJG" > ' +
+        '    <caption></caption> ' +
+        '    <thead><tr><th>Lun</th><th>Mar</th><th>Mié</th><th>Jue</th><th>Vie</th><th>Sáb</th><th>Dom</th></tr></thead> ' +
+        '    <tbody></tbody> ' +
+        '    </table > ' +
+        '</div > '
     );
     $("#dvCalendarioEJG").slideDown();
     mostrarCalendario(actual.getFullYear(), actual.getMonth() + 1, tf, elInput);
@@ -480,40 +598,52 @@ function mostrarElCalendarioEJG(elInput, tf = false, formato = "dma", separador 
 
 function cerrarCalendarioEJG() { $("#dvCalendarioEJG").remove(); }
 
-function formatFecha(f){
-	var fecha = new Date(f); 
-	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
-	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
-	var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD;
-	return laFecha;
+function formatFecha(f) {
+    var fecha = new Date(f);
+    var nfM = fecha.getMonth() + 1;
+    nfM = nfM < 10 ? "0" + (nfM) : nfM;
+    var nfD = fecha.getDate();
+    nfD = nfD < 10 ? "0" + (nfD) : nfD;
+    var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD;
+    return laFecha;
 }
 
-function formatFechaHora(f){
-	var fecha = new Date(f); 
-	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
-	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
-	var nfH = fecha.getHours(); 	nfH = nfH < 10 ? "0" + (nfH):nfH;
-	var nfi = fecha.getMinutes(); 	nfi = nfi < 10 ? "0" + (nfi):nfi;
-	var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD + "T" + nfH + ":" + nfi;
-	return laFecha;
+function formatFechaHora(f) {
+    var fecha = new Date(f);
+    var nfM = fecha.getMonth() + 1;
+    nfM = nfM < 10 ? "0" + (nfM) : nfM;
+    var nfD = fecha.getDate();
+    nfD = nfD < 10 ? "0" + (nfD) : nfD;
+    var nfH = fecha.getHours();
+    nfH = nfH < 10 ? "0" + (nfH) : nfH;
+    var nfi = fecha.getMinutes();
+    nfi = nfi < 10 ? "0" + (nfi) : nfi;
+    var laFecha = fecha.getFullYear() + "-" + nfM + "-" + nfD + "T" + nfH + ":" + nfi;
+    return laFecha;
 }
 
-function formatSqlFecha(f){
-	var fecha = new Date(f); 
-	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
-	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
-	var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear();
-	return laFecha;
+function formatSqlFecha(f) {
+    var fecha = new Date(f);
+    var nfM = fecha.getMonth() + 1;
+    nfM = nfM < 10 ? "0" + (nfM) : nfM;
+    var nfD = fecha.getDate();
+    nfD = nfD < 10 ? "0" + (nfD) : nfD;
+    var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear();
+    return laFecha;
 }
 
-function formatSqlFechaHora(f){
-	var fecha = new Date(f); 
-	var nfM = fecha.getMonth()+1; 	nfM = nfM < 10 ? "0" + (nfM):nfM;
-	var nfD = fecha.getDate(); 		nfD = nfD < 10 ? "0" + (nfD):nfD;
-	var nfH = fecha.getHours(); 	nfH = nfH < 10 ? "0" + (nfH):nfH;
-	var nfi = fecha.getMinutes(); 	nfi = nfi < 10 ? "0" + (nfi):nfi;
-	var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear() + " " + nfH + ":" + nfi;
-	return laFecha;
+function formatSqlFechaHora(f) {
+    var fecha = new Date(f);
+    var nfM = fecha.getMonth() + 1;
+    nfM = nfM < 10 ? "0" + (nfM) : nfM;
+    var nfD = fecha.getDate();
+    nfD = nfD < 10 ? "0" + (nfD) : nfD;
+    var nfH = fecha.getHours();
+    nfH = nfH < 10 ? "0" + (nfH) : nfH;
+    var nfi = fecha.getMinutes();
+    nfi = nfi < 10 ? "0" + (nfi) : nfi;
+    var laFecha = nfD + "-" + nfM + "-" + fecha.getFullYear() + " " + nfH + ":" + nfi;
+    return laFecha;
 }
 
 /*	
@@ -521,72 +651,73 @@ function formatSqlFechaHora(f){
 	   Reloj EJG
 	***************
 */
-var elRelojEJG = "<div id='dvRelojEJG' class='esq10'>"
-    + "<table id='tbRelojEJG'>"
-    + "	<tr>"
-    + "         <th colspan='6' style='padding:5px;'>"
-    + "                 <span id='horaDesde' class='inv'><img id='imgDesde' class='imgRelojEJGdh' src='./Merlos/images/icoCheck_I.png' width='14'> Desde las </span> <span id='horaSelecDesde'>00:00</span>"
-    + "                 <span id='horaHasta' class='inv' style='margin-left:10px;'><img id='imgHasta'  class='imgRelojEJGdh' src='./Merlos/images/icoCheck_O.png' width='14'> Hasta las </span>  <span id='horaSelecHasta'>00:00</span>"
-    + "         </th>"
-    + "   </tr>"
-    + "	<tr>"
-    + "		<td class='h'>00</td>"
-    + "		<td class='h'>01</td>"
-    + "		<td class='h'>02</td>"
-    + "		<td class='h'>03</td>"
-    + "		<td class='h'>04</td>"
-    + "		<td class='h'>05</td>"
-    + "	</tr>"
-    + "	<tr>"
-    + "		<td class='h'>06</td>"
-    + "		<td class='h'>07</td>"
-    + "		<td class='h'>08</td>"
-    + "		<td class='h'>09</td>"
-    + "		<td class='h'>10</td>"
-    + "		<td class='h'>11</td>"
-    + "	</tr>"
-    + "	<tr>"
-    + "		<td class='h'>12</td>"
-    + "		<td class='h'>13</td>"
-    + "		<td class='h'>14</td>"
-    + "		<td class='h'>15</td>"
-    + "		<td class='h'>16</td>"
-    + "		<td class='h'>17</td>"
-    + "	</tr>"
-    + "	<tr>"
-    + "		<td class='h'>18</td>"
-    + "		<td class='h'>19</td>"
-    + "		<td class='h'>20</td>"
-    + "		<td class='h'>21</td>"
-    + "		<td class='h'>22</td>"
-    + "		<td class='h'>23</td>"
-    + "	</tr>"
-    + "	<tr><th colspan='6' style='padding:5px;'></th></tr>"
-    + "	<tr>"
-    + "		<td class='m'>00</td>"
-    + "		<td class='m'>05</td>"
-    + "		<td class='m'>10</td>"
-    + "		<td class='m'>15</td>"
-    + "		<td class='m'>20</td>"
-    + "		<td class='m'>25</td>"
-    + "	</tr>"
-    + "	<tr>"
-    + "		<td class='m'>30</td>"
-    + "		<td class='m'>35</td>"
-    + "		<td class='m'>40</td>"
-    + "		<td class='m'>45</td>"
-    + "		<td class='m'>50</td>"
-    + "		<td class='m'>55</td>"
-    + "	</tr>"
-    + "	<tr><th colspan='6' style='padding:5px;' class='C'><br><span class='MIbotonGreen' onclick='asignarHora()'>asignar</span>&nbsp;&nbsp;&nbsp;<span class='MIbotonRed' onclick='cancelarHora()'>cancelar</span><br></th></tr>"
-    + "</table>"
-    + "</div>";
+var elRelojEJG = "<div id='dvRelojEJG' class='esq10'>" +
+    "<table id='tbRelojEJG'>" +
+    "	<tr>" +
+    "         <th colspan='6' style='padding:5px;'>" +
+    "                 <span id='horaDesde' class='inv'><img id='imgDesde' class='imgRelojEJGdh' src='./Merlos/images/icoCheck_I.png' width='14'> Desde las </span> <span id='horaSelecDesde'>00:00</span>" +
+    "                 <span id='horaHasta' class='inv' style='margin-left:10px;'><img id='imgHasta'  class='imgRelojEJGdh' src='./Merlos/images/icoCheck_O.png' width='14'> Hasta las </span>  <span id='horaSelecHasta'>00:00</span>" +
+    "         </th>" +
+    "   </tr>" +
+    "	<tr>" +
+    "		<td class='h'>00</td>" +
+    "		<td class='h'>01</td>" +
+    "		<td class='h'>02</td>" +
+    "		<td class='h'>03</td>" +
+    "		<td class='h'>04</td>" +
+    "		<td class='h'>05</td>" +
+    "	</tr>" +
+    "	<tr>" +
+    "		<td class='h'>06</td>" +
+    "		<td class='h'>07</td>" +
+    "		<td class='h'>08</td>" +
+    "		<td class='h'>09</td>" +
+    "		<td class='h'>10</td>" +
+    "		<td class='h'>11</td>" +
+    "	</tr>" +
+    "	<tr>" +
+    "		<td class='h'>12</td>" +
+    "		<td class='h'>13</td>" +
+    "		<td class='h'>14</td>" +
+    "		<td class='h'>15</td>" +
+    "		<td class='h'>16</td>" +
+    "		<td class='h'>17</td>" +
+    "	</tr>" +
+    "	<tr>" +
+    "		<td class='h'>18</td>" +
+    "		<td class='h'>19</td>" +
+    "		<td class='h'>20</td>" +
+    "		<td class='h'>21</td>" +
+    "		<td class='h'>22</td>" +
+    "		<td class='h'>23</td>" +
+    "	</tr>" +
+    "	<tr><th colspan='6' style='padding:5px;'></th></tr>" +
+    "	<tr>" +
+    "		<td class='m'>00</td>" +
+    "		<td class='m'>05</td>" +
+    "		<td class='m'>10</td>" +
+    "		<td class='m'>15</td>" +
+    "		<td class='m'>20</td>" +
+    "		<td class='m'>25</td>" +
+    "	</tr>" +
+    "	<tr>" +
+    "		<td class='m'>30</td>" +
+    "		<td class='m'>35</td>" +
+    "		<td class='m'>40</td>" +
+    "		<td class='m'>45</td>" +
+    "		<td class='m'>50</td>" +
+    "		<td class='m'>55</td>" +
+    "	</tr>" +
+    "	<tr><th colspan='6' style='padding:5px;' class='C'><br><span class='MIbotonGreen' onclick='asignarHora()'>asignar</span>&nbsp;&nbsp;&nbsp;<span class='MIbotonRed' onclick='cancelarHora()'>cancelar</span><br></th></tr>" +
+    "</table>" +
+    "</div>";
 
 var relojEJGhora = "";
 var relojEJGmin = "";
 var spanSelec = "horaSelecDesde";
 var relojEJG_desdeHasta = 0;
 var inpHoraEJG = "";
+
 function mostrarRelojEJG(inpId, inicioYfinal) {
     inpHoraEJG = inpId;
     relojEJGhora = relojEJGmin = relojEJGinicioHora = relojEJGinicioMin = relojEJGfinalHora = relojEJGfinalMin = "";
@@ -597,7 +728,7 @@ function mostrarRelojEJG(inpId, inicioYfinal) {
     $("body").prepend("<div id='veloRelojEJG' style='z-index:999999; position:absolute; left:" + (posCurX - 50) + "px; top:" + (posCurY - 100) + "px;'>" + elRelojEJG + "</div>");
     if (inicioYfinal) { $("#horaDesde, #horaHasta").show(); }
 
-    $(".imgRelojEJGdh").off().on("click", function () {
+    $(".imgRelojEJGdh").off().on("click", function() {
         if (relojEJG_desdeHasta === 0) {
             relojEJG_desdeHasta = 1;
             spanSelec = "horaSelecHasta";
@@ -612,7 +743,7 @@ function mostrarRelojEJG(inpId, inicioYfinal) {
         relojEJGhora = relojEJGmin = "";
     });
 
-    $("#tbRelojEJG td").off().on("click", function () {
+    $("#tbRelojEJG td").off().on("click", function() {
         if ($(this).hasClass("h")) { relojEJGhora = $(this).text(); }
         if ($(this).hasClass("m")) { relojEJGmin = $(this).text(); }
         if (relojEJGhora === "") { relojEJGhora = "00"; }
@@ -630,18 +761,28 @@ function asignarHora() {
     } else {
         $("#" + inpHoraEJG).val(horaSel);
 
-        $("#tbTablaDeLlamadas").find("img").each(function () {
-            var imgId = $(this).attr("id"); var dia = imgId.split("img")[1]; var diaVal = "inp" + dia + "Horario";
+        $("#tbTablaDeLlamadas").find("img").each(function() {
+            var imgId = $(this).attr("id");
+            var dia = imgId.split("img")[1];
+            var diaVal = "inp" + dia + "Horario";
             if ($(this).attr("src") === "./Merlos/images/icoCheck_I.png" && $("#" + diaVal).val() === "") { $("#" + diaVal).val(horaSel); }
             if ($("#" + diaVal).val() !== "") { $("#" + imgId).attr("src", "./Merlos/images/icoCheck_I.png"); }
         });
     }
 
-    $("#veloRelojEJG").fadeOut(300, function () { $("#veloRelojEJG").remove(); relojEJG_desdeHasta = 0; spanSelec = "horaSelecDesde"; });
+    $("#veloRelojEJG").fadeOut(300, function() {
+        $("#veloRelojEJG").remove();
+        relojEJG_desdeHasta = 0;
+        spanSelec = "horaSelecDesde";
+    });
 }
 
 function cancelarHora() {
-    $("#veloRelojEJG").fadeOut(300, function () { $("#veloRelojEJG").remove(); relojEJG_desdeHasta = 0; spanSelec = "horaSelecDesde"; });
+    $("#veloRelojEJG").fadeOut(300, function() {
+        $("#veloRelojEJG").remove();
+        relojEJG_desdeHasta = 0;
+        spanSelec = "horaSelecDesde";
+    });
 }
 
 
@@ -681,7 +822,7 @@ function getCookie(cname) {
 function removeCookie(cname) { document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'; }
 
 function limpiarCookies() {
-    document.cookie.split(";").forEach(function (c) {
+    document.cookie.split(";").forEach(function(c) {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
 }
@@ -689,8 +830,9 @@ function limpiarCookies() {
 
 // ORDENAR JSON
 function sortJSON(data, key, orden) {
-    return data.sort(function (a, b) {
-        var x = a[key], y = b[key];
+    return data.sort(function(a, b) {
+        var x = a[key],
+            y = b[key];
         if (orden === 'asc') { return ((x < y) ? -1 : ((x > y) ? 1 : 0)); }
         if (orden === 'desc') { return ((x > y) ? -1 : ((x < y) ? 1 : 0)); }
     });
@@ -710,6 +852,7 @@ function esJSON(str) {
 function limpiarCadena(cadena) {
     return cadena.replace(/\n/g, "<br>").replace(/\t/g, "").replace(/\b/g, "").replace(/\f/g, "").replace(/\\/g, "");
 }
+
 function recompCadena(cadena) {
     return cadena.replace(/<br>/g, "\n").replace(/<br \/>/g, "\n");
 }
@@ -789,7 +932,7 @@ function comenzarPizarra() {
     ch = elFirma.height = 300, cy = ch / 2;
     ctx.lineJoin = "round";
 
-    limpiar.addEventListener('click', function (evt) {
+    limpiar.addEventListener('click', function(evt) {
         estoyDibujando = false;
         ctx.clearRect(0, 0, cw, ch);
         Trazados.length = 0;
@@ -797,17 +940,17 @@ function comenzarPizarra() {
     }, false);
 
 
-    elFirma.addEventListener('mousedown', function (evt) {
+    elFirma.addEventListener('mousedown', function(evt) {
         estoyDibujando = true;
         puntos.length = 0;
         ctx.beginPath();
     }, false);
 
-    elFirma.addEventListener('mouseup', function (evt) { redibujarTrazados(); }, false);
+    elFirma.addEventListener('mouseup', function(evt) { redibujarTrazados(); }, false);
 
-    elFirma.addEventListener("mouseout", function (evt) { redibujarTrazados(); }, false);
+    elFirma.addEventListener("mouseout", function(evt) { redibujarTrazados(); }, false);
 
-    elFirma.addEventListener("mousemove", function (evt) {
+    elFirma.addEventListener("mousemove", function(evt) {
         if (estoyDibujando) {
             var m = oMousePos(elFirma, evt);
             puntos.push(m);
@@ -912,9 +1055,8 @@ function handleMove(evt) {
             ctx.strokeStyle = color;
             ctx.stroke();
 
-            ongoingTouches.splice(idx, 1, copyTouch(touches[i]));  // swap in the new touch record
-        } else {
-        }
+            ongoingTouches.splice(idx, 1, copyTouch(touches[i])); // swap in the new touch record
+        } else {}
     }
 }
 
@@ -946,7 +1088,7 @@ function handleCancel(evt) {
 
     for (var i = 0; i < touches.length; i++) {
         var idx = ongoingTouchIndexById(touches[i].identifier);
-        ongoingTouches.splice(idx, 1);  // remove it; we're done
+        ongoingTouches.splice(idx, 1); // remove it; we're done
     }
 }
 
@@ -972,7 +1114,7 @@ function ongoingTouchIndexById(idToFind) {
             return i;
         }
     }
-    return -1;    // not found
+    return -1; // not found
 }
 
 function guardarFirma() {
@@ -987,108 +1129,9 @@ function guardarFirma() {
 }
 
 function borrarFirma() { ctx.clearRect(0, 0, elFirma.width, elFirma.height); }
-function cancelarFirma() { borrarFirma(); $(".seccion").hide(); $("#dvFinalizar").fadeIn(); }
 
-/*
-function verDetallePedidoCliente(idpedido, empresa, letra, numero, i) {
-    var pedido = letra + "-" + numero.trim();
-    var contenido = icoCargando16 + " cargando lineas del pedido " + pedido + "...";
-    abrirVelo(contenido);
-    contenido = "<span style='font:bold 16px arial; color:#666;'>Datos del pedido " + pedido + "</span>"
-        + "<span class='flR' onclick='cerrarVelo()'>" + icoAspa +"</span>"
-        + "<br><br>"
-        + "<table id='tbPedidosDetalle' class='tbStd'>"
-        + "	<tr>"
-        + "		<th>Artículo</th>"
-        + "		<th>Descipción</th>"
-        + "		<th class='C'>Cajas</th>"
-        + "		<th class='C'>Uds.</th>"
-        + "		<th class='C'>Peso</th>"
-        + "		<th class='C'>Precio</th>"
-        + "		<th class='C'>Dto</th>"
-        + "		<th class='C'>Importe</th>"
-        + "	</tr>";
-    var parametros = '{"idpedido":"' + idpedido + '",' + paramStd + '}';
-    flexygo.nav.execProcess('pPedidoDetalle', '', null, null, [{ 'key': 'parametros', 'value': limpiarCadena(parametros) }], 'modal640x480', false, $(this), function (ret) {
-        if (ret) {
-            var js = JSON.parse(limpiarCadena(ret.JSCode));
-            if (js.length > 0) {
-                for (var j in js) {
-                    contenido += "<tr>"
-                        + "		<td>" + js[j].ARTICULO + "</td>"
-                        + "		<td>" + js[j].DEFINICION + "</td>"
-                        + "		<td class='C'>" + js[j].cajas + "</td>"
-                        + "		<td class='C'>" + js[j].UNIDADES + "</td>"
-                        + "		<td class='C'>" + js[j].PESO + "</td>"
-                        + "		<td class='C'>" + js[j].PRECIO + "</td>"
-                        + "		<td class='C'>" + js[j].DTO1 + "</td>"
-                        + "		<td class='R'>" + js[j].IMPORTEf + "</td>"
-                        + "	</tr>";
-                }
-                contenido += "</table>";
-            } else { contenido = "No se han obtenido resultados! <span class='flR' onclick='cerrarVelo()'>" + icoAspa + "</span>"; }
-            abrirVelo(contenido,800);
-        } else { alert("Error SP: pPedidoDetalle!!!" + JSON.stringify(ret)); }
-    }, false);
-}*/
-
-var ArticuloClienteBuscando = false;
-function verDetallePedidoCliente(idpedido, empresa, letra, pedido, i){
-	if(ArticuloClienteBuscando){return;}
-	ArticuloClienteBuscando=true;
-	dentroDelDiv=true;
-	var contenido = icoCargando16+" cargando lineas del pedido "+pedido+"..."; 
-	abrirAVT(contenido);
-	contenido =  "<span style='font:bold 16px arial; color:#666;'>Datos del pedido "+pedido+"</span>"
-				+"<br><br>"
-				+"<div style='max-height:300px; overflow:hidden; overflow-y:auto;'>"
-				+"	<table id='tbPedidosDetalle' class='tbStd'>"
-				+"		<tr>"
-				+"			<th>Artículo</th>"
-				+"			<th>Descipción</th>"
-				+"			<th class='C'>Cajas</th>"
-				+"			<th class='C'>Uds.</th>"
-				+"			<th class='C'>Peso</th>"
-				+"			<th class='C'>Precio</th>"
-				+"			<th class='C'>Dto</th>"
-				+"			<th class='C'>Importe</th>"
-				+"		</tr>"; 
-	var parametros = '{"idpedido":"'+idpedido+'",'+paramStd+'}';
-	flexygo.nav.execProcess('pPedidoDetalle','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-		if(ret){ 
-			var js = JSON.parse(limpiarCadena(ret.JSCode));   
-			if(js.length>0){
-				for(var j in js){ 
-					contenido   +="<tr>"
-								+"		<td>"+js[j].ARTICULO+"</td>"
-								+"		<td>"+js[j].DEFINICION+"</td>"
-								+"		<td class='C'>"+js[j].cajas+"</td>"
-								+"		<td class='C'>"+js[j].UNIDADES+"</td>"
-								+"		<td class='C'>"+js[j].PESO+"</td>"
-								+"		<td class='C'>"+js[j].PRECIO+"</td>"
-								+"		<td class='C'>"+js[j].DTO1+"</td>"
-								+"		<td class='R'>"+js[j].IMPORTEf+"</td>"
-								+"	</tr>"; 
-				}
-				contenido += "</table></div>";
-			}else{ contenido = "No se han obtenido resultados! <span class='flR' onclick='cerrarVelo()'>"+icoAspa+"</span>"; }
-			abrirAVT(contenido,800);
-			ArticuloClienteBuscando=false;
-			if(!dentroDelDiv){cerrarAVT();}
-		}else{ alert("Error SP: pPedidoDetalle!!!"+JSON.stringify(ret)); }
-	},false);	
-}
-
-function asignarGestor(modo,gestor,n){
-	if(modo){
-		var CodCliente = $("#spanClienteCodigo").text(); 
-		$("#btnrAsignarGestor").hide(); $("#btnAsignarGestorAV").html(icoCargando16+" asignando...").show(); 
-		$("flx-module[modulename='usuariosTV']").stop().slideUp();
-		var parametros = '{"modo":"'+modo+'","cliente":"'+CodCliente+'","gestor":"'+gestor+'","nGestor":"'+n+'",'+paramStd+'}';
-		flexygo.nav.execProcess('pClienteDatos','',null,null,[{'key':'parametros','value':limpiarCadena(parametros)}],'modal640x480',false,$(this),function(ret){
-			if(ret){
-				flexygo.nav.openPage('view','Cliente','CODIGO=\''+CodCliente+'\'','{\'CODIGO\':\''+CodCliente+'\'}','current',false,$(this));
-			}else{ alert("Error SP: pClienteDatos!!!"+JSON.stringify(ret)); }
-		},false);
-	}else{ $("flx-module[modulename='usuariosTV']").css("margin-top","-180px").stop().slideDown(); }		
+function cancelarFirma() {
+    borrarFirma();
+    $(".seccion").hide();
+    $("#dvFinalizar").fadeIn();
 }

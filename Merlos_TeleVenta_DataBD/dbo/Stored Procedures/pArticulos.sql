@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pArticulos]	@parametros varchar(max)
+﻿
+CREATE PROCEDURE [dbo].[pArticulos]	@parametros varchar(max)
 AS
 BEGIN TRY	
 	declare @modo varchar(50) = isnull((select JSON_VALUE(@parametros,'$.modo')),'')
@@ -31,33 +32,36 @@ BEGIN TRY
 		exec(@sentencia)
 	END
 
+	-- [pArticulos] '{"modo":"residuo","articulo":"PROM27201"}'
+	-- [pArticulos] '{"modo":"bebidasAzucaradas","articulo":"PROM27201"}'
 	if @modo='residuo' BEGIN
-		EXEC('
-			select isnull(
-				(select isnull(
-					(select codigo, PVERDE, P_TAN, P_IMPORTE
-									from ['+@GESTION+'].dbo.articulo  
-									where CODIGO=@articulo
-									for JSON AUTO, INCLUDE_NULL_VALUES)
-				,''[{"codigo":"''+@articulo+''","PVERDE":false,"P_TAN":1,"P_IMPORTE":0.000000}]''))
-			,''[]'') as JAVASCRIPT
-		')
+		set @sentencia='
+			declare @respuesta varchar(max) = ''''
+			set @respuesta = (select isnull(
+				(select codigo, PVERDE, P_TAN, P_IMPORTE
+								from ['+@GESTION+'].dbo.articulo  
+								where CODIGO='''+@articulo+'''
+								for JSON AUTO, INCLUDE_NULL_VALUES)
+			,''[{"codigo":"'+@articulo+'","PVERDE":false,"P_TAN":1,"P_IMPORTE":0.000000}]''))
+		
+			select isnull(@respuesta,''[]'') as JAVASCRIPT
+		'
+		EXEC(@sentencia)
 	END
 
 	if @modo='bebidasAzucaradas' BEGIN
-		set @sentencia = '
-			select ltrim(rtrim(esc.COMPONENTE)) as COMPONENTE, esc.PVP, esc.UNIDADES 
-			,art.codigo, art.PVERDE, art.P_TAN, art.P_IMPORTE
-			from ['+@GESTION+'].dbo.articulo art 
-			left join ['+@GESTION+'].dbo.escandal esc on art.CODIGO=esc.ARTICULO
-			where art.CODIGO='''+@articulo+''' and art.DESGLOSE<>0
-		'
-		declare @TablaTemporal TABLE (COMPONENTE varchar(50), PVP numeric(15,6), UNIDADES numeric(15,6), codigo varchar(50), PVERDE bit, P_TAN int, P_IMPORTE numeric(15,6))
-		INSERT @TablaTemporal EXEC(@sentencia)	
-		set @respuesta = (select * from @TablaTemporal for JSON AUTO, INCLUDE_NULL_VALUES)
-		delete @TablaTemporal
+		set @sentencia='
+			declare @respuesta varchar(max) = ''''
+			set @respuesta = (select ltrim(rtrim(esc.COMPONENTE)) as COMPONENTE, esc.PVP, esc.UNIDADES 
+								,art.codigo, art.PVERDE, art.P_TAN, art.P_IMPORTE
+								from ['+@GESTION+'].dbo.articulo art 
+								left join ['+@GESTION+'].dbo.escandal esc on art.CODIGO=esc.ARTICULO
+								where art.CODIGO='''+@articulo+''' and art.DESGLOSE<>0
+								for JSON AUTO, INCLUDE_NULL_VALUES)
 		
-		select isnull(@respuesta,'[]') as JAVASCRIPT
+			select isnull(@respuesta,''[]'') as JAVASCRIPT
+		'
+		EXEC(@sentencia)
 	END
 	
 	RETURN -1

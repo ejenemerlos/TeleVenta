@@ -6,14 +6,50 @@ MERGE INTO [Objects_Views] AS Target
 USING (VALUES
   (N'Cliente',N'ClienteDefaultList',N'ClienteDefaultList',N'DataConnectionString',N'select * from vClientes',0,1,1,0,1,N'Nombre ASC',0,NULL,NULL,1)
  ,(N'Contacto',N'ContactoDefaultList',N'ContactoDefaultList',N'DataConnectionString',N'select * from vContactos',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'ExportarListadoTV',N'ExportarListadoTVDefaultList',N'ExportarListadoTVDefaultList',N'DataConnectionString',N'SELECT * FROM vExportarListadoTV',0,1,1,0,1,N'horario ASC',0,NULL,NULL,1)
  ,(N'gestor',N'gestorDefaultList',N'gestorDefaultList',N'DataConnectionString',N'select * from gestores',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'inciART',N'inciARTDefaultList',N'inciARTDefaultList',N'DataConnectionString',N'select * from vIncidenciasArticulos order by FechaInsertUpdate desc',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'inciART',N'InciArticulos',N'InciArticulos',N'DataConnectionString',N'select i.* 
+		, i.FechaInsertUpdate as Fecha
+		, format(i.FechaInsertUpdate,''dd-MM-yyyy'') as laFecha
+		, g.nombre as nGestor
+		, ia.nombre as nIncidencia
+		, cli.nombre as nCliente
+		, cpv.LETRA, ltrim(rtrim(cpv.NUMERO)) as pedido
+		, art.NOMBRE as nArticulo
+		from TeleVentaIncidencias i
+		left join gestores g on g.codigo=i.gestor
+		left join inci_art ia on ia.codigo=i.incidencia
+		left join (select CODIGO, NOMBRE from vClientes) cli on cli.CODIGO  collate Modern_Spanish_CS_AI=i.cliente
+		left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+		left join (select CODIGO, NOMBRE from vArticulos) art on art.CODIGO collate Modern_Spanish_CS_AI=i.articulo
+		where i.tipo=''Articulo''',0,0,1,0,0,N'i.FechaInsertUpdate DESC',0,NULL,NULL,1)
  ,(N'inciCLI',N'inciCLIDefaultList',N'inciCLIDefaultList',N'DataConnectionString',N'select * from vIncidenciasClientes order by FechaInsertUpdate desc',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'inciCLI',N'incidenciasClientes',N'incidenciasClientes',N'DataConnectionString',N'select i.id, i.idpedido, i.tipo, i.articulo, i.observaciones,
+		  i.FechaInsertUpdate
+		, format(i.FechaInsertUpdate,''dd-MM-yyyy'') as laFecha
+		, i.gestor
+		, i.incidencia
+		, i.cliente
+		, cli.NOMBRE as nCliente
+		, icli.nombre as nIncidencia
+		, cpv.LETRA+''-''+ltrim(rtrim(cpv.NUMERO)) as pedido
+	from TeleVentaIncidencias i
+	left join vClientes cli on cli.CODIGO collate Modern_Spanish_CS_AI=i.cliente
+	left join inci_cli icli on icli.codigo=i.incidencia
+	left join vPedidos_Basic cpv on cpv.IDPEDIDO collate Modern_Spanish_CS_AI=i.idpedido
+	where i.tipo=''Cliente''',0,0,1,0,0,N'i.FechaInsertUpdate DESC',0,NULL,NULL,1)
  ,(N'IncidenciasArtCli',N'IncidenciasArtCliDefaultList',N'IncidenciasArtCliDefaultList',N'DataConnectionString',N'select * from inci_CliArt',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'IncidenciasArticulo',N'IncidenciasArticuloDefaultList',N'IncidenciasArticuloDefaultList',N'DataConnectionString',N' SELECT [inci_art].[codigo], [inci_art].[codigo] as [codigo_1], [inci_art].[nombre] as [nombre] FROM [inci_art] 
 
 ',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'IncidenciasCliente',N'IncidenciasClienteDefaultList',N'IncidenciasClienteDefaultList',N'DataConnectionString',N'select * from inci_cli',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'ListadoLlamadaImprimir',N'ListadoLlamadaImprimirDefaultList',N'ListadoLlamadaImprimirDefaultList',N'DataConnectionString',N'SELECT * FROM vListadosLlamadasImprimir',0,1,1,0,1,N'fecha ASC, horario ASC',0,NULL,NULL,1)
+ ,(N'ListadoLlamadas',N'ListadoLlamadasDefaultList',N'ListadoLlamadasDefaultList',N'DataConnectionString',N'SELECT * FROM vListadosLlamadas',0,1,1,0,1,NULL,0,NULL,NULL,1)
+ ,(N'ListadoVenta',N'ListadoVentaDefaultList',N'ListadoVentaDefaultList',N'DataConnectionString',N'SELECT * FROM vListadoTV',0,1,1,0,1,N'FechaInsertUpdate desc',0,NULL,NULL,1)
+ ,(N'Merlos_Cliente_Articulo',N'Merlos_Cliente_ArticuloDefaultList',N'Merlos_Cliente_ArticuloDefaultList',N'DataConnectionString',N' SELECT [Clientes_Articulos].[Cliente], [Clientes_Articulos].[Articulo], [Clientes_Articulos].[Id] as [Id] FROM [Clientes_Articulos] 
+
+',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Pedido',N'PedidoDefaultList',N'PedidoDefaultList',N'DataConnectionString',N'select * from vPedidos',0,1,1,0,1,NULL,0,NULL,NULL,1)
  ,(N'Pedido',N'vPedidosOrderBySQLFECHAdesc',N'Pedidos listado orden sqlFecha desc',N'DataConnectionString',N'select * from vPedidos',0,0,1,0,0,N'sqlFecha desc',0,NULL,NULL,1)
  ,(N'RecibosPendiente',N'RecibosPendienteDefaultList',N'RecibosPendienteDefaultList',N'DataConnectionString',N'select * from vGiros',0,1,1,0,1,NULL,0,NULL,NULL,1)

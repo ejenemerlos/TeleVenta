@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pVersiones]	  @modo varchar(50)='EW'
+﻿
+CREATE PROCEDURE [dbo].[pVersiones]	  @modo varchar(50)='EW'
 									, @comun varchar(8)=''
 AS
 BEGIN TRY	

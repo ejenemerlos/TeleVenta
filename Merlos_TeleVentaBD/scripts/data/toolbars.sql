@@ -5,6 +5,7 @@ BEGIN TRY
 MERGE INTO [ToolBars] AS Target
 USING (VALUES
   (N'buscarYexportar',N'Buscador y exportar',1)
+ ,(N'List toolbar Merlos',N'List toolbar Merlos',1)
 ) AS Source ([ToolbarName],[Descrip],[OriginId])
 ON (Target.[ToolbarName] = Source.[ToolbarName])
 WHEN MATCHED AND (

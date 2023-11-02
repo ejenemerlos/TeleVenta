@@ -6,6 +6,7 @@ MERGE INTO [Objects_Views_Properties] AS Target
 USING (VALUES
   (N'IncidenciasArticulo',N'IncidenciasArticuloDefaultList',N'IncidenciasArticulo',N'codigo',N'IncidenciasArticulo',0,N'codigo_1',1)
  ,(N'IncidenciasArticulo',N'IncidenciasArticuloDefaultList',N'IncidenciasArticulo',N'nombre',N'IncidenciasArticulo',1,N'nombre',1)
+ ,(N'Merlos_Cliente_Articulo',N'Merlos_Cliente_ArticuloDefaultList',N'Merlos_Cliente_Articulo',N'Id',N'Merlos_Cliente_Articulo',0,N'Id',1)
  ,(N'sysUser',N'sysUserDefaultList',N'sysUser',N'Email',N'sysUser',5,N'Email',1)
  ,(N'sysUser',N'sysUserDefaultList',N'sysUser',N'EmailConfirmed',N'sysUser',6,N'Email Confirmed',1)
  ,(N'sysUser',N'sysUserDefaultList',N'sysUser',N'Name',N'sysUser',0,N'Name',1)

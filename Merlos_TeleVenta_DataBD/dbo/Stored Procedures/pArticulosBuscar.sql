@@ -1,4 +1,5 @@
-﻿CREATE  PROCEDURE [dbo].[pArticulosBuscar]	@parametros nvarchar(max)='' 
+﻿
+CREATE PROCEDURE [dbo].[pArticulosBuscar]	@parametros nvarchar(max)='' 
 AS
 BEGIN TRY
 	declare @registros int       = (select JSON_VALUE(@parametros,'$.registros'))
@@ -13,13 +14,16 @@ BEGIN TRY
 		  , @subfams varchar(max) = ''
 		  , @consulta varchar(max) = ''
 
+	declare @GESTION char(6) = (select top 1 GESTION from Configuracion_SQL)
+	declare @elInnerJoin varchar(500) = ''
+
 	if exists (select valor from TeleVentaFiltros where id=@IdTeleVenta and tipo='Marca') BEGIN
 		DECLARE elCursor CURSOR FOR
 			select marca from marca_user where usuario=@usuario and fecha=@fechaTV and nombreTV=@nombreTV
 			OPEN elCursor
 			FETCH NEXT FROM elCursor INTO @registro
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				set @marcas = @marcas + ' or MARCA='''+@registro+''' '
+				set @marcas = @marcas + ' or vArticulos.MARCA='''+@registro+''' '
 				FETCH NEXT FROM elCursor INTO @registro
 			END		
 		CLOSE elCursor deallocate elCursor
@@ -33,7 +37,7 @@ BEGIN TRY
 			OPEN elCursor
 			FETCH NEXT FROM elCursor INTO @registro
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				set @familias = @familias + ' or FAMILIA='''+@registro+''' '
+				set @familias = @familias + ' or vArticulos.FAMILIA='''+@registro+''' '
 				FETCH NEXT FROM elCursor INTO @registro
 			END		
 		CLOSE elCursor deallocate elCursor
@@ -47,26 +51,36 @@ BEGIN TRY
 			OPEN elCursor
 			FETCH NEXT FROM elCursor INTO @registro
 			WHILE (@@FETCH_STATUS=0) BEGIN
-				set @subfams = @subfams + ' or SUBFAMILIA='''+@registro+''' '
+				set @subfams = @subfams + ' or vArticulos.SUBFAMILIA='''+@registro+''' '
 				FETCH NEXT FROM elCursor INTO @registro
 			END		
 		CLOSE elCursor deallocate elCursor
 		if LEN(@subfams)>0 set @subfams = ' AND (' + SUBSTRING(@subfams,4,LEN(@subfams))+ ')'
 	END
 
+	--	configuración Articulos IGES
+		DECLARE @WhereIGES varchar(1000) = ''
+		if (select ISNULL(valor,'') from Configuracion where nombre='ArticluosIGEST')='1' BEGIN 
+			set @elInnerJoin='LEFT join ['+@GESTION+'].DBO.MULTICAM mc on mc.CODIGO collate Modern_Spanish_CS_AI=vArticulos.CODIGO and mc.VALOR collate Modern_Spanish_CS_AI=''.T.'' '
+			set @WhereIGES = ' and (mc.VALOR in (NULL,'''',''.T.'')) '
+		END
+
 	set @consulta = '
 		select (
-			select
-				(select count(CODIGO) from vArticulos 
-				where (lower(CODIGO) like ''%''+lower('''+@buscar+''')+''%'' or lower(NOMBRE) like ''%''+lower('''+@buscar+''')+''%'') ' 
+			select distinct
+				(select count(vArticulos.CODIGO) from vArticulos ' + @elInnerJoin + ' 
+				where (lower(vArticulos.CODIGO) like ''%''+lower('''+@buscar+''')+''%'' or lower(vArticulos.NOMBRE) like ''%''+lower('''+@buscar+''')+''%'') ' 
 				+ @marcas + @familias + @subfams + ') as registros
-				, * 
+				, vArticulos.* 
 			from vArticulos 
-			where (lower(CODIGO) like ''%''+lower('''+@buscar+''')+''%'' or lower(NOMBRE) like ''%''+lower('''+@buscar+''')+''%'' ) 
-			' + @marcas + @familias + @subfams + ' for JSON AUTO
+			' + @elInnerJoin + ' 
+			where (lower(vArticulos.CODIGO) like ''%''+lower('''+@buscar+''')+''%'' or lower(vArticulos.NOMBRE) like ''%''+lower('''+@buscar+''')+''%'' ) 
+			' + @marcas + @familias + @subfams + ' 			
+			for JSON AUTO
 		) as JAVASCRIPT	
 	'
-	exec (@consulta)
+	--select @consulta
+	EXEC (@consulta)
 
 	RETURN -1
 END TRY

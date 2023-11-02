@@ -1,0 +1,34 @@
+<div id="dvBtnImp " class="ListadoSeccion MI_noImp inv" style="padding:20px; text-align:center; ">
+    <span class="MIbotonGreen " onclick="window.print() ">IMPRIMIR</span>
+    <span class="MIbotonGreen " style="margin-left:12px; " onclick="ListadosVolverExportTV() ">volver</span>
+</div>
+
+<table id="tbListadosTV" class="tbStd">
+    <tr>
+        <th>Cód. Cliente</th>
+        <th>Nombre</th>
+        <th class="taC">Teléfono</th>
+        <th class="taC">Horario</th>
+        <th class="taC">Pedido</th>
+        <th class="taC">Serie</th>
+        <th class="taC">SubTotal</th>
+        <th class="taC">Importe</th>
+        <th class="taC">Completado</th>
+    </tr>
+
+
+
+    <tr>
+        <td>{{cliente}}</td>
+        <td>{{RCOMERCIAL}}</td>
+        <td class="taC">{{TELEFONO}}</td>
+        <td class="taC">{{horario}}</td>
+        <td class="taR">{{pedido}}</td>
+        <td class="taC">{{serie}}</td>
+        <td class="taR">{{subtotal|decimal:2}} €</td>
+        <td class="taR">{{importe|decimal:2}} €</td>
+        <td class="taC">{{completado}}</td>
+    </tr>
+
+
+</table>

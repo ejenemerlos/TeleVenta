@@ -1,0 +1,63 @@
+﻿<div id="dvConfiguracionTeleVenta" class="mi-module ListadoSeccion">
+    <table id="tbConfiguracionOperador" class="tbFrm">
+        <tr>
+            <th>Nombre del listado</th>
+            <th class="tbHover" onclick="listadosGestores()">Gestor <span class='flR'>&#9660;</span></th>
+            <th>Desde</th>
+            <th>Hasta</th>
+            <th></th>
+        </tr>
+        <tr>
+            <td><input type="text" id="inpNombreListado" style="width:100%; text-align:left; color:#333;" onkeyup="autoNombreTV=false;"></td>
+            <td style="position:relative;">
+                <div id="dvListadoGestores" class="sombra" style="z-index:2; position:absolute; margin-top:-10px; padding:10px; background:#f2f2f2; border:1px solid #CCC; display:none;"></div>
+                <div id="dvListadoTDGestores"></div>
+            </td>
+            <td class="taC"><input type="text" id="ListadosDesde" placeholder="dd-mm-aaaa" onfocus="(this.type='date')" onblur="(this.type='text'); ListadosComprobarFechas();" style="width:90%; text-align:center;"></td>
+            <td class="taC"><input type="text" id="ListadosHasta" placeholder="dd-mm-aaaa" onfocus="(this.type='date')" onblur="(this.type='text'); ListadosComprobarFechas();" style="width:90%; text-align:center;"></td>
+            <td class="taC"><input type="button" class="MIbotonGreen" value="GENERAR" style="width:90%; text-align:center;" onclick="ListadosGenerar();"></td>
+        </tr>
+    </table>
+    <br>
+</div>
+
+
+<div id="dvBtnImp " class="ListadoSeccion inv MI_noImp " style="padding:20px; text-align:center; ">
+    <span class="MIbotonGreen " onclick="window.print() ">IMPRIMIR</span>
+    <span class="MIbotonGreen " style="margin-left:12px; " onclick="ListadosVolver() ">volver</span>
+</div>
+
+
+<div id="dvListadosSeccion " class="ListadoSeccion inv">
+    <div style="background:#68CDF9; padding:5px; ">Listado</div>
+    <div class="inp-fecha-agrup ">
+        <input type="text " class="inpFechaDesdeListados" id="ListadoLlamadasDesde" placeholder="dd-mm-aaaa " onfocus="(this.type='date' ) " onblur="(this.type='text' ); " style="width:90%; text-align:center; ">
+        <input type="text " class="inpFechaHastaListados" id="ListadosLlamadasHasta" placeholder="dd-mm-aaaa " onfocus="(this.type='date' ) " onblur="(this.type='text' ); " style="width:90%; text-align:center; ">
+        <input type="button" readonly class="MIbotonGreen " onclick="listadosLlamadasBuscarEntreFechas(); " value="Buscar " style="width:20%; text-align:center; ">
+    </div>
+    <div id="dvBuscList ">
+        <input type="text " id="dvBuscadorListadosListado " placeholder="Buscar por cualquiera de los campos " style="width:100%; box-sizing:border-box; " onkeyup="buscarEnTabla(this.id, 'tbListadosListado'); ">
+    </div>
+    <div id="dvListadosListado"></div>
+    <br>
+</div>
+
+
+<div id="dvRegistrosTV " class="ListadoSeccion inv">
+    <div style="background:#68CDF9; padding:5px; ">Registros TeleVenta</div>
+    <div class="inp-fecha-agrup ">
+        <input type="text " class="inpFechaDesdeListados" id="ListadoLlamadasDesdeReg" placeholder="dd-mm-aaaa " onfocus="(this.type='date' ) " onblur="(this.type='text' ); " style="width:90%; text-align:center; ">
+        <input type="text " class="inpFechaHastaListados" id="ListadosLlamadasHastaReg" placeholder="dd-mm-aaaa " onfocus="(this.type='date' ) " onblur="(this.type='text' ); " style="width:90%; text-align:center; ">
+        <input type="button " readonly class="MIbotonGreen " onclick="listadosLlamadasRegBuscarEntreFechas(); " value="Buscar " style="width:20%; text-align:center; ">
+    </div>
+    <div id="dvBusc ">
+        <input type="text " id="dvBuscadorListados " placeholder="Buscar por cualquiera de los campos " style="width:100%; box-sizing:border-box; " onkeyup="buscarEnTabla(this.id, 'tbListadosTV'); ">
+    </div>
+    <div id="dvListadosTVListado"></div>
+    <br>
+</div>
+
+<!-- <script>
+    cargarListadosListado();
+    cargarListadoTV();
+</script> -->

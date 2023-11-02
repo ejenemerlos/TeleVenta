@@ -1,0 +1,27 @@
+<table id="tbListadosTV" class="tbStd">
+    <tr>
+        <th>Gestor</th>
+        <th>Fecha</th>
+        <th>Nombre</th>
+        <th class="taC">Clientes</th>
+        <th class="taC">Llamadas</th>
+        <th class="taC">Pedidos</th>
+        <th class="taC">SubTotal</th>
+        <th class="taC">Importe</th>
+    </tr>
+
+
+
+    <tr class="trListadosTV" onclick="exportarListado('{{id}}')" data-buscar="{{fecha}}">
+        <td>{{usuario}}</td>
+        <td>{{fecha}}</td>
+        <td>{{nombre}}</td>
+        <td class="taR">{{clientes}}</td>
+        <td class="taR">{{llamadas}}</td>
+        <td class="taR">{{pedidos}}</td>
+        <td class="taR">{{subtotal|decimal:2}} €</td>
+        <td class="taR">{{importe|decimal:2}} €</td>
+    </tr>
+
+
+</table>

@@ -1,6 +1,10 @@
-﻿CREATE PROCEDURE [dbo].[pClienteDatos]  (@parametros varchar(max))  
+﻿
+-- [pClienteDatos] '{"cliente":"4300840206","FechaTeleVenta":"15-08-2023"}'
+CREATE PROCEDURE [dbo].[pClienteDatos]  (@parametros varchar(max))  
 AS
 BEGIN TRY	
+	/**/ insert into Merlos_Log (accion) values (CONCAT('[pClienteDatos] ''',@parametros,''''))
+
 	declare @cliente varchar(50) = isnull((select JSON_VALUE(@parametros,'$.cliente')),'')
 		  , @gestor varchar(50) = isnull((select JSON_VALUE(@parametros,'$.gestor')),'')
 		  , @nGestor varchar(100) = isnull((select JSON_VALUE(@parametros,'$.nGestor')),'')
@@ -44,7 +48,7 @@ BEGIN TRY
 	-- datos Std
 	ELSE 
 		EXEC('
-			select 
+			select isnull(
 			(
 				select *
 				, replace(convert(varchar(10),dateadd(day,(select DIAS_ENTRE from vDatosEmpresa where CODIGO collate Modern_Spanish_CI_AI=(select EMPRESA from Configuracion_SQL)),cast('''+@FechaTeleVenta+''' as smalldatetime)),103),''/'',''-'') as FechaEntrega
@@ -52,7 +56,7 @@ BEGIN TRY
 				, (select isnull(sum([Importe total]),0.00) from vGiros where CLIENTE='''+@cliente+''') as importeRecibos
 				, isnull( (select * from ['+@gestion+'].dbo.vaca_cli where CLIENTE='''+@cliente+''' for JSON AUTO),''[]'') as vacaciones
 				 from vClientes where CODIGO='''+@cliente+''' for JSON AUTO, INCLUDE_NULL_VALUES
-			 ) as JAVASCRIPT	
+			 ),''[]'') as JAVASCRIPT	
 		 ')
 	RETURN -1
 END TRY

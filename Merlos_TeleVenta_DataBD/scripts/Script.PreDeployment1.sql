@@ -2,6 +2,8 @@
 	
 	declare @GESTION char(8) = '['+(select GESTION from Configuracion_SQL)+']'
 	declare @COMUN char(10) = '['+(select COMUN from Configuracion_SQL)+']'
+	declare @EJERCICIO 	char(4)		 set @EJERCICIO = (select top 1 EJERCICIO from Configuracion_SQL)
+	declare @EJERCICIOAnt	char(4)
 	declare @Sentencia varchar(max)
 
 	if (@GESTION is not null and @GESTION<>'') and (@COMUN is not null and @COMUN<>'') BEGIN		
@@ -56,7 +58,7 @@
 		LEFT JOIN ObservacionesInternas o on o.cliente collate SQL_Latin1_General_CP1_CI_AS=C.CODIGO
 		WHERE LEFT(C.CODIGO,3)=''430''
 		'
-		exec(@Sentencia)
+		--exec(@Sentencia)
 		
 
 
@@ -72,13 +74,13 @@
 				, art.TIPO_IVA, art.RETENCION, art.IVA_INC, art.COST_ULT1, art.PMCOM1
 				, art.CARAC, art.UNICAJA, art.peso, art.litros as volumen, art.medidas, art.SUBFAMILIA, art.TIPO_PVP
 				, art.COST_ESCAN,	art.TIPO_ESCAN, art.IVALOT,	art.DTO1, coalesce(pvp.pvp,0.00) as pvp
-				, isnull(st.StockVirtual,0) as StockVirtual
+				, isnull(st.StockVirtual,0) as StockVirtual,ART.IMAGEN
 		from '+@GESTION+'.[DBO].articulo art
 		left join vStock st on st.ARTICULO=art.CODIGO
 		left join '+@GESTION+'.dbo.pvp pvp on pvp.articulo=art.codigo 
 		and pvp.tarifa collate Modern_Spanish_CS_AI=(select TarifaMinima from Configuracion_SQL)
 		' 
-		exec(@Sentencia)
+		--exec(@Sentencia)
 
 
 
@@ -113,7 +115,7 @@
 		LEFT JOIN vClientes vcli on vcli.CODIGO=previ.CLIENTE
 		WHERE CAST(CASE WHEN previ.BANCO = '''' AND previ.COBRO IS NULL THEN 0 ELSE 1 END AS BIT)=0  AND LEFT(previ.CLIENTE,3)=''430''
 		'
-		exec(@Sentencia)
+		--exec(@Sentencia)
 
 
 
@@ -123,6 +125,9 @@
 		set @Sentencia = @Sentencia + ' VIEW [dbo].[vArticulosBasic]   as       
 			select CODIGO, replace(NOMBRE,''"'',''-'') as NOMBRE, UNICAJA, PESO from '+@GESTION+'.[DBO].[articulo]
 		'
-		exec(@Sentencia)
+		--exec(@Sentencia)
+
+	
+
 	END	
 END

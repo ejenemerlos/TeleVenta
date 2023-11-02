@@ -1,4 +1,5 @@
-﻿CREATE PROCEDURE [dbo].[pConfiguracionLanzar] @comun varchar(10), @empresa varchar(10)
+﻿
+CREATE PROCEDURE [dbo].[pConfiguracionLanzar] @comun varchar(10), @empresa varchar(10)
 AS
 BEGIN TRY	
 	declare   @datos nvarchar(max)=''		

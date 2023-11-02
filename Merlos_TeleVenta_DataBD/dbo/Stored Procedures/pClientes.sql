@@ -1,4 +1,7 @@
-﻿-- ===========================================================
+﻿
+
+
+-- ===========================================================
 --	Author:			Elías Jené
 --	Create date:	02/05/2019
 --	Description:	Obtener Clientes del Vendedor
@@ -7,7 +10,7 @@
 -- exec pClientes '..'
 -- exec pClientes '01','actividad:50'
 
-CREATE  PROCEDURE [dbo].[pClientes] @elVendedor varchar(20)='', @modo varchar(100)='', @elUsuario varchar(50)='', @elRol varchar(50)=''
+CREATE PROCEDURE [dbo].[pClientes] @elVendedor varchar(20)='', @modo varchar(100)='', @elUsuario varchar(50)='', @elRol varchar(50)=''
 AS
 BEGIN TRY
 	
@@ -42,6 +45,7 @@ BEGIN TRY
 		BEGIN TRY DROP TABLE #Temp END TRY BEGIN CATCH end CATCH
 		return -1
 	END
+
 
 
 	declare @elWhere varchar(max) = ' where (VENDEDOR=''' + @elVendedor+''' 

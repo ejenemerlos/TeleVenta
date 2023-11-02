@@ -219,6 +219,33 @@ USING (VALUES
     <th>E-mail</th>
     <th>Dirección</th>
   </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
+ ,(N'ExportarListadoTVDefaultList',N'ExportarListadoTV',N'list',N'ExportarListadoTV Default List',N' <tr>
+        <td>{{cliente}}</td>
+        <td>{{RCOMERCIAL}}</td>
+        <td class="taC">{{TELEFONO}}</td>
+        <td class="taC">{{horario}}</td>
+        <td class="taR">{{pedido}}</td>
+        <td class="taC">{{serie}}</td>
+        <td class="taR">{{subtotal|decimal:2}} €</td>
+        <td class="taR">{{importe|decimal:2}} €</td>
+        <td class="taC">{{completado}}</td>
+    </tr>',N'ExportarListadoTVDefaultList',NULL,N'<div id="dvBtnImp " class="ListadoSeccion MI_noImp inv" style="padding:20px; text-align:center; ">
+    <span class="MIbotonGreen " onclick="window.print() ">IMPRIMIR</span>
+    <span class="MIbotonGreen " style="margin-left:12px; " onclick="ListadosVolverExportTV() ">volver</span>
+</div>
+
+<table id="tbListadosTV" class="tbStd">
+    <tr>
+        <th>Cód. Cliente</th>
+        <th>Nombre</th>
+        <th class="taC">Teléfono</th>
+        <th class="taC">Horario</th>
+        <th class="taC">Pedido</th>
+        <th class="taC">Serie</th>
+        <th class="taC">SubTotal</th>
+        <th class="taC">Importe</th>
+        <th class="taC">Completado</th>
+    </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
  ,(N'gestorDefaultList',N'gestor',N'list',N'gestor Default List',N'  <tr onclick="flexygo.nav.openPage(''view'',''gestor'',''codigo=\''{{CODIGO}}\'''','''',''current'',false,' + convert(nvarchar(max),NCHAR(36)) + N'(this));">
     <td>{{codigo}}</td>
     <td>{{nombre}}</td>
@@ -266,23 +293,77 @@ USING (VALUES
         <th>Observaciones</th>
     </tr>',N'</table>
 <span></span>',NULL,NULL,1,0,0,1,1)
- ,(N'inciCLIDefaultList',N'inciCLI',N'list',N'inciCLI Default List',N'<tr>
-  <td>{{laFecha}}</td>
-  <td>({{gestor}}) {{nGestor}}</td>
-  <td>{{incidencia}} - {{nIncidencia}}</td>
-  <td>({{cliente}}) {{nCliente}}</td>
-  <td>{{pedido}}</td>
-  <td>{{observaciones}}</td>
-</tr>',NULL,NULL,N'<table id="tbInciCLI" class="tbStd">
-  	<tr>
-  		<th>Fecha</th>
-  		<th>Gestor</th>
-  		<th>Incidencia</th>
-  		<th>Cliente</th>
-  		<th>Pedido</th>
-  		<th>Observaciones</th>
-	</tr>',N'</table>
-<span></span>',NULL,NULL,1,0,0,1,1)
+ ,(N'inciCLIDefaultList',N'inciCLI',N'list',N'inciCLI Default List',N' <tr>
+        <td>{{laFecha}}</td>
+        <td>{{gestor}}</td>
+        <td>{{incidencia}}</td>
+        <td>{{nIncidencia}}</td>
+        <td>{{cliente}}</td>
+        <td>{{nCliente}}</td>
+        <td>{{pedido}}</td>
+        <td>{{observaciones}}</td>
+    </tr>',N'incidenciasClientes',NULL,N'<table id="tbInciCLI" class="tbStd">
+    <tr>
+        <th>Fecha</th>
+        <th>Gestor</th>
+        <th>Incidencia</th>
+        <th>Descripción</th>
+        <th>Cliente</th>
+        <th>Nombre</th>
+        <th>Pedido</th>
+        <th>Observaciones</th>
+    </tr>',N'</table>
+',NULL,NULL,1,0,0,1,1)
+ ,(N'ListadoLlamadaImprimirDefaultList',N'ListadoLlamadaImprimir',N'list',N'ListadoLlamadaImprimir Default List',N' <tr>
+        <td>{{cliente}}</td>
+        <td>{{nombre}}</td>
+        <td>{{poblacion}}</td>
+        <td class="taC" style="white-space: nowrap;">{{fecha}}</td>
+        <td class="taC" style="white-space: nowrap;">{{horario}}</td>
+    </tr>',N'ListadoLlamadaImprimirDefaultList',NULL,N'<table id="tbListadosTV" class="tbStd">
+    <tr>
+        <th>Cód. Cliente</th>
+        <th>Cliente</th>
+        <th>Población</th>
+        <th class="taC">Fecha</th>
+        <th class="taC">Horario</th>
+    </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
+ ,(N'ListadoLlamadasDefaultList',N'ListadoLlamadas',N'list',N'ListadoLlamadas Default List',N'<tr class="trListadosListado" onclick="imprimirListado(''{{id}}'')">
+        <td>{{nombreListado}}</td>
+        <td>{{cliente}}</td>
+        <td>{{gestor}}</td>
+        <td class="taC fechaDesdeListadosListado">{{fecha}}</td>
+        <td class="taC fechaHastaListadosListado">{{hasta}}</td>
+        <td>{{horario}}</td>
+    </tr>',NULL,NULL,N'<table id="tbListadosListado" class="tbStd">
+    <tr>
+        <th>Nombre</th>
+        <th>Cliente</th>
+        <th>Gestor</th>
+        <th class="taC">Desde</th>
+        <th class="taC">Hasta</th>
+        <th>Hora</th>
+    </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
+ ,(N'ListadoVentaDefaultList',N'ListadoVenta',N'list',N'ListadoVenta Default List',N'<tr class="trListadosTV" onclick="exportarListado(''{{id}}'')" data-buscar="{{fecha}}">
+        <td>{{usuario}}</td>
+        <td>{{fecha}}</td>
+        <td>{{nombre}}</td>
+        <td class="taR">{{clientes}}</td>
+        <td class="taR">{{llamadas}}</td>
+        <td class="taR">{{pedidos}}</td>
+        <td class="taR">{{subtotal|decimal:2}} €</td>
+        <td class="taR">{{importe|decimal:2}} €</td>
+    </tr>',N'ListadoVentaDefaultList',NULL,N'<table id="tbListadosTV" class="tbStd">
+    <tr>
+        <th>Gestor</th>
+        <th>Fecha</th>
+        <th>Nombre</th>
+        <th class="taC">Clientes</th>
+        <th class="taC">Llamadas</th>
+        <th class="taC">Pedidos</th>
+        <th class="taC">SubTotal</th>
+        <th class="taC">Importe</th>
+    </tr>',N'</table>',NULL,NULL,1,0,0,1,1)
  ,(N'PedidosPlantilla01',N'Pedido',N'list',N'Listado de Pedidos',N'<tr>
 <td>{{LETRA}}</td>
 <td onmouseover="verDetallePedidoCliente(''{{IDPEDIDO}}'',''{{EMPRESA}}'',''{{LETRA}}'',''{{numero}}'')"
